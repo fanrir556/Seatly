@@ -4,13 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Seatly1</title>
-    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Seatly1.styles.css" asp-append-version="true" /> *@
-    <a href="~/css/theme-rtl.css.map">~/css/theme-rtl.css.map</a>
-    <a href="~/css/theme-rtl.min.css.map">~/css/theme-rtl.min.css.map</a>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" />
+    @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
+    @* <link rel="stylesheet" href="~/Seatly1.styles.css" asp-append-version="true" /> *@
     <link href="~/css/theme-rtl.min.css" rel="stylesheet" />
-    <link href="~/css/theme-rtl.css" rel="stylesheet" />
+    @* <link href="~/css/theme-rtl.css" rel="stylesheet" /> *@
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
@@ -83,18 +88,17 @@
     <!--    JavaScripts-->
     <!-- ===============================================-->
     <script src="~/public/vendors/popperjs/popper.min.js"></script>
-    <a href="~/public/vendors/bootstrap/bootstrap.min.js.map"></a>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js"></script>
     <script src="~/public/vendors/bootstrap/bootstrap.min.js"></script>
     <script src="~/public/vendors/is/is.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.js?features=window.scroll"></script>
     <script src="~/public/vendors/fontawesome/all.min.js"></script>
-    <a href="~/public/assets/js/theme.js.map"></a>
-    <a href="~/public/assets/js/theme.min.js.map"></a>
     <script src="~/public/assets/js/theme.min.js"></script>
-    <script src="~/public/assets/js/theme.js"></script>
 
+    @* <script src="~/gulp/build.gulp.js"></script> *@
+    @* <script src="~/gulp/clean.gulp.js"></script> *@
 
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap" rel="stylesheet">
 </body>
 </html>
