@@ -49,13 +49,13 @@ public partial class SeatlyContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=T770;Initial Catalog=Seatly;TrustServerCertificate=True;Integrated Security=true");
+        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\ProjectModels;Initial Catalog=Seatly;TrustServerCertificate=True;Integrated Security=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BookingOrder>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__BookingO__C3905BAF39920861");
+            entity.HasKey(e => e.OrderId).HasName("PK__BookingO__C3905BAF19F65072");
 
             entity.Property(e => e.OrderId)
                 .ValueGeneratedNever()
@@ -68,7 +68,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<CollectionItem>(entity =>
         {
-            entity.HasKey(e => e.SerialId).HasName("PK__Collecti__5E5B3EC498D4885F");
+            entity.HasKey(e => e.SerialId).HasName("PK__Collecti__5E5B3EC4546D67D3");
 
             entity.Property(e => e.SerialId)
                 .ValueGeneratedNever()
@@ -79,7 +79,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<Comment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFAA3F6B824D");
+            entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFAA1F6853F9");
 
             entity.Property(e => e.CommentId)
                 .ValueGeneratedNever()
@@ -93,7 +93,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<DailyCheckIn>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__DailyChe__3214EC27AE741CBC");
+            entity.HasKey(e => e.Id).HasName("PK__DailyChe__3214EC27E9471DDB");
 
             entity.ToTable("DailyCheckIn");
 
@@ -105,7 +105,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<GamePoint>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__GamePoin__3214EC27AFEAD1E6");
+            entity.HasKey(e => e.Id).HasName("PK__GamePoin__3214EC27DDC4938F");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -132,7 +132,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<NotificationRecord>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E323860F8AF");
+            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E32E5DEBF0F");
 
             entity.Property(e => e.NotificationId)
                 .ValueGeneratedNever()
@@ -147,12 +147,12 @@ public partial class SeatlyContext : DbContext
 
             entity.HasOne(d => d.Order).WithMany(p => p.NotificationRecords)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK__Notificat__Order__4E88ABD4");
+                .HasConstraintName("FK__Notificat__Order__412EB0B6");
         });
 
         modelBuilder.Entity<PointStore>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__PointSto__B40CC6ED990765CC");
+            entity.HasKey(e => e.ProductId).HasName("PK__PointSto__B40CC6ED3A0C5B05");
 
             entity.ToTable("PointStore");
 
@@ -167,7 +167,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<PointTransaction>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PointTra__3214EC27180FCD49");
+            entity.HasKey(e => e.Id).HasName("PK__PointTra__3214EC273C863E87");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -179,7 +179,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<Rating>(entity =>
         {
-            entity.HasKey(e => e.RatingId).HasName("PK__Ratings__FCCDF85CD16A3093");
+            entity.HasKey(e => e.RatingId).HasName("PK__Ratings__FCCDF85C5CA10BD0");
 
             entity.Property(e => e.RatingId)
                 .ValueGeneratedNever()
@@ -191,7 +191,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<Reply>(entity =>
         {
-            entity.HasKey(e => e.ReplyId).HasName("PK__Reply__C25E46293EA50A7C");
+            entity.HasKey(e => e.ReplyId).HasName("PK__Reply__C25E4629762A7F97");
 
             entity.ToTable("Reply");
 
@@ -235,7 +235,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<RestaurantOffer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Restaura__3214EC27D749CD0D");
+            entity.HasKey(e => e.Id).HasName("PK__Restaura__3214EC2737D02F33");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -247,7 +247,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<RestaurantTable>(entity =>
         {
-            entity.HasKey(e => e.TableId).HasName("PK__Restaura__7D5F018E7CF660C3");
+            entity.HasKey(e => e.TableId).HasName("PK__Restaura__7D5F018EA0488618");
 
             entity.Property(e => e.TableId)
                 .ValueGeneratedNever()
@@ -260,7 +260,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<RestaurantTime>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Restaura__3214EC27528C8260");
+            entity.HasKey(e => e.Id).HasName("PK__Restaura__3214EC27028CEA09");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -270,7 +270,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<WaitlistInfo>(entity =>
         {
-            entity.HasKey(e => e.WaitlistId).HasName("PK__Waitlist__FE78FE8022C11AF5");
+            entity.HasKey(e => e.WaitlistId).HasName("PK__Waitlist__FE78FE8064288934");
 
             entity.ToTable("WaitlistInfo");
 
