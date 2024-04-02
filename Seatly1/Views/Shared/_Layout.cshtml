@@ -60,13 +60,16 @@
             </button>
 
             <div class="collapse navbar-collapse border-top border-lg-0 my-2 mt-lg-0" id="navbarSupportedContent">
-                <form class="d-flex mt-4 mt-lg-0 ms-lg-auto ms-xl-0">
+               @*  <form class="d-flex mt-4 mt-lg-0 ms-lg-auto ms-xl-0" asp-area="Identity" asp-page="/Account/Login">
                     <button class="btn btn-white shadow-warning text-warning" type="submit">
                         <i class="fas fa-user me-2"></i>Login
                     </button>
-                </form>
+                </form> *@
+              @*   <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a> *@
             </div>
 
+            <partial name="_LoginPartial" />
         </div>
     </nav>
 
@@ -92,7 +95,7 @@
     <!-- ===============================================-->
     <!--    JavaScripts-->
     <!-- ===============================================-->
-    @* <script src="~/public/vendors/popperjs/popper.min.js"></script> *@
+    <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js"></script>
     @* <script src="~/public/vendors/bootstrap/bootstrap.min.js"></script> *@
@@ -109,7 +112,11 @@
     @* <script src="~/gulp/build.gulp.js"></script> *@
     @* <script src="~/gulp/clean.gulp.js"></script> *@
     @* import { createPopper } from '@popperjs/core'; *@
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script> *@
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/esm/createPopper.min.js"></script> *@
+    @* <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.10.2/dist/umd/popper.min.js"></script> *@
+
+
 
     
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap" rel="stylesheet">
