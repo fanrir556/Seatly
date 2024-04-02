@@ -12,7 +12,7 @@ using Seatly1.Data;
 namespace Seatly1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240402021209_Mixed members CODE FIRST")]
+    [Migration("20240402073544_Mixed members CODE FIRST")]
     partial class MixedmembersCODEFIRST
     {
         /// <inheritdoc />
