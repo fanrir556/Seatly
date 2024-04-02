@@ -30,6 +30,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @* 點數專區開始 *@
+                        <li class="nav-item dropdown">
+                            <a id="pointsNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                點數專區
+                            </a>
+                            <ul id="pointsDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item  text-dark" asp-area="" asp-controller="Home" asp-action="PointsShop">點數商城</a></li>
+                                <li><a class="dropdown-item  text-dark" asp-area="" asp-controller="Home" asp-action="Coupon">持有優惠券</a></li>
+                                <li><a class="dropdown-item  text-dark" asp-area="" asp-controller="Home" asp-action="PointsHistory">點數交易紀錄</a></li>
+                            </ul>
+                        </li>
+                        @* 點數專區結束 *@
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
