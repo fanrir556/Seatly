@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace Seatly1.Models
+namespace Seatly1.Data
 {
     public class ApplicationUser : IdentityUser
     {

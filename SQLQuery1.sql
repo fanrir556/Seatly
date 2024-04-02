@@ -4,9 +4,9 @@ GO
 CREATE DATABASE [Seatly]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'Seatly', FILENAME = N'C:\Users\saigy\AppData\Local\Microsoft\VisualStudio\SSDT\Seatly.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'Seatly', FILENAME = N'C:\Users\iSpan\AppData\Local\Microsoft\VisualStudio\SSDT\Seatly.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'Seatly_log', FILENAME = N'C:\Users\saigy\AppData\Local\Microsoft\VisualStudio\SSDT\Seatly_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+( NAME = N'Seatly_log', FILENAME = N'C:\Users\iSpan\AppData\Local\Microsoft\VisualStudio\SSDT\Seatly_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
  WITH CATALOG_COLLATION = DATABASE_DEFAULT
 GO
 ALTER DATABASE [Seatly] SET COMPATIBILITY_LEVEL = 150
