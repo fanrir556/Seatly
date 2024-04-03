@@ -47,14 +47,14 @@
     @* ====================================================== *@
         @* nav bar *@
     @* ====================================================== *@
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" data-navbar-on-scroll="data-navbar-on-scroll">
+    <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-light fixed-top" data-navbar-on-scroll="data-navbar-on-scroll">
         <div class="container-fluid">
             <a class="navbar-brand d-inline-flex" asp-area="" asp-controller="Home" asp-action="Index">
                 <img class="d-inline-block" src="~/img/gallery/logo.svg" alt="logo" />
-                <span class="text-1000 fs-3 fw-bold ms-2 text-gradient">foodwaGon</span>
+                <span class="text-1000 fs-3 fw-bold ms-2 text-gradient">Seatly</span>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"> </span>
             </button>
@@ -68,7 +68,21 @@
              
             </div>
 
+                @* 點數專區開始 *@
+                <li class="nav-item dropdown text-gradient list-group">
+                    <a id="pointsNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        點數專區
+                    </a>
+                    <ul id="pointsDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="PointsShop">點數商城</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="Coupon">持有優惠券</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="PointsHistory">點數交易紀錄</a></li>
+                    </ul>
+                </li>
+                @* 點數專區結束 *@
             <partial name="_LoginPartial" />
+
+            </div>
         </div>
     </nav>
 
@@ -86,9 +100,9 @@
         </div>
     </footer>
 
-    @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    @* <script src="~/js/site.js" asp-append-version="true"></script> *@
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
     <!-- ===============================================-->
@@ -96,16 +110,16 @@
     <!-- ===============================================-->
     <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js"></script>
-    @* <script src="~/public/vendors/bootstrap/bootstrap.min.js"></script> *@
+    <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     @* <script src="~/public/vendors/is/is.min.js"></script> *@
     <script src="https://polyfill.io/v3/polyfill.js?features=window.scroll"></script>
     <script src="~/public/vendors/fontawesome/all.min.js"></script>
     <script src="~/js/bootstrap-navbar.js"></script>
-    <script src="~/js/detector.js"></script>
-    <script src="~/js/scroll-to-top.js"></script>
+    <script type="module" src="~/js/scroll-to-top.js"></script>
     <script src="~/js/theme.min.js"></script>
-    <script src="~/js/utils.js"></script>
+    <script type="module" src="~/js/detector.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/utils.js" asp-append-version="true"></script>
     @* <script src="~/public/assets/js/theme.min.js"></script> *@
 
     @* <script src="~/gulp/build.gulp.js"></script> *@
