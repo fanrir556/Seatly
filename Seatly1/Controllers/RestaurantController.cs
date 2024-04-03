@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Seatly1.DTO;
 using Seatly1.Models;
 
 namespace Seatly1.Controllers
@@ -11,39 +12,17 @@ namespace Seatly1.Controllers
             _context = context;
             }
 
-        //GET: Restaurant/Greet 
-        [HttpGet]
-        public string Greet(string Name) 
+        [HttpPost]
+        public async Task<string> PostRestaurant(RestaurantDTO Restaurant)
         {
-            return $"Hello,{Name}!"; 
-        }
-
-        //POST: Restaurant/Greet 
-        [HttpPost,ActionName("Greet")]
-        public string PostGreet(string Name) 
-        {
-            return $"Hello,{Name}!";
-        }
-
-        [HttpPost()]
-        public string FetchPostGreet([FromBody]Parameter p)
-        {
-            return $"Hello,{p.Name}!";
-        }
-
-        //POST: /Ajax/CheckRestaurantName
-        [HttpPost()]
-        public string CheckRestaurantName(string RestaurantName)
-        {
-            bool Exists = _context.Restaurants.Any(emp => emp.RestaurantName == RestaurantName);
-            return Exists ? "true" : "false" ;   
-        }
-
-        [HttpPost()]
-        public string FetchCheckRestaurantName(string RestaurantName)
-        {
-            bool Exists = _context.Restaurants.Any(emp => emp.RestaurantName == RestaurantName);
-            return Exists ? "true" : "false";
+            Restaurant emp = new Restaurant
+            {
+                RestaurantId = Restaurant.RestaurantId,
+                RestaurantAccount = Restaurant.RestaurantAccount,
+            };
+            _context.Restaurant.Add(emp);
+            await _context.SaveChangesAsync();
+            return $"新增成功餐廳編號:{emp.RestaurantId}";
         }
 
         public IActionResult Index()

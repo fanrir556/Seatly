@@ -37,7 +37,7 @@ public partial class SeatlyContext : DbContext
 
     public virtual DbSet<Reply> Replies { get; set; }
 
-    public virtual DbSet<Restaurant> Restaurants { get; set; }
+    public virtual DbSet<Restaurant> Restaurant { get; set; }
 
     public virtual DbSet<RestaurantOffer> RestaurantOffers { get; set; }
 
