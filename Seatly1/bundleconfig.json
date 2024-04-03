@@ -4,5 +4,11 @@
     "inputFiles": [
       "wwwroot/css/theme.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/lib/bootstrap/dist/js/bootstrap.esm.min.js",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap/dist/js/bootstrap.esm.js"
+    ]
   }
 ]
