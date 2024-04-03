@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Seatly1.Data.Migrations
+namespace Seatly1.Migrations
 {
     /// <inheritdoc />
-    public partial class BaseSchema : Migration
+    public partial class MixedmembersCODEFIRST : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

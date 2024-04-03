@@ -9,11 +9,11 @@ using Seatly1.Data;
 
 #nullable disable
 
-namespace Seatly1.Data.Migrations
+namespace Seatly1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240402123022_Fixed null")]
-    partial class Fixednull
+    [Migration("20240402021052_BaseSchema")]
+    partial class BaseSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,7 +170,7 @@ namespace Seatly1.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Age")
+                    b.Property<int>("Age")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Birthday")
@@ -180,7 +180,7 @@ namespace Seatly1.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("CreatAt")
+                    b.Property<DateTime>("CreatAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -197,10 +197,12 @@ namespace Seatly1.Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("MemberAccount")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("MemberNickname")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
@@ -231,6 +233,7 @@ namespace Seatly1.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sex")
+                        .IsRequired()
                         .HasMaxLength(1)
                         .HasColumnType("nvarchar(1)");
 

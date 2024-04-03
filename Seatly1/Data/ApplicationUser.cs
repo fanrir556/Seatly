@@ -11,10 +11,10 @@ namespace Seatly1.Data
         [MaxLength(10)]
         public string? MemberNickname { get; set; }
 
-        
+
         public int? Permission { get; set; }
 
-        
+
         public int? Points { get; set; }
 
         public int? Age { get; set; }
