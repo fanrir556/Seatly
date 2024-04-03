@@ -60,18 +60,10 @@
             </button>
 
             <div class="collapse navbar-collapse border-top border-lg-0 my-2 mt-lg-0" id="navbarSupportedContent">
-               @*  <form class="d-flex mt-4 mt-lg-0 ms-lg-auto ms-xl-0" asp-area="Identity" asp-page="/Account/Login">
-                    <button class="btn btn-white shadow-warning text-warning" type="submit">
-                        <i class="fas fa-user me-2"></i>Login
-                    </button>
-                </form> *@
-             
-            </div>
-
                 @* 點數專區開始 *@
                 <li class="nav-item dropdown text-gradient list-group">
                     <a id="pointsNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        點數專區
+                    點數專區
                     </a>
                     <ul id="pointsDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="PointsShop">點數商城</a></li>
@@ -80,8 +72,7 @@
                     </ul>
                 </li>
                 @* 點數專區結束 *@
-            <partial name="_LoginPartial" />
-
+                <partial name="_LoginPartial" />
             </div>
         </div>
     </nav>
@@ -100,19 +91,17 @@
         </div>
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-
     <!-- ===============================================-->
     <!--    JavaScripts-->
     <!-- ===============================================-->
-    <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    @* <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    @* <script src="~/public/vendors/is/is.min.js"></script> *@
+    <script src="~/public/vendors/is/is.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.js?features=window.scroll"></script>
     <script src="~/public/vendors/fontawesome/all.min.js"></script>
     <script src="~/js/bootstrap-navbar.js"></script>
@@ -120,18 +109,17 @@
     <script src="~/js/theme.min.js"></script>
     <script type="module" src="~/js/detector.js" asp-append-version="true"></script>
     <script type="module" src="~/js/utils.js" asp-append-version="true"></script>
-    @* <script src="~/public/assets/js/theme.min.js"></script> *@
+    <script src="~/public/assets/js/theme.min.js"></script>
 
-    @* <script src="~/gulp/build.gulp.js"></script> *@
-    @* <script src="~/gulp/clean.gulp.js"></script> *@
-    @* import { createPopper } from '@popperjs/core'; *@
-    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script> *@
-    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/esm/createPopper.min.js"></script> *@
-    @* <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.10.2/dist/umd/popper.min.js"></script> *@
+    <script src="~/gulp/build.gulp.js"></script>
+    <script src="~/gulp/clean.gulp.js"></script>
+    import { createPopper } from '@popperjs/core';
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/esm/createPopper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+ *@
 
-
-
-    
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap" rel="stylesheet">
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
