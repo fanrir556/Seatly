@@ -11,12 +11,14 @@ namespace Seatly1.Controllers
             _context = context;
             }
 
+        //GET: Restaurant/Greet 
         [HttpGet]
         public string Greet(string Name) 
         {
             return $"Hello,{Name}!"; 
         }
 
+        //POST: Restaurant/Greet 
         [HttpPost,ActionName("Greet")]
         public string PostGreet(string Name) 
         {
