@@ -10,5 +10,11 @@
     "inputFiles": [
       "wwwroot/lib/bootstrap/dist/js/bootstrap.esm.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/css/theme-rtl.min.css",
+    "inputFiles": [
+      "wwwroot/css/theme-rtl.css"
+    ]
   }
 ]
