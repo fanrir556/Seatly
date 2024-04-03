@@ -60,6 +60,14 @@
             </button>
 
             <div class="collapse navbar-collapse border-top border-lg-0 my-2 mt-lg-0" id="navbarSupportedContent">
+               @*  <form class="d-flex mt-4 mt-lg-0 ms-lg-auto ms-xl-0" asp-area="Identity" asp-page="/Account/Login">
+                    <button class="btn btn-white shadow-warning text-warning" type="submit">
+                        <i class="fas fa-user me-2"></i>Login
+                    </button>
+                </form> *@
+             
+            </div>
+
                 @* 點數專區開始 *@
                 <li class="nav-item dropdown text-gradient list-group">
                     <a id="pointsNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -72,11 +80,8 @@
                     </ul>
                 </li>
                 @* 點數專區結束 *@
-                <form class="d-flex mt-4 mt-lg-0 ms-lg-auto ms-xl-0">
-                    <button class="btn btn-white shadow-warning text-warning" type="submit">
-                        <i class="fas fa-user me-2"></i>Login
-                    </button>
-                </form>
+            <partial name="_LoginPartial" />
+
             </div>
         </div>
     </nav>
@@ -103,7 +108,7 @@
     <!-- ===============================================-->
     <!--    JavaScripts-->
     <!-- ===============================================-->
-    @* <script src="~/public/vendors/popperjs/popper.min.js"></script> *@
+    <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -120,7 +125,11 @@
     @* <script src="~/gulp/build.gulp.js"></script> *@
     @* <script src="~/gulp/clean.gulp.js"></script> *@
     @* import { createPopper } from '@popperjs/core'; *@
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script> *@
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/esm/createPopper.min.js"></script> *@
+    @* <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.10.2/dist/umd/popper.min.js"></script> *@
+
+
 
     
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap" rel="stylesheet">

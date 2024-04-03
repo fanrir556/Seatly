@@ -9,14 +9,18 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.AddDbContext<SeatlyContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Seatly")));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// µù¥UDI®e¾¹
+// ï¿½ï¿½ï¿½UDIï¿½eï¿½ï¿½
 builder.Services.AddDbContext<SeatlyContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Seatly"));
 });
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
