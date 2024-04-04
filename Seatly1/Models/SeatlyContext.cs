@@ -15,6 +15,18 @@ public partial class SeatlyContext : DbContext
     {
     }
 
+    public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+
+    public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
+
+    public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+
+    public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+
+    public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+
+    public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
+
     public virtual DbSet<BookingOrder> BookingOrders { get; set; }
 
     public virtual DbSet<CollectionItem> CollectionItems { get; set; }
@@ -29,6 +41,8 @@ public partial class SeatlyContext : DbContext
 
     public virtual DbSet<NotificationRecord> NotificationRecords { get; set; }
 
+    public virtual DbSet<Organizer> Organizers { get; set; }
+
     public virtual DbSet<PointStore> PointStores { get; set; }
 
     public virtual DbSet<PointTransaction> PointTransactions { get; set; }
@@ -36,8 +50,6 @@ public partial class SeatlyContext : DbContext
     public virtual DbSet<Rating> Ratings { get; set; }
 
     public virtual DbSet<Reply> Replies { get; set; }
-
-    public virtual DbSet<Restaurant> Restaurant { get; set; }
 
     public virtual DbSet<RestaurantOffer> RestaurantOffers { get; set; }
 
@@ -47,12 +59,87 @@ public partial class SeatlyContext : DbContext
 
     public virtual DbSet<WaitlistInfo> WaitlistInfos { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Data Source=T770;Initial Catalog=Seatly;TrustServerCertificate=True;Integrated Security=true");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\ProjectModels;Initial Catalog=Seatly;TrustServerCertificate=True;Integrated Security=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AspNetRole>(entity =>
+        {
+            entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
+                .IsUnique()
+                .HasFilter("([NormalizedName] IS NOT NULL)");
+
+            entity.Property(e => e.Name).HasMaxLength(256);
+            entity.Property(e => e.NormalizedName).HasMaxLength(256);
+        });
+
+        modelBuilder.Entity<AspNetRoleClaim>(entity =>
+        {
+            entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.AspNetRoleClaims).HasForeignKey(d => d.RoleId);
+        });
+
+        modelBuilder.Entity<AspNetUser>(entity =>
+        {
+            entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
+
+            entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
+                .IsUnique()
+                .HasFilter("([NormalizedUserName] IS NOT NULL)");
+
+            entity.Property(e => e.Email).HasMaxLength(256);
+            entity.Property(e => e.MemberAccount).HasMaxLength(20);
+            entity.Property(e => e.MemberNickname).HasMaxLength(10);
+            entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
+            entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+            entity.Property(e => e.Sex).HasMaxLength(1);
+            entity.Property(e => e.UserName).HasMaxLength(256);
+
+            entity.HasMany(d => d.Roles).WithMany(p => p.Users)
+                .UsingEntity<Dictionary<string, object>>(
+                    "AspNetUserRole",
+                    r => r.HasOne<AspNetRole>().WithMany().HasForeignKey("RoleId"),
+                    l => l.HasOne<AspNetUser>().WithMany().HasForeignKey("UserId"),
+                    j =>
+                    {
+                        j.HasKey("UserId", "RoleId");
+                        j.ToTable("AspNetUserRoles");
+                        j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
+                    });
+        });
+
+        modelBuilder.Entity<AspNetUserClaim>(entity =>
+        {
+            entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
+
+            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserClaims).HasForeignKey(d => d.UserId);
+        });
+
+        modelBuilder.Entity<AspNetUserLogin>(entity =>
+        {
+            entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
+
+            entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
+
+            entity.Property(e => e.LoginProvider).HasMaxLength(128);
+            entity.Property(e => e.ProviderKey).HasMaxLength(128);
+
+            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserLogins).HasForeignKey(d => d.UserId);
+        });
+
+        modelBuilder.Entity<AspNetUserToken>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+            entity.Property(e => e.LoginProvider).HasMaxLength(128);
+            entity.Property(e => e.Name).HasMaxLength(128);
+
+            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens).HasForeignKey(d => d.UserId);
+        });
+
         modelBuilder.Entity<BookingOrder>(entity =>
         {
             entity.HasKey(e => e.OrderId).HasName("PK__BookingO__C3905BAF19F65072");
@@ -150,6 +237,30 @@ public partial class SeatlyContext : DbContext
                 .HasConstraintName("FK__Notificat__Order__412EB0B6");
         });
 
+        modelBuilder.Entity<Organizer>(entity =>
+        {
+            entity.HasKey(e => e.OrganizerId).HasName("PK__Restaura__87454CB580C1ADB7");
+
+            entity.Property(e => e.OrganizerId).HasColumnName("OrganizerID");
+            entity.Property(e => e.Address).HasMaxLength(200);
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .HasColumnName("email");
+            entity.Property(e => e.Hashtag).HasMaxLength(100);
+            entity.Property(e => e.LoginPassword).HasMaxLength(50);
+            entity.Property(e => e.Menu).HasMaxLength(100);
+            entity.Property(e => e.OrganizerAccount).HasMaxLength(50);
+            entity.Property(e => e.OrganizerCategory).HasMaxLength(50);
+            entity.Property(e => e.OrganizerName).HasMaxLength(100);
+            entity.Property(e => e.OrganizerPhoto).HasMaxLength(100);
+            entity.Property(e => e.Phone)
+                .HasMaxLength(50)
+                .HasColumnName("phone");
+            entity.Property(e => e.ReservationUrl)
+                .HasMaxLength(200)
+                .HasColumnName("ReservationURL");
+        });
+
         modelBuilder.Entity<PointStore>(entity =>
         {
             entity.HasKey(e => e.ProductId).HasName("PK__PointSto__B40CC6ED3A0C5B05");
@@ -203,34 +314,6 @@ public partial class SeatlyContext : DbContext
                 .HasColumnName("reContent");
             entity.Property(e => e.ReplyAccount).HasMaxLength(50);
             entity.Property(e => e.ReviewId).HasColumnName("ReviewID");
-        });
-
-        modelBuilder.Entity<Restaurant>(entity =>
-        {
-            entity.HasKey(e => e.RestaurantId).HasName("PK__Restaura__87454CB580C1ADB7");
-
-            entity.Property(e => e.RestaurantId)
-                .ValueGeneratedNever()
-                .HasColumnName("RestaurantID");
-            entity.Property(e => e.Address).HasMaxLength(200);
-            entity.Property(e => e.DepartmentStoreName).HasMaxLength(100);
-            entity.Property(e => e.Email)
-                .HasMaxLength(50)
-                .HasColumnName("email");
-            entity.Property(e => e.Hashtag).HasMaxLength(100);
-            entity.Property(e => e.LoginPassword).HasMaxLength(50);
-            entity.Property(e => e.MenuPhoto).HasMaxLength(100);
-            entity.Property(e => e.Phone)
-                .HasMaxLength(50)
-                .HasColumnName("phone");
-            entity.Property(e => e.ReservationUrl)
-                .HasMaxLength(200)
-                .HasColumnName("ReservationURL");
-            entity.Property(e => e.RestaurantAccount).HasMaxLength(50);
-            entity.Property(e => e.RestaurantCategory).HasMaxLength(50);
-            entity.Property(e => e.RestaurantInfo).HasMaxLength(100);
-            entity.Property(e => e.RestaurantName).HasMaxLength(100);
-            entity.Property(e => e.RestaurantPhoto).HasMaxLength(100);
         });
 
         modelBuilder.Entity<RestaurantOffer>(entity =>
