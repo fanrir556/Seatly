@@ -71,10 +71,9 @@ namespace Seatly1.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
-            [MaxLength(20)]
+            [Required(ErrorMessage = "帳號未填寫")]
             [Display(Name = "帳號")]
-            public string? MemberAccount { get; set; }
+            public string UserName { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -120,9 +119,9 @@ namespace Seatly1.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.MemberAccount = Input.MemberAccount;
+                //user.MemberAccount = Input.MemberAccount;
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
