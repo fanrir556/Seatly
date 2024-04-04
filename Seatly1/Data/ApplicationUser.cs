@@ -22,7 +22,7 @@ namespace Seatly1.Data
         [MaxLength(1)]
         public string? Sex { get; set; }
 
-        public String? Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
         public DateTime? CreatAt { get; set; }
 
     }

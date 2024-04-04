@@ -64,7 +64,8 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
             public string Sex { get; set; }
 
             [Display(Name = "生日")]
-            public string Birthday { get; set; }
+            [DataType(DataType.Date)]
+            public DateTime? Birthday { get; set; } = DateTime.MinValue;
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -80,7 +81,7 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
             {
                 PhoneNumber = phoneNumber,
                 Sex = sex,
-                Birthday = birthday,
+                Birthday = birthday.HasValue ? birthday.Value : DateTime.MinValue, // 检查生日是否有值，有值则赋值，否则赋默认值
             };
         }
 
@@ -133,7 +134,7 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            // 加入生日
+            //加入生日
             if (Input.Birthday != user.Birthday)
             {
                 user.Birthday = Input.Birthday; // Update Birthday property
@@ -144,6 +145,8 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+
 
 
             await _signInManager.RefreshSignInAsync(user);
