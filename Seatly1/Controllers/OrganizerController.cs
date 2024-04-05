@@ -15,27 +15,37 @@ namespace Seatly1.Controllers
             _context = context;
             }
 
-        // 活動方登入api
-        //[HttpPost]
-        //public ActionResult Login(FormCollection post)
-        //{
-        //    string account = post["account"];
-        //    string password = post["password"];
+        [HttpGet]
+        public async Task<OrganizerDTO> GetOrganizers(int id)
+        {
+        {
+            return _context.Organizers.Select(
+                org => new OrganizerDTO
+                {
+                    OrganizerId = org.OrganizerId,
+                    OrganizerAccount = org.OrganizerAccount,
+                    LoginPassword = org.LoginPassword,
+                });
+        }
 
-        //    //驗證密碼
-        //    if (db.CheckUserData(account, password))
-        //    {
-        //        Response.Redirect("~/Home/Home");
-        //        return new EmptyResult();
-        //    }
-        //    else
-        //    {
-        //        ViewBag.Msg = "登入失敗...";
-        //        return View();
-        //    }
-        //}
+        [HttpGet("{id}")]
+        public async Task<OrganizerDTO> GetOrganizer(int id)
+        {
+            var organizer = await _context.Organizers.FindAsync(id);
+            if (organizer == null)
+            {
+                return null;
+            }
+            OrganizerDTO orgDTO = new OrganizerDTO
+            {
+                OrganizerId = organizer.OrganizerId,
+                OrganizerAccount = organizer.OrganizerAccount,
+                LoginPassword = organizer.LoginPassword,
 
-        // 新增活動方api
+            };
+            return orgDTO;
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostOrganizer(OrganizerDTO Organizer)
         {
@@ -68,9 +78,9 @@ namespace Seatly1.Controllers
                 Validation = Organizer.Validation,
             };
 
-            // Save to database (replace with your actual database logic)
-            // _context.Organizers.Add(emp);
-            // await _context.SaveChangesAsync();
+            //Save to database(replace with your actual database logic)
+             _context.Organizers.Add(emp);
+            await _context.SaveChangesAsync();
 
             return Ok($"新增成功活動方編號:{emp.OrganizerId}");
         }
