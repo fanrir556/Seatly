@@ -7,17 +7,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Seatly1</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+  @*   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.min.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" /> *@
     @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
     @* <link rel="stylesheet" href="~/Seatly1.styles.css" asp-append-version="true" /> *@
-    <link href="~/css/theme-rtl.min.css" rel="stylesheet asp-append-version="true" />
+    @* <link href="~/css/theme-rtl.min.css" rel="stylesheet asp-append-version="true" /> *@
     @* <link href="~/css/theme-rtl.css" rel="stylesheet" /> *@
     <!-- ===============================================-->
     <!--    Document Title-->
@@ -72,9 +72,13 @@
                     </ul>
                 </li>
                 @* 點數專區結束 *@
+
+                @* 會員登入/註冊 start *@
                 <div>
                     <partial name="_LoginPartial" />
                 </div>
+                @* 會員登入/註冊 end *@
+
             </div>
         </div>
     </nav>
