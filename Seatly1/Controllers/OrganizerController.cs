@@ -16,18 +16,18 @@ namespace Seatly1.Controllers
             }
 
         [HttpGet]
-        public async Task<OrganizerDTO> GetOrganizers(int id)
+        public async Task<IEnumerable<OrganizerLoginDTO>> GetOrganizers(int id)
         {
-        {
-            return _context.Organizers.Select(
-                org => new OrganizerDTO
-                {
-                    OrganizerId = org.OrganizerId,
-                    OrganizerAccount = org.OrganizerAccount,
-                    LoginPassword = org.LoginPassword,
-                });
-        }
+            
+                return _context.Organizers.Select(
+                    org => new OrganizerLoginDTO
+                    {
+                        OrganizerAccount = org.OrganizerAccount,
+                        LoginPassword = org.LoginPassword,
+                    });
+            _context.SaveChangesAsync();
 
+        }
         [HttpGet("{id}")]
         public async Task<OrganizerDTO> GetOrganizer(int id)
         {
