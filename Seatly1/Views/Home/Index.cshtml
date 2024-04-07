@@ -38,16 +38,17 @@
                             </nav>
                             <div class="tab-content mt-3" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                    <form class="row gx-2 gy-2 align-items-center">
+                                    <form asp-action="Search" method="get"  class="row gx-2 gy-2 align-items-center">
                                         <div class="col">
                                             <div class="input-group-icon">
                                                 <i class="fas fa-map-marker-alt text-danger input-box-icon"></i>
                                                 <label class="visually-hidden" for="inputDelivery">Address</label>
-                                                <input class="form-control input-box form-foodwagon-control" id="inputDelivery" type="text" placeholder="Enter Your Address" />
+                                                <input class="form-control input-box form-foodwagon-control" name="searchString" id="inputDelivery" type="text" placeholder="Enter Your Address" />
                                             </div>
                                         </div>
                                         <div class="d-grid gap-3 col-sm-auto">
-                                            <button class="btn btn-danger" type="submit">Find Food</button>
+                                            <button class="btn btn-danger" type="submit" asp-area="" asp-controller="Organizers" asp-action="Search">搜尋</button>
+                                            
                                         </div>
                                     </form>
                                 </div>
