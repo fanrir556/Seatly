@@ -11,7 +11,7 @@ public partial class NotificationRecord
 
     public int? OrganizerId { get; set; }
 
-    public byte[]? ActivityPhoto { get; set; }
+    public byte[] ActivityPhoto { get; set; }
 
     public DateTime? StartTime { get; set; }
 
