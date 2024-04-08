@@ -49,7 +49,7 @@
                 @Html.DisplayFor(modelItem => item.OrganizerId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ActivityPhoto)
+                    <partial name="_ShowActivityPhoto" model="@item" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StartTime)

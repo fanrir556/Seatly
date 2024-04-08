@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="OrganizerId" class="control-label"></label>
@@ -19,8 +19,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="ActivityPhoto" class="control-label"></label>
-                <input asp-for="ActivityPhoto" class="form-control" />
-                <span asp-validation-for="ActivityPhoto" class="text-danger"></span>
+                <partial name="_ShowActivityPhoto" />
+                <input type="file" asp-for="ActivityPhoto" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="StartTime" class="control-label"></label>
@@ -70,4 +70,32 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function previewImage(inputFile, img) {
+            if (inputFile.files && inputFile.files[0]) {
+                var file = inputFile.files[0];
+                var allowType = "image.*";
+                if (file.type.match(allowType)) {
+                    //預覽
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+
+                        img.attr("src", e.target.result);
+                        img.attr("title", inputFile.files[0].name);
+                    };
+
+                    reader.readAsDataURL(inputFile.files[0]);
+                    $(".btn").prop("disabled", false);
+
+                }
+
+                else {
+                    alert("不支援檔案類型");
+                    $(".btn").prop("disabled", true);
+                }
+            }
+        }
+
+    </script>
 }

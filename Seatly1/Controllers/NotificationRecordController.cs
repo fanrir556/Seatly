@@ -57,6 +57,12 @@ namespace Seatly1.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (Request.Form.Files["ActivityPhoto"] != null) 
+                {
+                    SetPhoto(notificationRecord);
+                }
+
+
                 _context.Add(notificationRecord);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -96,6 +102,18 @@ namespace Seatly1.Controllers
             {
                 try
                 {
+                    NotificationRecord c = await _context.NotificationRecords.FindAsync(id);
+                    if (Request.Form.Files["ActivityPhoto"] != null)
+                    {
+                        SetPhoto(notificationRecord);
+                    }
+
+                    else {
+                        notificationRecord.ActivityPhoto = c.ActivityPhoto;
+                    }
+
+
+                    _context.Entry(c).State = EntityState.Detached;
                     _context.Update(notificationRecord);
                     await _context.SaveChangesAsync();
                 }
@@ -113,6 +131,15 @@ namespace Seatly1.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(notificationRecord);
+        }
+
+        private void SetPhoto(NotificationRecord notificationRecord)
+        {
+            using (BinaryReader br = new
+            BinaryReader(Request.Form.Files["ActivityPhoto"].OpenReadStream())) //BinaryReader一次性
+            {
+                notificationRecord.ActivityPhoto = br.ReadBytes((int)Request.Form.Files["ActivityPhoto"].Length);
+            }
         }
 
         // GET: NotificationRecord/Delete/5
@@ -149,9 +176,16 @@ namespace Seatly1.Controllers
         }
 
 
+        public async Task<FileResult> GetActivityPhoto(int? id)
+        {
+            NotificationRecord C = await _context.NotificationRecords.FindAsync(id);
+            byte[]? content = C?.ActivityPhoto;
+            return File(content, "image/jpeg");
+        }
 
 
-        private bool NotificationRecordExists(int id)
+
+            private bool NotificationRecordExists(int id)
         {
             return _context.NotificationRecords.Any(e => e.ActivityId == id);
         }
