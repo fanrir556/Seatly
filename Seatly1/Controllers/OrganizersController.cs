@@ -101,24 +101,33 @@ namespace Seatly1.Controllers
             return NoContent();
         }
 
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("login")]
-        public async Task<ActionResult<Organizer>> LoginOrganizer(OrganizerLoginDTO organizer)
+        //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public ActionResult Login(FormCollection post)
         {
+            string account = post["account"];
+            string password = post["password"];
 
-            _context.Organizers.Add(organizer);
-            await _context.SaveChangesAsync();
-
-            return $"{}";
+            //驗證密碼
+            if (db.CheckUserData(account, password))
+            {
+                Response.Redirect("~/Home/Home");
+                return new EmptyResult();
+            }
+            else
+            {
+                ViewBag.Msg = "登入失敗...";
+                return View();
+            }
         }
         [HttpPost("register")]
-        public async Task<ActionResult<Organizer>> RegisterOrganizer(OrganizerLoginDTO organizer)
+        public async Task<string> RegisterOrganizer(OrganizerLoginDTO organizer)
         {
 
             _context.Organizers.Add(organizer);
             await _context.SaveChangesAsync();
 
-            return $"{}";
+            return "註冊成功";
         }
 
         private bool OrganizerExists(int id)

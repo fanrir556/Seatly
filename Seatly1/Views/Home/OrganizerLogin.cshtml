@@ -2,4 +2,82 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewBag.Title = "OrganizersLogin";
+    Layout = null;
 }
+
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>餐廳登入</title>
+</head>
+
+<body>
+    <main class="main" id="top">
+        <!--登入頁開始-->
+        <section class="py-8 overflow-hidden">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-start text-md-center mb-3">活動方登入</h1>
+                    </div>
+                    <div class="col-12 col-md-8 offset-md-2">
+                        <!-- 表單 start -->
+                        <form class="needs-validation" novalidate>
+                            <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
+                            <div class="row">
+                                <div class="col-12 col-md-3">
+                                    <label for="account" class="form-label">帳號</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <!-- input.form-control[type="text"] -->
+                                    <input type="text" id="account" name="account" class="form-control"
+                                           placeholder="請輸入帳號" required>
+                                    <div class="invalid-feedback">
+                                        帳號不可為空。
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label for="password" class="form-label">餐廳密碼</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="password" id="password" name="password" class="form-control"
+                                           placeholder="請輸入密碼" required>
+                                    <div class="invalid-feedback">
+                                        密碼不可為空。
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="col-12 mb-3">
+                            <input type="checkbox" id="check" class="form-check-input">
+                            <label for="check" class="form-check-label">我已詳閱並同意 <a href="#">使用者條款</a> & <a href="#">隱私權保護政策</a></label>
+                            </div> -->
+                            <div class="row">
+                                <div class="col-md-12 col-sm-4 mb-3 d-flex flex-row-reverse bd-highlight">
+                                    <button id="r-login" type="submit" class="btn btn-primary margin-right mx-2">登入</button>
+                                    <button id="r-forget" type="button"
+                                            class="btn btn-primary margin-right">
+                                        忘記密碼
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <!-- 表單 end -->
+            </div>
+        </section>
+
+    </main>
+</body>
+
+</html>
