@@ -32,7 +32,7 @@ public partial class SeatlyContext : DbContext
     public virtual DbSet<RestaurantTime> RestaurantTimes { get; set; }
 
     public virtual DbSet<WaitlistInfo> WaitlistInfos { get; set; }
-    public virtual DbSet<Organizers> Organizers { get;  set; }
+
     public virtual DbSet<Friends> Friends { get;  set; }
 
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

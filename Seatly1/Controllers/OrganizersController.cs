@@ -73,67 +73,67 @@ namespace Seatly1.Controllers
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrganizer(int id, Organizer organizer)
-        {
-            if (id != organizer.OrganizerId)
-            {
-                return BadRequest();
-            }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutOrganizer(int id, Organizer organizer)
+        //{
+        //    if (id != organizer.OrganizerId)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(organizer).State = EntityState.Modified;
+        //    _context.Entry(organizer).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrganizerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!OrganizerExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
-        //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public ActionResult Login(FormCollection post)
-        {
-            string account = post["account"];
-            string password = post["password"];
+        ////To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public ActionResult Login(FormCollection post)
+        //{
+        //    string account = post["account"];
+        //    string password = post["password"];
 
-            //驗證密碼
-            if (db.CheckUserData(account, password))
-            {
-                Response.Redirect("~/Home/Home");
-                return new EmptyResult();
-            }
-            else
-            {
-                ViewBag.Msg = "登入失敗...";
-                return View();
-            }
-        }
-        [HttpPost("register")]
-        public async Task<string> RegisterOrganizer(OrganizerLoginDTO organizer)
-        {
+        //    //驗證密碼
+        //    if (db.CheckUserData(account, password))
+        //    {
+        //        Response.Redirect("~/Home/Home");
+        //        return new EmptyResult();
+        //    }
+        //    else
+        //    {
+        //        ViewBag.Msg = "登入失敗...";
+        //        return View();
+        //    }
+        //}
+        //[HttpPost("register")]
+        //public async Task<string> RegisterOrganizer(OrganizerLoginDTO organizer)
+        //{
 
-            _context.Organizers.Add(organizer);
-            await _context.SaveChangesAsync();
+        //    _context.Organizers.Add(organizer);
+        //    await _context.SaveChangesAsync();
 
-            return "註冊成功";
-        }
+        //    return "註冊成功";
+        //}
 
-        private bool OrganizerExists(int id)
-        {
-            return _context.Organizers.Any(e => e.OrganizerId == id);
-        }
+        //private bool OrganizerExists(int id)
+        //{
+        //    return _context.Organizers.Any(e => e.OrganizerId == id);
+        //}
     }
 }
