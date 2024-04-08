@@ -1,5 +1,4 @@
-﻿
-
+﻿var strPointsTitle = sessionStorage.getItem('strPointsTitle') || "";
 $(function () {
     /*點數專區導覽列hover開始*/
     var timer;
@@ -20,4 +19,17 @@ $(function () {
         }, 100); // 這裡可以調整延遲的時間
     });
     /*點數專區導覽列hover結束*/
+
+    $("#pointsShop").on("click", function () {
+        strPointsTitle = "pointsShop";
+        sessionStorage.setItem('strPointsTitle', strPointsTitle);
+    });
+    $("#pointsHistory").on("click", function () {
+        strPointsTitle = "pointsHistory";
+        sessionStorage.setItem('strPointsTitle', strPointsTitle);
+    });
+    $("#coupon").on("click", function () {
+        strPointsTitle = "coupon";
+        sessionStorage.setItem('strPointsTitle', strPointsTitle);
+    });
 })

@@ -12,10 +12,10 @@
             <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsShopSide">點數商城</a>
         </li>
         <li class="list-group-item text-gradient">
-            <a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="Coupon">持有優惠券</a>
+            <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="couponSide">持有優惠券</a>
         </li>
         <li class="list-group-item text-gradient">
-            <a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="PointsHistory">點數交易紀錄</a>
+            <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsHistorySide">點數交易紀錄</a>
         </li>
     </ul>
 </div>
@@ -23,16 +23,60 @@
 @section Scripts
 {
     <script>
-        $("#pointsShopSide").on("click", function (e) {
-            e.preventDefault();
-            $.ajax({
-                type: "GET",
-                url: `@Url.Action("pointsShopTitle", "Points")`
-            }).done(function (data) {
-                $("#pointsTitle").html(data); // 將局部視圖的內容設置為 #pointsTitle 元素的HTML內容
-            }).fail(function (err) {
-                alert(err.responseText);
+        $(function () {
+            $("#pointsShopSide").on("click", function (e) {
+                e.preventDefault();
+                strPointsTitle = "pointsShop";
+                sessionStorage.setItem('strPointsTitle', strPointsTitle);
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsShopTitle", "Points")`
+                }).done(function (data) {
+                    $("#pointsTitle").html(data); // 將局部視圖的內容設置為 #pointsTitle 元素的HTML內容
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
             });
+            $("#couponSide").on("click", function (e) {
+                e.preventDefault();
+                strPointsTitle = "coupon";
+                sessionStorage.setItem('strPointsTitle', strPointsTitle);
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("couponTitle", "Points")`
+                }).done(function (data) {
+                    $("#pointsTitle").html(data); // 將局部視圖的內容設置為 #pointsTitle 元素的HTML內容
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            });
+            $("#pointsHistorySide").on("click", function (e) {
+                e.preventDefault();
+                strPointsTitle = "pointsHistory";
+                sessionStorage.setItem('strPointsTitle', strPointsTitle);
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsHistoryTitle", "Points")`
+                }).done(function (data) {
+                    $("#pointsTitle").html(data); // 將局部視圖的內容設置為 #pointsTitle 元素的HTML內容
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            });
+            switch(strPointsTitle){
+                case "pointsShop":
+                    $("#pointsShopSide").trigger("click");
+                    break;
+                case "pointsHistory":
+                    $("#pointsHistorySide").trigger("click");
+                    break;
+                case "coupon":
+                    $("#couponSide").trigger("click");
+                    break;
+                default:
+                alert("?")
+                    break;
+            }
         });
     </script>
 }

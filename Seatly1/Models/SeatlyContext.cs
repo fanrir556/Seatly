@@ -230,22 +230,17 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<NotificationRecord>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E32B6D5F544");
+            entity.HasNoKey();
 
-            entity.Property(e => e.NotificationId)
-                .ValueGeneratedNever()
-                .HasColumnName("NotificationID");
-            entity.Property(e => e.EmailAddress).HasMaxLength(100);
-            entity.Property(e => e.MessageContent).HasMaxLength(500);
-            entity.Property(e => e.NotificationContent).HasMaxLength(500);
-            entity.Property(e => e.NotificationStatus).HasMaxLength(50);
-            entity.Property(e => e.NotificationTimestamp).HasColumnType("datetime");
-            entity.Property(e => e.NotificationType).HasMaxLength(50);
-            entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
-            entity.HasOne(d => d.Order).WithMany(p => p.NotificationRecords)
-                .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK__Notificat__Order__412EB0B6");
+            entity.Property(e => e.ActivityId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("ActivityID");
+            entity.Property(e => e.ActivityName).HasMaxLength(100);
+            entity.Property(e => e.DescriptionN).HasMaxLength(1000);
+            entity.Property(e => e.EndTime).HasColumnType("datetime");
+            entity.Property(e => e.OrganizerId).HasColumnName("OrganizerID");
+            entity.Property(e => e.RecurringTime).HasMaxLength(50);
+            entity.Property(e => e.StartTime).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Organizer>(entity =>

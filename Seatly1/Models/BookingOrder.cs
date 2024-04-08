@@ -20,6 +20,4 @@ public partial class BookingOrder
     public int? PartySize { get; set; }
 
     public string? Status { get; set; }
-
-    public virtual ICollection<NotificationRecord> NotificationRecords { get; set; } = new List<NotificationRecord>();
 }

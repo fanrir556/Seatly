@@ -5,23 +5,23 @@ namespace Seatly1.Models;
 
 public partial class NotificationRecord
 {
-    public int NotificationId { get; set; }
+    public int ActivityId { get; set; }
 
-    public int? OrderId { get; set; }
+    public int? OrganizerId { get; set; }
 
-    public string? NotificationType { get; set; }
+    public byte[]? ActivityPhoto { get; set; }
 
-    public string? NotificationContent { get; set; }
+    public DateTime? StartTime { get; set; }
 
-    public string? NotificationStatus { get; set; }
+    public DateTime? EndTime { get; set; }
 
-    public DateTime? NotificationTimestamp { get; set; }
+    public int? Capacity { get; set; }
 
-    public string? EmailAddress { get; set; }
+    public string? ActivityName { get; set; }
 
-    public bool? MessageSent { get; set; }
+    public string? DescriptionN { get; set; }
 
-    public string? MessageContent { get; set; }
+    public bool? IsRecurring { get; set; }
 
-    public virtual BookingOrder? Order { get; set; }
+    public string? RecurringTime { get; set; }
 }

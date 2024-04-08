@@ -10,10 +10,20 @@ namespace Seatly1.Controllers
             return View();
         }
 
-        //GET: /Points/Title
+        //GET: /Points/pointsShopTitle
         public IActionResult pointsShopTitle()
         {
             return PartialView("_pointsShopTitlePartial");
+        }
+
+        public IActionResult pointsHistoryTitle()
+        {
+            return PartialView("_pointsHistoryTitlePartial");
+        }
+
+        public IActionResult couponTitle()
+        {
+            return PartialView("_couponTitlePartial");
         }
     }
 }
