@@ -14,7 +14,7 @@ public partial class SeatlyContext : DbContext
     }
 
     public virtual DbSet<NotificationRecord> NotificationRecords { get; set; }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<NotificationRecord>(entity =>
