@@ -7,6 +7,22 @@ public partial class AspNetUser
 {
     public string Id { get; set; } = null!;
 
+    public string MemberAccount { get; set; } = null!;
+
+    public string MemberNickname { get; set; } = null!;
+
+    public int? Permission { get; set; }
+
+    public int? Points { get; set; }
+
+    public int Age { get; set; }
+
+    public string Sex { get; set; } = null!;
+
+    public DateTime? Birthday { get; set; }
+
+    public DateTime CreatAt { get; set; }
+
     public string? UserName { get; set; }
 
     public string? NormalizedUserName { get; set; }
