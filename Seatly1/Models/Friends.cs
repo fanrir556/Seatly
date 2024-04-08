@@ -2,7 +2,7 @@
 
 namespace Seatly1.Models
 {
-    public class Friends
+    public partial class Friends
     {
         [Key]
         public int FlowID { get; set; }
