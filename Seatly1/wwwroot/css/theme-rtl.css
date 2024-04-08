@@ -5785,7 +5785,7 @@ fieldset:disabled .btn {
   z-index: 2;
   color: #FFFEFE;
   background-color: #FFB30E;
-  border-color: #FFB30E;
+  border-color: #e73140;
 }
 
 .list-group-item + .list-group-item {

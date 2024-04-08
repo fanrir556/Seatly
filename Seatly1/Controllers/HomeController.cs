@@ -23,21 +23,6 @@ namespace Seatly1.Controllers
             return View();
         }
 
-        public IActionResult PointsShop()
-        {
-            return View();
-        }
-
-        public IActionResult Coupon()
-        {
-            return View();
-        }
-
-    public IActionResult PointsHistory()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

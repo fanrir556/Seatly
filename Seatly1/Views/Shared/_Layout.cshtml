@@ -15,9 +15,9 @@
     <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" /> *@
-    @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
     @* <link rel="stylesheet" href="~/Seatly1.styles.css" asp-append-version="true" /> *@
     <link href="~/css/theme-rtl.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     @* <link href="~/css/theme-rtl.css" rel="stylesheet" /> *@
     <!-- ===============================================-->
     <!--    Document Title-->
@@ -67,9 +67,9 @@
                         點數專區
                     </a>
                     <ul id="pointsDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="PointsShop">點數商城</a></li>
-                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="Coupon">持有優惠券</a></li>
-                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="PointsHistory">點數交易紀錄</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsShop">點數商城</a></li>
+                        @* <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="Coupon">持有優惠券</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="PointsHistory">點數交易紀錄</a></li> *@
                     </ul>
                 </li>
                 @* 點數專區結束 *@
@@ -96,7 +96,7 @@
     <!--    JavaScripts-->
     <!-- ===============================================-->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
     @* <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
