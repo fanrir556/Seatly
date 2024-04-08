@@ -53,7 +53,7 @@
                 <img class="d-inline-block" src="~/img/gallery/logo.svg" alt="logo" />
                 <span class="text-1000 fs-3 fw-bold ms-2 text-gradient">Seatly</span>
             </a>
-
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"> </span>
@@ -82,6 +82,15 @@
                 @* 點數專區結束 *@
             <partial name="_LoginPartial" />
 
+            </div>
+            <div class="d-flex flex-grow-1">
+                <!-- 新增這個 div -->
+                <a class="navbar-brand d-inline-flex" asp-area="" asp-controller="Home" asp-action="OrganizerRegister">
+                    <span class="fs-1 fw-bold text-gradient small">活動方註冊</span>
+                </a>
+                <a class="navbar-brand d-inline-flex" asp-area="" asp-controller="Home" asp-action="OrganizerLogin">
+                    <span class="fs-1 fw-bold text-gradient small">活動方登入</span>
+                </a>
             </div>
         </div>
     </nav>

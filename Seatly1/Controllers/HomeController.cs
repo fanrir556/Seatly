@@ -32,16 +32,16 @@ namespace Seatly1.Controllers
         {
             return View();
         }
-        public IActionResult RestaurantRegister()
-        {
-            return View();
-        }
-        public IActionResult RestaurantLogin()
-        {
-            return View();
-        }
 
         public IActionResult PointsHistory()
+        {
+            return View();
+        }
+        public IActionResult OrganizerLogin()
+        {
+            return View();
+        }
+        public IActionResult OrganizerRegister()
         {
             return View();
         }

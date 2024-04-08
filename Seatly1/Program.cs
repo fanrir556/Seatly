@@ -59,6 +59,15 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "OrganizerRegister",
+    pattern: "{controller=Home}/{action=OrganizerRegister}/{id?}");
+
+app.MapControllerRoute(
+    name: "OrganizerLogin",
+    pattern: "{controller=Home}/{action=OrganizerLogin}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();

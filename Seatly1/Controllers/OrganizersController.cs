@@ -15,17 +15,17 @@ namespace Seatly1.Controllers
     // 活動方資訊頁的api
     [Route("api/[controller]")]
     [ApiController]
-    public class OrganizersInfoController : ControllerBase
+    public class OrganizersController : ControllerBase
     {
         private readonly SeatlyContext _context;
 
-        public OrganizersInfoController(SeatlyContext context)
+        public OrganizersController(SeatlyContext context)
         {
             _context = context;
         }
 
         // 活動方資訊取得api
-        [HttpGet]
+        [HttpGet("totalinfo")]
         public async Task<IEnumerable<OrgainzerInfoDTO>> GetOrganizers()
         {
             return await _context.Organizers
@@ -45,8 +45,8 @@ namespace Seatly1.Controllers
                 .ToListAsync();
         }
 
-        // 活動方資訊取得api
-        [HttpGet("{id}")]
+        // 活動方個別會員資訊取得api
+        [HttpGet("info/{id}")]
         public async Task<OrgainzerInfoDTO?> GetOrganizer(int id)
         {
             var organizer = await _context.Organizers.FindAsync(id);
@@ -102,29 +102,24 @@ namespace Seatly1.Controllers
         }
 
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Organizer>> PostOrganizer(Organizer organizer)
+        [HttpPost("login")]
+        public async Task<ActionResult<Organizer>> LoginOrganizer(OrganizerLoginDTO organizer)
         {
+
             _context.Organizers.Add(organizer);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrganizer", new { id = organizer.OrganizerId }, organizer);
+            return $"{}";
         }
+        [HttpPost("register")]
+        public async Task<ActionResult<Organizer>> RegisterOrganizer(OrganizerLoginDTO organizer)
+        {
 
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteOrganizer(int id)
-        //{
-        //    var organizer = await _context.Organizers.FindAsync(id);
-        //    if (organizer == null)
-        //    {
-        //        return NotFound();
-        //    }
+            _context.Organizers.Add(organizer);
+            await _context.SaveChangesAsync();
 
-        //    _context.Organizers.Remove(organizer);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
+            return $"{}";
+        }
 
         private bool OrganizerExists(int id)
         {
