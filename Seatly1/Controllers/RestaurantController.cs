@@ -31,20 +31,20 @@ namespace Seatly1.Controllers
             return $"Hello,{p.Name}!";
         }
 
-        //POST: /Ajax/CheckRestaurantName
-        [HttpPost()]
-        public string CheckRestaurantName(string RestaurantName)
-        {
-            bool Exists = _context.Restaurants.Any(emp => emp.RestaurantName == RestaurantName);
-            return Exists ? "true" : "false" ;   
-        }
+        ////POST: /Ajax/CheckRestaurantName
+        //[HttpPost()]
+        //public string CheckRestaurantName(string RestaurantName)
+        //{
+        //    bool Exists = _context.Restaurants.Any(emp => emp.RestaurantName == RestaurantName);
+        //    return Exists ? "true" : "false" ;   
+        //}
 
-        [HttpPost()]
-        public string FetchCheckRestaurantName(string RestaurantName)
-        {
-            bool Exists = _context.Restaurants.Any(emp => emp.RestaurantName == RestaurantName);
-            return Exists ? "true" : "false";
-        }
+        //[HttpPost()]
+        //public string FetchCheckRestaurantName(string RestaurantName)
+        //{
+        //    bool Exists = _context.Restaurants.Any(emp => emp.RestaurantName == RestaurantName);
+        //    return Exists ? "true" : "false";
+        //}
 
         public IActionResult Index()
         {
