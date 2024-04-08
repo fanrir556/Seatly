@@ -174,6 +174,7 @@ namespace Seatly1.Controllers
         }
 
 
+        //GET: NotificationRecord/GetActivityPhoto/(id)
         public async Task<FileResult> GetActivityPhoto(int? id)
         {
             NotificationRecord C = await _context.NotificationRecords.FindAsync(id);
