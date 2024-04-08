@@ -61,6 +61,11 @@ namespace  Seatly1.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
+
+        public static string Friends => "Friends";
+
+        public static string Collections => "Collectons";
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -108,6 +113,12 @@ namespace  Seatly1.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public static string TwoFactorAuthenticationNavClass(ViewContext viewContext) => PageNavClass(viewContext, TwoFactorAuthentication);
+
+        public static string FriendsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Friends);
+
+        public static string CollectionsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Collections);
+
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
