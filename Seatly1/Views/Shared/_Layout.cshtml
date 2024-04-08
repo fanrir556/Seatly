@@ -40,7 +40,8 @@
     <!-- ===============================================-->
     <!--    Stylesheets-->
     <!-- ===============================================-->
-    <link href="~/css/theme.css" rel="stylesheet" />
+    <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/theme.css" rel="stylesheet" asp-append-version="true" />
     @RenderSection("Styles", required: false) <!-- 如果提供了 Styles 部分，则渲染 Styles 部分 -->
 </head>
 <body>
@@ -59,11 +60,14 @@
                 <span class="navbar-toggler-icon"> </span>
             </button>
 
-            <div class="collapse navbar-collapse border-top border-lg-0 my-2 mt-lg-0 " id="navbarSupportedContent">
+            <div class="collapse navbar-collapse border-top border-lg-0 justify-content-end" id="navbarSupportedContent">
+
+                <a class="dropdown-item text-gradient" asp-area="" asp-controller="NotificationRecord" asp-action="Index">活動連接測試</a>
+
                 @* 點數專區開始 *@
                 <li class="nav-item dropdown text-gradient list-group">
                     <a id="pointsNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    點數專區
+                        點數專區
                     </a>
                     <ul id="pointsDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="PointsShop">點數商城</a></li>

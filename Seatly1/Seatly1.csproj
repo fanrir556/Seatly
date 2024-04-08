@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="efpt.config.json.user" />
     <None Include="wwwroot\public\vendors\%40popperjs\%40popper.min.js" />
   </ItemGroup>
 
