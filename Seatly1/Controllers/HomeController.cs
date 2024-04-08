@@ -33,7 +33,15 @@ namespace Seatly1.Controllers
             return View();
         }
 
-    public IActionResult PointsHistory()
+        public IActionResult PointsHistory()
+        {
+            return View();
+        }
+        public IActionResult OrganizerLogin()
+        {
+            return View();
+        }
+        public IActionResult OrganizerRegister()
         {
             return View();
         }

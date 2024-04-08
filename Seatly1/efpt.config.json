@@ -31,6 +31,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Friends]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[GamePoints]",
          "ObjectType": 0
       },
@@ -40,6 +44,10 @@
       },
       {
          "Name": "[dbo].[NotificationRecords]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Organizers]",
          "ObjectType": 0
       },
       {
