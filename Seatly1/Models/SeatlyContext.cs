@@ -142,7 +142,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<BookingOrder>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__BookingO__C3905BAF19F65072");
+            entity.HasKey(e => e.OrderId).HasName("PK__BookingO__C3905BAFFED084D1");
 
             entity.Property(e => e.OrderId)
                 .ValueGeneratedNever()
@@ -155,7 +155,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<CollectionItem>(entity =>
         {
-            entity.HasKey(e => e.SerialId).HasName("PK__Collecti__5E5B3EC4546D67D3");
+            entity.HasKey(e => e.SerialId).HasName("PK__Collecti__5E5B3EC486B21CA6");
 
             entity.Property(e => e.SerialId)
                 .ValueGeneratedNever()
@@ -166,7 +166,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<Comment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFAA1F6853F9");
+            entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFAAE19E2712");
 
             entity.Property(e => e.CommentId)
                 .ValueGeneratedNever()
@@ -180,7 +180,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<DailyCheckIn>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__DailyChe__3214EC27E9471DDB");
+            entity.HasKey(e => e.Id).HasName("PK__DailyChe__3214EC27353AA3D6");
 
             entity.ToTable("DailyCheckIn");
 
@@ -192,7 +192,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<GamePoint>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__GamePoin__3214EC27DDC4938F");
+            entity.HasKey(e => e.Id).HasName("PK__GamePoin__3214EC276106CA55");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -219,7 +219,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<NotificationRecord>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E32E5DEBF0F");
+            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E32F7AB5941");
 
             entity.Property(e => e.NotificationId)
                 .ValueGeneratedNever()
@@ -263,7 +263,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<PointStore>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__PointSto__B40CC6ED3A0C5B05");
+            entity.HasKey(e => e.ProductId).HasName("PK__PointSto__B40CC6ED748591A7");
 
             entity.ToTable("PointStore");
 
@@ -278,7 +278,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<PointTransaction>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PointTra__3214EC273C863E87");
+            entity.HasKey(e => e.Id).HasName("PK__PointTra__3214EC27BF8F36EB");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -290,7 +290,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<Rating>(entity =>
         {
-            entity.HasKey(e => e.RatingId).HasName("PK__Ratings__FCCDF85C5CA10BD0");
+            entity.HasKey(e => e.RatingId).HasName("PK__Ratings__FCCDF85C704CA40B");
 
             entity.Property(e => e.RatingId)
                 .ValueGeneratedNever()
@@ -302,7 +302,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<Reply>(entity =>
         {
-            entity.HasKey(e => e.ReplyId).HasName("PK__Reply__C25E4629762A7F97");
+            entity.HasKey(e => e.ReplyId).HasName("PK__Reply__C25E4629DDB1EFC9");
 
             entity.ToTable("Reply");
 
@@ -318,7 +318,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<RestaurantOffer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Restaura__3214EC2737D02F33");
+            entity.HasKey(e => e.Id).HasName("PK__Restaura__3214EC27D32F508C");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -330,7 +330,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<RestaurantTable>(entity =>
         {
-            entity.HasKey(e => e.TableId).HasName("PK__Restaura__7D5F018EA0488618");
+            entity.HasKey(e => e.TableId).HasName("PK__Restaura__7D5F018EA7399522");
 
             entity.Property(e => e.TableId)
                 .ValueGeneratedNever()
@@ -343,7 +343,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<RestaurantTime>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Restaura__3214EC27028CEA09");
+            entity.HasKey(e => e.Id).HasName("PK__Restaura__3214EC273D4D828B");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -353,7 +353,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<WaitlistInfo>(entity =>
         {
-            entity.HasKey(e => e.WaitlistId).HasName("PK__Waitlist__FE78FE8064288934");
+            entity.HasKey(e => e.WaitlistId).HasName("PK__Waitlist__FE78FE80A6E3BE7F");
 
             entity.ToTable("WaitlistInfo");
 
