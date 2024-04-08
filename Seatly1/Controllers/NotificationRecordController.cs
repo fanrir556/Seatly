@@ -107,11 +107,9 @@ namespace Seatly1.Controllers
                     {
                         SetPhoto(notificationRecord);
                     }
-
                     else {
                         notificationRecord.ActivityPhoto = c.ActivityPhoto;
                     }
-
 
                     _context.Entry(c).State = EntityState.Detached;
                     _context.Update(notificationRecord);

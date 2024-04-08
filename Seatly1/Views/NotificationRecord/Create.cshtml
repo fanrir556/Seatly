@@ -20,7 +20,7 @@
             <div class="form-group">
                 <label asp-for="ActivityPhoto" class="control-label"></label>
                 <partial name="_ShowActivityPhoto" />
-                <input type="file" asp-for="ActivityPhoto" class="form-control" />
+                <input type="file" asp-for="ActivityPhoto" class="form-control" accept="image/*" />
             </div>
             <div class="form-group">
                 <label asp-for="StartTime" class="control-label"></label>
@@ -97,5 +97,9 @@
             }
         }
 
+
+        $("#ActivityPhoto").change(function () {
+            previewImage(this, $("#ActivityPhoto").prev());
+        });
     </script>
 }
