@@ -31,7 +31,7 @@ public partial class SeatlyContext : DbContext
 
     public virtual DbSet<BookingOrder> BookingOrders { get; set; }
 
-    public virtual DbSet<CollectionItem> CollectionItems { get; set; }
+    public virtual DbSet<Collections> CollectionItems { get; set; }
 
     public virtual DbSet<Comment> Comments { get; set; }
 
@@ -150,7 +150,7 @@ public partial class SeatlyContext : DbContext
             entity.Property(e => e.WaitingName).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<CollectionItem>(entity =>
+        modelBuilder.Entity<Collections>(entity =>
         {
             entity.HasKey(e => e.SerialId).HasName("PK__Collecti__5E5B3EC45C3661CB");
 

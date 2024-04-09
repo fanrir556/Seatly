@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Seatly1.Models;
 
-public partial class CollectionItem
+public partial class Collections
 {
     public int SerialId { get; set; }
 
