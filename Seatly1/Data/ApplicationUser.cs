@@ -6,7 +6,7 @@ namespace Seatly1.Data
     public class ApplicationUser:IdentityUser
     {
         [MaxLength(20)]
-        public string? MemberAccount { get; set; }
+        public string? MemberRealName { get; set; }
 
         [MaxLength(10)]
         public string? MemberNickname { get; set; }

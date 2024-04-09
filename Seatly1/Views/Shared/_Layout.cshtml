@@ -2,7 +2,7 @@
     Layout = null;
 }
 <!DOCTYPE html>
-<html lang="tw">
+<html lang="tw" class="h-100">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -44,7 +44,7 @@
     @* <link href="~/css/theme-rtl.css" rel="stylesheet" /> *@
     @RenderSection("Styles", required: false) <!-- 如果提供了 Styles 部分，则渲染 Styles 部分 -->
 </head>
-<body>
+<body class="d-flex flex-column h-100">
     @* ====================================================== *@
         @* nav bar *@
     @* ====================================================== *@
@@ -80,7 +80,7 @@
 
   
     <div class="container-fluid">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 flex-shrink-0">
             @RenderBody()
         </main>
     </div>

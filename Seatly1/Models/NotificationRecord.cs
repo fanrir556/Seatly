@@ -24,4 +24,8 @@ public partial class NotificationRecord
     public bool? IsRecurring { get; set; }
 
     public string? RecurringTime { get; set; }
+
+    public string? HashTag { get; set; }
+
+    public string? ActivityMethod { get; set; }
 }

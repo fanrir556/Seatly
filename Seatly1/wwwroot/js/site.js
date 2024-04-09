@@ -1,4 +1,4 @@
-﻿var strPointsTitle = sessionStorage.getItem('strPointsTitle') || "";
+﻿var strPoints = sessionStorage.getItem('strPoints') || "";
 $(function () {
     /*點數專區導覽列hover開始*/
     var timer;
@@ -21,15 +21,15 @@ $(function () {
     /*點數專區導覽列hover結束*/
 
     $("#pointsShop").on("click", function () {
-        strPointsTitle = "pointsShop";
-        sessionStorage.setItem('strPointsTitle', strPointsTitle);
+        strPoints = "pointsShop";
+        sessionStorage.setItem('strPoints', strPoints);
     });
     $("#pointsHistory").on("click", function () {
-        strPointsTitle = "pointsHistory";
-        sessionStorage.setItem('strPointsTitle', strPointsTitle);
+        strPoints = "pointsHistory";
+        sessionStorage.setItem('strPoints', strPoints);
     });
     $("#coupon").on("click", function () {
-        strPointsTitle = "coupon";
-        sessionStorage.setItem('strPointsTitle', strPointsTitle);
+        strPoints = "coupon";
+        sessionStorage.setItem('strPoints', strPoints);
     });
 })

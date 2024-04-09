@@ -35,11 +35,19 @@ public partial class AspNetUser
 
     public int AccessFailedCount { get; set; }
 
-    public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; } = new List<AspNetUserClaim>();
+    public int? Age { get; set; }
 
-    public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; } = new List<AspNetUserLogin>();
+    public DateTime? Birthday { get; set; }
 
-    public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
+    public DateTime? CreatAt { get; set; }
 
-    public virtual ICollection<AspNetRole> Roles { get; set; } = new List<AspNetRole>();
+    public string? MemberRealName { get; set; }
+
+    public string? MemberNickname { get; set; }
+
+    public int? Permission { get; set; }
+
+    public int? Points { get; set; }
+
+    public string? Sex { get; set; }
 }

@@ -12,6 +12,4 @@ public partial class AspNetUserToken
     public string Name { get; set; } = null!;
 
     public string? Value { get; set; }
-
-    public virtual AspNetUser User { get; set; } = null!;
 }

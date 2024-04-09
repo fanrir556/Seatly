@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Basic.Models
+namespace Seatly1.Models
 {
     public partial class SeatlyContext : DbContext
     {

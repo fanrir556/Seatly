@@ -1,0 +1,42 @@
+﻿@model IEnumerable<IGrouping<string, PointStore>>
+
+<button class="btn btn-gradient mb-2" data-cate="">全部</button>
+
+@foreach(var group in Model)
+{
+    <button class="btn btn-gradient mb-2 btn-cate" data-cate="@group.Key">@Html.DisplayFor(modelgroup => group.Key)</button>
+}
+
+<div class="col-12 col-md-10 p-3" id="pointsContentBody">
+    @foreach (var group in Model)
+    {
+        @foreach (var product in group)
+        {
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="~/images/@product.ProductImage" class="img-fluid rounded-start" style="width:300px" alt="@product.ProductName" title="@product.ProductName">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <span class="position-absolute end-0 me-2">@product.Category</span>
+                            <h5 class="card-title text-gradient fs-3">@product.ProductName</h5>
+                            <p class="card-text">@product.ProductDescription</p>
+                            <p class="card-text text-gradient">兌換需要 @product.ProductPrice 點數</p>
+                            <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1">兌換</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<script>
+    $(function () {
+        $(".btn-cate").on("click", function () {
+            $("#pointsContentHead").html("test");
+        });
+    });
+
+</script>
