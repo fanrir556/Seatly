@@ -158,10 +158,8 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.SerialId).HasName("PK__Collecti__5E5B3EC446FF6BE9");
 
-            entity.Property(e => e.SerialId)
-                .ValueGeneratedNever()
-                .HasColumnName("SerialID");
-            entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
+            entity.Property(e => e.SerialId).HasColumnName("SerialID");
+            entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
         });
 

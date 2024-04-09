@@ -11,5 +11,5 @@ public partial class CollectionItem
 
     public int? UserId { get; set; }
 
-    public int? RestaurantId { get; set; }
+    public int? ActivityId { get; set; }
 }
