@@ -145,13 +145,13 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.OrderId).HasName("PK__BookingO__C3905BAF4F8536F1");
 
-            entity.Property(e => e.OrderId)
-                .ValueGeneratedNever()
-                .HasColumnName("OrderID");
-            entity.Property(e => e.ContactInfo).HasMaxLength(100);
-            entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
+            entity.Property(e => e.OrderId).HasColumnName("OrderID");
+            entity.Property(e => e.ActivityBarcode).HasMaxLength(6);
+            entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
+            entity.Property(e => e.ActivityName).HasMaxLength(100);
+            entity.Property(e => e.DateTime).HasColumnType("datetime");
             entity.Property(e => e.Status).HasMaxLength(50);
-            entity.Property(e => e.WaitingName).HasMaxLength(100);
+            entity.Property(e => e.UserName).HasMaxLength(256);
         });
 
         modelBuilder.Entity<CollectionItem>(entity =>
