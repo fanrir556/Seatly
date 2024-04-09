@@ -33,6 +33,10 @@
                 <label asp-for="Username" class="form-label"></label>
             </div>
             <div class="form-floating mb-3">
+                <input asp-for="MemberRealName" class="form-control" placeholder="真實姓名" disabled />
+                <label asp-for="MemberRealName" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3">
                 <input asp-for="Input.PhoneNumber" class="form-control" placeholder="連絡電話"/>
                 <label asp-for="Input.PhoneNumber" class="form-label">@Html.DisplayNameFor(a => a.Input.PhoneNumber)</label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>

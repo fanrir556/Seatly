@@ -19,6 +19,11 @@
                 <span asp-validation-for="Input.UserName" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
+                <input asp-for="Input.MemberRealName" class="form-control" autocomplete="MemberRealName" aria-required="true" placeholder="真實姓名" />
+                <label asp-for="Input.MemberRealName">@Html.DisplayNameFor(a => a.Input.MemberRealName)</label>
+                <span asp-validation-for="Input.MemberRealName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="Email@example.com" />
                 <label asp-for="Input.Email">@Html.DisplayNameFor(a => a.Input.Email)</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>

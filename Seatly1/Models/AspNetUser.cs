@@ -7,22 +7,6 @@ public partial class AspNetUser
 {
     public string Id { get; set; } = null!;
 
-    public string MemberAccount { get; set; } = null!;
-
-    public string MemberNickname { get; set; } = null!;
-
-    public int? Permission { get; set; }
-
-    public int? Points { get; set; }
-
-    public int Age { get; set; }
-
-    public string Sex { get; set; } = null!;
-
-    public DateTime? Birthday { get; set; }
-
-    public DateTime CreatAt { get; set; }
-
     public string? UserName { get; set; }
 
     public string? NormalizedUserName { get; set; }
@@ -51,11 +35,27 @@ public partial class AspNetUser
 
     public int AccessFailedCount { get; set; }
 
+    public int? Age { get; set; }
+
+    public DateTime? Birthday { get; set; }
+
+    public DateTime? CreatAt { get; set; }
+
+    public string? MemberRealName { get; set; }
+
+    public string? MemberNickname { get; set; }
+
+    public int? Permission { get; set; }
+
+    public int? Points { get; set; }
+
+    public string? Sex { get; set; }
+
     public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; } = new List<AspNetUserClaim>();
 
     public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; } = new List<AspNetUserLogin>();
 
-    public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
+    public virtual ICollection<AspNetUserRole> AspNetUserRoles { get; set; } = new List<AspNetUserRole>();
 
-    public virtual ICollection<AspNetRole> Roles { get; set; } = new List<AspNetRole>();
+    public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
 }

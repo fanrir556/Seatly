@@ -12,8 +12,8 @@ using Seatly1.Data;
 namespace Seatly1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240408111633_renameMemberRealName")]
-    partial class renameMemberRealName
+    [Migration("20240409020255_RenameMemberRealName")]
+    partial class RenameMemberRealName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
