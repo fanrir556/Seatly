@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.OrganizerId)
+                @Html.DisplayNameFor(model => model.ActivityId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ActivityPhoto)
@@ -46,7 +46,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.OrganizerId)
+                @Html.DisplayFor(modelItem => item.ActivityId)
             </td>
             <td>
                     <partial name="_ShowActivityPhoto" model="@item" />
