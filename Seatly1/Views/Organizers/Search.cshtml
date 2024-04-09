@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Seatly1.Models.Organizers>
+
+@{
+    ViewData["Title"] = "Search Organizers";
+}
+
+<h2>Search Organizers</h2>
+
+
+@if (Model != null && Model.Any())
+{
+    <h3>Search Results</h3>
+    <ul>
+        @foreach (var org in Model)
+        {
+            <li>@org.OrganizerName</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No results found.</p>
+}
