@@ -13,6 +13,18 @@ public partial class SeatlyContext : DbContext
     {
     }
 
+    public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+
+    public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
+
+    public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+
+    public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+
+    public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+
+    public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
+
     public virtual DbSet<BookingOrder> BookingOrders { get; set; }
 
     public virtual DbSet<CollectionItem> CollectionItems { get; set; }
@@ -39,8 +51,6 @@ public partial class SeatlyContext : DbContext
 
     public virtual DbSet<Reply> Replies { get; set; }
 
-    public virtual DbSet<Restaurant> Restaurants { get; set; }
-
     public virtual DbSet<RestaurantOffer> RestaurantOffers { get; set; }
 
     public virtual DbSet<RestaurantTable> RestaurantTables { get; set; }
@@ -51,27 +61,105 @@ public partial class SeatlyContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AspNetRole>(entity =>
+        {
+            entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
+                .IsUnique()
+                .HasFilter("([NormalizedName] IS NOT NULL)");
+
+            entity.Property(e => e.Name).HasMaxLength(256);
+            entity.Property(e => e.NormalizedName).HasMaxLength(256);
+        });
+
+        modelBuilder.Entity<AspNetRoleClaim>(entity =>
+        {
+            entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
+
+            entity.Property(e => e.RoleId).IsRequired();
+
+            entity.HasOne(d => d.Role).WithMany(p => p.AspNetRoleClaims).HasForeignKey(d => d.RoleId);
+        });
+
+        modelBuilder.Entity<AspNetUser>(entity =>
+        {
+            entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
+
+            entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
+                .IsUnique()
+                .HasFilter("([NormalizedUserName] IS NOT NULL)");
+
+            entity.Property(e => e.Email).HasMaxLength(256);
+            entity.Property(e => e.MemberNickname).HasMaxLength(10);
+            entity.Property(e => e.MemberRealName).HasMaxLength(20);
+            entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
+            entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+            entity.Property(e => e.Sex).HasMaxLength(1);
+            entity.Property(e => e.UserName).HasMaxLength(256);
+
+            entity.HasMany(d => d.Roles).WithMany(p => p.Users)
+                .UsingEntity<Dictionary<string, object>>(
+                    "AspNetUserRole",
+                    r => r.HasOne<AspNetRole>().WithMany().HasForeignKey("RoleId"),
+                    l => l.HasOne<AspNetUser>().WithMany().HasForeignKey("UserId"),
+                    j =>
+                    {
+                        j.HasKey("UserId", "RoleId");
+                        j.ToTable("AspNetUserRoles");
+                        j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
+                    });
+        });
+
+        modelBuilder.Entity<AspNetUserClaim>(entity =>
+        {
+            entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
+
+            entity.Property(e => e.UserId).IsRequired();
+
+            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserClaims).HasForeignKey(d => d.UserId);
+        });
+
+        modelBuilder.Entity<AspNetUserLogin>(entity =>
+        {
+            entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
+
+            entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
+
+            entity.Property(e => e.LoginProvider).HasMaxLength(128);
+            entity.Property(e => e.ProviderKey).HasMaxLength(128);
+            entity.Property(e => e.UserId).IsRequired();
+
+            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserLogins).HasForeignKey(d => d.UserId);
+        });
+
+        modelBuilder.Entity<AspNetUserToken>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+            entity.Property(e => e.LoginProvider).HasMaxLength(128);
+            entity.Property(e => e.Name).HasMaxLength(128);
+
+            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens).HasForeignKey(d => d.UserId);
+        });
+
         modelBuilder.Entity<BookingOrder>(entity =>
         {
             entity.HasKey(e => e.OrderId).HasName("PK__BookingO__C3905BAF4F8536F1");
 
-            entity.Property(e => e.OrderId)
-                .ValueGeneratedNever()
-                .HasColumnName("OrderID");
-            entity.Property(e => e.ContactInfo).HasMaxLength(100);
-            entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
+            entity.Property(e => e.OrderId).HasColumnName("OrderID");
+            entity.Property(e => e.ActivityBarcode).HasMaxLength(6);
+            entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
+            entity.Property(e => e.ActivityName).HasMaxLength(100);
+            entity.Property(e => e.DateTime).HasColumnType("datetime");
             entity.Property(e => e.Status).HasMaxLength(50);
-            entity.Property(e => e.WaitingName).HasMaxLength(100);
+            entity.Property(e => e.UserName).HasMaxLength(256);
         });
 
         modelBuilder.Entity<CollectionItem>(entity =>
         {
             entity.HasKey(e => e.SerialId).HasName("PK__Collecti__5E5B3EC446FF6BE9");
 
-            entity.Property(e => e.SerialId)
-                .ValueGeneratedNever()
-                .HasColumnName("SerialID");
-            entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
+            entity.Property(e => e.SerialId).HasColumnName("SerialID");
+            entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
         });
 
@@ -95,10 +183,20 @@ public partial class SeatlyContext : DbContext
 
             entity.ToTable("DailyCheckIn");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
+        });
+
+        modelBuilder.Entity<Friend>(entity =>
+        {
+            entity.HasKey(e => e.FlowId).HasName("PK__Friends__1184B35C5F5B6409");
+
+            entity.Property(e => e.FlowId)
+                .ValueGeneratedNever()
+                .HasColumnName("FlowID");
+            entity.Property(e => e.FriendUserName).HasMaxLength(50);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.UserName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Friend>(entity =>
@@ -117,9 +215,7 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__GamePoin__3214EC27C4ACC4AB");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
         });
 
@@ -145,9 +241,11 @@ public partial class SeatlyContext : DbContext
             entity.HasKey(e => e.ActivityId).HasName("PK__Notifica__45F4A7F13E52F071");
 
             entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
+            entity.Property(e => e.ActivityMethod).HasMaxLength(50);
             entity.Property(e => e.ActivityName).HasMaxLength(100);
             entity.Property(e => e.DescriptionN).HasMaxLength(1000);
             entity.Property(e => e.EndTime).HasColumnType("datetime");
+            entity.Property(e => e.HashTag).HasMaxLength(255);
             entity.Property(e => e.OrganizerId).HasColumnName("OrganizerID");
             entity.Property(e => e.RecurringTime).HasMaxLength(50);
             entity.Property(e => e.StartTime).HasColumnType("datetime");
@@ -185,9 +283,7 @@ public partial class SeatlyContext : DbContext
 
             entity.ToTable("PointStore");
 
-            entity.Property(e => e.ProductId)
-                .ValueGeneratedNever()
-                .HasColumnName("ProductID");
+            entity.Property(e => e.ProductId).HasColumnName("ProductID");
             entity.Property(e => e.Category).HasMaxLength(50);
             entity.Property(e => e.ProductDescription).HasMaxLength(500);
             entity.Property(e => e.ProductImage).HasMaxLength(200);
@@ -198,9 +294,7 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__PointTra__3214EC272AA20793");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
             entity.Property(e => e.TransactionDate).HasColumnType("datetime");
@@ -232,34 +326,6 @@ public partial class SeatlyContext : DbContext
                 .HasColumnName("reContent");
             entity.Property(e => e.ReplyAccount).HasMaxLength(50);
             entity.Property(e => e.ReviewId).HasColumnName("ReviewID");
-        });
-
-        modelBuilder.Entity<Restaurant>(entity =>
-        {
-            entity.HasKey(e => e.RestaurantId).HasName("PK__Restaura__87454CB580C1ADB7");
-
-            entity.Property(e => e.RestaurantId)
-                .ValueGeneratedNever()
-                .HasColumnName("RestaurantID");
-            entity.Property(e => e.Address).HasMaxLength(200);
-            entity.Property(e => e.DepartmentStoreName).HasMaxLength(100);
-            entity.Property(e => e.Email)
-                .HasMaxLength(50)
-                .HasColumnName("email");
-            entity.Property(e => e.Hashtag).HasMaxLength(100);
-            entity.Property(e => e.LoginPassword).HasMaxLength(50);
-            entity.Property(e => e.MenuPhoto).HasMaxLength(100);
-            entity.Property(e => e.Phone)
-                .HasMaxLength(50)
-                .HasColumnName("phone");
-            entity.Property(e => e.ReservationUrl)
-                .HasMaxLength(200)
-                .HasColumnName("ReservationURL");
-            entity.Property(e => e.RestaurantAccount).HasMaxLength(50);
-            entity.Property(e => e.RestaurantCategory).HasMaxLength(50);
-            entity.Property(e => e.RestaurantInfo).HasMaxLength(100);
-            entity.Property(e => e.RestaurantName).HasMaxLength(100);
-            entity.Property(e => e.RestaurantPhoto).HasMaxLength(100);
         });
 
         modelBuilder.Entity<RestaurantOffer>(entity =>
