@@ -1,0 +1,126 @@
+﻿@model IEnumerable<PointStore>
+
+<button class="btn btn-gradient mb-2 btn-cate" data-cate="all">全部</button>
+
+@foreach (var cate in Model.Select(s => s.Category).Distinct())
+{
+    <button class="btn btn-gradient mb-2 btn-cate" data-cate="@cate">@cate</button>
+}
+<div class="d-flex justify-content-end align-items-center">
+    <span>每頁顯示<select id="pgSize">
+        <option value="10" selected>10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </select>筆資料</span>
+    <button class="btn btn-gradient me-1 p-0" id="pP" style="width:50px;height:50px;text-align:center;" disabled>上</button>
+    <input class="me-1 p-0" id="pgNum" value="1" style="width:50px;height:50px;text-align:center;" />
+    <button class="btn btn-gradient me-1 p-0" id="nP" style="width:50px;height:50px;text-align:center;" disabled>下</button>
+</div>
+
+<div class="col-12" id="pointsContentBody">
+    @* @foreach (var product in Model.OrderBy(s => s.Category).ThenBy(s => s.ProductPrice))
+    {
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="~/images/@product.ProductImage" class="img-fluid rounded-start" style="width:300px" alt="@product.ProductName" title="@product.ProductName">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <span class="position-absolute end-0 me-2">@product.Category</span>
+                            <h5 class="card-title text-gradient fs-3">@product.ProductName</h5>
+                            <p class="card-text">@product.ProductDescription</p>
+                            <p class="card-text text-gradient">兌換需要 @product.ProductPrice 點數</p>
+                            <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1">兌換</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    } *@
+</div>
+
+<script>
+    $(function () {
+        var parameters = {
+            cate: strCate,
+            pgNum: 1,
+            pgSize: 10
+        };
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("pointsShopContentBody", "Points")`,
+            data: parameters
+        }).done(function (data) {
+            $("#pointsContentBody").html(data);
+        }).fail(function (err) {
+            alert(err.responseText);
+        });
+
+        $(".btn-cate").on("click", function () {
+            sessionStorage.setItem('strCate', $(this).data("cate"));
+            
+            if ($("#pgNum").val() != 1) {
+                $("#pgNum").val(1);
+                $("#pgNum").trigger("change");
+            }
+            else {
+                strCate = sessionStorage.getItem('strCate');
+                parameters.cate = strCate;
+                parameters.pgNum = $("#pgNum").val();
+                parameters.pgSize = $("#pgSize").val();
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsShopContentBody", "Points")`,
+                    data: parameters
+                }).done(function (data) {
+                    $("#pointsContentBody").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            }
+        });
+
+        $("#pgNum").on("change", function () {
+            var pgNumint = parseInt($(this).val());
+            if (!isNaN(pgNumint) && pgNumint > 0) {
+                strCate = sessionStorage.getItem('strCate');
+                parameters.cate = strCate;
+                parameters.pgNum = $(this).val();
+                parameters.pgSize = $("#pgSize").val();
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsShopContentBody", "Points")`,
+                    data: parameters
+                }).done(function (data) {
+                    $("#pointsContentBody").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            }
+        });
+
+        $("#pgSize").on("change", function () {
+            if ($("#pgNum").val() != 1) {
+                $("#pgNum").val(1);
+                $("#pgNum").trigger("change");
+            }
+            else {
+                strCate = sessionStorage.getItem('strCate');
+                parameters.cate = strCate;
+                parameters.pgNum = $("#pgNum").val();
+                parameters.pgSize = $("#pgSize").val();
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsShopContentBody", "Points")`,
+                    data: parameters
+                }).done(function (data) {
+                    $("#pointsContentBody").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            }
+        });
+    });
+
+</script>

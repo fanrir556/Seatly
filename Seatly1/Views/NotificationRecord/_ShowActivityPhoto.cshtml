@@ -1,0 +1,11 @@
+﻿@model NotificationRecord
+
+@if (Model != null && Model.ActivityPhoto != null)
+{
+    <img src="@Url.Action("GetActivityPhoto","NotificationRecord",new {id=Model.ActivityId})" title="@Model.ActivityName" style="height:240px;width:320px" />
+}
+
+else
+{
+    <img src="@Url.Content("~/images/NoImage.jpg")" title="NoImage" style="height:240px;width:320px" />
+}
