@@ -60,6 +60,8 @@
                 <span class="navbar-toggler-icon"> </span>
             </button>
 
+            <a class="dropdown-item text-gradient" asp-area="" asp-controller="NotificationRecord" asp-action="Index">活動連接測試</a>
+
             <div class="collapse navbar-collapse border-top border-lg-0 justify-content-end" id="navbarSupportedContent">
                 @* 點數專區開始 *@
                 <li class="nav-item dropdown text-gradient list-group">
@@ -74,6 +76,21 @@
                 </li>
                 @* 點數專區結束 *@
                 <partial name="_LoginPartial" />
+
+                @* 活動方專區開始 *@
+                <li class="nav-item dropdown text-gradient list-group">
+                    <a id="OrganizersNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        活動方專區
+                    </a>
+                    <ul id="OrganizersDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a id="o-register" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="OrganizerRegister">活動方註冊</a></li>
+                        <li><a id="o-login" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="OrganizerLogin">活動方登入</a></li>
+                        @*                      <li><a id="o-info" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="">修改活動方資訊</a></li>
+                        <li><a id="o-info" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="">登出</a></li> *@
+                    </ul>
+                </li>
+                @* 活動方專區結束 *@
+
             </div>
         </div>
     </nav>
