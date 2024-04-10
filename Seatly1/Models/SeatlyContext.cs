@@ -199,18 +199,6 @@ public partial class SeatlyContext : DbContext
             entity.Property(e => e.UserName).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Friend>(entity =>
-        {
-            entity.HasKey(e => e.FlowId).HasName("PK__Friends__1184B35C5F5B6409");
-
-            entity.Property(e => e.FlowId)
-                .ValueGeneratedNever()
-                .HasColumnName("FlowID");
-            entity.Property(e => e.FriendUserName).HasMaxLength(50);
-            entity.Property(e => e.UserId).HasColumnName("UserID");
-            entity.Property(e => e.UserName).HasMaxLength(50);
-        });
-
         modelBuilder.Entity<GamePoint>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__GamePoin__3214EC27C4ACC4AB");
