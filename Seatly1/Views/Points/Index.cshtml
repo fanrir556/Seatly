@@ -1,0 +1,115 @@
+﻿@section Styles
+{
+    <style>
+
+    </style>
+}
+<div class="row m-4 mb-2" id="pointsTitle">
+</div>
+
+<div class="row ps-5 pe-5">
+    <div class="col-12 col-md-2 p-3">
+        <ul class="list-group">
+            <li class="list-group-item text-gradient">
+                <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsShopSide">點數商城</a>
+            </li>
+            <li class="list-group-item text-gradient">
+                <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="couponSide">持有優惠券</a>
+            </li>
+            <li class="list-group-item text-gradient">
+                <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsHistorySide">點數交易紀錄</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-12 col-md-10 p-3" id="pointsContentHead">
+    </div>
+
+    
+</div>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $("#pointsShopSide").on("click", function (e) {
+                e.preventDefault();
+                strPoints = "pointsShop";
+                sessionStorage.setItem('strPoints', strPoints);
+                sessionStorage.setItem('strCate', "all");
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsShopTitle", "Points")`
+                }).done(function (data) {
+                    $("#pointsTitle").html(data); // 將局部視圖的內容設置為 #pointsTitle 元素的HTML內容
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsShopContentHead", "Points")`
+                }).done(function (data) {
+                    $("#pointsContentHead").html(data); // 將局部視圖的內容設置為 #pointsContent 元素的HTML內容
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            });
+            $("#couponSide").on("click", function (e) {
+                e.preventDefault();
+                strPoints = "coupon";
+                sessionStorage.setItem('strPoints', strPoints);
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("couponTitle", "Points")`
+                }).done(function (data) {
+                    $("#pointsTitle").html(data); 
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("couponContent", "Points")`
+                }).done(function (data) {
+                    $("#pointsContentHead").html(data); 
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            });
+            $("#pointsHistorySide").on("click", function (e) {
+                e.preventDefault();
+                strPoints = "pointsHistory";
+                sessionStorage.setItem('strPoints', strPoints);
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsHistoryTitle", "Points")`
+                }).done(function (data) {
+                    $("#pointsTitle").html(data); 
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsHistoryContent", "Points")`
+                }).done(function (data) {
+                    $("#pointsContentHead").html(data); 
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            });
+            switch(strPoints){
+                case "pointsShop":
+                    $("#pointsShopSide").trigger("click");
+                    break;
+                case "pointsHistory":
+                    $("#pointsHistorySide").trigger("click");
+                    break;
+                case "coupon":
+                    $("#couponSide").trigger("click");
+                    break;
+                default:
+                alert("?")
+                    break;
+            }
+        });
+    </script>
+}

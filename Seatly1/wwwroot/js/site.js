@@ -1,8 +1,5 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
+﻿var strPoints = sessionStorage.getItem('strPoints') || "";
+var strCate = sessionStorage.getItem('strCate') || "all";
 $(function () {
     /*點數專區導覽列hover開始*/
     var timer;
@@ -23,5 +20,17 @@ $(function () {
         }, 100); // 這裡可以調整延遲的時間
     });
     /*點數專區導覽列hover結束*/
-})
 
+    $("#pointsShop").on("click", function () {
+        strPoints = "pointsShop";
+        sessionStorage.setItem('strPoints', strPoints);
+    });
+    $("#pointsHistory").on("click", function () {
+        strPoints = "pointsHistory";
+        sessionStorage.setItem('strPoints', strPoints);
+    });
+    $("#coupon").on("click", function () {
+        strPoints = "coupon";
+        sessionStorage.setItem('strPoints', strPoints);
+    });
+})

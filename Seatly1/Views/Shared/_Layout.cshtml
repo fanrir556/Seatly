@@ -7,18 +7,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Seatly1</title>
-  @*   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.min.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.min.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" /> *@
-    @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
-    @* <link rel="stylesheet" href="~/Seatly1.styles.css" asp-append-version="true" /> *@
-    @* <link href="~/css/theme-rtl.min.css" rel="stylesheet asp-append-version="true" /> *@
-    @* <link href="~/css/theme-rtl.css" rel="stylesheet" /> *@
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
@@ -40,63 +28,52 @@
     <!-- ===============================================-->
     <!--    Stylesheets-->
     <!-- ===============================================-->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/theme.css" rel="stylesheet" asp-append-version="true" />
+    @* <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" /> *@
+    @* <link rel="stylesheet" href="~/Seatly1.styles.css" asp-append-version="true" /> *@
+    @* <link href="~/css/theme-rtl.min.css" rel="stylesheet" asp-append-version="true" /> *@
+    @* <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" /> *@
+    @* <link href="~/css/theme-rtl.css" rel="stylesheet" /> *@
     @RenderSection("Styles", required: false) <!-- 如果提供了 Styles 部分，则渲染 Styles 部分 -->
 </head>
 <body>
     @* ====================================================== *@
         @* nav bar *@
     @* ====================================================== *@
-    <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-light" data-navbar-on-scroll="data-navbar-on-scroll">
-        <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-light justify-content-center" data-navbar-on-scroll="data-navbar-on-scroll">
+        <div class="container m-0" style="min-width: 98vw;">
             <a class="navbar-brand d-inline-flex" asp-area="" asp-controller="Home" asp-action="Index">
                 <img class="d-inline-block" src="~/img/gallery/logo.svg" alt="logo" />
                 <span class="text-1000 fs-3 fw-bold ms-2 text-gradient">Seatly</span>
             </a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"> </span>
             </button>
 
             <div class="collapse navbar-collapse border-top border-lg-0 justify-content-end" id="navbarSupportedContent">
-
-                <a class="dropdown-item text-gradient" asp-area="" asp-controller="NotificationRecord" asp-action="Index">活動連接測試</a>
-
                 @* 點數專區開始 *@
                 <li class="nav-item dropdown text-gradient list-group">
                     <a id="pointsNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         點數專區
                     </a>
                     <ul id="pointsDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="PointsShop">點數商城</a></li>
-                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="Coupon">持有優惠券</a></li>
-                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="PointsHistory">點數交易紀錄</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsShop">點數商城</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="coupon">持有優惠券</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsHistory">點數交易紀錄</a></li>
                     </ul>
                 </li>
                 @* 點數專區結束 *@
-
-                @* 活動方專區開始 *@
-                <li class="nav-item dropdown text-gradient list-group">
-                    <a id="OrganizersNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        活動方專區
-                    </a>
-                    <ul id="OrganizersDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a id="o-register" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="OrganizerRegister">活動方註冊</a></li>
-                        <li><a id="o-login" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="OrganizerLogin">活動方登入</a></li>
-@*                      <li><a id="o-info" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="">修改活動方資訊</a></li>
-                        <li><a id="o-info" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="">登出</a></li> *@
-                    </ul>
-                </li>
-                @* 活動方專區結束 *@
-                
-                @* 會員登入/註冊 start *@
-                <div>
-                    <partial name="_LoginPartial" />
-                </div>
-                @* 會員登入/註冊 end *@
-                <p id="cookieValue"></p>
+                <partial name="_LoginPartial" />
             </div>
         </div>
     </nav>
@@ -119,16 +96,10 @@
     <!--    JavaScripts-->
     <!-- ===============================================-->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/js/main.js"></script>
-
-
-    @* <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-   
-    
+
     @* <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js" asp-append-version="true"></script>
@@ -148,7 +119,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/esm/createPopper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-
  *@
 
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap" rel="stylesheet">
