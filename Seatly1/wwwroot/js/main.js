@@ -49,7 +49,8 @@ $('#loginForm').submit(function (event) {
             url: '/api/Organizers/login', // 后端登录接口的URL
             type: 'POST',
             data: JSON.stringify({
-                OrganizerAccount: loginaccount, LoginPassword: loginpassword
+                OrganizerAccount: loginaccount,
+                LoginPassword: loginpassword
             }),
             contentType: 'application/json'
         }).done(function (result) {
@@ -57,7 +58,8 @@ $('#loginForm').submit(function (event) {
             // 登录成功，重定向到首页
             window.location.href = '/';
         }).fail(function (err) {
-            $('#errorMessage').text(err.StatusText);
+            // 登录失败，显示错误消息
+            $('#errorMessage').text(err.responseText);
             $('#loginErrorModal').modal('show');
         })
     }

@@ -9,7 +9,7 @@ public partial class Member
 {
     public int MemberId { get; set; }
 
-    public string MemberAccount { get; set; }
+    public string MemberRealName { get; set; }
 
     public string MemberPassword { get; set; }
 
