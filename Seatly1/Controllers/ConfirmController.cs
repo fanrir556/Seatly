@@ -23,43 +23,44 @@ namespace Seatly1.Controllers
       
 
         // GET: ConfirmController
-        public ActionResult Index()
+        public IActionResult Index(int? NId, string? UId)
         {
-            BookingOrder? BookData = BookO();
+
+            BookingOrder? BookData = BookO(NId,UId);
 
             return View(BookData);
         }
 
 
-        private BookingOrder BookO()
+        private BookingOrder BookO(int? NId ,string? UId)
         {
-            var NontiData = _context.NotificationRecords.FirstOrDefault();
-            var UserData = _context.AspNetUsers.FirstOrDefault();
-            var BookData = _context.BookingOrders.FirstOrDefault();
+            var NontiData = _context.NotificationRecords.FirstOrDefault(n => n.ActivityId == NId);
+            var UserData = _context.AspNetUsers.FirstOrDefault(u => u.UserName == UId);
+            var newBookingOrder = new BookingOrder();
 
             if (NontiData != null)
-            { 
-            BookData.ActivityId = NontiData.ActivityId;
-            BookData.ActivityName = NontiData.ActivityName;
+            {
+                newBookingOrder.ActivityId = NontiData.ActivityId;
+                newBookingOrder.ActivityName = NontiData.ActivityName;
             }
 
-            if (BookData.WaitingNumber != null)
+            if (newBookingOrder.WaitingNumber != null)
             {
-                BookData.WaitingNumber = BookData.WaitingNumber + 1;
+                newBookingOrder.WaitingNumber = newBookingOrder.WaitingNumber + 1;
             }
             else
             {
-                BookData.WaitingNumber = 1;
+                newBookingOrder.WaitingNumber = 1;
             }
 
             if (UserData.UserName != null) 
-            { 
-            BookData.UserName = UserData.UserName;
+            {
+                newBookingOrder.UserName = UserData.UserName;
             }
 
 
-            BookData.DateTime = DateTime.Now;
-            BookData.Status = "UnCheck";
+            newBookingOrder.DateTime = DateTime.Now;
+            newBookingOrder.Status = "UnCheck";
 
 
             Random random = new Random();
@@ -68,9 +69,12 @@ namespace Seatly1.Controllers
             string barcode = new string(Enumerable.Range(0, 6)
            .Select(_ => chars[random.Next(chars.Length)]).ToArray());
 
-            BookData.ActivityBarcode = barcode;
-            BookData.Checked = false;
-            return BookData;
+            newBookingOrder.ActivityBarcode = barcode;
+            newBookingOrder.Checked = false;
+
+            var addedBookingOrder = _context.BookingOrders.Add(newBookingOrder);
+
+            return addedBookingOrder.Entity;
         }
 
         // GET: ConfirmController/Details/5
