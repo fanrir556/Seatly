@@ -1,9 +1,17 @@
 ﻿@page
-@model Seatly1.Areas.Identity.Pages.Account.Manage.CollectionsModel
-@{
-    ViewData["Title"] = "收藏清單";
-    ViewData["ActivePage"] = ManageNavPages.Collections;
-}
+@model CollectionsModel
+
+<!-- 收藏列表 -->
+<ul>
+    @foreach(var collection in Model.Collections)
+    {
+        <li>@collection.ActivityId</li>
+    }
+</ul>
 
 
-<h3>@ViewData["Title"]</h3>
+<!-- 添加收藏项表单 -->
+<form method="post" asp-page-handler="AddToCollection">
+    <!-- 添加收藏项的表单字段 -->
+    <button type="submit">添加到收藏</button>
+</form>

@@ -31,7 +31,7 @@ public partial class SeatlyContext : DbContext
 
     public virtual DbSet<BookingOrder> BookingOrders { get; set; }
 
-    public virtual DbSet<Collections> CollectionItems { get; set; }
+    public virtual DbSet<CollectionItem> CollectionItems { get; set; }
 
     public virtual DbSet<Comment> Comments { get; set; }
 
@@ -139,26 +139,28 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<BookingOrder>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__BookingO__C3905BAF1AE4AE37");
+            entity.HasNoKey();
 
+            entity.Property(e => e.ActivityBarcode).HasMaxLength(6);
+            entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
+            entity.Property(e => e.ActivityName).HasMaxLength(100);
+            entity.Property(e => e.DateTime).HasColumnType("datetime");
             entity.Property(e => e.OrderId)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("OrderID");
-            entity.Property(e => e.ContactInfo).HasMaxLength(100);
-            entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
             entity.Property(e => e.Status).HasMaxLength(50);
-            entity.Property(e => e.WaitingName).HasMaxLength(100);
+            entity.Property(e => e.UserName).HasMaxLength(256);
         });
 
-        modelBuilder.Entity<Collections>(entity =>
+        modelBuilder.Entity<CollectionItem>(entity =>
         {
             entity.HasKey(e => e.SerialId).HasName("PK__Collecti__5E5B3EC45C3661CB");
 
-            entity.Property(e => e.SerialId)
-                .ValueGeneratedNever()
-                .HasColumnName("SerialID");
-            entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.SerialId).HasColumnName("SerialID");
+            entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
+            entity.Property(e => e.UserId)
+                .HasMaxLength(50)
+                .HasColumnName("UserID");
         });
 
         modelBuilder.Entity<Comment>(entity =>
@@ -231,7 +233,7 @@ public partial class SeatlyContext : DbContext
                 .HasColumnName("ActivityID");
             entity.Property(e => e.ActivityMethod).HasMaxLength(50);
             entity.Property(e => e.ActivityName).HasMaxLength(100);
-            entity.Property(e => e.DescriptionN).HasMaxLength(1000);
+            entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.EndTime).HasColumnType("datetime");
             entity.Property(e => e.HashTag).HasMaxLength(255);
             entity.Property(e => e.OrganizerId).HasColumnName("OrganizerID");

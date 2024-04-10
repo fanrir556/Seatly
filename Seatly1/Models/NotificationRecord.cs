@@ -19,7 +19,7 @@ public partial class NotificationRecord
 
     public string? ActivityName { get; set; }
 
-    public string? DescriptionN { get; set; }
+    public string? Description { get; set; }
 
     public bool? IsRecurring { get; set; }
 
