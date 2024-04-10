@@ -52,14 +52,6 @@
                 }).fail(function (err) {
                     alert(err.responseText);
                 });
-                // $.ajax({
-                //     type: "GET",
-                //     url: `@Url.Action("pointsShopContentBody", "Points")`
-                // }).done(function (data) {
-                //     $("#pointsContentBody").html(data); // 將局部視圖的內容設置為 #pointsContent 元素的HTML內容
-                // }).fail(function (err) {
-                //     alert(err.responseText);
-                // });
             });
             $("#couponSide").on("click", function (e) {
                 e.preventDefault();
