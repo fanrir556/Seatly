@@ -61,96 +61,71 @@
                     <!-- col-8 start -->
                     <div class="col-12 col-md-8 offset-md-2">
                         <!-- 表單 start -->
-                        <form class="needs-validation" novalidate>
+                        <form id="registerForm" class="needs-validation" novalidate>
                             <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
                             <div class="row">
                                 <div class="col-12 col-md-3">
-                                    <label for="restaurant-name" class="form-label">餐廳名稱</label>
+                                    <label for="loginaccount" class="form-label">活動方帳號</label>
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
                                     <!-- input.form-control[type="text"] -->
-                                    <input type="text" id="restaurant-name" name="餐廳名稱" class="form-control" placeholder="請輸入餐廳名稱"
+                                    <input type="text" id="account" name="account" class="form-control" placeholder="請輸入活動方帳號"
                                            required>
                                     <div class="invalid-feedback">
                                         此為必填項目。
                                     </div>
                                 </div>
+
                                 <div class="col-12 col-md-3">
-                                    <label for="restaurant-type" class="form-label">餐廳分類</label>
+                                    <label for="name" class="form-label">活動方名稱</label>
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="restaurant-type" name="餐廳分類" class="form-control" placeholder="請輸入餐廳分類"
+                                    <!-- input.form-control[type="text"] -->
+                                    <input type="text" id="name" name="name" class="form-control" placeholder="請輸入活動方名稱"
                                            required>
                                     <div class="invalid-feedback">
                                         此為必填項目。
                                     </div>
                                 </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="category" class="form-label">活動方分類</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="text" id="category" name="category" class="form-control" placeholder="請輸入活動方分類"
+                                           required>
+                                    <div class="invalid-feedback">
+                                        此為必填項目。
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="menu" class="form-label">菜單</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="text" id="menu" name="menu" class="form-control" placeholder="請輸入菜單" required>
+                                    <div class="invalid-feedback">
+
+                                    </div>
+                                </div>
+
                                 <div class="col-12 col-md-3">
                                     <label for="address" class="form-label">地址</label>
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="address" name="地址" class="form-control" placeholder="請輸入地址" required>
+                                    <input type="text" id="address" name="地址" class="form-control" placeholder="請輸入地址">
+                                </div>
+ 
+                                <div class="col-12 col-md-3">
+                                    <label for="final-enter" class="form-label">活動網址</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="text" id="URL" name="URL" class="form-control" placeholder="請輸入活動網址" required>
                                     <div class="invalid-feedback">
                                         此為必填項目。
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-3">
-                                    <label for="business-hours" class="form-label">營業時間</label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="business-hours" name="營業時間" class="form-control" placeholder="請輸入營業時間"
-                                           required>
-                                    <div class="invalid-feedback">
-                                        此為必填項目。
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-3">
-                                    <label for="close-time" class="form-label">結束營業時間</label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="close-time" name="結束營業" class="form-control" placeholder="請輸入結束營業時間" required>
-                                    <div class="invalid-feedback">
-                                        此為必填項目。
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-3">
-                                    <label for="final-enter" class="form-label">最後入場</label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="final-enter" name="最後入場" class="form-control" placeholder="請輸入最後入場" required>
-                                    <div class="invalid-feedback">
-                                        此為必填項目。
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-3">
-                                    <label for="store" class="form-label">能否訂位</label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <select id="order-or-not" name="能否訂位" class="form-select" required>
-                                        <option selected disabled value="">--請選取--</option>
-                                        <option>是</option>
-                                        <option>否</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-3">
-                                    <label for="final-enter" class="form-label">訂位網址</label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="final-enter" name="訂位網址" class="form-control" placeholder="請輸入訂位網址" required>
-                                    <div class="invalid-feedback">
-                                        此為必填項目。
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-3">
-                                    <label for="department-store-name" class="form-label department-store-name">百貨名稱</label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="department-store-name" name="百貨名稱" class="form-control " placeholder="請輸入百貨名稱"
-                                           required>
-                                    <div class="invalid-feedback">
-                                        此為必填項目。
-                                    </div>
-                                </div>
+
                                 <div class="col-12 col-md-3">
                                     <label for="hashtag" class="form-label">hashtag</label>
                                 </div>
@@ -160,15 +135,70 @@
                                         此為必填項目。
                                     </div>
                                 </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="email" class="form-label">Email</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="email" id="email" name="email" class="form-control" placeholder="name@example.com" required>
+                                    <div class="invalid-feedback">
+                                        此為必填項目。
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="phone" class="form-label">連絡電話</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="text" id="phone" name="phone" class="form-control" placeholder="請輸入連絡電話" required>
+                                    <div class="invalid-feedback">
+                                        此為必填項目。
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="password1" class="form-label">密碼</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="password" id="password1" name="password1" class="form-control"
+                                           placeholder="請輸入密碼" required>
+                                    <div id="invalid_password1" class="invalid-feedback">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="password2" class="form-label">確認密碼</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="password" id="password2" name="password2" class="form-control"
+                                           placeholder="請再次輸入密碼" required>
+                                    <div id="invalid_password2" class="invalid-feedback">
+                                    </div>
+                                </div>
+
+ @*                                <div class="col-12 col-md-3">
+                                    <label for="photo" class="form-label">上傳活動方照片</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="file" id="photo" name="photo" class="form-control" aria-label="file example"
+                                           placeholder="請上傳活動方照片" required>
+                                    <div class="invalid-feedback">
+                                        沒有選擇檔案。
+                                    </div>
+                                    <div id="status" class="valid-feedback">
+                                    </div>
+                                </div> *@
                             </div>
-                            <!-- <div class="col-12 mb-3">
-                              <input type="checkbox" id="check" class="form-check-input">
-                              <label for="check" class="form-check-label">我已詳閱並同意 <a href="#">使用者條款</a> & <a href="#">隱私權保護政策</a></label>
-                              </div> -->
-                            <div id="r-register" class="col-md-12 col-sm-4 mb-3 d-flex flex-row-reverse bd-highlight">
-                                <button type="submit" class="btn btn-primary">送出表單</button>
+
+                            <div id="submit" class="col-md-12 col-sm-4 mb-3 d-flex flex-row-reverse bd-highlight">
+                                <button id="submit" type="submit" class="btn btn-primary">送出表單</button>
                             </div>
                         </form>
+                        <!--上傳活動方照片-->
+                        <h2>上傳活動方照片</h2>
+                        <input type="file" id="imageInput">
+                        <button id="uploadButton">Upload</button>
+                        <div id="status"></div>
                     </div>
                 </div>
                 <!-- 表單 end -->

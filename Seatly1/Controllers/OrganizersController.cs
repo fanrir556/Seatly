@@ -26,12 +26,12 @@ namespace Seatly1.Controllers
         }
 
         // 活動方資訊取得api
-        [HttpGet("totalinfo")]
+        [HttpGet("infoes")]
         public async Task<IEnumerable<OrgainzerInfoDTO>> GetOrganizers()
         {
             return await _context.Organizers
                 .Select(org => new OrgainzerInfoDTO
-                { 
+                {
                     OrganizerAccount = org.OrganizerAccount,
                     OrganizerName = org.OrganizerName,
                     OrganizerCategory = org.OrganizerCategory,
@@ -72,68 +72,112 @@ namespace Seatly1.Controllers
             return orgInfo;
         }
 
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutOrganizer(int id, Organizer organizer)
-        //{
-        //    if (id != organizer.OrganizerId)
-        //    {
-        //        return BadRequest();
-        //    }
+        // 讀取cookie驗證活動方式否登入
+        [HttpGet("cookie")]
+        public IActionResult CheckLoginStatus()
+        {
+            // 获取请求中的 cookie 数据
+            var cookieValue = Request.Cookies["OrganizerId"];
 
-        //    _context.Entry(organizer).State = EntityState.Modified;
+            // 检查是否存在有效的登录会话或认证凭据
+            if (cookieValue != null)
+            {
+                // 用户已登录，返回成功的响应
+                return Ok($"活動方已登入，id是 {cookieValue}");
+            }
+            else
+            {
+                // 用户未登录，返回错误的响应
+                return Unauthorized("User is not logged in.");
+            }
+        }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!OrganizerExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+        //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("login")]
+        public async Task<ActionResult<Organizers>> Login(OrganizerLoginDTO orglogindto)
+        {
+            var user = await _context.Organizers.FirstOrDefaultAsync(u => u.OrganizerAccount == orglogindto.OrganizerAccount && u.LoginPassword == orglogindto.LoginPassword);
 
-        //    return NoContent();
-        //}
+            if (user == null)
+            {
+                return Unauthorized("帳號或密碼錯誤");
+            }
+            else if (user != null && user.Validation == false)
+            {
+                return Unauthorized("該活動方未完成審核");
+            }
+            else
+            {
+                // 将用户的唯一标识符添加到Cookie中
+                CookieOptions option = new CookieOptions();
+                option.Expires = DateTime.Now.AddYears(1);
+                option.HttpOnly = true;
+                option.Secure = true;
+                Response.Cookies.Append("OrganizerId",user.OrganizerId.ToString(), option);
+                return Ok(user);
+            }
+        }
 
-        ////To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public ActionResult Login(FormCollection post)
-        //{
-        //    string account = post["account"];
-        //    string password = post["password"];
+        // 註冊的文字上傳api
+        [HttpPost("register")]
+        public async Task<ActionResult<Organizers>> RegisterOrganizer(OrganizerDTO organizer)
+        {
+                Organizer o = new()
+                {
+                    OrganizerAccount = organizer.OrganizerAccount,
+                    LoginPassword = organizer.LoginPassword,
+                    OrganizerName = organizer.OrganizerName,
+                    OrganizerCategory = organizer.OrganizerCategory,
+                    OrganizerPhoto = organizer.OrganizerPhoto,
+                    Menu = organizer.Menu,
+                    Address = organizer.Address,
+                    ReservationUrl = organizer.ReservationUrl,
+                    Hashtag = organizer.Hashtag,
+                    Email = organizer.Email,
+                    Phone = organizer.Phone,
+                    Validation = organizer.Validation
+                };
+                _context.Organizers.Add(o);
+                await _context.SaveChangesAsync();
+                return Ok("已完成註冊，待審核完成後即可登入");
+        }
 
-        //    //驗證密碼
-        //    if (db.CheckUserData(account, password))
-        //    {
-        //        Response.Redirect("~/Home/Home");
-        //        return new EmptyResult();
-        //    }
-        //    else
-        //    {
-        //        ViewBag.Msg = "登入失敗...";
-        //        return View();
-        //    }
-        //}
-        //[HttpPost("register")]
-        //public async Task<string> RegisterOrganizer(OrganizerLoginDTO organizer)
-        //{
+        // 註冊的圖片上傳api
+        [HttpPost("uploads")]
+        public async Task<IActionResult> UploadImage(IFormFile image)
+        {
+            if (image == null || image.Length == 0)
+            {
+                return BadRequest("No image uploaded.");
+            }
 
-        //    _context.Organizers.Add(organizer);
-        //    await _context.SaveChangesAsync();
+            // 处理图片上传逻辑，例如保存到服务器上的某个位置
+            // 这里只是一个简单的示例，将图片保存到 wwwroot/uploads 文件夹下
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
 
-        //    return "註冊成功";
-        //}
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+            var filePath = Path.Combine(uploadsFolder, fileName);
 
-        //private bool OrganizerExists(int id)
-        //{
-        //    return _context.Organizers.Any(e => e.OrganizerId == id);
-        //}
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+
+            return Ok(new { fileName });
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            // 清除用户的身份验证凭证（例如，清除存储在 cookie 中的身份验证令牌）
+            Response.Cookies.Delete("OrganizerId");
+
+            // 返回成功响应
+            return Ok("登出成功");
+        }
     }
 }

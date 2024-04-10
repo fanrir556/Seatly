@@ -16,7 +16,7 @@
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
-    <title>餐廳登入</title>
+    <title>活動方登入</title>
 </head>
 
 <body>
@@ -30,25 +30,25 @@
                     </div>
                     <div class="col-12 col-md-8 offset-md-2">
                         <!-- 表單 start -->
-                        <form class="needs-validation" novalidate>
+                        <form id="loginForm" class="needs-validation" novalidate>
                             <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
                             <div class="row">
                                 <div class="col-12 col-md-3">
-                                    <label for="account" class="form-label">帳號</label>
+                                    <label for="loginaccount" class="form-label">帳號</label>
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
                                     <!-- input.form-control[type="text"] -->
-                                    <input type="text" id="account" name="account" class="form-control"
+                                    <input type="text" id="loginaccount" name="loginaccount" class="form-control"
                                            placeholder="請輸入帳號" required>
                                     <div class="invalid-feedback">
                                         帳號不可為空。
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-3">
-                                    <label for="password" class="form-label">餐廳密碼</label>
+                                    <label for="loginpassword" class="form-label">密碼</label>
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
-                                    <input type="password" id="password" name="password" class="form-control"
+                                    <input type="password" id="loginpassword" name="loginpassword" class="form-control"
                                            placeholder="請輸入密碼" required>
                                     <div class="invalid-feedback">
                                         密碼不可為空。
@@ -61,14 +61,35 @@
                             </div> -->
                             <div class="row">
                                 <div class="col-md-12 col-sm-4 mb-3 d-flex flex-row-reverse bd-highlight">
-                                    <button id="r-login" type="submit" class="btn btn-primary margin-right mx-2">登入</button>
-                                    <button id="r-forget" type="button"
+                                    <button id="login" type="submit" class="btn btn-primary margin-right mx-2">登入</button>
+                                    <button id="forget" type="button"
                                             class="btn btn-primary margin-right">
                                         忘記密碼
                                     </button>
                                 </div>
                             </div>
+                            
                         </form>
+
+                        <!-- 登入失敗Modal -->
+                        <div class="modal fade" id="loginErrorModal" tabindex="-1" role="dialog" aria-labelledby="loginErrorModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="loginErrorModalLabel">登入失敗</h5>
+                                        <button type="button" id="closeErrorModalBtn2" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p id="errorMessage"></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" id="closeErrorModalBtn" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -78,6 +99,7 @@
         </section>
 
     </main>
+    
 </body>
 
 </html>

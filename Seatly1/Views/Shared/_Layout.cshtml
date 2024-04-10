@@ -77,21 +77,26 @@
                 </li>
                 @* 點數專區結束 *@
 
+                @* 活動方專區開始 *@
+                <li class="nav-item dropdown text-gradient list-group">
+                    <a id="OrganizersNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        活動方專區
+                    </a>
+                    <ul id="OrganizersDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a id="o-register" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="OrganizerRegister">活動方註冊</a></li>
+                        <li><a id="o-login" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="OrganizerLogin">活動方登入</a></li>
+@*                      <li><a id="o-info" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="">修改活動方資訊</a></li>
+                        <li><a id="o-info" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="">登出</a></li> *@
+                    </ul>
+                </li>
+                @* 活動方專區結束 *@
+                
                 @* 會員登入/註冊 start *@
                 <div>
                     <partial name="_LoginPartial" />
                 </div>
                 @* 會員登入/註冊 end *@
-
-            </div>
-            <div class="d-flex flex-grow-1">
-                <!-- 新增這個 div -->
-                <a class="navbar-brand d-inline-flex" asp-area="" asp-controller="Home" asp-action="OrganizerRegister">
-                    <span class="fs-1 fw-bold text-gradient small">活動方註冊</span>
-                </a>
-                <a class="navbar-brand d-inline-flex" asp-area="" asp-controller="Home" asp-action="OrganizerLogin">
-                    <span class="fs-1 fw-bold text-gradient small">活動方登入</span>
-                </a>
+                <p id="cookieValue"></p>
             </div>
         </div>
     </nav>
@@ -117,6 +122,11 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
+    @* <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/js/main.js"></script>   
+    
     @* <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js" asp-append-version="true"></script>
