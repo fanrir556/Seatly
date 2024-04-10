@@ -6,16 +6,16 @@
 {
     <button class="btn btn-gradient mb-2 btn-cate" data-cate="@cate">@cate</button>
 }
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-end align-items-center">
     <span>每頁顯示<select id="pgSize">
         <option value="10" selected>10</option>
         <option value="25">25</option>
         <option value="50">50</option>
         <option value="100">100</option>
     </select>筆資料</span>
-    <button class="btn btn-gradient me-1" id="pP" style="width:50px;height:50px;text-align:center;" disabled>上一頁</button>
-    <input class="p-0" id="pgNum" value="1" style="width:50px;height:50px;text-align:center;" />
-    <button class="btn btn-gradient me-1" id="nP" style="width:50px;height:50px;text-align:center;" disabled>下一頁</button>
+    <button class="btn btn-gradient me-1 p-0" id="pP" style="width:50px;height:50px;text-align:center;" disabled>上</button>
+    <input class="me-1 p-0" id="pgNum" value="1" style="width:50px;height:50px;text-align:center;" />
+    <button class="btn btn-gradient me-1 p-0" id="nP" style="width:50px;height:50px;text-align:center;" disabled>下</button>
 </div>
 
 <div class="col-12" id="pointsContentBody">
