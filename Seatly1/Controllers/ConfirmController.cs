@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Seatly1.Models;
+using Seatly1.ViewModels;
 
 namespace Seatly1.Controllers
 {
@@ -25,10 +26,13 @@ namespace Seatly1.Controllers
         // GET: ConfirmController
         public IActionResult Index(int? NId, string? UId)
         {
+            var viewModel = new NotificationBookReader();
 
-            BookingOrder? BookData = BookO(NId,UId);
+            BookingOrder? BookData = BookO(NId, UId);
 
-            return View(BookData);
+            viewModel.BookingOrder = BookData;
+
+            return View(viewModel);
         }
 
 
@@ -41,6 +45,7 @@ namespace Seatly1.Controllers
             if (NontiData != null)
             {
                 newBookingOrder.ActivityId = NontiData.ActivityId;
+
                 newBookingOrder.ActivityName = NontiData.ActivityName;
             }
 
@@ -72,9 +77,9 @@ namespace Seatly1.Controllers
             newBookingOrder.ActivityBarcode = barcode;
             newBookingOrder.Checked = false;
 
-            var addedBookingOrder = _context.BookingOrders.Add(newBookingOrder);
 
-            return addedBookingOrder.Entity;
+
+            return newBookingOrder;
         }
 
         // GET: ConfirmController/Details/5
