@@ -28,9 +28,12 @@ namespace Seatly1.Controllers
         {
             var viewModel = new NotificationBookReader();
 
+
             BookingOrder? BookData = BookO(NId, UId);
+            var notificationRecord = _context.NotificationRecords.FirstOrDefault(n => n.ActivityId == NId);
 
             viewModel.BookingOrder = BookData;
+            viewModel.NotificationRecord = notificationRecord;
 
             return View(viewModel);
         }

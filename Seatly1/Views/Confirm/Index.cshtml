@@ -13,11 +13,24 @@
             @Html.DisplayFor(model => model.BookingOrder.ActivityId)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NotificationRecord.OrganizerId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NotificationRecord.OrganizerId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NotificationRecord.ActivityPhoto)
+        </dt>
+        <dd class="col-sm-10">
+            <partial name="_ShowActivityPhoto" />
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.BookingOrder.ActivityName)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.BookingOrder.ActivityName)
         </dd>
+
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.BookingOrder.WaitingNumber)
         </dt>
