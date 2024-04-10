@@ -8,11 +8,36 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\gulp\**" />
+    <Compile Remove="wwwroot\public\**" />
+    <Compile Remove="wwwroot\src\**" />
+    <Compile Remove="wwwroot\video\**" />
+    <Content Remove="wwwroot\gulp\**" />
+    <Content Remove="wwwroot\public\**" />
+    <Content Remove="wwwroot\src\**" />
+    <Content Remove="wwwroot\video\**" />
+    <EmbeddedResource Remove="wwwroot\gulp\**" />
+    <EmbeddedResource Remove="wwwroot\public\**" />
+    <EmbeddedResource Remove="wwwroot\src\**" />
+    <EmbeddedResource Remove="wwwroot\video\**" />
+    <None Remove="wwwroot\gulp\**" />
+    <None Remove="wwwroot\public\**" />
+    <None Remove="wwwroot\src\**" />
+    <None Remove="wwwroot\video\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\public\vendors\%40popperjs\%40popper.min.js" />
   </ItemGroup>
 
 </Project>
