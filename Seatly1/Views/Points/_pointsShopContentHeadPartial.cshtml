@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<PointStore>
 
-<button class="btn btn-gradient mb-2" id="btnAll">全部</button>
+<button class="btn btn-gradient mb-2 btn-cate" data-cate="all">全部</button>
 
 @foreach(var cate in Model.OrderBy(s => s.Category).Select(s => s.Category).Distinct())
 {
@@ -26,18 +26,11 @@
                     </div>
                 </div>
             </div>
-        @* @foreach (var product in group)
-        {
-        } *@
     }
 </div>
 
 <script>
     $(function () {
-        $("#btnAll").on("click", function () {
-            $("#pointsShopSide").trigger("click");
-        });
-
         $(".btn-cate").on("click", function () {
             $.ajax({
                 type: "GET",
