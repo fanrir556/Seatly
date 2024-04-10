@@ -122,7 +122,16 @@ namespace Seatly1.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<Organizers>> RegisterOrganizer(OrganizerDTO organizer)
         {
-                Organizer o = new()
+            // 检查邮箱、电子邮件和电话号码是否已被注册
+            if (await _context.Organizers.AnyAsync(o =>
+                o.OrganizerAccount == organizer.OrganizerAccount ||
+                o.Email == organizer.Email ||
+                o.Phone == organizer.Phone))
+            {
+                return BadRequest("帳號、Email 或電話已經被註冊過了。");
+            }
+
+            Organizer o = new()
                 {
                     OrganizerAccount = organizer.OrganizerAccount,
                     LoginPassword = organizer.LoginPassword,

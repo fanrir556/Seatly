@@ -119,7 +119,7 @@ $('#registerForm').submit(function (event) {
             // 登录成功，重定向到首页
             window.location.href = '/';
         }).fail(function (err) {
-            alert("註冊失敗", err);
+            alert(err.responseText);
             //$('#errorMessage').text(err.StatusText);
             //$('#loginErrorModal').modal('show');
         })
