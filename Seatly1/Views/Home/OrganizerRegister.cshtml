@@ -176,18 +176,14 @@
                                     </div>
                                 </div>
 
- @*                                <div class="col-12 col-md-3">
+                                <div class="col-12 col-md-3">
                                     <label for="photo" class="form-label">上傳活動方照片</label>
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
-                                    <input type="file" id="photo" name="photo" class="form-control" aria-label="file example"
+                                    <input type="file" id="imageInput" name="imageInput" class="form-control" aria-label="file example"
                                            placeholder="請上傳活動方照片" required>
-                                    <div class="invalid-feedback">
-                                        沒有選擇檔案。
-                                    </div>
-                                    <div id="status" class="valid-feedback">
+                                    <div id="invalid_imageInput" class="invalid-feedback"></div>
                                 </div>
-                                </div> *@
                             </div>
 
                             <div id="submit" class="col-md-12 col-sm-4 mb-3 d-flex flex-row-reverse bd-highlight">
@@ -195,10 +191,9 @@
                             </div>
                         </form>
                         <!--上傳活動方照片-->
-                        <h2>上傳活動方照片</h2>
+@*                         <h2>上傳活動方照片</h2>
                         <input type="file" id="imageInput">
-                        <button id="uploadButton">Upload</button>
-                        <div id="status"></div>
+                        <div id="status"></div> *@
                     </div>
                 </div>
                 <!-- 表單 end -->

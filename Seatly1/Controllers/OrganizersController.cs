@@ -123,15 +123,21 @@ namespace Seatly1.Controllers
         public async Task<ActionResult<Organizers>> RegisterOrganizer(OrganizerDTO organizer)
         {
             // 检查邮箱、电子邮件和电话号码是否已被注册
-            if (await _context.Organizers.AnyAsync(o =>
-                o.OrganizerAccount == organizer.OrganizerAccount ||
-                o.Email == organizer.Email ||
-                o.Phone == organizer.Phone))
+            if (await _context.Organizers.AnyAsync(o => o.OrganizerAccount == organizer.OrganizerAccount))
             {
-                return BadRequest("帳號、Email 或電話已經被註冊過了。");
+                return BadRequest("帳號已被註冊");
             }
-
-            Organizer o = new()
+            else if (await _context.Organizers.AnyAsync(o => o.Email == organizer.Email))
+            {
+                return BadRequest("信箱已被註冊");
+            }
+            else if (await _context.Organizers.AnyAsync(o => o.Phone == organizer.Phone))
+            {
+                return BadRequest("電話已被註冊");
+            }
+            else
+            {
+                Organizer o = new()
                 {
                     OrganizerAccount = organizer.OrganizerAccount,
                     LoginPassword = organizer.LoginPassword,
@@ -149,6 +155,7 @@ namespace Seatly1.Controllers
                 _context.Organizers.Add(o);
                 await _context.SaveChangesAsync();
                 return Ok("已完成註冊，待審核完成後即可登入");
+            }
         }
 
         // 註冊的圖片上傳api
@@ -168,7 +175,7 @@ namespace Seatly1.Controllers
                 Directory.CreateDirectory(uploadsFolder);
             }
 
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+            var fileName = image.FileName; // 保留原始檔名
             var filePath = Path.Combine(uploadsFolder, fileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
