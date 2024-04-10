@@ -398,7 +398,7 @@ GO
     [UserID] INT NULL,
     [UserName] NVARCHAR(50) NULL,
     [FriendUserName] NVARCHAR(50) NULL,
-
+   
 CREATE TABLE Comments (
     CommentID INT PRIMARY KEY,
     MemberAccount NVARCHAR(50),

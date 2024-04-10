@@ -4,6 +4,8 @@ namespace Seatly1.Models
 {
     public partial class SeatlyContext : DbContext
     {
+        public object Collections { get; internal set; }
+
         // 定義OnConfiguring函式
 
         //定義OnConfiguring函式

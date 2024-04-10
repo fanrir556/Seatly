@@ -31,7 +31,7 @@ namespace Seatly1.Controllers
         {
             return await _context.Organizers
                 .Select(org => new OrgainzerInfoDTO
-                {
+                { 
                     OrganizerAccount = org.OrganizerAccount,
                     OrganizerName = org.OrganizerName,
                     OrganizerCategory = org.OrganizerCategory,

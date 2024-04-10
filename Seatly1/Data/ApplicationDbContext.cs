@@ -10,5 +10,8 @@ namespace Seatly1.Data
             : base(options)
         {
         }
+
+        public object Collections { get; internal set; }
+        public IEnumerable<object> CollectionItems { get; set; }
     }
 }

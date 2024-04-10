@@ -12,8 +12,13 @@ using Seatly1.Data;
 namespace Seatly1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<<< HEAD:Seatly1/Migrations/20240402021052_BaseSchema.Designer.cs
     [Migration("20240402021052_BaseSchema")]
     partial class BaseSchema
+========
+    [Migration("20240409020255_RenameMemberRealName")]
+    partial class RenameMemberRealName
+>>>>>>>> yuci:Seatly1/Migrations/20240409020255_RenameMemberRealName.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,7 +175,11 @@ namespace Seatly1.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+<<<<<<<< HEAD:Seatly1/Migrations/20240402021052_BaseSchema.Designer.cs
                     b.Property<int>("Age")
+========
+                    b.Property<int?>("Age")
+>>>>>>>> yuci:Seatly1/Migrations/20240409020255_RenameMemberRealName.Designer.cs
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Birthday")
@@ -180,7 +189,11 @@ namespace Seatly1.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+<<<<<<<< HEAD:Seatly1/Migrations/20240402021052_BaseSchema.Designer.cs
                     b.Property<DateTime>("CreatAt")
+========
+                    b.Property<DateTime?>("CreatAt")
+>>>>>>>> yuci:Seatly1/Migrations/20240409020255_RenameMemberRealName.Designer.cs
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -196,6 +209,7 @@ namespace Seatly1.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+<<<<<<<< HEAD:Seatly1/Migrations/20240402021052_BaseSchema.Designer.cs
                     b.Property<string>("MemberAccount")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -206,6 +220,16 @@ namespace Seatly1.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+========
+                    b.Property<string>("MemberNickname")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("MemberRealName")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+>>>>>>>> yuci:Seatly1/Migrations/20240409020255_RenameMemberRealName.Designer.cs
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -233,7 +257,10 @@ namespace Seatly1.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sex")
+<<<<<<<< HEAD:Seatly1/Migrations/20240402021052_BaseSchema.Designer.cs
                         .IsRequired()
+========
+>>>>>>>> yuci:Seatly1/Migrations/20240409020255_RenameMemberRealName.Designer.cs
                         .HasMaxLength(1)
                         .HasColumnType("nvarchar(1)");
 

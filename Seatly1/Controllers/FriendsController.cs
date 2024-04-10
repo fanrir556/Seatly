@@ -19,8 +19,8 @@ namespace Seatly1.Controllers
 
         public IActionResult Index()
         {
-            var friends = new List<string> { "Friend 1", "Friend 2", "Friend 3" };
-            ViewBag.FriendsList = friends;
+            //var friends = new List<string> { "Friend 1", "Friend 2", "Friend 3" };
+            //ViewBag.FriendsList = friends;
             return RedirectToPage("/Areas/Identity/Pages/Account/Manage/Friends.cshtml");
 
         }

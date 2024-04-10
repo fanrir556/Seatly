@@ -32,6 +32,8 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public string Username { get; set; }
 
+        public string MemberRealName { get; set; }
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -72,16 +74,22 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var realname = user.MemberRealName;
             var sex = user.Sex;  // 加入性別
             var birthday = user.Birthday; // 加入生日
+            //var dateTime = new DateTime(1980,01,01);
+            var birthdayPlease = "===請選擇===";
 
             Username = userName;
+            MemberRealName = realname;
 
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
                 Sex = sex,
-                Birthday = birthday.HasValue ? birthday.Value : DateTime.MinValue, // 检查生日是否有值，有值则赋值，否则赋默认值
+                //Birthday = birthday== dateTime ? birthday.Value : dateTime, // 检查生日是否有值，有值则赋值，否则赋默认值
+                Birthday = birthday.HasValue ? birthday.Value : null, // 检查生日是否有值，有值则赋值，否则赋默认值
+
             };
         }
 

@@ -79,6 +79,12 @@ namespace Seatly1.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            /// 
+
+            [Required(ErrorMessage = "請填寫真實姓名")]
+            [Display(Name = "真實姓名")]
+            public string MemberRealName { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -119,7 +125,7 @@ namespace Seatly1.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                //user.MemberAccount = Input.MemberAccount;
+                user.MemberRealName = Input.MemberRealName;
 
                 await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -128,6 +134,8 @@ namespace Seatly1.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
