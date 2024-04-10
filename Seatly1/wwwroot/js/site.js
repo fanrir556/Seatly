@@ -1,4 +1,5 @@
 ﻿var strPoints = sessionStorage.getItem('strPoints') || "";
+var strCate = sessionStorage.getItem('strCate') || "all";
 $(function () {
     /*點數專區導覽列hover開始*/
     var timer;

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<PointStore>
 
-@foreach (var product in Model.OrderBy(s => s.Category).ThenBy(s => s.ProductPrice))
+@foreach (var product in Model)
 {
     <div class="card mb-3">
         <div class="row g-0">

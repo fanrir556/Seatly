@@ -36,18 +36,37 @@ namespace Seatly1.Controllers
 
         public async Task<IActionResult> pointsShopContentHead()
         {
-            return PartialView("_pointsShopContentHeadPartial", await _context.PointStores.ToListAsync());
+            return PartialView("_pointsShopContentHeadPartial", await _context.PointStores.OrderBy(s => s.Category).ToListAsync());
         }
 
-        public async Task<IActionResult> pointsShopContentBody(string? cate)
+        public async Task<IActionResult> pointsShopContentBody(string? cate, int? pgNum, int? pgSize)
         {
             if (cate == "all")
             {
-                return PartialView("_pointsShopContentBodyPartial", await _context.PointStores.ToListAsync());
+                int skipCount = ((int)pgNum - 1) * (int)pgSize;
+
+                var data = await _context.PointStores
+                    .OrderBy(s => s.Category)
+                    .ThenBy(s => s.ProductPrice)
+                    .Skip(skipCount)
+                    .Take((int)pgSize)
+                    .ToListAsync();
+                return PartialView("_pointsShopContentBodyPartial", data);
+                //return PartialView("_pointsShopContentBodyPartial", await _context.PointStores.ToListAsync());
             }
             else
             {
-                return PartialView("_pointsShopContentBodyPartial", await _context.PointStores.Where(s => s.Category == cate).ToListAsync());
+                int skipCount = ((int)pgNum - 1) * (int)pgSize;
+
+                var data = await _context.PointStores
+                    .Where(s => s.Category == cate)
+                    .OrderBy(s => s.Category)
+                    .ThenBy(s => s.ProductPrice)
+                    .Skip(skipCount)
+                    .Take((int)pgSize)
+                    .ToListAsync();
+                return PartialView("_pointsShopContentBodyPartial", data);
+                //return PartialView("_pointsShopContentBodyPartial", await _context.PointStores.Where(s => s.Category == cate).OrderBy(s => s.Category).ThenBy(s => s.ProductPrice).ToListAsync());
             }
         }
 

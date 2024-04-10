@@ -36,6 +36,7 @@
                 e.preventDefault();
                 strPoints = "pointsShop";
                 sessionStorage.setItem('strPoints', strPoints);
+                sessionStorage.setItem('strCate', "all");
                 $.ajax({
                     type: "GET",
                     url: `@Url.Action("pointsShopTitle", "Points")`
