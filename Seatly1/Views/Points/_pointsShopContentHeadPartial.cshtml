@@ -126,20 +126,21 @@
                 $("#pgNum").trigger("change");
             }
             else {
-            strCate = sessionStorage.getItem('strCate');
-            parameters.cate = strCate;
-            parameters.pgNum = $("#pgNum").val();
-            parameters.pgSize = $("#pgSize").val();
-            $("#pgNum").val(1);
-            $.ajax({
-                type: "GET",
-                url: `@Url.Action("pointsShopContentBody", "Points")`,
-                data: parameters
-            }).done(function (data) {
-                $("#pointsContentBody").html(data);
-            }).fail(function (err) {
-                alert(err.responseText);
-            });
+                strCate = sessionStorage.getItem('strCate');
+                parameters.cate = strCate;
+                parameters.pgNum = $("#pgNum").val();
+                parameters.pgSize = $("#pgSize").val();
+                $("#pgNum").val(1);
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsShopContentBody", "Points")`,
+                    data: parameters
+                }).done(function (data) {
+                    $("#pointsContentBody").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            }
         });
 
         $("#pP").on("click", function () {
