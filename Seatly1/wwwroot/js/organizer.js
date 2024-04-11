@@ -1,19 +1,4 @@
-﻿// 獲取cookie驗證活動方是否登入
-//$.ajax({
-//    url: '/api/Organizers/cookie', // 后端 API 的 URL
-//    type: 'GET',
-//    success: function (response) {
-//        // 成功获取到响应数据后，处理数据
-//        alert(response);
-//    },
-//    error: function (textStatus, errorThrown) {
-//        // 处理请求失败的情况
-//        alert('活動方未登入', textStatus, errorThrown);
-//    }
-//});
-
-
-// 關閉登入失敗Modal
+﻿// 關閉登入失敗Modal
 $('#closeErrorModalBtn').click(function () {
     $('#loginErrorModal').modal('hide'); // 關閉Modal
 });

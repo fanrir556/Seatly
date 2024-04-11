@@ -72,7 +72,7 @@ namespace Seatly1.Controllers
             return orgInfo;
         }
 
-        // 讀取cookie驗證活動方式否登入
+        // 讀取cookie驗證是否登入
         [HttpGet("cookie")]
         public IActionResult CheckLoginStatus()
         {
