@@ -167,9 +167,7 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFAABE080226");
 
-            entity.Property(e => e.CommentId)
-                .ValueGeneratedNever()
-                .HasColumnName("CommentID");
+            entity.Property(e => e.CommentId).HasColumnName("CommentID");
             entity.Property(e => e.MemberAccount).HasMaxLength(50);
             entity.Property(e => e.ReContent)
                 .HasMaxLength(1000)
@@ -211,15 +209,13 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.MemberId).HasName("PK__Members__0CF04B38AC717DEA");
 
-            entity.Property(e => e.MemberId)
-                .ValueGeneratedNever()
-                .HasColumnName("MemberID");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.MemberAccount).HasMaxLength(20);
             entity.Property(e => e.MemberName).HasMaxLength(30);
             entity.Property(e => e.MemberNickname).HasMaxLength(10);
             entity.Property(e => e.MemberPassword).HasMaxLength(20);
+            entity.Property(e => e.MemberRealName).HasMaxLength(20);
             entity.Property(e => e.Phone).HasMaxLength(16);
             entity.Property(e => e.Sex).HasMaxLength(1);
         });
@@ -292,9 +288,7 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.RatingId).HasName("PK__Ratings__FCCDF85C69CC4A10");
 
-            entity.Property(e => e.RatingId)
-                .ValueGeneratedNever()
-                .HasColumnName("RatingID");
+            entity.Property(e => e.RatingId).HasColumnName("RatingID");
             entity.Property(e => e.CommentTime).HasColumnType("datetime");
             entity.Property(e => e.MemberAccount).HasMaxLength(50);
             entity.Property(e => e.RestaurantAccount).HasMaxLength(50);
@@ -306,9 +300,7 @@ public partial class SeatlyContext : DbContext
 
             entity.ToTable("Reply");
 
-            entity.Property(e => e.ReplyId)
-                .ValueGeneratedNever()
-                .HasColumnName("ReplyID");
+            entity.Property(e => e.ReplyId).HasColumnName("ReplyID");
             entity.Property(e => e.ReContent)
                 .HasMaxLength(50)
                 .HasColumnName("reContent");
@@ -320,9 +312,7 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Restaura__3214EC27EAE743BB");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.Photo).HasMaxLength(200);
             entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
@@ -332,9 +322,7 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.TableId).HasName("PK__Restaura__7D5F018EF6A631AE");
 
-            entity.Property(e => e.TableId)
-                .ValueGeneratedNever()
-                .HasColumnName("TableID");
+            entity.Property(e => e.TableId).HasColumnName("TableID");
             entity.Property(e => e.PartitionName).HasMaxLength(50);
             entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
             entity.Property(e => e.Status).HasMaxLength(10);
@@ -345,9 +333,7 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Restaura__3214EC2778FF0829");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
         });
 
@@ -357,9 +343,7 @@ public partial class SeatlyContext : DbContext
 
             entity.ToTable("WaitlistInfo");
 
-            entity.Property(e => e.WaitlistId)
-                .ValueGeneratedNever()
-                .HasColumnName("WaitlistID");
+            entity.Property(e => e.WaitlistId).HasColumnName("WaitlistID");
             entity.Property(e => e.RestaurantId).HasColumnName("RestaurantID");
         });
 

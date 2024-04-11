@@ -115,7 +115,7 @@
                                 <div class="col-12 col-md-9 mb-3">
                                     <input type="text" id="address" name="地址" class="form-control" placeholder="請輸入地址">
                                 </div>
- 
+
                                 <div class="col-12 col-md-3">
                                     <label for="final-enter" class="form-label">活動網址</label>
                                 </div>
@@ -176,17 +176,16 @@
                                     </div>
                                 </div>
 
- @*                                <div class="col-12 col-md-3">
+                                <div class="col-12 col-md-3">
                                     <label for="photo" class="form-label">上傳活動方照片</label>
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
-                                    <input type="file" id="photo" name="photo" class="form-control" aria-label="file example"
+                                    <input type="file" id="imageInput" name="imageInput" class="form-control" aria-label="file example"
                                            placeholder="請上傳活動方照片" required>
-                                    <div class="invalid-feedback">
-                                        沒有選擇檔案。
-                                    </div>
-                                    <div id="status" class="valid-feedback">
+                                    <div id="invalid_imageInput" class="invalid-feedback"></div>
                                 </div>
+                                    <div id="status" class="valid-feedback">
+                            </div>
                                 </div> *@
                             </div>
 
@@ -205,12 +204,7 @@
             </div>
             <!-- col-8 end -->
         </section>
-        <!--註冊頁結束->
-
-        <!--頁尾開始-->
-        <footer></footer>
-        <!--頁尾結束-->
-
+        <!--註冊頁結束-->
     </main>
     <!-- ===============================================-->
     <!--    End of Main Content-->
@@ -225,7 +219,7 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
     <script src="vendors/fontawesome/all.min.js"></script>
     <script src="assets/js/theme.js"></script>
-    <script src="../src/js/main.js"></script> <!--自定義的js-->
+    <script src="~/js/organizer.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap"
           rel="stylesheet">
