@@ -91,7 +91,7 @@ namespace Seatly1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ActivityId,OrganizerId,ActivityPhoto,StartTime,EndTime,Capacity,ActivityName,Description,IsRecurring,RecurringTime")] NotificationRecord notificationRecord)
+        public async Task<IActionResult> Edit(int id, [Bind("ActivityId,OrganizerId,ActivityPhoto,StartTime,EndTime,Capacity,ActivityName,DescriptionN,IsRecurring,RecurringTime")] NotificationRecord notificationRecord)
         {
             if (id != notificationRecord.ActivityId)
             {
