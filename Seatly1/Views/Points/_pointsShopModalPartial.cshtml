@@ -1,0 +1,18 @@
+﻿@model PointStore
+
+<div class="row g-0">
+    <div class="col-12 d-flex justify-content-center">
+        <img src="~/images/@Model.ProductImage" class="img-fluid rounded-start" style="width:150px" alt="ProductName" title="@Model.ProductName">
+    </div>
+    <div class="col-12">
+        <div>
+            <div class="text-gradient d-inline">商品名稱:</div>
+            <div class="d-inline ms-2">@Model.ProductName</div>
+        </div>
+        <div>
+            <div class="text-gradient d-inline">商品價格:</div>
+            <div class="d-inline ms-2 me-2">@Model.ProductPrice</div>
+            <div class="text-gradient d-inline">點數</div>
+        </div>
+    </div>
+</div>

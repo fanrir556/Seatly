@@ -70,6 +70,11 @@ namespace Seatly1.Controllers
             }
         }
 
+        public async Task<IActionResult> pointsShopModal(int? id)
+        {
+            return PartialView("_pointsShopModalPartial", await _context.PointStores.FirstOrDefaultAsync(s => s.ProductId == id));
+        }
+
         public IActionResult pointsHistoryContent()
         {
             return PartialView("_pointsHistoryContentPartial");

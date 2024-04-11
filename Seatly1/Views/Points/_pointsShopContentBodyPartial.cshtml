@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<PointStore>
 
+<span class="d-none" id="pdCount">@Model.Count()</span>
+
 @foreach (var product in Model)
 {
     <div class="card mb-3">
@@ -13,9 +15,55 @@
                     <h5 class="card-title text-gradient fs-3">@product.ProductName</h5>
                     <p class="card-text">@product.ProductDescription</p>
                     <p class="card-text text-gradient">兌換需要 @product.ProductPrice 點數</p>
-                    <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1">兌換</button>
+                    <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1 btn-exchange" data-bs-toggle="modal" data-bs-target="#exchangeModal" data-pdId="@product.ProductId">兌換</button>
                 </div>
             </div>
         </div>
     </div>
 }
+
+<script>
+    $(function () {
+        var parameters = {
+            cate: strCate,
+            pgNum:1,
+            pgSize: @Int32.MaxValue
+        };
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("pointsShopContentBody", "Points")`,
+            data: parameters
+        }).done(function (data) {
+            var match = data.match(/id="pdCount">(.*?)<\/span>/);
+            var pgTotal = Math.ceil(match[1] / $("#pgSize").val());
+            $("#pgTotal").text(pgTotal);
+            if ($("#pgNum").val() == 1) {
+                $("#pP").prop("disabled", true);
+            }
+            else {
+                $("#pP").prop("disabled", false);
+            }
+            if ($("#pgNum").val() == $("#pgTotal").text()) {
+                $("#nP").prop("disabled", true);
+            }
+            else {
+                $("#nP").prop("disabled", false);
+            }
+        }).fail(function (err) {
+            alert(err.responseText);
+        });
+
+        $(".btn-exchange").on("click", function (e) {
+            var pdId = $(this).data("pdid");
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("pointsShopModal", "Points", new {id = "pdId"})`
+                .replace("pdId", pdId)
+            }).done(function (data) {
+                $("#exchangeModalBody").html(data);
+            }).fail(function (err) {
+                alert(err.responseText);
+            });
+        });
+    });
+</script>

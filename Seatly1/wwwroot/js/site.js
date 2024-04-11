@@ -21,6 +21,7 @@ $(function () {
     });
     /*點數專區導覽列hover結束*/
 
+    /*點數專區導向partial*/
     $("#pointsShop").on("click", function () {
         strPoints = "pointsShop";
         sessionStorage.setItem('strPoints', strPoints);
@@ -33,4 +34,16 @@ $(function () {
         strPoints = "coupon";
         sessionStorage.setItem('strPoints', strPoints);
     });
+    /*點數專區導向partial*/
+
+    /*點數專區dropdown-item:hover*/
+    $(".dropdown-item").on("mouseenter", function () {
+        $(this).removeClass("text-gradient");
+        $(this).addClass("text-dark");
+    });
+    $(".dropdown-item").on("mouseleave", function () {
+        $(this).addClass("text-gradient");
+        $(this).removeClass("text-white");
+    });
+    /*點數專區dropdown-item:hover*/
 })

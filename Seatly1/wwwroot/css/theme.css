@@ -4445,7 +4445,8 @@ fieldset:disabled .btn {
 
 .dropdown-item:hover, .dropdown-item:focus {
   color: #3b3b3b;
-  background-color: #F5F5F5;
+  background: linear-gradient(70deg, #e73140, #f7b9b9);
+  -webkit-text-fill-color: white;
 }
 
 .dropdown-item.active, .dropdown-item:active {
