@@ -148,7 +148,7 @@ $('#registerForm').submit(function (event) {
                     }),
                     contentType: 'application/json',
                     success: function (result) {
-                        alert("註冊成功", result);
+                        alert(result);
                         // 登录成功，重定向到首页
                         window.location.href = '/';
                     },
