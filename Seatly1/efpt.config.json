@@ -99,6 +99,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Restaurants]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[RestaurantTables]",
          "ObjectType": 0
       },

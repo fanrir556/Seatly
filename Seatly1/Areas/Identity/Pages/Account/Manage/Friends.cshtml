@@ -59,15 +59,8 @@
         // 关闭模态框
         closeAddFriendModal();
     }
-</script>
 
 
-
-<ul>
-    <li>
-   @*  @foreach (var friends in ViewBag.FriendsList)
-    {
-      
         $(function () {
             $("#collections").on("click", function (e) {
                 e.preventDefault();
@@ -82,7 +75,30 @@
                 });
             });
         });
+
 </script>
+
+
 }
-*@
-}
+    @*  @foreach (var friends in ViewBag.FriendsList)
+    {
+
+        $(function () {
+             $("#collections").on("click", function (e) {
+                 e.preventDefault();
+                 // alert("1111");
+                 $.ajax({
+                  type: "GET",
+                    url: `@Url.Action("collectionsPartial", "Friends")`
+               }).done(function (data) {
+                     $("#memberBody").html(data);
+                 }).fail(function (err) {
+                     alert(err.responseText);
+                 });
+             });
+         });
+
+ } *@
+
+
+            
