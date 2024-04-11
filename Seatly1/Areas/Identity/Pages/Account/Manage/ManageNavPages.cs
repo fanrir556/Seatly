@@ -3,10 +3,14 @@
 #nullable disable
 
 using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Seatly1.Models;
 
 namespace  Seatly1.Areas.Identity.Pages.Account.Manage
 {
+    
     /// <summary>
     ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
     ///     directly from your code. This API may change or be removed in future releases.
@@ -118,7 +122,19 @@ namespace  Seatly1.Areas.Identity.Pages.Account.Manage
 
         public static string CollectionsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Collections);
 
+        public class FriendsController : Controller
+        {
+            SeatlyContext _context;
+             public FriendsController(SeatlyContext context)
+            {
+                _context = context;
+            }
 
+            public async Task<IActionResult> collectionsPartial()
+            {
+                return PartialView("_collectionsPartial", await _context.CollectionItems.ToListAsync());
+            }
+        }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

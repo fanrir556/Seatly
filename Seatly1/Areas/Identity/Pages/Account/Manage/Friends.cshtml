@@ -22,6 +22,20 @@
     </div>
 </div>
 
+
+
+
+<ul>
+    <li>
+   @*  @foreach (var friends in ViewBag.FriendsList)
+    {
+      
+        <strong>好友帳號:</strong> @friends.FriendUserName
+        } *@
+    </li>
+</ul>
+@section Scripts{
+
 <script>
     // 显示模态框
     function showAddFriendModal() {
@@ -53,8 +67,20 @@
     <li>
    @*  @foreach (var friends in ViewBag.FriendsList)
     {
-      
-        <strong>好友帳號:</strong> @friends.FriendUserName
-        } *@
-    </li>
-</ul>
+
+        $(function () {
+            $("#collections").on("click", function (e) {
+                e.preventDefault();
+                // alert("1111");
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("collectionsPartial", "Friends")`
+                }).done(function (data) {
+                    $("#memberBody").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            });
+        });
+</script>
+}

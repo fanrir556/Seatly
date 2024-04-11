@@ -6,8 +6,13 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div> *@
-<link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
-<link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+@section Styles {
+    
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+   
+}
+
+
 
 <!-- ===============================================-->
 <!--    Main Content-->
@@ -33,16 +38,17 @@
                             </nav>
                             <div class="tab-content mt-3" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                    <form class="row gx-2 gy-2 align-items-center">
+                                    <form asp-action="Search" method="get"  class="row gx-2 gy-2 align-items-center">
                                         <div class="col">
                                             <div class="input-group-icon">
                                                 <i class="fas fa-map-marker-alt text-danger input-box-icon"></i>
                                                 <label class="visually-hidden" for="inputDelivery">Address</label>
-                                                <input class="form-control input-box form-foodwagon-control" id="inputDelivery" type="text" placeholder="Enter Your Address" />
+                                                <input class="form-control input-box form-foodwagon-control" name="searchString" id="inputDelivery" type="text" placeholder="Enter Your Address" />
                                             </div>
                                         </div>
                                         <div class="d-grid gap-3 col-sm-auto">
-                                            <button class="btn btn-danger" type="submit">Find Food</button>
+                                            <button class="btn btn-danger" type="submit" asp-area="" asp-controller="Search" asp-action="Search">搜尋</button>
+                                            
                                         </div>
                                     </form>
                                 </div>
@@ -70,7 +76,7 @@
 
 
     <!-- ============================================-->
-    <!-- <section> begin ============================-->
+    <!-- <section> begin ===優惠區====================-->
     <section class="py-0">
         <div class="container">
             <div class="row h-100 gx-2 mt-7">
@@ -165,7 +171,7 @@
     <!-- <section> close ============================-->
     <!-- ============================================-->
     <!-- ============================================-->
-    <!-- <section> begin ============================-->
+    <!-- <section> begin ====使用方法=================-->
     <section class="py-0 bg-primary-gradient">
 
         <div class="container">
@@ -213,16 +219,22 @@
     <!-- <section> close ============================-->
     <!-- ============================================-->
     <!-- ============================================-->
-    <!-- <section> begin ============================-->
-    <section class="py-4 overflow-hidden  position-relative">
+ 
 
-        <div class="container">
+
+    <!-- ============================================-->
+    <!-- <section> begin ====人氣店家=================-->
+    <section class="py-4 overflow-hidden  ">
+
+        <div class="container ">
             <div class="row h-100">
                 <div class="col-lg-7 mx-auto text-center mt-7 mb-5">
                     <h5 class="fw-bold fs-3 fs-lg-5 lh-sm">Popular items</h5>
                 </div>
-                <div class="col-12" >
-                    <div class="carousel slide" id="carouselPopularItems" data-bs-touch="false" data-bs-interval="false">
+                <div class="col-12">
+                   
+                    <div class="carousel slide position-relative w-100" id="carouselPopularItems" data-bs-touch="false" data-bs-interval="false">
+                        
                         <div class="carousel-inner">
                             <div class="carousel-item active" data-bs-interval="10000">
                                 <div class="row gx-3 h-100 align-items-center">
@@ -442,12 +454,12 @@
                             </div>
                         </div>
                     </div>
-                    <button class="carousel-control-prev carousel-icon" type="button" data-bs-target="#carouselPopularItems" data-bs-slide="prev" >
-                        <span class="carousel-control-prev-icon hover-top-shadow" aria-hidden="true"></span>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselPopularItems" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
                     </button>
-                    <button class="carousel-control-next carousel-icon" type="button" data-bs-target="#carouselPopularItems" data-bs-slide="next">
-                        <span class="carousel-control-next-icon hover-top-shadow" aria-hidden="true"></span>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselPopularItems" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
                 </div>
@@ -586,7 +598,7 @@
 
 
     <!-- ============================================-->
-    <!-- <section> begin ============================-->
+    <!-- <section> begin ====依分類搜尋===============-->
     <section class="py-8 overflow-hidden">
 
         <div class="container">
@@ -600,6 +612,7 @@
                     <button class="carousel-control-next s-icon-next carousel-icon" type="button" data-bs-target="#carouselSearchByFood" data-bs-slide="next"><span class="carousel-control-next-icon hover-top-shadow" aria-hidden="true"></span><span class="visually-hidden">Next</span></button>
                 </div>
             </div>
+
             <div class="row flex-center">
                 <div class="col-12">
                     <div class="carousel slide" id="carouselSearchByFood" data-bs-touch="false" data-bs-interval="false">
@@ -822,56 +835,7 @@
     <!-- <section> close ============================-->
     <!-- ============================================-->
 
-    <section>
-        <div class="bg-holder" style="background-position:center;background-size:cover;">
-        </div>
-        @* background-image:url(~/img/gallery/cta-one-bg.png); *@
-        <!--/.bg-holder-->
-
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xxl-10">
-                    <div class="card card-span shadow-warning" style="border-radius: 35px;">
-                        <div class="card-body py-5">
-                            <div class="row justify-content-evenly">
-                                <div class="col-md-3">
-                                    <div class="d-flex d-md-block d-xl-flex justify-content-evenly justify-content-lg-between">
-                                        <img src="~/img/icons/discounts.png" width="100" alt="..." />
-                                        <div class="d-flex d-lg-block d-xl-flex flex-center">
-                                            <h2 class="fw-bolder text-1000 mb-0 text-gradient">Daily<br class="d-none d-md-block" />Discounts </h2>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 hr-vertical">
-                                    <div class="d-flex d-md-block d-xl-flex justify-content-evenly justify-content-lg-between">
-                                        <img src="~/img/icons/live-tracking.png" width="100" alt="..." />
-                                        <div class="d-flex d-lg-block d-xl-flex flex-center">
-                                            <h2 class="fw-bolder text-1000 mb-0 text-gradient">Live Tracking</h2>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 hr-vertical">
-                                    <div class="d-flex d-md-block d-xl-flex justify-content-evenly justify-content-lg-between">
-                                        <img src="~/img/icons/quick-delivery.png" width="100" alt="..." />
-                                        <div class="d-flex d-lg-block d-xl-flex flex-center">
-                                            <h2 class="fw-bolder text-1000 mb-0 text-gradient">Quick Delivery </h2>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row flex-center mt-md-8">
-                <div class="col-lg-5 d-none d-lg-block" style="margin-bottom: -122px;"> @* <img class="w-100" src="~/img/gallery/phone-cta-one.png" alt="..." /> *@</div>
-                <div class="col-lg-5 mt-7 mt-md-0">
-                    <h1 class="text-primary">Install the app</h1>
-                    <p>It's never been easier to order food. Look for the finest <br class="d-none d-xl-block" />discounts and you'll be lost in a world of delectable food.</p><a class="pe-2" href="https://www.apple.com/app-store/" target="_blank"><img src="~/img/gallery/app-store.svg" width="160" alt="" /></a><a href="https://play.google.com/store/apps" target="_blank"><img src="~/img/gallery/google-play.svg" width="160" alt="" /></a>
-                </div>
-            </div>
-        </div>
-    </section>
+ 
 
 
     <!-- ============================================-->
@@ -970,7 +934,7 @@
     </section>
 
 
-    <!-- ============================================-->
+  @*   <!-- ============================================-->
     <!-- <section> begin ============================-->
     <section class="py-0 pt-7 bg-1000">
 
@@ -1104,8 +1068,27 @@
                 </div>
             </div>
         </div><!-- end of .container-->
+    *@
 </main>
-
+ 
 <!-- ===============================================-->
 <!--    End of Main Content-->
 <!-- ===============================================-->
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js" integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $("#collections").on("click", function (e) {
+            e.preventDefault();
+            //alert("1111");
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("collectionsPartial", "Friends")`
+            }).done(function (data) {
+                $("#memberBody").html(data);
+            }).fail(function (err) {
+                alert(err.responseText);
+            });
+        });
+    </script>
+}

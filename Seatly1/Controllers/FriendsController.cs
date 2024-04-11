@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Seatly1.Models;
 
 namespace Seatly1.Controllers
@@ -10,7 +11,8 @@ namespace Seatly1.Controllers
         //    return RedirectToPage("/Areas/Identity/Pages/Account/Manage/Friends.cshtml"); // 重定向到 Razor 页面
         //}
 
-        private readonly SeatlyContext _context;
+        //private readonly SeatlyContext _context;
+        SeatlyContext _context;
 
         public FriendsController(SeatlyContext context)
         {
@@ -23,6 +25,11 @@ namespace Seatly1.Controllers
             //ViewBag.FriendsList = friends;
             return RedirectToPage("/Areas/Identity/Pages/Account/Manage/Friends.cshtml");
 
+        }
+
+        public async Task<IActionResult> collectionsPartial()
+        {
+            return PartialView("_collectionsPartial", await _context.CollectionItems.ToListAsync());
         }
 
 
