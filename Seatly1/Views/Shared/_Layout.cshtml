@@ -1,53 +1,144 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tw">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Seatly1</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Seatly1.styles.css" asp-append-version="true" />
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>Foodwagon | Responsive, Ecommerce &amp; Business Templatee</title>
+
+
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/img/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/img/favicons/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/img/favicons/favicon.ico">
+    <link rel="manifest" href="~/img/favicons/manifest.json">
+    <meta name="msapplication-TileImage" content="~/img/favicons/mstile-150x150.png">
+    <meta name="theme-color" content="#ffffff">
+
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+    <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/theme.css" rel="stylesheet" asp-append-version="true" />
+    @* <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" /> *@
+    @* <link rel="stylesheet" href="~/Seatly1.styles.css" asp-append-version="true" /> *@
+    @* <link href="~/css/theme-rtl.min.css" rel="stylesheet" asp-append-version="true" /> *@
+    @* <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" /> *@
+    @* <link href="~/css/theme-rtl.css" rel="stylesheet" /> *@
+    @RenderSection("Styles", required: false) <!-- 如果提供了 Styles 部分，则渲染 Styles 部分 -->
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Seatly1</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+    @* ====================================================== *@
+        @* nav bar *@
+    @* ====================================================== *@
+    <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-light justify-content-center" data-navbar-on-scroll="data-navbar-on-scroll">
+        <div class="container m-0" style="min-width: 98vw;">
+            <a class="navbar-brand d-inline-flex" asp-area="" asp-controller="Home" asp-action="Index">
+                <img class="d-inline-block" src="~/img/gallery/logo.svg" alt="logo" />
+                <span class="text-1000 fs-3 fw-bold ms-2 text-gradient">Seatly</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"> </span>
+            </button>
+
+            <a class="dropdown-item text-gradient" asp-area="" asp-controller="NotificationRecord" asp-action="Index">活動連接測試</a>
+
+            <div class="collapse navbar-collapse border-top border-lg-0 justify-content-end" id="navbarSupportedContent">
+                @* 點數專區開始 *@
+                <li class="nav-item dropdown text-gradient list-group">
+                    <a id="pointsNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        點數專區
+                    </a>
+                    <ul id="pointsDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsShop">點數商城</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="coupon">持有優惠券</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsHistory">點數交易紀錄</a></li>
                     </ul>
-                    <partial name="_LoginPartial" />
-                </div>
+                </li>
+                @* 點數專區結束 *@
+                <partial name="_LoginPartial" />
+
+                @* 活動方專區開始 *@
+                <li class="nav-item dropdown text-gradient list-group">
+                    <a id="OrganizersNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        活動方專區
+                    </a>
+                    <ul id="OrganizersDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a id="o-register" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="OrganizerRegister">活動方註冊</a></li>
+                        <li><a id="o-login" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="OrganizerLogin">活動方登入</a></li>
+                        @*                      <li><a id="o-info" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="">修改活動方資訊</a></li>
+                        <li><a id="o-info" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="">登出</a></li> *@
+                    </ul>
+                </li>
+                @* 活動方專區結束 *@
+
             </div>
-        </nav>
-    </header>
-    <div class="container">
+        </div>
+    </nav>
+
+  
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    
+    <footer class="border-top footer text-muted position-fixed bottom-0">
+        <div class="container-fluid">
             &copy; 2024 - Seatly1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+@*     <script src="~/js/main.js"></script> *@
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    @* <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js" asp-append-version="true"></script>
+    <script src="~/public/vendors/is/is.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.js?features=window.scroll"></script>
+    <script src="~/public/vendors/fontawesome/all.min.js"></script>
+    <script src="~/js/bootstrap-navbar.js"></script>
+    <script type="module" src="~/js/scroll-to-top.js"></script>
+    <script src="~/js/theme.min.js"></script>
+    <script type="module" src="~/js/detector.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/utils.js" asp-append-version="true"></script>
+    <script src="~/public/assets/js/theme.min.js"></script>
+
+    <script src="~/gulp/build.gulp.js"></script>
+    <script src="~/gulp/clean.gulp.js"></script>
+    import { createPopper } from '@popperjs/core';
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/esm/createPopper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+ *@
+
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap" rel="stylesheet">
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

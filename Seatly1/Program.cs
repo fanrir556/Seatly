@@ -1,6 +1,8 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Seatly1.Data;
+using Seatly1.Models;
+using Seatly1.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,11 +10,24 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.AddDbContext<SeatlyContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Seatly")));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+// ���UDI�e��
+builder.Services.AddDbContext<SeatlyContext>(options => {
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Seatly"));
+});
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -28,6 +43,12 @@ else
     app.UseHsts();
 }
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+};
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -38,6 +59,15 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "OrganizerRegister",
+    pattern: "{controller=Home}/{action=OrganizerRegister}/{id?}");
+
+app.MapControllerRoute(
+    name: "OrganizerLogin",
+    pattern: "{controller=Home}/{action=OrganizerLogin}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();
