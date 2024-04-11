@@ -26,24 +26,32 @@ namespace Seatly1.Controllers
         // GET: ConfirmController
         public IActionResult Index(int? NId, string? UId)
         {
-            var viewModel = new NotificationBookReader();
+            if (User.Identity.IsAuthenticated)
+            {
+
+                var viewModel = new NotificationBookReader();
 
 
-            BookingOrder? BookData = BookO(NId, UId);
-            var notificationRecord = _context.NotificationRecords.FirstOrDefault(n => n.ActivityId == NId);
+                BookingOrder? BookData = BookO(NId);
+                var notificationRecord = _context.NotificationRecords.FirstOrDefault(n => n.ActivityId == NId);
 
-            viewModel.BookingOrder = BookData;
-            viewModel.NotificationRecord = notificationRecord;
+                viewModel.BookingOrder = BookData;
+                viewModel.NotificationRecord = notificationRecord;
 
-            return View(viewModel);
+                return View(viewModel);
+            }
+            else 
+            {
+                return Redirect("/Identity/Account/Login");
+            }
         }
 
 
   
-        private BookingOrder BookO(int? NId ,string? UId)
+        private BookingOrder BookO(int? NId)
         {
             var NontiData = _context.NotificationRecords.FirstOrDefault(n => n.ActivityId == NId);
-            var UserData = _context.AspNetUsers.FirstOrDefault(u => u.UserName == UId);
+            var loggedInUserName = User.Identity.Name;
 
             var newBookingOrder = new BookingOrder();
 
@@ -70,9 +78,9 @@ namespace Seatly1.Controllers
                 newBookingOrder.WaitingNumber = 1;
             }
 
-            if (UserData.UserName != null) 
+            if (loggedInUserName != null) 
             {
-                newBookingOrder.UserName = UserData.UserName;
+                newBookingOrder.UserName = loggedInUserName;
             }
 
 
