@@ -4441,7 +4441,6 @@ fieldset:disabled .btn {
   white-space: nowrap;
   background-color: transparent;
   border: 0;
-  transition:0.5s;
 }
 
 .dropdown-item:hover, .dropdown-item:focus {
