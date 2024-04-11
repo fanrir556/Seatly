@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Seatly1.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Seatly1.Data
@@ -25,5 +26,8 @@ namespace Seatly1.Data
         public DateTime? Birthday { get; set; }
         public DateTime? CreatAt { get; set; }
 
+
+        // 導航屬性
+        public ICollection<CollectionItem> Collections { get; set; }
     }
 }

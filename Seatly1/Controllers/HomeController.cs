@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Seatly1.Models;
 using System.Diagnostics;
 
@@ -19,6 +19,29 @@ namespace Seatly1.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult PointsShop()
+        {
+            return View();
+        }
+
+        public IActionResult Coupon()
+        {
+            return View();
+        }
+
+        public IActionResult PointsHistory()
+        {
+            return View();
+        }
+        public IActionResult OrganizerLogin()
+        {
+            return View();
+        }
+        public IActionResult OrganizerRegister()
         {
             return View();
         }

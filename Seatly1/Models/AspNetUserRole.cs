@@ -9,5 +9,5 @@ public partial class AspNetUserRole
 
     public string RoleId { get; set; } = null!;
 
-    public virtual AspNetRole Role { get; set; } = null!;
+    public virtual AspNetUser User { get; set; } = null!;
 }

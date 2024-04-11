@@ -14,14 +14,19 @@
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
            
             <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Email@example.com" />
-                <label asp-for="Input.Email">@Html.DisplayNameFor(a => a.Input.Email)</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <input asp-for="Input.UserName" class="form-control" autocomplete="UserName" aria-required="true" placeholder="帳號請輸入20字以內" />
+                <label asp-for="Input.UserName">@Html.DisplayNameFor(a => a.Input.UserName)</label>
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.MemberAccount" class="form-control" autocomplete="MemberAccount" aria-required="true" placeholder="帳號請輸入20字以內" />
-                <label asp-for="Input.MemberAccount">@Html.DisplayNameFor(a => a.Input.MemberAccount)</label>
-                <span asp-validation-for="Input.MemberAccount" class="text-danger"></span>
+                <input asp-for="Input.MemberRealName" class="form-control" autocomplete="MemberRealName" aria-required="true" placeholder="真實姓名" />
+                <label asp-for="Input.MemberRealName">@Html.DisplayNameFor(a => a.Input.MemberRealName)</label>
+                <span asp-validation-for="Input.MemberRealName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="Email@example.com" />
+                <label asp-for="Input.Email">@Html.DisplayNameFor(a => a.Input.Email)</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="密碼請包含至少一位大寫字母、數字、特殊符號" />

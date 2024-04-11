@@ -1,9 +1,26 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "個人檔案";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
+@* @section Styles
+{
+    
+} *@
+
+<head>
+    @* <script type="text/javascript" src="~/scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="~/scripts/moment.min.js"></script>
+    <script type="text/javascript" src="~/scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/scripts/bootstrap-datetimepicker.js"></script>
+    <link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.css" />
+    <link href="~/lib/bootstrap.v3.datetimepicker.CSS/bootstrap-datetimepicker.min.css" rel="stylesheet" /> *@
+    @* <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" /> *@
+    
+
+</head>
+
 
 <h3>@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
@@ -12,19 +29,43 @@
         <form id="profile-form" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
-                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
+                <input asp-for="Username" class="form-control" placeholder="使用者名稱" disabled />
                 <label asp-for="Username" class="form-label"></label>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                <input asp-for="MemberRealName" class="form-control" placeholder="真實姓名" disabled />
+                <label asp-for="MemberRealName" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="連絡電話"/>
+                <label asp-for="Input.PhoneNumber" class="form-label">@Html.DisplayNameFor(a => a.Input.PhoneNumber)</label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <div class="form-group">
+                <label asp-for="Input.Sex" class="control-label"></label>
+                <select asp-for="Input.Sex" class="form-control">
+                    <option value="M">男性</option>
+                    <option value="F">女性</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Birthday" class="control-label"></label>
+                <div class="input-group date" id="datetimepicker1">
+                    <input type="date" asp-for="Input.Birthday" class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <span asp-validation-for="Input.Birthday" class="text-danger"></span>
+            </div>
+
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">儲存</button>
         </form>
     </div>
 </div>
 
 @section Scripts {
+  
     <partial name="_ValidationScriptsPartial" />
 }
