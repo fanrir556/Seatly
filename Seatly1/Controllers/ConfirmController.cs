@@ -39,11 +39,15 @@ namespace Seatly1.Controllers
         }
 
 
+  
         private BookingOrder BookO(int? NId ,string? UId)
         {
             var NontiData = _context.NotificationRecords.FirstOrDefault(n => n.ActivityId == NId);
             var UserData = _context.AspNetUsers.FirstOrDefault(u => u.UserName == UId);
+
             var newBookingOrder = new BookingOrder();
+
+
 
             if (NontiData != null)
             {
@@ -52,9 +56,14 @@ namespace Seatly1.Controllers
                 newBookingOrder.ActivityName = NontiData.ActivityName;
             }
 
-            if (newBookingOrder.WaitingNumber != null)
+            var BookingOrderWaitingNumber = _context.BookingOrders
+                .Where(b => b.ActivityId == NId)
+                .OrderBy(c => c.WaitingNumber)
+                .LastOrDefault();
+
+            if (BookingOrderWaitingNumber != null && BookingOrderWaitingNumber.WaitingNumber != null)
             {
-                newBookingOrder.WaitingNumber = newBookingOrder.WaitingNumber + 1;
+                newBookingOrder.WaitingNumber = BookingOrderWaitingNumber.WaitingNumber + 1;
             }
             else
             {
@@ -80,10 +89,27 @@ namespace Seatly1.Controllers
             newBookingOrder.ActivityBarcode = barcode;
             newBookingOrder.Checked = false;
 
-
+            AddBookingOrder(newBookingOrder);
 
             return newBookingOrder;
         }
+
+
+        private void AddBookingOrder(BookingOrder newBookingOrder)
+        {
+            try
+            {
+                _context.BookingOrders.Add(newBookingOrder);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                // 處理寫入失敗的異常
+                Console.WriteLine("寫入資料庫失敗：" + ex.Message);
+                throw; // 可以選擇處理或再次拋出異常
+            }
+        }
+
 
         // GET: ConfirmController/Details/5
         public ActionResult Details(int id)

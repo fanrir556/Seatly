@@ -62,7 +62,7 @@ namespace Seatly1.Controllers
                     SetPhoto(notificationRecord);
                 }
 
-
+                
                 _context.Add(notificationRecord);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

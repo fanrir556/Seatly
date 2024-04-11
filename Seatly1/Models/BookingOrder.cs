@@ -11,17 +11,17 @@ public partial class BookingOrder
 
     public int? ActivityId { get; set; }
 
-    public string ActivityName { get; set; }
+    public string? ActivityName { get; set; }
 
     public int? WaitingNumber { get; set; }
 
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 
     public DateTime? DateTime { get; set; }
 
-    public string Status { get; set; }
+    public string? Status { get; set; }
 
-    public string ActivityBarcode { get; set; }
+    public string? ActivityBarcode { get; set; }
 
     public bool? Checked { get; set; }
 }
