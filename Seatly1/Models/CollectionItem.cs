@@ -9,6 +9,7 @@ namespace Seatly1.Models;
 
 public partial class CollectionItem
 {
+    [Key]
     public int SerialId { get; set; }
 
     public string UserId { get; set; }

@@ -85,8 +85,8 @@
             // parameters.cate = strCate;
             // parameters.pgNum = $("#pgNum").val();
             // parameters.pgSize = $("#pgSize").val();
-                $("#pgNum").val(1);
-                $("#pgNum").trigger("change");
+            $("#pgNum").val(1);
+            $("#pgNum").trigger("change");
             // $.ajax({
             //     type: "GET",
             //     url: `@Url.Action("pointsShopContentBody", "Points")`,
@@ -121,25 +121,20 @@
         });
 
         $("#pgSize").on("change", function () {
-            if ($("#pgNum").val() != 1) {
-                $("#pgNum").val(1);
-                $("#pgNum").trigger("change");
-            }
-            else {
-                strCate = sessionStorage.getItem('strCate');
-                parameters.cate = strCate;
-                parameters.pgNum = $("#pgNum").val();
-                parameters.pgSize = $("#pgSize").val();
+            strCate = sessionStorage.getItem('strCate');
+            parameters.cate = strCate;
+            parameters.pgNum = $("#pgNum").val();
+            parameters.pgSize = $("#pgSize").val();
             $("#pgNum").val(1);
-                $.ajax({
-                    type: "GET",
-                    url: `@Url.Action("pointsShopContentBody", "Points")`,
-                    data: parameters
-                }).done(function (data) {
-                    $("#pointsContentBody").html(data);
-                }).fail(function (err) {
-                    alert(err.responseText);
-                });
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("pointsShopContentBody", "Points")`,
+                data: parameters
+            }).done(function (data) {
+                $("#pointsContentBody").html(data);
+            }).fail(function (err) {
+                alert(err.responseText);
+            });
         });
 
         $("#pP").on("click", function () {
