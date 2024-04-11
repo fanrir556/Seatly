@@ -245,8 +245,7 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<Organizer>(entity =>
         {
-            entity.HasNoKey();
-
+            entity.Property(e => e.OrganizerId).HasColumnName("OrganizerID");
             entity.Property(e => e.Address).HasMaxLength(200);
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
@@ -256,9 +255,6 @@ public partial class SeatlyContext : DbContext
             entity.Property(e => e.Menu).HasMaxLength(100);
             entity.Property(e => e.OrganizerAccount).HasMaxLength(50);
             entity.Property(e => e.OrganizerCategory).HasMaxLength(50);
-            entity.Property(e => e.OrganizerId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("OrganizerID");
             entity.Property(e => e.OrganizerName).HasMaxLength(100);
             entity.Property(e => e.OrganizerPhoto).HasMaxLength(100);
             entity.Property(e => e.Phone)
