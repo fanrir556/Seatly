@@ -58,7 +58,7 @@ $('#registerForm').submit(function (event) {
     let registeraccount = $('#account').val();
     let name = $('#name').val();
     let category = $('#category').val();
-    let photo; // 声明photo变量
+    let photo;
     let menu = $('#menu').val();
     let address = $('#address').val();
     let url = $('#URL').val();
@@ -71,19 +71,24 @@ $('#registerForm').submit(function (event) {
     let formData = new FormData();
     let fileInput = document.getElementById('imageInput');
     let file = fileInput.files[0];
-    
+
+    // 驗證密碼與確認密碼欄位一致
     if (registerpassword1 != registerpassword2) {
         $('#password1').addClass("is-invalid");
         $('#invalid_password1').text("密碼與確認密碼欄位不一致");
         $('#password2').addClass("is-invalid");
         $('#invalid_password2').text("密碼與確認密碼欄位不一致");
     }
+    // 驗證密碼與確認密碼欄位不可為空
     else if (registerpassword1 == "") {
+        $('#password1').addClass("is-invalid");
         $('#invalid_password1').text("密碼不可為空");
     }
     else if (registerpassword2 == "") {
+        $('#password2').addClass("is-invalid");
         $('#invalid_password2').text("密碼不可為空");
     }
+    // 驗證是否選擇要上傳的圖片
     else if (!file) {
         $('#imageInput').addClass("is-invalid");
         $('#invalid_imageInput').text("請選擇要上傳的圖片");

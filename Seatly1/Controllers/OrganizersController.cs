@@ -72,23 +72,41 @@ namespace Seatly1.Controllers
             return orgInfo;
         }
 
+        // 顯示登入後的會員帳號與會員名稱
+        [HttpGet("account/{id}")]
+        public async Task<OrgainzerNameDTO?> GetOrganizerAccount(int id)
+        {
+            var organizer = await _context.Organizers.FindAsync(id);
+
+            if (organizer == null)
+            {
+                return null;
+            }
+            OrgainzerNameDTO orgInfo = new OrgainzerNameDTO
+            {
+                OrganizerAccount = organizer.OrganizerAccount,
+                OrganizerName = organizer.OrganizerName,
+            };
+            return orgInfo;
+        }
+
         // 讀取cookie驗證是否登入
         [HttpGet("cookie")]
         public IActionResult CheckLoginStatus()
         {
             // 获取请求中的 cookie 数据
-            var cookieValue = Request.Cookies["OrganizerId"];
+            string? cookieValue = Request.Cookies["OrganizerId"];
 
             // 检查是否存在有效的登录会话或认证凭据
             if (cookieValue != null)
             {
                 // 用户已登录，返回成功的响应
-                return Ok($"活動方已登入，id是 {cookieValue}");
+                return Ok(cookieValue);
             }
             else
             {
                 // 用户未登录，返回错误的响应
-                return Unauthorized("User is not logged in.");
+                return Unauthorized("活動方未登入");
             }
         }
 
@@ -190,10 +208,13 @@ namespace Seatly1.Controllers
         public IActionResult Logout()
         {
             // 清除用户的身份验证凭证（例如，清除存储在 cookie 中的身份验证令牌）
-            Response.Cookies.Delete("OrganizerId");
-
-            // 返回成功响应
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(-1);
+            option.HttpOnly = true;
+            option.Secure = true;
+            Response.Cookies.Append("OrganizerId", "", option);
             return Ok("登出成功");
+            // 返回成功响应
         }
     }
 }
