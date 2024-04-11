@@ -4441,11 +4441,13 @@ fieldset:disabled .btn {
   white-space: nowrap;
   background-color: transparent;
   border: 0;
+  transition:0.5s;
 }
 
 .dropdown-item:hover, .dropdown-item:focus {
   color: #3b3b3b;
-  background-color: #F5F5F5;
+  background: linear-gradient(70deg, #e73140, #f7b9b9);
+  -webkit-text-fill-color: white;
 }
 
 .dropdown-item.active, .dropdown-item:active {
