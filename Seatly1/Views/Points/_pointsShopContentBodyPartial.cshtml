@@ -1,0 +1,162 @@
+﻿@* @model IEnumerable<PointStore> *@
+@model pointsShopViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+@*管理員登入判定*@
+@{
+    var isMg = HttpContextAccessor.HttpContext.Session.GetString("isMg");
+}
+
+<span class="d-none" id="pdCount">@Model.pointsShopPd.Count()</span>
+
+@if (isMg == "true")
+{
+    @* <table class="table table-striped text-center">
+        <thead>
+            <tr>
+                <th style="width: 100px">@Html.DisplayNameFor(model => model.trans.FirstOrDefault().Id)</th>
+                <th>@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductImage)</th>
+                <th>@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductName)</th>
+                <th>@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductPrice)</th>
+                <th>@Html.DisplayNameFor(model => model.trans.FirstOrDefault().TransactionDate)</th>
+                <th>@Html.DisplayNameFor(model => model.trans.FirstOrDefault().Active)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.trans)
+            {
+                var id = item.ProductId;
+                <tr class="align-middle">
+                    <td>@item.Id</td>
+                    <td><img src="~/images/@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductImage).FirstOrDefault()" class="img-fluid rounded-start" style="width:100px" alt="@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductName).FirstOrDefault()" title="@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductName).FirstOrDefault()"></td>
+                    <td>@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductName).FirstOrDefault()</td>
+                    <td>@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductPrice).FirstOrDefault()</td>
+                    <td>@item.TransactionDate</td>
+                    @if (item.Active == true)
+                    {
+                        <td class="text-success">未使用</td>
+                    }
+                    else
+                    {
+                        <td style="color:red;">已使用</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table> *@
+}
+else
+{
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div>
+            <div class="text-gradient d-inline">您目前持有:</div>
+            @if (Model.user.Points == null)
+            {
+                <div class="d-inline ms-2 me-2" id="userPoints">0</div>
+            }
+            else
+            {
+                <div class="d-inline ms-2 me-2" id="userPoints" data-userId="@Model.user.Id">@Model.user.Points</div>
+            }
+            <div class="text-gradient d-inline">點數</div>
+        </div>
+    }
+    @foreach (var product in Model.pointsShopPd)
+{
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="~/images/@product.ProductImage" class="img-fluid rounded-start" style="width:300px" alt="@product.ProductName" title="@product.ProductName">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <span class="position-absolute end-0 me-2">@product.Category</span>
+                    <h5 class="card-title text-gradient fs-3">@product.ProductName</h5>
+                    <p class="card-text">@product.ProductDescription</p>
+                    <p class="card-text text-gradient">兌換需要 @product.ProductPrice 點數</p>
+                    <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1 btn-exchange" data-bs-toggle="modal" data-bs-target="#exchangeModal" data-pdId="@product.ProductId">兌換</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+}
+@*管理員登入判定*@
+
+<script>
+    $(function () {
+        isSearching = sessionStorage.getItem("isSearching");
+        strCate = sessionStorage.getItem("strCate");
+        var pdkeyword = sessionStorage.getItem("pdKeyword");
+        var parameters = {
+            cate: strCate,
+            pgNum:1,
+            pgSize: @Int32.MaxValue,
+            keyword:pdkeyword
+        };
+        // if (isSearching) {
+        //     parameters.keyword = pdkeyword;
+        // }
+        // else {
+        //     parameters.keyword = null;
+        // }
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("pointsShopContentBody", "Points")`,
+            data: parameters
+        }).done(function (data) {
+            var match = data.match(/id="pdCount">(.*?)<\/span>/);
+            var pgTotal = Math.ceil(match[1] / $("#pgSize").val());
+            $("#pgTotal").text(pgTotal);
+            if (pgTotal == 0) {
+                $("#pointsContentBody").html("<h3 class='text-gradient'>查無商品!</h3>");
+            }
+            if ($("#pgNum").val() <= 1) {
+                $("#pP").prop("disabled", true);
+            }
+            else {
+                $("#pP").prop("disabled", false);
+            }
+            if ($("#pgNum").val() == $("#pgTotal").text() || $("#pgTotal").text() == 0) {
+                $("#nP").prop("disabled", true);
+            }
+            else {
+                $("#nP").prop("disabled", false);
+            }
+        }).fail(function (err) {
+            alert(err.responseText);
+        });
+
+        if (isUser){
+            var userPoints = parseInt($("#userPoints").text());
+            $(".btn-exchange").each(function () {
+                var match = $(this).prev().text().match(/兌換需要 (.*?) 點數/);
+                if (parseInt(match[1]) > userPoints) {
+                    $(this).prop("disabled", true);
+                }
+            });
+        }
+
+        $(".btn-exchange").on("click", function (e) {
+            var pdId = $(this).data("pdid");
+            if (isUser)
+            {
+            $.ajax({
+                type: "GET",
+                    url: `@Url.Action("pointsShopModal", "Points", new { id = "pdId" })`
+                .replace("pdId", pdId)
+            }).done(function (data) {
+                $("#exchangeModalBody").html(data);
+            }).fail(function (err) {
+                alert(err.responseText);
+            });
+            }
+            else{
+                window.location.href = "/Identity/Account/Login";
+            }
+        });
+
+        $(".table").css("--bs-table-striped-bg", "rgba(231, 49, 64, 0.05)");
+    });
+</script>

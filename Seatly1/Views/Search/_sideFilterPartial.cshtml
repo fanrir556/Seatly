@@ -1,0 +1,131 @@
+﻿@model IEnumerable<NotificationRecord>
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h3>結果篩選</h3>
+<fieldset class="search-filter-group">
+    <legend class="search-filter-group_header">分類</legend>
+    <div class="search-filter search-checkbox-filter">
+        <label class="search-checkbox">
+            <div class="search-checkbox_box">
+                <input type="checkbox" name="" value="all" data-category="all"><span class="search-checkbox_label">查看全部</span>
+            </div>
+        </label>
+    </div>
+   @*  @foreach (var tag in Model)
+    {
+        <div class="search-filter search-checkbox-filter">
+            <label class="search-checkbox">
+                <div class="search-checkbox_box">
+                    <input type="checkbox" name="" value="@tag" data-category="@tag"><span class="search-checkbox_label">@tag</span>
+                </div>
+            </label>
+        </div>
+    } *@
+
+    @foreach (var tag in ViewBag.AllTags)
+    {
+        <div class="search-filter search-checkbox-filter">
+            <label class="search-checkbox">
+                <div class="search-checkbox_box">
+                    <input type="checkbox" name="" value="@tag" data-category="@tag"><span class="search-checkbox_label">@tag</span>
+                </div>
+            </label>
+        </div>
+    }
+    @* 
+    <div class="search-filter search-checkbox-filter">
+        <label class="search-checkbox">
+            <div class="search-checkbox_box">
+                <input type="checkbox" name="" value="熱門" data-category="熱門"><span class="search-checkbox_label">熱門</span>
+            </div>
+        </label>
+    </div>
+    <div class="search-filter search-checkbox-filter">
+        <label class="search-checkbox">
+            <div class="search-checkbox_box">
+                <input type="checkbox" name="" value="美食" data-category="美食"><span class="search-checkbox_label">美食</span>
+            </div>
+        </label>
+    </div>
+    <div class="search-filter search-checkbox-filter">
+        <label class="search-checkbox">
+            <div class="search-checkbox_box">
+                <input type="checkbox" name="" value="港式" data-category="港式"><span class="search-checkbox_label">港式</span>
+            </div>
+        </label>
+    </div>
+    <div class="search-filter search-checkbox-filter">
+        <label class="search-checkbox">
+            <div class="search-checkbox_box">
+                <input type="checkbox" name="" value="日式" data-category="日式"><span class="search-checkbox_label">日式</span>
+            </div>
+        </label>
+    </div>
+    <div class="search-filter search-checkbox-filter">
+        <label class="search-checkbox">
+            <div class="search-checkbox_box">
+                <input type="checkbox" name="" value="測試" data-category="測試"><span class="search-checkbox_label">測試</span>
+            </div>
+        </label>
+    </div>
+    <div class="search-filter search-checkbox-filter">
+        <label class="search-checkbox">
+            <div class="search-checkbox_box">
+                <input type="checkbox" name="" value="推薦" data-category="推薦"><span class="search-checkbox_label">推薦</span>
+            </div>
+        </label>
+    </div> *@
+</fieldset>
+
+
+<script>
+    $(function () {
+        // 監聽 checkbox 點擊事件
+        $('input[type="checkbox"]').click(function () {
+            var selectedCategories = [];
+            $('input[type="checkbox"]:checked').each(function () {
+                selectedCategories.push($(this).data('category'));
+            });
+
+            if (selectedCategories.includes('all')) {
+                // 根據 searchString 進行初始搜索
+                var searchKeyword = sessionStorage.getItem("searchString");
+                var parameters = {
+                    searchString: searchKeyword
+                };
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("SearchPartial", "Search")', 
+                    data: parameters
+                }).done(function (data) {
+                    $("#searchResultContainer").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+
+            } else {
+                
+
+                // 根據選中的篩選項進行搜索
+               
+                $.ajax({
+                    type: "POST",
+                    url: "/Search/GetActivitiesByCategories",
+                    data: { categories: selectedCategories },
+                    success: function (data) {
+                        
+                        $('#searchResultContainer').html(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+        });
+    });
+
+
+
+</script>

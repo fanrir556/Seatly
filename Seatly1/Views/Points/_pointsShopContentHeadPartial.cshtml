@@ -1,0 +1,191 @@
+﻿@model IEnumerable<PointStore>
+
+
+@*管理員登入判定*@
+@{
+    var isMg = HttpContextAccessor.HttpContext.Session.GetString("isMg");
+}
+
+@if (isMg == "true")
+{
+    
+}
+else
+{
+    <div>
+<button class="btn btn-gradient mb-2 btn-cate" data-cate="all">全部</button>
+
+@foreach (var cate in Model.Select(s => s.Category).Distinct())
+{
+    <button class="btn btn-gradient mb-2 btn-cate" data-cate="@cate">@cate</button>
+}
+    </div>
+}
+@*管理員登入判定*@
+
+<div class="d-flex align-items-center">
+    <label for="pdSearch" class="text-gradient form-label m-0">關鍵字:</label><input id="pdSearch" type="text" class="form-control ms-2 me-2 w-25" /><button class="btn btn-gradient" id="btnPdSearch">搜尋</button>
+</div>
+<div class="d-flex justify-content-end align-items-center">
+    <span class="me-2">每頁顯示<select id="pgSize">
+        <option value="10" selected>10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </select>筆資料。</span>
+    <button class="btn btn-gradient me-1 p-0" id="pP" style="width:30px;height:30px;text-align:center;">上</button>
+    第
+    <input class="me-1 p-0" id="pgNum" value="1" style="width:30px;height:30px;text-align:center;" />
+    頁，共<span id="pgTotal"></span>頁
+    <button class="btn btn-gradient me-1 p-0" id="nP" style="width:30px;height:30px;text-align:center;">下</button>
+</div>
+
+
+<div class="col-12" id="pointsContentBody">
+    @* @foreach (var product in Model.OrderBy(s => s.Category).ThenBy(s => s.ProductPrice))
+    {
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="~/images/@product.ProductImage" class="img-fluid rounded-start" style="width:300px" alt="@product.ProductName" title="@product.ProductName">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <span class="position-absolute end-0 me-2">@product.Category</span>
+                            <h5 class="card-title text-gradient fs-3">@product.ProductName</h5>
+                            <p class="card-text">@product.ProductDescription</p>
+                            <p class="card-text text-gradient">兌換需要 @product.ProductPrice 點數</p>
+                            <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1">兌換</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    } *@
+</div>
+
+@* Modal *@
+<div class="modal fade" id="exchangeModal" tabindex="-1" aria-labelledby="exchangeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exchangeModalLabel">您確定要兌換嗎?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="exchangeModalBody">
+                
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-gradient p-0 text-align-center" style="width:100px;height:45px" id="pShopExchange">確認兌換</button>
+                <button class="btn btn-secondary p-0 text-align-center" style="width:100px;height:45px" data-bs-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* Modal *@
+
+<script>
+    function showPd(cate, pgNum, pgSize, keyword){
+        var parameters = {
+            cate: cate,
+            pgNum: pgNum,
+            pgSize: pgSize,
+            keyword: keyword
+        };
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("pointsShopContentBody", "Points")`,
+            data: parameters
+        }).done(function (data) {
+            $("#pointsContentBody").html(data);
+        }).fail(function (err) {
+            alert(err.responseText);
+        });
+    }
+
+    $(function () {
+        showPd("all", 1, 10);
+
+        $(".btn-cate").on("click", function () {
+            sessionStorage.setItem('strCate', $(this).data("cate"));
+            sessionStorage.removeItem("isSearching");
+            sessionStorage.removeItem("pdKeyword");
+            $("#pdSearch").val(null);
+            $("#pgNum").val(1);
+            showPd($(this).data("cate"), 1, $("#pgSize").val());
+        });
+
+        $("#pgNum").on("change", function () {
+            var pgNumint = parseInt($(this).val());
+            isSearching = sessionStorage.getItem("isSearching")
+            if (isSearching) {
+            if (!isNaN(pgNumint) && pgNumint > 0 && pgNumint <= $("#pgTotal").text()) {
+                    showPd("all", $("#pgNum").val(), $("#pgSize").val(), $("#pdSearch").val());
+                }
+                else {
+                    alert("請輸入正確的頁碼");
+                }
+            }
+            else {
+                if ($("#pgTotal").text() == 0) {
+                    strCate = sessionStorage.getItem('strCate');
+                    showPd(strCate, 1, $("#pgSize").val());
+
+                }
+                else if (!isNaN(pgNumint) && pgNumint > 0 && pgNumint <= $("#pgTotal").text()) {
+                strCate = sessionStorage.getItem('strCate');
+                    showPd(strCate, $("#pgNum").val(), $("#pgSize").val());
+            }
+            else { 
+                alert("請輸入正確的頁碼");
+            }
+            }
+        });
+
+        $("#pgSize").on("change", function () {
+            if (isSearching) {
+                $("#pgNum").val(1);
+                showPd("all", 1, $("#pgSize").val(), $("#pdSearch").val());
+            }
+            else {
+            strCate = sessionStorage.getItem('strCate');
+            parameters.cate = strCate;
+            parameters.pgNum = $("#pgNum").val();
+            parameters.pgSize = $("#pgSize").val();
+            $("#pgNum").val(1);
+                showPd(strCate, 1, $("#pgSize").val());
+            }
+        });
+
+        $("#pP").on("click", function () {
+            if ($("#pgNum").val() > 1) {
+                $("#pgNum").val($("#pgNum").val() - 1);
+                $("#pgNum").trigger("change");
+            }
+        });
+
+        $("#nP").on("click", function () {
+            if ($("#pgNum").val() < $("#pgTotal").text()) {
+                var pgNum = parseInt($("#pgNum").val());
+                $("#pgNum").val(pgNum + 1);
+                $("#pgNum").trigger("change");
+            }
+        });
+
+        $("#btnPdSearch").on("click", function () {
+            if ($("#pdSearch").val() != ""){
+                var pdKeyword = $("#pdSearch").val()
+                sessionStorage.setItem("strCate", "all")
+                sessionStorage.setItem("isSearching", true);
+                sessionStorage.setItem("pdKeyword", pdKeyword);
+                $("#pgNum").val(1);
+                showPd("all", $("#pgNum").val(), $("#pgSize").val(), $("#pdSearch").val());
+            }
+            else{
+                sessionStorage.removeItem("isSearching");
+                isSearching = sessionStorage.getItem("isSearching");
+                parameters.keyword = null;
+            }
+        });
+    });
+
+</script>

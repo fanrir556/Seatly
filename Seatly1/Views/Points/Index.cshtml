@@ -1,0 +1,111 @@
+﻿@section Styles
+{
+    <style>
+
+    </style>
+}
+
+@{
+    ViewData["Title"] = "點數專區";
+}
+
+<div class="row m-4 mb-2">
+    <h2 class="text-gradient" id="pointsTitle">點數商城</h2>
+</div>
+
+<div class="row ps-5 pe-5">
+    <div class="col-12 col-md-2 p-3">
+        <ul class="list-group">
+            <li class="list-group-item bg-white">
+                <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsShopSide">點數商城</a>
+            </li>
+            <li class="list-group-item bg-white">
+                <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="couponSide">持有優惠券</a>
+            </li>
+            <li class="list-group-item bg-white">
+                <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsHistorySide">點數交易紀錄</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-12 col-md-10 p-3" id="pointsContentHead">
+    </div>
+
+
+</div>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $("#pointsShopSide").on("click", function (e) {
+                e.preventDefault();
+                strPoints = "pointsShop";
+                sessionStorage.setItem('strPoints', strPoints);
+                sessionStorage.setItem('strCate', "all");
+                $("#pointsTitle").text("點數商城");
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsShopContentHead", "Points")`
+                }).done(function (data) {
+                    $("#pointsContentHead").html(data); // 將局部視圖的內容設置為 #pointsContent 元素的HTML內容
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            });
+            $("#couponSide").on("click", function (e) {
+                e.preventDefault();
+                if (isUser || isMG) {
+                    strPoints = "coupon";
+                    sessionStorage.setItem('strPoints', strPoints);
+                    $("#pointsTitle").text("持有優惠券");
+                    $.ajax({
+                        type: "GET",
+                        url: `@Url.Action("couponContent", "Points")`
+                    }).done(function (data) {
+                        $("#pointsContentHead").html(data);
+                    }).fail(function (err) {
+                        alert(err.responseText);
+                    });
+                }
+                else {
+                    window.location.href = "/Identity/Account/Login";
+                }
+            });
+            $("#pointsHistorySide").on("click", function (e) {
+                e.preventDefault();
+                if (isUser || isMG) {
+                    strPoints = "pointsHistory";
+                    sessionStorage.setItem('strPoints', strPoints);
+                    $("#pointsTitle").text("點數交易紀錄");
+                    $.ajax({
+                        type: "GET",
+                        url: `@Url.Action("pointsHistoryContent", "Points")`
+                    }).done(function (data) {
+                        $("#pointsContentHead").html(data);
+                    }).fail(function (err) {
+                        alert(err.responseText);
+                    });
+                }
+                else {
+                    window.location.href = "/Identity/Account/Login";
+                }
+
+            });
+            switch (strPoints) {
+                case "pointsShop":
+                    $("#pointsShopSide").trigger("click");
+                    break;
+                case "pointsHistory":
+                    $("#pointsHistorySide").trigger("click");
+                    break;
+                case "coupon":
+                    $("#couponSide").trigger("click");
+                    break;
+                default:
+                    alert("?")
+                    break;
+            }
+        });
+    </script>
+}

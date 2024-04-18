@@ -5785,7 +5785,7 @@ fieldset:disabled .btn {
   z-index: 2;
   color: #FFFEFE;
   background-color: #FFB30E;
-  border-color: #FFB30E;
+  border-color: #e73140;
 }
 
 .list-group-item + .list-group-item {
@@ -17548,10 +17548,10 @@ ul {
 }
 
 .text-gradient {
-  background: -o-linear-gradient(-40deg, #fb3c00, #ffb800);
-  background: linear-gradient(-50deg, #fb3c00, #ffb800);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+    background: -o-linear-gradient(40deg, #e73140, #f7b9b9);
+    background: linear-gradient(70deg, #e73140, #f7b9b9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /*-----------------------------------------------

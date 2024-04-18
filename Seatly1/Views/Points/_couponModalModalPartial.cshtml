@@ -1,0 +1,48 @@
+﻿@model pointsShopViewModel
+
+<div class="row g-0">
+    <div class="col-12 d-flex justify-content-center">
+        <img src="~/images/@Model.pointsShopPd.Select(s => s.ProductImage).FirstOrDefault()" class="img-fluid rounded-start" style="width:150px" alt="@Model.pointsShopPd.Select(s => s.ProductName).FirstOrDefault()" title="@Model.pointsShopPd.Select(s => s.ProductName).FirstOrDefault()">
+    </div>
+    <div class="col-12">
+        <div>
+            <div class="text-gradient d-inline">商品名稱:</div>
+            <div class="d-inline ms-2 coupon" data-couponId="@Model.trans.Select(s => s.Id).FirstOrDefault()">@Model.pointsShopPd.Select(s => s.ProductName).FirstOrDefault()</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#couponUse").on("click", function () {
+            var id = $(".coupon").data("couponid")
+            var p = {
+                Id: `${id}`,
+                Active: false
+            };
+            fetch(`@Url.Action("couponUse", "Points")`, {
+                method: "POST",
+                body: JSON.stringify(p),
+                headers: { 'Content-Type': 'application/json' }
+            }).then(response => {
+                return response.blob();
+            }).then(blob => {
+                var url = URL.createObjectURL(blob);
+                $("#couponModalBody").html(`<h5 class="text-center" style="color:red;">此優惠碼關閉後即失效，請謹慎保存或截圖留存</h5><img src="${url}" alt="QR Code" class="col-12 text-gradient text-center">`);
+                $("#couponUse").hide();
+                $("#couponUse").next().text("關閉");
+                $("#couponModalLabel").text("兌換完成");
+            }).catch(err => {
+                alert(err);
+            });
+        });
+
+        $("#couponModal").on("hide.bs.modal", function () {
+            // 在模態將要隱藏時執行的程式碼
+            $("#couponUse").show();
+            $("#couponUse").next().text("取消");
+            $("#couponModalLabel").text("您確定要兌換嗎?");
+            $("#couponSide").trigger("click");
+        });
+    });
+</script>

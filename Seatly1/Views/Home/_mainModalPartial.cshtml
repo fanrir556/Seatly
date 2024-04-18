@@ -1,0 +1,46 @@
+﻿<div>
+    <div class="d-flex justify-content-center">
+        <h2 class="m-auto text-gradient">管理員，請證明身分</h2>
+    </div>
+    <div class="d-flex justify-content-center"><input type="text" id="managerPw" class="form-control p-2" placeholder="可悲阿，竟然是管理員" autocomplete="off" /></div>
+</div>
+
+<script>
+    $(function () {
+        $("#managerLogin").on("click", function () {
+            if ($("#managerPw").val() == "5487"){
+                setTimeout(function () {
+                    $("#mainModalBody").html('<div class="d-flex justify-content-center"><h2 class="m-auto text-gradient">歡迎回來，肝苦人</h2></div>');
+                }, 1);
+                sessionStorage.setItem("isManager", "true");
+
+                var form = new FormData();
+                form.append("key", "true");
+                fetch(`@Url.Action("isMG", "Home")`, {
+                    method: "POST",
+                    body: form,
+                }).then(function (response) {
+                    console.log(response);
+                }).catch(function (err) {
+                    alert(err);
+                });
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            }
+            else{
+                $("#mainModalBody").html('<div class="d-flex justify-content-center"><h2 class="m-auto text-gradient">你這個騙子!!!</h2></div>');
+                setTimeout(function () {
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("mainModal", "Home")', // 將 Razor 語法包裹在引號中
+                    }).done(function (data) {
+                        $("#mainModalBody").html(data);
+                    }).fail(function (err) {
+                        alert(err.responseText);
+                    });
+                }, 1000);
+            }
+        });
+    });
+</script>

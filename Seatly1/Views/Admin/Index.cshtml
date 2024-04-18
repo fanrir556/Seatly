@@ -1,0 +1,36 @@
+﻿<body>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-2">
+                <ul>
+                    <li>
+                        <a class="nav-link" id="Notification">活動頁面</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-10" id="adminBody">
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+@section Scripts {
+
+<script>
+    //呼叫控制器裡面的網頁
+    $("#Notification").on("click", (e) => {
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_NotificationRecord", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data); 
+            }).fail(function (err) {
+                alert(err.responseText);
+            });
+    })
+</script>
+
+
+}

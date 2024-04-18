@@ -1,0 +1,59 @@
+﻿@model pointsShopViewModel
+
+<table class="table table-striped text-center">
+    <thead>
+        <tr>
+            <th style="width: 100px">@Html.DisplayNameFor(model => model.trans.FirstOrDefault().Id)</th>
+            <th>@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductImage)</th>
+            <th>@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductName)</th>
+            <th>@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductPrice)</th>
+            <th>@Html.DisplayNameFor(model => model.trans.FirstOrDefault().TransactionDate)</th>
+            <th>@Html.DisplayNameFor(model => model.trans.FirstOrDefault().Active)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.trans)
+        {
+            var id = item.ProductId;
+            <tr class="align-middle">
+                <td>@item.Id</td>
+                <td><img src="~/images/@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductImage).FirstOrDefault()" class="img-fluid rounded-start" style="width:100px" alt="@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductName).FirstOrDefault()" title="@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductName).FirstOrDefault()"></td>
+                <td>@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductName).FirstOrDefault()</td>
+                <td>@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductPrice).FirstOrDefault()</td>
+                <td>@item.TransactionDate</td>
+                @if (item.Active == true)
+                {
+                    <td class="text-success">未使用</td>
+                }
+                else
+                {
+                    <td style="color:red;">已使用</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+        var pgTotal = Math.ceil($("#transCount").text() / $("#pgSize").val());
+        $("#pgTotal").text(pgTotal);
+        if (pgTotal == 0) {
+            $("pointsHistoryContentBody").html("<h3 class='text-gradient'>查無交易紀錄!</h3>");
+        }
+        if ($("#pgNum").val() <= 1) {
+            $("#pP").prop("disabled", true);
+        }
+        else {
+            $("#pP").prop("disabled", false);
+        }
+        if ($("#pgNum").val() == $("#pgTotal").text() || $("#pgTotal").text() == 0) {
+            $("#nP").prop("disabled", true);
+        }
+        else {
+            $("#nP").prop("disabled", false);
+        }
+
+        $(".table").css("--bs-table-striped-bg", "rgba(231, 49, 64, 0.05)");
+    });
+</script>

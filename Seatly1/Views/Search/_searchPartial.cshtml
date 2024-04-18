@@ -1,0 +1,60 @@
+﻿@model IEnumerable<NotificationRecord>
+
+@* @{
+    Layout =   "/Views/Shared/_Layout.cshtml"; 
+} *@
+
+
+
+@if (Model != null && Model.Any())
+{
+    <div>
+        <ul>
+            @foreach (var activity in Model)
+            {
+                <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        @{
+                            var base64Image = Convert.ToBase64String(activity.ActivityPhoto);
+                            var imageSrc = $"data:image;base64,{base64Image}";
+                        }
+                        <img src="@imageSrc" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2" />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title fs-3">活動名稱: @activity.ActivityName</h3>
+                            <p class="card-text">活動代碼: @activity.ActivityId</p>
+                            <p class="card-text">開始時間: @activity.StartTime</p>
+                            <p class="card-text">結束時間: @activity.EndTime</p>
+                            <p class="card-text">活動內容: @activity.DescriptionN</p>
+                                <p class="card-text">
+                                    @foreach (var tag in activity.HashTag.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        <span>#<span class="hash-tag">@tag</span></span>
+                                    }
+                                </p>
+
+                        <form asp-action="Details" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
+                            <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看活動</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <br />
+            }
+        </ul>
+    </div>
+}
+
+else
+{
+    <p>查無此活動</p>
+}
+
+
+<script>
+
+
+</script>
