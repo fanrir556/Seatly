@@ -99,13 +99,14 @@
 
                     @* 活動方管理Navbar，顯示帳號與活動方名稱 *@
                     <a class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    活動方管理</a>
+                        活動方管理
+                    </a>
                     <ul id="OrganizersManageDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a id="o-info" class="dropdown-item text-gradient" asp-area="" asp-controller="Home" asp-action="OrganizerInfo">修改活動方資訊</a></li>
                         <li><a id="o-logout" class="dropdown-item text-gradient">登出</a></li>
                     </ul>
                 </li>
-                
+
                 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
