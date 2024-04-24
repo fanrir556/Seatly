@@ -45,12 +45,14 @@
         $('input[type="checkbox"]').click(function () {
             var selectedCategories = [];
             var checked = $('input[type="checkbox"]:checked');
-            if (checked.length == 0) {
-                $("#all").prop("checked", true);
+            // if (checked.length == 0) {
+            //     $("#all").prop("checked", true);
 
-            }
+            // }
             if ($(this).attr("id") !== "all" && $("#all").prop("checked")) {
                 $("#all").prop("checked", false);
+            } else if (checked.length == 0) {
+                $("#all").prop("checked", true);
             }
             $('input[type="checkbox"]:checked').each(function () {
                 selectedCategories.push($(this).data('category'));
