@@ -1,0 +1,102 @@
+﻿@model Seatly1.Models.NotificationRecord
+
+
+<h3>結果篩選</h3>
+<fieldset class="search-filter-group">
+    <legend class="search-filter-group_header">分類</legend>
+    <div class="search-filter search-checkbox-filter">
+        <label class="search-checkbox">
+            <div class="search-checkbox_box">
+                <input type="checkbox" name="" value="all" data-category="all" id="all"><span class="search-checkbox_label">查看全部</span>
+            </div>
+        </label>
+    </div>
+   @*  @foreach (var tag in Model)
+    {
+        <div class="search-filter search-checkbox-filter">
+            <label class="search-checkbox">
+                <div class="search-checkbox_box">
+                    <input type="checkbox" name="" value="@tag" data-category="@tag"><span class="search-checkbox_label">@tag</span>
+                </div>
+            </label>
+        </div>
+    } *@
+
+    @foreach (var tag in ViewBag.AllTags)
+    {
+        <div class="search-filter search-checkbox-filter">
+            <label class="search-checkbox">
+                <div class="search-checkbox_box">
+                    <input type="checkbox" name="" value="@tag" data-category="@tag"><span class="search-checkbox_label">@tag</span>
+                </div>
+            </label>
+        </div>
+    }
+   
+</fieldset>
+
+
+<script>
+    $(function () {
+        $(document).ready(function () {
+            $("#all").prop("checked", true); 
+        });
+        // 監聽 checkbox 點擊事件
+        $('input[type="checkbox"]').click(function () {
+            var selectedCategories = [];
+            var checked = $('input[type="checkbox"]:checked');
+            if (checked.length == 0) {
+                $("#all").prop("checked", true);
+
+            }
+            if ($(this).attr("id") !== "all" && $("#all").prop("checked")) {
+                $("#all").prop("checked", false);
+            }
+            $('input[type="checkbox"]:checked').each(function () {
+                selectedCategories.push($(this).data('category'));
+            });
+
+            var searchKeyword = sessionStorage.getItem("searchString");
+            var parameters = {
+                searchString: searchKeyword,
+                categories: null
+            };
+
+            if (selectedCategories.includes('all')) {
+                // 根據 searchString 進行初始搜索
+                
+                
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("SearchPartial", "Search")', 
+                    data: parameters
+                }).done(function (data) {
+                    $("#searchResultContainer").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+
+            } else {
+                
+
+                // 根據選中的篩選項進行搜索
+                parameters.categories = selectedCategories;
+                $.ajax({
+                    type: "POST",
+                    url: "/Search/GetActivitiesByCategories",
+                    data: parameters,
+                    success: function (data) {
+                        
+                        $('#searchResultContainer').html(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+        });
+    });
+
+
+
+</script>

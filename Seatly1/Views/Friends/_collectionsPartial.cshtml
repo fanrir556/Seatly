@@ -1,0 +1,9 @@
+﻿@model IEnumerable<CollectionItem>
+
+@foreach (var item in Model)
+{
+    <p>======================</p>
+    <p>@item.SerialId</p>
+    <p>@item.UserId</p>
+    <p>@item.ActivityId</p>
+}

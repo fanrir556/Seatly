@@ -1,0 +1,29 @@
+Scaffold-DbContext "Data Source=(LocalDB)\ProjectModels;Initial Catalog=Seatly; Integrated Security=true; TrustServerCertificate=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -f
+
+Add-Migration "BaseSchema" -context ApplicationDbContext
+Update-Database -context ApplicationDbContext
+Remove-Migration -f -context ApplicationDbContext
+
+scaffold-dbcontext "Data Source=伺服器名稱;Initial Catalog=資料庫;Integrated Security=true;TrustServerCertificate=true;" Microsoft.EntityFrameworkCore.SqlServer -outputdir Models(目標資料夾) -t Customers(資料表，兩個以上用逗號隔開，如果資料表有空格，要用雙引號""框住整個資料表名稱，全部加入的話不用-t跟資料表名稱) -f(覆蓋已有檔案)
+OnConfiguring要自己另外重寫
+appsetting跟program.cs也要修改
+
+Abc123456$
+
+(localdb)\ProjectModels.Seatly
+
+P@ssw0rd-iii
+
+
+
+"ConnectionStrings": {
+  "DefaultConnection": "Server=(localdb)\\ProjectModels;Database=Seatly;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "Seatly": "Data Source=(localdb)\\ProjectModels;Initial Catalog=Seatly;TrustServerCertificate=True;Integrated Security=true"
+},
+"Logging": {
+  "LogLevel": {
+    "Default": "Information",
+    "Microsoft.AspNetCore": "Warning"
+  }
+},
+"AllowedHosts": "*"

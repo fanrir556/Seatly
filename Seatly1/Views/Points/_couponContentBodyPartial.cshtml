@@ -1,0 +1,56 @@
+﻿@model pointsShopViewModel
+
+@foreach (var coupon in Model.trans)
+{
+    var product = Model.pointsShopPd.FirstOrDefault(s => s.ProductId == coupon.ProductId);
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="~/images/@product.ProductImage" class="img-fluid rounded-start" style="width:300px" alt="@product.ProductName" title="@product.ProductName">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <span class="position-absolute end-0 me-2">@product.Category</span>
+                    <h5 class="card-title text-gradient fs-3">@product.ProductName</h5>
+                    <p class="card-text">@product.ProductDescription</p>
+                    <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1 btn-coupon" data-bs-toggle="modal" data-bs-target="#couponModal" data-couponId="@coupon.Id">使用</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        var pgTotal = Math.ceil($("#transCount").text() / $("#pgSize").val());
+        $("#pgTotal").text(pgTotal);
+        if (pgTotal == 0) {
+            $("pointsHistoryContentBody").html("<h3 class='text-gradient'>查無交易紀錄!</h3>");
+        }
+        if ($("#pgNum").val() <= 1) {
+            $("#pP").prop("disabled", true);
+        }
+        else {
+            $("#pP").prop("disabled", false);
+        }
+        if ($("#pgNum").val() == $("#pgTotal").text() || $("#pgTotal").text() == 0) {
+            $("#nP").prop("disabled", true);
+        }
+        else {
+            $("#nP").prop("disabled", false);
+        }
+
+        $(".btn-coupon").on("click", function (e) {
+            var couponId = $(this).data("couponid");
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("couponModal", "Points", new { id = "couponId" })`
+                    .replace("couponId", couponId)
+            }).done(function (data) {
+                $("#couponModalBody").html(data);
+            }).fail(function (err) {
+                alert(err.responseText);
+            });
+        });
+    });
+</script>

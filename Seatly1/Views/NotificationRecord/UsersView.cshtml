@@ -1,0 +1,83 @@
+﻿@model Seatly1.ViewModels.NotificationBookReader
+
+@{
+    ViewData["Title"] = "UserView";
+}
+
+<h1>UserView</h1>
+
+<div>
+    <h4>NotificationRecord</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NotificationRecord.ActivityPhoto)
+        </dt>
+        <dd class="col-sm-10">
+            <partial name="_ShowActivityPhoto" />
+            @*             @Html.DisplayFor(model => model.ActivityPhoto) *@
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NotificationRecord.StartTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NotificationRecord.StartTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NotificationRecord.EndTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NotificationRecord.EndTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NotificationRecord.Capacity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BookingOrder.WaitingNumber)/@Html.DisplayFor(model => model.NotificationRecord.Capacity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NotificationRecord.ActivityName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NotificationRecord.ActivityName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NotificationRecord.DescriptionN)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NotificationRecord.DescriptionN)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NotificationRecord.IsRecurring)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NotificationRecord.IsRecurring)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NotificationRecord.RecurringTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NotificationRecord.RecurringTime)
+        </dd>
+        <dt class="col-sm-2">
+        JOIN~~
+        </dt>
+        <dd class="col-sm-10">
+            <form asp-controller="Confirm" asp-action="Index" asp-route-NId="@Model?.NotificationRecord.ActivityId">
+        <button>加入</button>
+        </form>
+        </dd>
+    </dl>
+
+    <div>
+        <a id="Details_Edit" data-id="@Model?.NotificationRecord.ActivityId">Edit</a> |
+        <a id="NotificationRecord_Details_back">Back to List</a>
+    </div>
+
+</div>
+@section Scripts
+{
+
+}
+
+

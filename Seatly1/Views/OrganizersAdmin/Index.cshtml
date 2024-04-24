@@ -1,0 +1,101 @@
+﻿@model IEnumerable<Seatly1.Models.Organizer>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-controller="OrganizersAdmin" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrganizerAccount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoginPassword)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrganizerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrganizerCategory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrganizerPhoto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Menu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hashtag)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Validation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrganizerAccount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoginPassword)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrganizerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrganizerCategory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrganizerPhoto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Menu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hashtag)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Validation)
+            </td>
+            <td>
+                    <a asp-controller="OrganizersAdmin" asp-action="Edit" asp-route-id="@item.OrganizerId">Edit</a> |
+                    <a asp-controller="OrganizersAdmin" asp-action="Details" asp-route-id="@item.OrganizerId">Details</a> |
+                    <a asp-controller="OrganizersAdmin" asp-action="Delete" asp-route-id="@item.OrganizerId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

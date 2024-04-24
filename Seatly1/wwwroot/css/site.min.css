@@ -1,0 +1,1 @@
+body{background-image:url('../images/paper.jpg');background-repeat:repeat}#logo{animation-iteration-count:infinite;animation-duration:300ms;animation-timing-function:ease-in}@keyframes logoSpin{0%{transform:rotate3d(1,1,1,0deg)}100%{transform:rotate3d(1,1,1,360deg)}}

@@ -1,0 +1,58 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>專題練習網頁</title>
+  <style>
+
+  </style>
+</head>
+<body>
+
+    <!-- content start -->
+    <div class="container">
+        <!-- Add Button -->
+        <button type="button" class="btn btn-primary mb-3" onclick="addRow()">Add New Store</button>
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center">活動管理</h1>
+            </div>
+            <table id="dataTable" class="table table-bordered table-primary">
+                <colgroup>
+                    <col style="background-color: #0f0" />
+                    <col span="2" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>活動ID</th>
+                        <th>活動方ID</th>
+                        <th>活動照片</th>
+                        <th>活動開始時間</th>
+                        <th>活動結束時間</th>
+                        <th>活動人數上限</th>
+                        <th>活動名稱</th>
+                        <th>活動敘述</th>
+                        <th>活動是否重複</th>
+                        <th>活動重複時間</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+  <!-- content end -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/NotificationRecordForOrganizer.js"></script>
+
+</body>
+</html>
