@@ -41,13 +41,13 @@
                                     <div class="col">
                                         <div class="input-group-icon">
                                             <i class="fas fa-map-marker-alt text-danger input-box-icon"></i>
-                                            <label class="visually-hidden" for="inputDelivery">Address</label>
+                                            <label class="visually-hidden" for="inputDelivery">Keyword</label>
                                             <input class="form-control input-box form-foodwagon-control" name="searchString" id="inputDelivery" type="text" placeholder="請輸入關鍵字" />
                                         </div>
                                     </div>
                                     <div class="d-grid gap-3 col-sm-auto">
 
-                                        <button class="btn btn-danger"><a id="customSearchButton" asp-area="" asp-controller="Search" asp-action="searchIndex">搜尋</a></button>
+                                        <button class="btn btn-danger"><a id="customSearchButton" asp-area="" asp-controller="Search" asp-action="searchIndex">搜尋活動關鍵字</a></button>
 
 
                                     </div>
@@ -55,17 +55,17 @@
                                     </form>
                                 </div>
                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                    <form class="row gx-4 gy-2 align-items-center">
-                                        <div class="col">
-                                            <div class="input-group-icon">
-                                                <i class="fas fa-map-marker-alt text-danger input-box-icon"></i>
-                                                <label class="visually-hidden" for="inputPickup">Address</label>
-                                                <input class="form-control input-box form-foodwagon-control" id="inputPickup" type="text" placeholder="請輸入關鍵字" />
-                                            </div>
+                                    <div class="col">
+                                        <div class="input-group-icon">
+                                            <i class="fas fa-calendar-alt text-danger input-box-icon"></i>
+                                            <label class="visually-hidden" for="inputPickup">Date</label>
+                                            <input class="form-control input-box form-foodwagon-control" name="searchDate" id="inputPickup" type="date" placeholder="請選擇日期" />
                                         </div>
-                                        <div class="d-grid gap-3 col-sm-auto">
-                                            <button class="btn btn-danger" type="submit">Find Food</button>
-                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-3 col-sm-auto">
+                                        <button class="btn btn-danger"><a id="customSearchButtonDate" asp-area="" asp-controller="Search" asp-action="searchIndex">依日期搜尋</a></button>
+                                    </div>
+                                    <form asp-action="Search" method="get" class="row gx-2 gy-2 align-items-center">
                                     </form>
                                 </div>
                             </div>
@@ -1085,14 +1085,47 @@
             });
         });
 
+        // 依名稱關鍵字搜尋
         $("#customSearchButton").on("click", function (e) {
             // e.preventDefault();
+            sessionStorage.clear()
             var searchKeyword = $("#inputDelivery").val()
+            console.log(searchKeyword)
             sessionStorage.setItem("searchString", searchKeyword)
             sessionStorage.setItem("isSearching", "true")
         });
 
-        $("#customSearchButton").parent().on("click", function () {
-        }, true);
+        // $("#customSearchButton").parent().on("click", function () {
+        // }, true);
+
+        // 依日期搜尋
+        $("#customSearchButtonDate").on("click", function (e) {
+            sessionStorage.clear()
+            var searchDate = $("#inputPickup").val();
+            console.log(searchDate)
+            var formattedDate = formatDate(searchDate);
+            console.log(formattedDate)
+
+            // 將格式化後的日期值存儲在 sessionStorage 中
+            sessionStorage.setItem("searchDate", formattedDate);
+            sessionStorage.setItem("isSearching", "true");
+        });
+
+        // 格式化日期的函數
+        function formatDate(dateString) {
+            console.log(dateString)
+            var parts = dateString.split("-");
+            var year = parts[0];
+            var month = parts[1];
+            var day = parts[2];
+            var formattedDate = year + "/" + month + "/" + day;
+            return formattedDate;
+        }
+
+        // 監聽 window.onpopstate 事件
+        window.onpopstate = function (event) {
+            // 清空 sessionStorage
+            sessionStorage.clear();
+        };
     </script>
 }

@@ -49,15 +49,35 @@
             var parameters = {
                 searchString: searchKeyword
             };
-            $.ajax({
-                type: "GET",
-                url: `@Url.Action("searchPartial", "Search")`,
-                data: parameters
-            }).done(function (data) {
-                $("#searchResultContainer").html(data);
-            }).fail(function (err) {
-                alert(err.responseText);
-            });
+
+            var searchDateStart = sessionStorage.getItem("searchDate");
+            var parametersDate = {
+                searchDate: searchDateStart
+            };
+
+            if (searchKeyword !== null) {
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("searchPartial", "Search")`,
+                    data: parameters
+                }).done(function (data) {
+                    $("#searchResultContainer").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            }
+            else if (searchDateStart !== null) {
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("searchPartial", "Search")`,
+                    data: parametersDate
+                }).done(function (data) {
+                    $("#searchResultContainer").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            }
+            return
         });
      
 </script>
