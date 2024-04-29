@@ -38,8 +38,8 @@ namespace Seatly1.Controllers
             }else if(searchDate != null) 
             {
                 var act = await _context.NotificationRecords
-    .Where(p => p.StartTime.HasValue && p.StartTime.Value.Date == searchDate.Value.Date)
-    .ToListAsync();
+                .Where(p => p.StartTime.HasValue && p.EndTime.HasValue && p.StartTime.Value.Date <= searchDate.Value.Date && p.EndTime.Value.Date >= searchDate.Value.Date)
+                .ToListAsync();
 
 
                 if (act != null)
@@ -118,8 +118,8 @@ namespace Seatly1.Controllers
                                        a.HashTag2.Contains(c) ||
                                        a.HashTag3.Contains(c) ||
                                        a.HashTag4.Contains(c) ||
-                                       a.HashTag5.Contains(c)))
-                       .ToList();
+                                       a.HashTag5.Contains(c)));
+                       
                     return PartialView("_searchPartial", filteredActivities);
 
                 }
@@ -129,7 +129,7 @@ namespace Seatly1.Controllers
                 if (categories == null)
                 {
                     var act = _context.NotificationRecords
-                       .Where(p => p.StartTime.HasValue && p.StartTime.Value.Date == searchDate.Value.Date)
+                       .Where(p => p.StartTime.HasValue && p.EndTime.HasValue && p.StartTime.Value.Date <= searchDate.Value.Date && p.EndTime.Value.Date >= searchDate.Value.Date)
                        .ToListAsync();
 
                     return PartialView("_searchPartial", act);
@@ -137,14 +137,14 @@ namespace Seatly1.Controllers
                 else
                 {
                     var filteredActivities = _context.NotificationRecords
-                       .Where(a => a.StartTime.HasValue && a.StartTime.Value.Date == searchDate.Value.Date &&
+                       .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date &&
                                    categories.Any(c =>
                                        a.HashTag1.Contains(c) ||
                                        a.HashTag2.Contains(c) ||
                                        a.HashTag3.Contains(c) ||
                                        a.HashTag4.Contains(c) ||
-                                       a.HashTag5.Contains(c)))
-                       .ToList();
+                                       a.HashTag5.Contains(c)));
+                       
                     return PartialView("_searchPartial", filteredActivities);
 
                 }

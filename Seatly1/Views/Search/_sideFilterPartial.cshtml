@@ -98,25 +98,40 @@
                     });
                 }
             } else if (searchDateStart !== null) {
-                // 根據選中的日期進行搜索
-                $.ajax({
-                    type: "POST",
-                    url: "/Search/GetActivitiesByCategories",
-                    data: parametersDate,
-                    success: function (data) {
-                        $('#searchResultContainer').html(data);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(error);
-                    }
-                });
+                
+                if (selectedCategories.includes('all')) {
+                    // 根據 searchString 進行初始搜索
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("SearchPartial", "Search")',
+                        data: parametersDate
+                    }).done(function (data) {
+                        $("#searchResultContainer").html(data);
+                    }).fail(function (err) {
+                        alert(err.responseText);
+                    });
+                } else {
+                    // 根據選中的日期進行搜索
+                    parametersDate.categories = selectedCategories;
+                    $.ajax({
+                        type: "POST",
+                        url: "/Search/GetActivitiesByCategories",
+                        data: parametersDate,
+                        success: function (data) {
+                            $('#searchResultContainer').html(data);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                }
             }
         });
-        // 監聽 window.onpopstate 事件
-        window.onpopstate = function (event) {
-            // 清空 sessionStorage
-            sessionStorage.clear();
-        };
+        // // 監聽 window.onpopstate 事件
+        // window.onpopstate = function (event) {
+        //     // 清空 sessionStorage
+        //     sessionStorage.clear();
+        // };
 
     });
 
