@@ -1,0 +1,210 @@
+﻿
+@section Styles{
+    <link href="~/css/roulettestyles.css" rel="stylesheet" />
+    <style>
+   
+
+    </style>
+}
+
+@* <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin Wheel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+ *@
+<body>
+    <div class="contain1">
+    <div class="container">
+            <div class="spinBtn">spin</div>
+        <div class="wheel">
+                <div class="number" style="--i:1;--clr:#db7093"><span data-selectedTag="韓式">韓式</span></div>
+                <div class="number" style="--i:2;--clr:#20b2aa"><span data-selectedTag="日式">日式</span></div>
+                <div class="number" style="--i:3;--clr:#d63e92"><span data-selectedTag="泰式">泰式</span></div>
+                <div class="number" style="--i:4;--clr:#daa520"><span data-selectedTag="中式">中式</span></div>
+                <div class="number" style="--i:5;--clr:#ff340f"><span data-selectedTag="越式">越式</span></div>
+                <div class="number" style="--i:6;--clr:#ff7f50"><span data-selectedTag="港式">港式</span></div>
+                <div class="number" style="--i:7;--clr:#3cb371"><span data-selectedTag="美式">美式</span></div>
+                <div class="number" style="--i:8;--clr:#4169e1"><span data-selectedTag="健康餐">健康餐</span></div>
+        </div>
+    </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Result</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modalContent"></div>
+                </div>
+                <div class="modal-footer">
+                    <!-- 查看活動按鈕 -->
+                    <button id="viewActivityBtn" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看活動</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* <div id="myModal" class="modal">
+        
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div> *@
+</body>
+    
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.spinBtn').click(function () {
+                let sections = $('.number');
+                let randomIndex = Math.floor(Math.random() * sections.length);
+                let selectedSection = $(sections[randomIndex]);
+                let selectedTag = selectedSection.find('span').attr('data-selectedTag');
+
+                sessionStorage.setItem('selectedTag', selectedTag);
+
+                let rotationAngle = 360 - (randomIndex * 45);
+                let extraRotation = Math.floor(Math.random() * 8) + 1;
+
+                $('.wheel').css('transition', 'transform 5s ease-in-out');
+                $('.wheel').css('transform', `rotate(${rotationAngle + (360 * extraRotation)}deg)`);
+
+                setTimeout(function () {
+                    let selectedTag = sessionStorage.getItem('selectedTag');
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Roulette/SpinWheel',
+                        data: { selectedTag: selectedTag },
+                        success: function (data) {
+                            if (data.success) {
+                                // showModal(data.name);
+                                showResult(data);
+                            } else {
+                                showModal('再轉一次試試看吧!');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }, 5300);
+            });
+        });
+
+        function showResult(data) {
+            const modalContent = document.getElementById('modalContent');
+            // 將返回的資料顯示在模態框內容區域中
+            modalContent.innerHTML = `
+                <div class="activity">
+                    <h2>${data.name}</h2>
+                    <img src="data:image/jpeg;base64,${data.photo}" alt="Activity Photo">
+                    <p>${data.description}</p>
+                </div>
+            `;
+
+            // 將活動 ID 存儲在全局變量中
+            window.activityId = data.activityId;
+
+            // 顯示模態框
+            // modal.style.display = "block";
+            $('#resultModal').modal('show'); // 啟動模態框
+        }
+
+        // 點擊查看活動按鈕時導航到活動詳細頁面
+        $('#viewActivityBtn').click(function () {
+            if (window.activityId) {
+                window.location.href = `/NotificationRecord/UsersView/${window.activityId}`;
+            }
+        });
+        // let wheel = document.querySelector('.wheel');
+        // let spinBtn = document.querySelector('.spinBtn');
+        // let degree = 0; // 初始角度
+
+        // spinBtn.onclick = function () {
+        //     // 隨機生成一個停留位置並對應轉盤上的內容
+        //     let sections = document.querySelectorAll('.number');
+        //     let randomIndex = Math.floor(Math.random() * sections.length);
+        //     let selectedSection = sections[randomIndex];
+
+        //     // 取得停留位置對應標籤內容
+        //     let selectedTag = selectedSection.querySelector('span').getAttribute('data-selectedTag');
+        //     // let selectedTag = selectedSection.querySelector('span').textContent;
+        //     sessionStorage.setItem('selectedTag', selectedTag); // 將selectedTag保存到session中
+
+        //     // 計算選種區塊的角度
+        //     let rotationAngle = 360 - (randomIndex * 45);
+        //     // 增加隨機選轉的圈數
+        //     let extraRotation = Math.floor(Math.random() * 5) + 1; 
+
+            
+        //     wheel.style.transition = 'transform 5s ease-in-out';
+        //     wheel.style.transform = `rotate(${rotationAngle + (360 * extraRotation)}deg)`;
+
+            
+        //     console.log("停留在: " + selectedTag);
+            
+        //     // 在轉盤停止之後顯示 modal
+        //     setTimeout(() => {
+        //         // 從sessionStorage中讀取最後停留的標籤內容
+        //         let selectedTag = sessionStorage.getItem('selectedTag');
+        //         console.log(selectedTag);
+        //         // 向後端發送最後停留的標籤內容
+        //         fetch('/Roulette/SpinWheel', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({ 'selectedTag': selectedTag }) // 將最後停留的標籤內容作為請求數據
+        //         })
+        //             .then(response => response.json())
+        //             .then(data => {
+        //                 if (data.success) {
+        //                     // 成功找到匹配的記錄
+        //                     showModal(data.name);
+        //                 } else {
+        //                     // 未找到匹配的記錄
+        //                     showModal("前端沒找到資料");
+        //                 }
+        //             })
+        //             .catch(error => {
+        //                 console.error('Error:', error);
+        //             });
+        //     }, 5500); // 延遲 5 秒以確保轉盤停止後再顯示 modal
+        // }
+
+
+        
+        // var modal = document.getElementById("myModal");
+        // var modalContent = document.getElementById("modalContent");
+        // var closeBtn = document.getElementsByClassName("close")[0];
+
+        // // 點空白處關閉modal
+        // window.onclick = function (event) {
+        //     if (event.target == modal) {
+        //         modal.style.display = "none";
+        //     }
+        // }
+
+        // // 關閉modal
+        // closeBtn.onclick = function () {
+        //     modal.style.display = "none";
+        // }
+
+        // // 顯示modal
+        // function showModal(content) {
+        //     modalContent.innerHTML = content;
+        //     modal.style.display = "block";
+        // }
+    </script>
+    }
+
+
+

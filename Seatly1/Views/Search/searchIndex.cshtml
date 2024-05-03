@@ -1,0 +1,84 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml"; 
+}
+
+@section Styles
+{
+    <style>
+
+    </style>
+}
+
+<h2>搜尋結果</h2>
+<div class="row m-4 mb-2" id="searchTitle">
+</div>
+
+
+<div class="row ps-5 pe-5">
+    <div class="col-12 col-md-2 p-3" id="sideFilterContainer">
+        @* @Html.Partial("_sideFilterPartial") *@
+    </div>
+
+    <div class="col-12 col-md-10 p-3" id="searchResultContainer">
+
+    </div>
+
+
+</div>
+
+
+
+
+@section Scripts{
+<script>
+        $(function () {
+
+            // $.ajax({
+            //     type: "POST",
+            //     url: `@Url.Action("sideFilterPartial", "Search")`,
+                
+            // }).done(function (data) {
+            //     $("#sideFilterContainer").html(data);
+            // }).fail(function (err) {
+            //     alert(err.responseText);
+            // });
+
+
+            sessionStorage.setItem("isSearching", "true")
+            var searchKeyword = sessionStorage.getItem("searchString");
+            var parameters = {
+                searchString: searchKeyword
+            };
+
+            var searchDateStart = sessionStorage.getItem("searchDate");
+            var parametersDate = {
+                searchDate: searchDateStart
+            };
+
+            if (searchKeyword !== null) {
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("searchPartial", "Search")`,
+                    data: parameters
+                }).done(function (data) {
+                    $("#searchResultContainer").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            }
+            else if (searchDateStart !== null) {
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("searchPartial", "Search")`,
+                    data: parametersDate
+                }).done(function (data) {
+                    $("#searchResultContainer").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            }
+            return
+        });
+     
+</script>
+}

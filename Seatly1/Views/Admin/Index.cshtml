@@ -1,0 +1,172 @@
+﻿@section Styles{
+
+    
+}
+
+<body>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-2 list-group">
+                <ul>
+                    <li class="list-group-item">
+                        <a class="nav-link" id="Notification">活動資訊頁面</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="nav-link" id="AspNetUsers">使用者頁面</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="nav-link" id="OrganizersAdmin">活動舉辦方頁面</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-10" id="app">
+                <div id="adminBody">
+                    <img id="dancingtime" src="~/images/dancingtime.gif" style="display:none;" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+@* <table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <td v-for="column in tableColumns" :key="column.key">{{ column.label }}</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr v-for="empDTO in EmpDTOesArray" :key="empDTO.employeeId">
+            <template v-for="column in tableColumns">
+                <td v-if="!column.editable">{{ empDTO[column.field] }}</td>
+                <td v-else>
+                    <input type="text" v-model="empDTO[column.field]" />
+                </td>
+            </template>
+            <td>
+                <template v-if="empDTO.Edit">
+                    <button type="button" class="btn btn-success" @@click="update(empDTO)">更新</button>
+                    <button type="button" class="btn btn-warning" @@click="cancel">取消</button>
+                </template>
+                <template v-else>
+                    <button type="button" class="btn btn-primary" @@click="edit(empDTO.employeeId)">編輯</button>
+                    <button type="button" class="btn btn-success" @@click="deleteEmployee(empDTO.employeeId)">刪除</button>
+                </template>
+            </td>
+        </tr>
+    </tbody>
+</table>
+ *@
+
+@section Scripts {
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js" integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
+
+
+    <script>
+        var vuebase = "https://localhost:7271/"
+
+        //---------------主要頁面開頭------------------------------
+        //活動主頁
+        $("#Notification").on("click", (e) => {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_NotificationRecord", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        })
+
+        //使用者資訊主頁
+        $("#AspNetUsers").on("click", (e) => {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_AspNetUsers", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        })
+
+
+        //活動主辦方
+        $("#OrganizersAdmin").on("click", (e) => {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_OrganizersAdmin", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        })
+
+
+        // //---------------主要頁面結尾------------------------------
+
+        // //---------------------------活動頁面操作開始--------------------
+      
+
+
+
+
+
+
+        // //---------------------------活動頁面操作結束--------------------
+
+
+
+        //--------------------圖片即時顯示開始-----
+        function previewImage(inputFile, img) {
+            if (inputFile.files && inputFile.files[0]) {
+                var file = inputFile.files[0];
+                var allowType = "image.*";
+                if (file.type.match(allowType)) {
+                    //預覽
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        img.attr("src", e.target.result);
+                        img.attr("title", inputFile.files[0].name);
+                    };
+
+                    reader.readAsDataURL(inputFile.files[0]);
+                    $(".btn").prop("disabled", false);
+
+                }
+
+                else {
+                    alert("不支援檔案類型");
+                    $(".btn").prop("disabled", true);
+                }
+            }
+        }
+
+        $(document).on("change", "#ActivityPhoto", function () {
+            previewImage(this, $("#ActivityPhoto").prev());
+        });
+
+
+        //--------------------圖片即時顯示結束-----
+
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

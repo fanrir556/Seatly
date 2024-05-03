@@ -1,0 +1,142 @@
+﻿@model IEnumerable<NotificationRecord>
+
+@* @{
+    Layout =   "/Views/Shared/_Layout.cshtml"; 
+} *@
+
+
+
+@if (Model != null && Model.Any())
+{
+    <div>
+        <ul>
+            @foreach (var activity in Model)
+            {
+                <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        @{
+                            var base64Image = Convert.ToBase64String(activity.ActivityPhoto);
+                            var imageSrc = $"data:image;base64,{base64Image}";
+                        }
+                        <img src="@imageSrc" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2" />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title fs-3">活動名稱: @activity.ActivityName</h3>
+                            <p class="card-text">活動代碼: @activity.ActivityId</p>
+                            <p class="card-text start-date">開始時間: @activity.StartTime</p>
+                            <p class="card-text end-date">結束時間: @activity.EndTime</p>
+                            <p class="card-text">活動內容: @activity.DescriptionN</p>
+                                <p class="card-text">
+                                    @for (int i = 1; i <= 5; i++)
+                                {
+                                    var tagName = "HashTag" + i;
+                                    var tagValue = activity.GetType().GetProperty(tagName)?.GetValue(activity, null)?.ToString();
+                                    if (!string.IsNullOrEmpty(tagValue))
+                                    {
+                                            <span>#<span class="hash-tag">@tagValue</span></span>
+                                    }
+                                }</p>
+
+                        <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
+                            <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看活動</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <br />
+            }
+        </ul>
+    </div>
+}
+
+else
+{
+    <p>查無此活動</p>
+}
+
+
+<script>
+    $(function () {
+        var isSearching = sessionStorage.getItem("isSearching");
+        if (isSearching == "true") {
+            var hashtags = [];
+            $(".hash-tag").each(function () {
+                var tag = $(this).text()
+                hashtags.push(`${tag}`)
+            });
+
+            console.log(hashtags)
+
+            var startdates = [];
+            $(".start-date").each(function () {
+                // var formatStartDate = formatDate($(this).text());
+                // startdates.push(formatStartDate);
+                // console.log(formatStartDate);
+                var startDateString = $(this).text()
+                var startDateParts = startDateString.split(" ")
+                var startDate = startDateParts[1]
+                startdates.push(`${startDate}`)
+            });
+
+            console.log(startdates)
+
+            var enddates = [];
+            $(".end-date").each(function () {
+                var endDateString = $(this).text()
+                var endDateParts = endDateString.split(" ")
+                var endDate = endDateParts[1]
+                enddates.push(`${endDate}`)
+            });
+
+            console.log(enddates)
+
+
+            fetch(`@Url.Action("sideFilterPartial", "Search")`, {
+                method: "POST",
+                body: JSON.stringify({
+                    hashtags: hashtags,
+                    startdates: startdates,
+                    enddates: enddates,
+                }),
+                headers: { 'Content-type': 'application/json' }
+            }).then(function (response) {
+                return response.text();
+            }).then(function (data) {
+                $("#sideFilterContainer").html(data);
+            }).catch(function (err) {
+            });
+
+            
+
+            // fetch(`@Url.Action("startDateFilter", "Search")`, {
+            //     method: "POST",
+            //     body: JSON.stringify(startdates),
+            //     headers: { 'Content-type': 'application/json' }
+            // }).then(function (response) {
+            //     return response.text();
+            // }).then(function (data) {
+            //     $("#sideFilterContainer").html(data);
+            // }).catch(function (err) {
+            // });
+
+            sessionStorage.removeItem("isSearching");
+        }
+        
+    });
+
+    // // 格式化日期的函數
+    // function formatDate(dateString) {
+    //     console.log(dateString)
+    //     var parts = dateString.split("-");
+    //     var year = parts[0];
+    //     var month = parts[1];
+    //     var day = parts[2];
+    //     var formattedDate = year + "/" + month + "/" + day;
+    //     return formattedDate;
+    // }
+    
+
+</script>

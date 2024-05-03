@@ -1,0 +1,173 @@
+﻿@model pointsShopViewModel
+
+@*管理員登入判定*@
+@{
+    var isMg = HttpContextAccessor.HttpContext.Session.GetString("isMg");
+}
+
+@* <span class="d-none" id="transCount">@Model.trans.Count()</span> *@
+
+@if (isMg == "true")
+{
+    <div class="d-flex align-items-center">
+        <label for="pdSearch" class="text-gradient form-label m-0">關鍵字:</label><input id="pdSearch" type="text" class="form-control ms-2 me-2 w-25" autocomplete="off" />
+        <span id="schCate">
+            <input type="radio" id="Id" name="schCate" value="Id" class="m-0 me-1 form-check-input" checked />
+            <label for="Id" class="me-1 mb-0">交易編號</label>
+            <input type="radio" id="mId" name="schCate" value="mId" class="m-0 me-1 form-check-input" />
+            <label for="mId" class="me-1 mb-0">會員編號</label>
+        </span>
+        
+        <button class="btn btn-gradient me-1" id="btnPdSearch">搜尋</button>
+        <button class="btn btn-gradient" id="btnCcSearch">清除搜尋</button>
+    </div>
+}
+
+<div class="d-flex justify-content-end align-items-center">
+    <span class="me-2">
+        每頁顯示
+        <select id="pgSize">
+            <option value="10" selected>10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>筆資料。
+    </span>
+    <button class="btn btn-gradient me-1 p-0" id="pP" style="width:30px;height:30px;text-align:center;">上</button>
+    第
+    <input class="me-1 p-0" id="pgNum" value="1" style="width:30px;height:30px;text-align:center;" />
+    頁，共<span id="pgTotal"></span>頁
+    <button class="btn btn-gradient me-1 p-0" id="nP" style="width:30px;height:30px;text-align:center;">下</button>
+</div>
+
+
+<div class="col-12" id="pointsHistoryContentBody">
+</div>
+
+<script>
+    function showHis(pgNum, pgSize, keyword, cate) {
+        var parameters = {
+            pgNum: pgNum,
+            pgSize: pgSize,
+            keyword: keyword,
+            cate: cate
+        };
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("pointsHistoryContentBody", "Points")`,
+            data: parameters
+        }).done(function (data) {
+            $("#pointsHistoryContentBody").html(data);
+        }).fail(function (err) {
+            alert(err.responseText);
+        });
+    }
+
+    $(function () {
+        showHis(1, 10);
+        var keyword = null;
+        var schCate = "";
+
+        $("#pgNum").on("change", function () {
+            var pgNumint = parseInt($(this).val());
+            isTranSearching = sessionStorage.getItem("isTranSearching");
+            if (isTranSearching == "true") {
+                if (!isNaN(pgNumint) && pgNumint > 0 && pgNumint <= $("#pgTotal").text()) {
+                    showHis($("#pgNum").val(), $("#pgSize").val(), keyword, schCate);
+                }
+                else {
+                    alert("請輸入正確的頁碼");
+                }
+            }
+            else {
+                if ($("#pgTotal").text() == 0) {
+                    strCate = sessionStorage.getItem('strCate');
+                    showHis(1, $("#pgSize").val());
+
+                }
+                else if (!isNaN(pgNumint) && pgNumint > 0 && pgNumint <= $("#pgTotal").text()) {
+                    strCate = sessionStorage.getItem('strCate');
+                    showHis($("#pgNum").val(), $("#pgSize").val());
+                }
+                else {
+                    alert("請輸入正確的頁碼");
+                }
+            }
+        });
+
+        $("#pgSize").on("change", function () {
+            isTranSearching = sessionStorage.getItem("isTranSearching");
+            if (isTranSearching == "true") {
+                $("#pgNum").val(1);
+                showHis(1, $("#pgSize").val(), keyword, schCate);
+            }
+            else {
+                strCate = sessionStorage.getItem('strCate');
+                $("#pgNum").val(1);
+                showHis(1, $("#pgSize").val());
+            }
+        });
+
+        $("#pP").on("click", function () {
+            if ($("#pgNum").val() > 1) {
+                $("#pgNum").val($("#pgNum").val() - 1);
+                $("#pgNum").trigger("change");
+            }
+        });
+
+        $("#nP").on("click", function () {
+            if ($("#pgNum").val() < $("#pgTotal").text()) {
+                var pgNum = parseInt($("#pgNum").val());
+                $("#pgNum").val(pgNum + 1);
+                $("#pgNum").trigger("change");
+            }
+        });
+
+        $("#btnPdSearch").on("click", function () {
+            if ($("#pdSearch").val() != "") {
+                sessionStorage.setItem("isTranSearching", "true");
+                $("#pgNum").val(1);
+                if ($("#schCate>:radio:checked").val() == "Id") {
+                    keyword = parseInt($("#pdSearch").val());
+                    schCate = $("#schCate>:radio:checked").val();
+                    sessionStorage.setItem("tranKeyword", keyword);
+                    sessionStorage.setItem("schCate", schCate);
+                    if (!isNaN(keyword)) {
+                        showHis($("#pgNum").val(), $("#pgSize").val(), keyword, schCate);
+                    }
+                    else{
+                        alert("請輸入正確的訂單編號");
+                    }
+                }
+                else {
+                    keyword = $("#pdSearch").val();
+                    schCate = $("#schCate>:radio:checked").val();
+                    sessionStorage.setItem("tranKeyword", keyword);
+                    sessionStorage.setItem("schCate", schCate);
+                    showHis($("#pgNum").val(), $("#pgSize").val(), keyword, schCate);
+                }
+            }
+            else {
+                keyword = null;
+                schCate = "";
+                sessionStorage.removeItem("isTranSearching");
+                sessionStorage.removeItem("tranKeyword");
+                sessionStorage.removeItem("schCate");
+                isTranSearching = sessionStorage.getItem("isTranSearching");
+            }
+        });
+
+        $("#btnCcSearch").on("click", function () {
+            keyword = null;
+            schCate = "";
+            sessionStorage.removeItem("isTranSearching");
+            sessionStorage.removeItem("tranKeyword");
+            sessionStorage.removeItem("schCate");
+            isTranSearching = sessionStorage.getItem("isTranSearching");
+            $("#pdSearch").val("");
+            $("#pgNum").val(1);
+            showHis(1, $("#pgSize").val());
+        });
+    });
+
+</script>

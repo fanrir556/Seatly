@@ -1,0 +1,451 @@
+﻿@* @model IEnumerable<PointStore> *@
+@model pointsShopViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+@*管理員登入判定*@
+@{
+    var isMg = HttpContextAccessor.HttpContext.Session.GetString("isMg");
+}
+
+<span class="d-none" id="pdCount">@Model.pointsShopPd.Count()</span>
+
+@if (isMg == "true")
+{
+    <div class="d-flex justify-content-between mt-1">
+        <button class="btn btn-gradient mb-2 me-1" id="btnCreatePS">新增商品</button>
+        <button class="btn btn-gradient mb-2 me-1" id="btnSaveEditPS">儲存修改</button>
+        <button class="btn btn-gradient mb-2 me-1" id="btnSaveNewPS" style="display:none;">儲存新增</button>
+        <button class="btn btn-gradient mb-2 ms-auto" id="btnDeleteSelected">刪除勾選商品</button>
+    </div>
+    <div id="requiredContent"></div>
+    <table class="table table-striped text-center">
+        <thead>
+            <tr>
+                <th style="width:100px;">@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductId)</th>
+                <th style="width:200px;">@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductImage)</th>
+                <th style="width:120px;">@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductName)</th>
+                <th style="width:80px;">@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductPrice)</th>
+                <th style="width:120px;">@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().Category)</th>
+                <th>@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductDescription)</th>
+                <th style="width:50px;">刪除</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="align-middle" id="createPS" style="display:none;">
+                <td></td>
+                <td>
+                    <img src="~/images/NoImage.jpg" class="img-fluid rounded" style="width:100px" alt="..." title="..">
+                    <input class="form-control p-0 pimg" type="file" accept="image/*" />
+                </td>
+                <td><input class="form-control p-0 text-center" style="width:120px;" type="text" /></td>
+                <td><input class="form-control p-0 text-center" style="width:80px;" type="number" /></td>
+                <td>
+                    <select class="form-control p-0 text-center" asp-items="ViewBag.PSCategory">
+                        <option disabled selected>請選擇</option>
+                    </select>
+                    <input class="form-control p-0 text-center" style="width:104px;display:none" type="text" placeholder="請輸入類別" />
+                    <p class="text-gradient" id="addCategory">新增類別?</p>
+                </td>
+                <td><textarea class="form-control p-0"></textarea></td>
+                <td></td>
+            </tr>
+            @foreach (var item in Model.pointsShopPd)
+            {
+                <tr class="align-middle">
+                    <td>@item.ProductId</td>
+                    <td>
+                        <img src="~/images/@item.ProductImage" class="img-fluid rounded" style="width:100px" alt="@item.ProductImage" title="@item.ProductName" data-fileName="@item.ProductImage">
+                        <input class="form-control p-0 pimg" type="file" accept="image/*" />
+                    </td>
+                    <td><input class="form-control p-0 text-center" style="width:120px;" type="text" value="@item.ProductName" /></td>
+                    <td><input class="form-control p-0 text-center" style="width:80px;" type="number" value="@item.ProductPrice" /></td>
+                    <td><select class="form-control p-0 text-center" asp-items="ViewBag.PSCategory" asp-for="@item.Category"></select></td>
+                    <td><textarea class="form-control p-0">@item.ProductDescription</textarea></td>
+                    <td><input type="checkbox" class="form-check-input" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div>
+            <div class="text-gradient d-inline">您目前持有:</div>
+            @if (Model.user.Points == null)
+            {
+                <div class="d-inline ms-2 me-2" id="userPoints">0</div>
+            }
+            else
+            {
+                <div class="d-inline ms-2 me-2" id="userPoints" data-userId="@Model.user.Id">@Model.user.Points</div>
+            }
+            <div class="text-gradient d-inline">點數</div>
+        </div>
+    }
+    @foreach (var product in Model.pointsShopPd)
+    {
+        <div class="card mb-3">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="~/images/@product.ProductImage" class="img-fluid rounded-start" style="width:300px" alt="@product.ProductName" title="@product.ProductName">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <span class="position-absolute end-0 me-2">@product.Category</span>
+                        <h5 class="card-title text-gradient fs-3">@product.ProductName</h5>
+                        <p class="card-text">@product.ProductDescription</p>
+                        <p class="card-text text-gradient">兌換需要 @product.ProductPrice 點數</p>
+                        <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1 btn-exchange" data-bs-toggle="modal" data-bs-target="#exchangeModal" data-pdId="@product.ProductId">兌換</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+@*管理員登入判定*@
+
+
+<script>
+    $(function () {
+        isSearching = sessionStorage.getItem("isSearching");
+        strCate = sessionStorage.getItem("strCate");
+        var pdkeyword = sessionStorage.getItem("pdKeyword");
+        var parameters = {
+            cate: strCate,
+            pgNum:1,
+            pgSize: @Int32.MaxValue,
+            keyword:pdkeyword
+        };
+        // if (isSearching) {
+        //     parameters.keyword = pdkeyword;
+        // }
+        // else {
+        //     parameters.keyword = null;
+        // }
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("pointsShopContentBody", "Points")`,
+            data: parameters
+        }).done(function (data) {
+            var match = data.match(/id="pdCount">(.*?)<\/span>/);
+            var pgTotal = Math.ceil(match[1] / $("#pgSize").val());
+            $("#pgTotal").text(pgTotal);
+            if (pgTotal == 0) {
+                $("#pointsContentBody").html("<h3 class='text-gradient'>查無商品!</h3>");
+            }
+            if ($("#pgNum").val() <= 1) {
+                $("#pP").prop("disabled", true);
+            }
+            else {
+                $("#pP").prop("disabled", false);
+            }
+            if ($("#pgNum").val() == $("#pgTotal").text() || $("#pgTotal").text() == 0) {
+                $("#nP").prop("disabled", true);
+            }
+            else {
+                $("#nP").prop("disabled", false);
+            }
+        }).fail(function (err) {
+            alert(err.responseText);
+        });
+
+        if (isUser){
+            var userPoints = parseInt($("#userPoints").text());
+            $(".btn-exchange").each(function () {
+                var match = $(this).prev().text().match(/兌換需要 (.*?) 點數/);
+                if (parseInt(match[1]) > userPoints) {
+                    $(this).prop("disabled", true);
+                }
+            });
+        }
+
+        $(".btn-exchange").on("click", function (e) {
+            var pdId = $(this).data("pdid");
+            if (isUser)
+            {
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsShopModal", "Points", new { id = "pdId" })`
+                        .replace("pdId", pdId)
+                }).done(function (data) {
+                    $("#exchangeModalBody").html(data);
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            }
+            else{
+                window.location.href = "/Identity/Account/Login";
+            }
+        });
+
+        //MG
+        
+        if (isMG){
+            $(".table").css("--bs-table-striped-bg", "rgba(231, 49, 64, 0.05)");
+
+            $(".pimg").on("change", function () {
+                var img = this.files[0];
+                var reader = new FileReader();
+                var allowType = "image.*";
+                // console.log(reader.readAsText($(this).children("td").eq(1).find("input").files[0]));
+                if (img.type.match(allowType)) {
+                    reader.readAsDataURL(img);
+                    reader.onload = (e) => {
+                        // console.log(e.target.result);
+                        $(this).prev().attr("src", e.target.result);
+                        // console.log(this.files[0].name);
+                        $(this).prev().attr("alt", img.name);
+                        $(this).prev().attr("title", img.name);
+                    };
+                }
+            });
+
+            $("input, select, textarea").not("#pdSearch, #pgSize, #pgNum").on("change", function (e) {
+                $(this).closest("tr").addClass("edited");
+                $(this).css("box-shadow", "0 0 3px 3px pink");
+                if ($(this).attr('type') == "number" && $(this).val() < 0) {
+                    $(this).val(0);
+                }
+            });
+
+            $("input, select, textarea").on("blur", function (e) {
+                var index = $(this).closest("td").index();
+                var thTitle = $("th").eq(index).text();
+                var pId = $(this).closest("tr").children("td").eq(0).text();
+
+                if (!$(this).is(":file") && !$(this).is("#pdSearch")) {
+                    if ($(this).val() == "" || $(this).val() == null) {
+                        var notExist = $("#requiredContent").find(`p:contains('商品編號:「${pId}」的「${thTitle}」')`);
+                        $(this).css("box-shadow", "0 0 5px 5px red");
+                        if (notExist.length == 0) {
+                            // $("#requiredContent").html($("#requiredContent").html() + `<p class="text-danger">請填寫商品編號:「${pId}」的「${thTitle}」</p>`);
+                            $("#requiredContent").append(`<p class="text-danger">請填寫商品編號:「${pId}」的「${thTitle}」</p>`);
+                        }
+                        // this.focus();
+                        // $("input, select, textarea").not(this).prop("disabled", true);
+                    }
+                    else {
+                        $("#requiredContent").find(`p:contains('商品編號:「${pId}」的「${thTitle}」')`).remove();
+                        // $("input, select, textarea").not(this).prop("disabled", false);
+                    }
+                }
+            });
+
+            $("#btnSaveEditPS").on("click", function () {
+                // $(".edited input[type=file]").each(function () {
+                //     if (this.files && this.files[0]) {
+                //         console.log(this.files[0].name);
+                //     }
+                // });
+                $("#requiredContent").find(`p:contains('商品編號:「」的')`).remove();
+                var isComplete = $("#requiredContent").html();
+                if (isComplete.length != 0){
+                    alert("請填寫所有欄位");
+                }
+                else{
+                    var pShop = [];
+                    // pShop.push()
+                    $(".edited:not(#createPS)").each(function () {
+                        var oldImg = $(this).children("td").eq(1).children("img").attr("alt");
+                        var pPd = {
+                            ProductId: $(this).children("td").eq(0).text(),
+                            ProductName: $(this).children("td").eq(2).children("input").val(),
+                            ProductPrice: $(this).children("td").eq(3).children("input").val(),
+                            Category: $(this).children("td").eq(4).children("select").val(),
+                            ProductDescription: $(this).children("td").eq(5).children("textarea").val(),
+                            ProductImage: oldImg
+                        }
+
+                        var img = $(this).children("td").eq(1).children("input[type=file]");
+                        if (img[0].files && img[0].files[0]) {
+                            var formData = new FormData();
+                            var file = img[0].files[0];
+                            var fileName = img[0].files[0].name;
+
+                            formData.append("image", file, fileName);
+
+                            fetch(`@Url.Action("UploadImage", "Points")`, {
+                                method: "POST",
+                                body: formData
+                            }).then(function (response) {
+                                // console.log(response);
+                            }).catch(function (err) {
+                                alert(err);
+                            });
+
+                            pPd.ProductImage = fileName;
+                            // console.log(img[0].files[0].name);
+                        }
+
+                        // console.log(pPd);
+                        pShop.push(pPd);
+                    });
+                    // console.log(pShop)
+
+                    if (pShop.length > 0)
+                    {
+                        fetch(`@Url.Action("EditPointsShop", "Points")`, {
+                            method: "POST",
+                            body: JSON.stringify(pShop),
+                            headers: { 'Content-Type': 'application/json' }
+                        }).then(function (response) {
+                            // console.log(response.text());
+                            var count = pShop.length;
+                            alert(`${count}筆資料已修改`);
+                        }).then(() => {
+                            // $("#pointsShopSide").trigger("click");
+                            showPd("all", $("#pgNum").val(), $("#pgSize").val());
+                            sessionStorage.removeItem("isSearching");
+                            sessionStorage.removeItem("pdKeyword");
+                            $("#pdSearch").val("");
+                            $("#pgNum").val(1);
+                        }).catch(function (err) {
+                            alert(err);
+                        });
+                    }
+                }
+            });
+
+            $("#btnCreatePS").on("click", function () {
+                $("#createPS").show();
+                // $(this).next().next().show();
+                $("#btnSaveNewPS").show();
+                // $("#btnSaveNewPS").prop("disabled", false);
+            });
+
+            $("#addCategory").on("click", function () {
+                // alert("d");
+                if ($(this).siblings("input").css("display") === "none") {
+                    // 如果兄弟元素中的 input 元素的 display 屬性為 "none"，則執行下面的程式碼
+                    $(this).siblings("input").show();
+                    $(this).siblings("select").hide();
+                    $(this).text("選擇類別?");
+                }
+                else{
+                    $(this).siblings("input").hide();
+                    $(this).siblings("select").show();
+                    $(this).text("新增類別?");
+                }
+            });
+
+            $("#btnSaveNewPS").on("click", function () {
+                var pShop = [];
+                var pName = $("#createPS").children("td").eq(2).children("input").val();
+                var pPrice = $("#createPS").children("td").eq(3).children("input").val();
+                var pCategory = $("#createPS").children("td").eq(4).children("select").val();
+                var pNewCategory = $("#createPS").children("td").eq(4).children("input").val();
+                var isNewCategory = $("#createPS").children("td").eq(4).children("input").css("display");
+                var pDescription = $("#createPS").children("td").eq(5).children("textarea").val();
+                // console.log(pName)
+                if (pName != "" && pPrice != "" && ((pCategory != "") || (pNewCategory != "")) && pDescription != "") {
+                    var pPd = {
+                        ProductId: 0,
+                        ProductName: pName,
+                        ProductPrice: pPrice,
+                        Category: pCategory,
+                        ProductDescription: pDescription,
+                        ProductImage: "NoImage.jpg"
+                    }
+
+                    console.log(isNewCategory);
+                    if (isNewCategory != "none"){
+                        pPd.Category = pNewCategory;
+                    }
+
+                    var img = $("#createPS").children("td").eq(1).children("input[type=file]");
+                    if (img[0].files && img[0].files[0]) {
+                        var formData = new FormData();
+                        var file = img[0].files[0];
+                        var fileName = img[0].files[0].name;
+
+                        formData.append("image", file, fileName);
+
+                        fetch(`@Url.Action("UploadImage", "Points")`, {
+                            method: "POST",
+                            body: formData
+                        }).then(function (response) {
+                            // console.log(response);
+                        }).catch(function (err) {
+                            alert(err);
+                        });
+
+                        pPd.ProductImage = fileName;
+                        // console.log(img[0].files[0].name);
+                    }
+
+                    // console.log(pPd);
+                    pShop.push(pPd);
+                    // console.log(pShop)
+
+                    fetch(`@Url.Action("EditPointsShop", "Points")`, {
+                        method: "POST",
+                        body: JSON.stringify(pShop),
+                        headers: { 'Content-Type': 'application/json' }
+                    }).then(function (response) {
+                        // console.log(response.text());
+                        var count = pShop.length;
+                        alert(`${count}筆資料已新增`);
+                    }).then(() => {
+                        // $("#pointsShopSide").trigger("click");
+                        showPd("all", $("#pgNum").val(), $("#pgSize").val());
+                        sessionStorage.removeItem("isSearching");
+                        sessionStorage.removeItem("pdKeyword");
+                        $("#pdSearch").val("");
+                        $("#pgNum").val(1);
+                    }).catch(function (err) {
+                        alert(err);
+                    });
+                }
+                else {
+                    alert("請填寫所有欄位");
+                }
+                
+            });
+
+            $("#btnDeleteSelected").on("click", function () { 
+                var ids = [];
+                var fileNames = [];
+                $("input:checkbox:checked").each(function () {
+                    ids.push($(this).parent().siblings("td").eq(0).text());
+                    fileNames.push($(this).parent().siblings("td").eq(1).children("img").data("filename"));
+                });
+                var strIds = ids.join(", ");
+                if (ids.length > 0)
+                {
+                    var result = confirm(`確定要刪除編號「${strIds}」的商品嗎?`);
+                    // console.log(result);
+                    if (result){
+                        fetch(`@Url.Action("DeleteImage", "Points")`, {
+                            method:"DELETE",
+                            body: JSON.stringify(fileNames),
+                            headers:{ 'Content-Type': 'application/json' }
+                        }).then(function (response) {
+                            // console.log(response);
+                        }).catch(function (err) {
+                            alert(err);
+                        });
+
+                        fetch(`@Url.Action("DeletePointsShop", "Points")`, {
+                            method: "POST",
+                            body: JSON.stringify(ids),
+                            headers: { 'Content-Type': 'application/json' }
+                        }).then(function (response) {
+                            // console.log(response);
+                            showPd("all", $("#pgNum").val(), $("#pgSize").val());
+                            sessionStorage.removeItem("isSearching");
+                            sessionStorage.removeItem("pdKeyword");
+                            $("#pdSearch").val("");
+                            $("#pgNum").val(1);
+                        }).catch(function (err) {
+                            alert(err);
+                        });
+                    }
+                    else{
+                    }
+                }
+            });
+        }
+    });
+</script>

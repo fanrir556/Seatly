@@ -7,7 +7,7 @@ public partial class PointTransaction
 {
     public int Id { get; set; }
 
-    public int? MemberId { get; set; }
+    public string? MemberId { get; set; }
 
     public int? ProductId { get; set; }
 

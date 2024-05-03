@@ -1,0 +1,360 @@
+﻿@model pointsShopViewModel
+
+@*管理員登入判定*@
+@{
+    var isMg = HttpContextAccessor.HttpContext.Session.GetString("isMg");
+}
+
+<span class="d-none" id="transCount">@Model.trans.Count()</span>
+
+@if (isMg == "true")
+{
+    <div class="d-flex justify-content-between mt-1">
+        <button class="btn btn-gradient mb-2 me-1" id="btnCreateTran">新增紀錄</button>
+        <button class="btn btn-gradient mb-2 me-1" id="btnSaveEditTran">儲存修改</button>
+        <button class="btn btn-gradient mb-2 me-1" id="btnSaveNewTran" style="display:none;">儲存新增</button>
+        <button class="btn btn-gradient mb-2 ms-auto" id="btnDeleteSelected">刪除勾選紀錄</button>
+    </div>
+    <div id="requiredContent"></div>
+    <table class="table table-striped text-center">
+        <thead>
+            <tr>
+                <th style="width: 100px">@Html.DisplayNameFor(model => model.trans.FirstOrDefault().Id)</th>
+                <th>@Html.DisplayNameFor(model => model.trans.FirstOrDefault().ProductId)</th>
+                <th>@Html.DisplayNameFor(model => model.trans.FirstOrDefault().MemberId)</th>
+                <th>@Html.DisplayNameFor(model => model.trans.FirstOrDefault().TransactionDate)</th>
+                <th>@Html.DisplayNameFor(model => model.trans.FirstOrDefault().Active)</th>
+                <th style="width:50px;">刪除</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="align-middle" id="createTran" style="display:none;">
+                <td></td>
+                <td>
+                    <select class="form-control p-0 text-center" asp-items="ViewBag.pId">
+                        <option disabled selected>請選擇</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="form-control p-0 text-center" asp-items="ViewBag.mId">
+                        <option disabled selected>請選擇</option>
+                    </select>
+                </td>
+                <td><input type="date"></td>
+                <td>
+                    <select class="form-control p-0 text-center cAct">
+                        <option value="true" class="text-success">未使用</option>
+                        <option value="false" class="text-danger">已使用</option>
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+            @foreach (var item in Model.trans)
+            {
+                var id = item.ProductId;
+                <tr class="align-middle">
+                    <td>@item.Id</td>
+                    <td>@item.ProductId</td>
+                    <td>@item.MemberId</td>
+                    <td>@item.TransactionDate</td>
+                    <td>
+                        <select class="form-control p-0 text-center cAct" asp-for="@item.Active">
+                            <option value="true" class="text-success">未使用</option>
+                            <option value="false" class="text-danger">已使用</option>
+                        </select>
+                    </td>
+                    <td><input type="checkbox" class="form-check-input" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <table class="table table-striped text-center">
+        <thead>
+            <tr>
+                <th style="width: 100px">@Html.DisplayNameFor(model => model.trans.FirstOrDefault().Id)</th>
+                <th>@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductImage)</th>
+                <th>@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductName)</th>
+                <th>@Html.DisplayNameFor(model => model.pointsShopPd.FirstOrDefault().ProductPrice)</th>
+                <th>@Html.DisplayNameFor(model => model.trans.FirstOrDefault().TransactionDate)</th>
+                <th>@Html.DisplayNameFor(model => model.trans.FirstOrDefault().Active)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.trans)
+            {
+                var id = item.ProductId;
+                <tr class="align-middle">
+                    <td>@item.Id</td>
+                    <td><img src="~/images/@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductImage).FirstOrDefault()" class="img-fluid rounded-start" style="width:100px" alt="@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductName).FirstOrDefault()" title="@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductName).FirstOrDefault()"></td>
+                    <td>@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductName).FirstOrDefault()</td>
+                    <td>@Model.pointsShopPd.Where(s => s.ProductId == id).Select(s => s.ProductPrice).FirstOrDefault()</td>
+                    <td>@item.TransactionDate</td>
+                    @if (item.Active == true)
+                    {
+                        <td class="text-success">未使用</td>
+                    }
+                    else
+                    {
+                        <td style="color:red;">已使用</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+<script>
+    $(function () {
+        var keyword = sessionStorage.getItem("tranKeyword");
+        var cate = sessionStorage.getItem("schCate");
+        let url = `@Url.Action("pointsHistoryContentBody", "Points")?pgNum=1&pgSize=${@Int32.MaxValue}`;
+        if (keyword != null) {
+            url = `@Url.Action("pointsHistoryContentBody", "Points")?pgNum=1&pgSize=${@Int32.MaxValue}&keyword=${keyword}&cate=${cate}`;
+        }
+
+        fetch(url, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        }).then(response => { 
+            return response.text();
+        }).then(data => {
+            var match = data.match(/id="transCount">(.*?)<\/span>/);
+            var pgTotal = Math.ceil(match[1] / $("#pgSize").val());
+            $("#pgTotal").text(pgTotal);
+            if (pgTotal == 0) {
+                $("#pointsHistoryContentBody").html("<h3 class='text-gradient'>查無交易紀錄!</h3>");
+            }
+            if ($("#pgNum").val() <= 1) {
+                $("#pP").prop("disabled", true);
+            }
+            else {
+                $("#pP").prop("disabled", false);
+            }
+            if ($("#pgNum").val() == $("#pgTotal").text() || $("#pgTotal").text() == 0) {
+                $("#nP").prop("disabled", true);
+            }
+            else {
+                $("#nP").prop("disabled", false);
+            }
+        }).catch(error => {
+            alert(error);
+        });
+            
+            
+
+        // var pgTotal = Math.ceil($("#transCount").text() / $("#pgSize").val());
+        // $("#pgTotal").text(pgTotal);
+        // if (pgTotal == 0) {
+        //     $("#pointsHistoryContentBody").html("<h3 class='text-gradient'>查無交易紀錄!</h3>");
+        // }
+        // if ($("#pgNum").val() <= 1) {
+        //     $("#pP").prop("disabled", true);
+        // }
+        // else {
+        //     $("#pP").prop("disabled", false);
+        // }
+        // if ($("#pgNum").val() == $("#pgTotal").text() || $("#pgTotal").text() == 0) {
+        //     $("#nP").prop("disabled", true);
+        // }
+        // else {
+        //     $("#nP").prop("disabled", false);
+        // }
+
+        $(".table").css("--bs-table-striped-bg", "rgba(231, 49, 64, 0.05)");
+
+        if (isMG){
+            $("select:is(.cAct)").each(function () {
+                if ($(this).val() == "true") {
+                    $(this).addClass("text-success");
+                }
+                else {
+                    $(this).addClass("text-danger");
+                }
+            });
+
+            $("select:is(.cAct)").on("change", function () {
+                if ($(this).val() == "true") {
+                    $(this).addClass("text-success");
+                    $(this).removeClass("text-danger");
+                }
+                else {
+                    $(this).addClass("text-danger");
+                    $(this).removeClass("text-success");
+                }
+            });
+
+            $("input, select").not("#pdSearch, #pgSize, #pgNum, :radio").on("change", function (e) {
+                $(this).closest("tr").addClass("edited");
+                $(this).css("box-shadow", "0 0 3px 3px pink");
+            });
+
+            $("select").on("blur", function (e) {
+                var index = $(this).closest("td").index();
+                var thTitle = $("th").eq(index).text();
+                var pId = $(this).closest("tr").children("td").eq(0).text();
+
+                if ($(this).val() == "" || $(this).val() == null) {
+                    var notExist = $("#requiredContent").find(`p:contains('交易編號:「${pId}」的「${thTitle}」')`);
+                    $(this).css("box-shadow", "0 0 5px 5px red");
+                    if (notExist.length == 0) {
+                        // $("#requiredContent").html($("#requiredContent").html() + `<p class="text-danger">請填寫交易編號:「${pId}」的「${thTitle}」</p>`);
+                        $("#requiredContent").append(`<p class="text-danger">請填寫交易編號:「${pId}」的「${thTitle}」</p>`);
+                    }
+                }
+                else {
+                    $("#requiredContent").find(`p:contains('交易編號:「${pId}」的「${thTitle}」')`).remove();
+                }
+            });
+
+            $("#btnSaveEditTran").on("click", function () {
+                $("#requiredContent").find(`p:contains('交易編號:「」的')`).remove();
+                var isComplete = $("#requiredContent").html();
+                if (isComplete.length != 0) {
+                    alert("請填寫所有欄位");
+                }
+                else {
+                    var pTrans = [];
+                    // pTrans.push()
+                    $(".edited:not(#createTran)").each(function () {
+                        var pTran = {
+                            Id: $(this).children("td").eq(0).text(),
+                            Active: true
+                        }
+                        if ($(this).children("td").eq(4).children("select").val() == "false"){
+                            pTran.Active = false;
+                        }
+                        // console.log(pTran);
+                        pTrans.push(pTran);
+                    });
+
+                    if (pTrans.length > 0) {
+                        fetch(`@Url.Action("EditPointsTran", "Points")`, {
+                            method: "POST",
+                            body: JSON.stringify(pTrans),
+                            headers: { 'Content-Type': 'application/json' }
+                        }).then(function (response) {
+                            // console.log(response.text());
+                            var count = pTrans.length;
+                            alert(`${count}筆資料已修改`);
+                        }).then(() => {
+                            // $("#pointsShopSide").trigger("click");
+                            sessionStorage.removeItem("isTranSearching");
+                            sessionStorage.removeItem("tranKeyword");
+                            sessionStorage.removeItem("schCate");
+                            showHis(1, $("#pgSize").val());
+                            $("#pdSearch").val("");
+                            $("#pgNum").val(1);
+                        }).catch(function (err) {
+                            alert(err);
+                        });
+                    }
+                }
+            });
+
+            $("#btnCreateTran").on("click", function () {
+                $("#createTran").show();
+                // $(this).next().next().show();
+                $("#btnSaveNewTran").show();
+                // $("#btnSaveNewTran").prop("disabled", false);
+            });
+
+            $("#btnSaveNewTran").on("click", function () {
+                var pTrans = [];
+                var pId = $("#createTran").children("td").eq(1).children("select").val();
+                var mId = $("#createTran").children("td").eq(2).children("select").val();
+                var tranDate = $("#createTran").children("td").eq(3).children("input").val();
+                var active = true;
+
+                if ($("#createTran").children("td").eq(4).children("select").val() == "false") { 
+                    active = false;
+                }
+
+                // var date = new Date(Date.now());
+                // var year = date.getFullYear();
+                // var month = String(date.getMonth() + 1).padStart(2, '0');
+                // var day = String(date.getDate()).padStart(2, '0');
+                // var hours = String(date.getHours()).padStart(2, '0');
+                // var minutes = String(date.getMinutes()).padStart(2, '0');
+                // var seconds = String(date.getSeconds()).padStart(2, '0');
+                // var formattedDate = `${year}-${month}-${day}-${hours}-${minutes}-${seconds}`;
+                // console.log(pName)
+                if (pId != null && mId != null  && active != null) {
+                    var pTran = {
+                        Id: "0",
+                        ProductId: pId,
+                        MemberId: mId,
+                        TransactionDate: null,
+                        Active: active
+                    }
+
+                    if (tranDate != "") {
+                        pTran.tDate = tranDate;
+                    }
+
+                    // console.log(pTran);
+                    
+                    pTrans.push(pTran);
+
+                    fetch(`@Url.Action("EditPointsTran", "Points")`, {
+                        method: "POST",
+                        body: JSON.stringify(pTrans),
+                        headers: { 'Content-Type': 'application/json' }
+                    }).then(function (response) {
+                        // console.log(response.text());
+                        var count = pTrans.length;
+                        alert(`${count}筆資料已新增`);
+                    }).then(() => {
+                        // $("#pointsShopSide").trigger("click");
+                        sessionStorage.removeItem("isTranSearching");
+                        sessionStorage.removeItem("tranKeyword");
+                        sessionStorage.removeItem("schCate");
+                        showHis(1, $("#pgSize").val());
+                        $("#pdSearch").val("");
+                        $("#pgNum").val(1);
+                    }).catch(function (err) {
+                        alert(err);
+                    });
+                }
+                else {
+                    alert("請填寫所有欄位");
+                }
+
+            });
+
+            $("#btnDeleteSelected").on("click", function () {
+                var ids = [];
+                $("input:checkbox:checked").each(function () {
+                    ids.push($(this).parent().siblings("td").eq(0).text());
+                });
+                var strIds = ids.join(", ");
+                if (ids.length > 0) {
+                    var result = confirm(`確定要刪除編號「${strIds}」的紀錄嗎?`);
+                    // console.log(result);
+                    if (result) {
+                        fetch(`@Url.Action("DeletePointsTran", "Points")`, {
+                            method: "POST",
+                            body: JSON.stringify(ids),
+                            headers: { 'Content-Type': 'application/json' }
+                        }).then(function (response) {
+                            // console.log(response);
+                            sessionStorage.removeItem("isTranSearching");
+                            sessionStorage.removeItem("tranKeyword");
+                            sessionStorage.removeItem("schCate");
+                            showHis(1, $("#pgSize").val());
+                            $("#pdSearch").val("");
+                            $("#pgNum").val(1);
+                        }).catch(function (err) {
+                            alert(err);
+                        });
+                    }
+                    else {
+                    }
+                }
+            });
+        }
+    });
+</script>

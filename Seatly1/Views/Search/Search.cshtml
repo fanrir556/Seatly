@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Seatly1.Models.NotificationRecord>
+
+@{
+    ViewData["Title"] = "Search Activity";
+}
+
+<h2>Search Activity</h2>
+
+
+@if (Model != null && Model.Any())
+{
+    <h3>Search Results</h3>
+    <ul>
+        @foreach (var activity in Model)
+        {
+            <div>
+                @{
+                    // 轉換編碼
+                    var base64Image = Convert.ToBase64String(activity.ActivityPhoto);
+                    var imageSrc = $"data:image;base64,{base64Image}";
+                }
+                <img src="@imageSrc" alt="Activity Photo" />
+            <li>活動名稱: @activity.ActivityName</li>
+            <li>開始時間: @activity.StartTime</li>
+            <li>結束時間: @activity.EndTime</li>
+            <li>活動內容: @activity.DescriptionN</li>
+
+            <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
+                <button>查看活動</button>
+            </form> 
+
+            </div>
+            <br />
+        }
+    </ul>
+}
+else
+{
+    <p>查無此活動</p>
+}
+
+@section Scripts{
+    <script>
+   
+
+    </script>
+}

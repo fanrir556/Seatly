@@ -1,0 +1,140 @@
+﻿@model pointsShopViewModel
+
+@if (Model.trans.Count() == 0)
+{
+    <h2 class="text-gradient">目前沒有可使用的優惠券</h2>
+}
+
+<span class="d-none" id="transCount">@Model.trans.Count()</span>
+
+<div class="d-flex justify-content-end align-items-center">
+    @* 起始日期: <input type="text" id="datepicker"> *@
+    <span class="me-2">
+        每頁顯示
+        <select id="pgSize">
+            <option value="10" selected>10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>筆資料。
+    </span>
+    <button class="btn btn-gradient me-1 p-0" id="pP" style="width:30px;height:30px;text-align:center;">上</button>
+    第
+    <input class="me-1 p-0" id="pgNum" value="1" style="width:30px;height:30px;text-align:center;" />
+    頁，共<span id="pgTotal"></span>頁
+    <button class="btn btn-gradient me-1 p-0" id="nP" style="width:30px;height:30px;text-align:center;">下</button>
+</div>
+
+<div class="col-12" id="couponContentBody">
+</div>
+
+@* Modal *@
+<div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="couponModalLabel">您確定要兌換嗎?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="couponModalBody">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-gradient p-0 text-align-center" style="width:100px;height:45px" id="couponUse">確認使用</button>
+                <button class="btn btn-secondary p-0 text-align-center" style="width:100px;height:45px" data-bs-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* Modal *@
+
+<script>
+    function showCou(pgNum, pgSize) {
+        var parameters = {
+            pgNum: pgNum,
+            pgSize: pgSize
+        };
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("couponContentBody", "Points")`,
+            data: parameters
+        }).done(function (data) {
+            $("#couponContentBody").html(data);
+        }).fail(function (err) {
+            alert(err.responseText);
+        });
+    }
+
+    $(function () {
+        showCou(1, 10);
+
+        $("#pgNum").on("change", function () {
+            var pgNumint = parseInt($(this).val());
+            isSearching = sessionStorage.getItem("isSearching")
+            if (isSearching) {
+                if (!isNaN(pgNumint) && pgNumint > 0 && pgNumint <= $("#pgTotal").text()) {
+                    showCou($("#pgNum").val(), $("#pgSize").val());
+                }
+                else {
+                    alert("請輸入正確的頁碼");
+                }
+            }
+            else {
+                if ($("#pgTotal").text() == 0) {
+                    strCate = sessionStorage.getItem('strCate');
+                    showCou(1, $("#pgSize").val());
+
+                }
+                else if (!isNaN(pgNumint) && pgNumint > 0 && pgNumint <= $("#pgTotal").text()) {
+                    strCate = sessionStorage.getItem('strCate');
+                    showCou($("#pgNum").val(), $("#pgSize").val());
+                }
+                else {
+                    alert("請輸入正確的頁碼");
+                }
+            }
+        });
+
+        $("#pgSize").on("change", function () {
+            if (isSearching) {
+                $("#pgNum").val(1);
+                showCou(1, $("#pgSize").val());
+            }
+            else {
+                strCate = sessionStorage.getItem('strCate');
+                $("#pgNum").val(1);
+                showCou(1, $("#pgSize").val());
+            }
+        });
+
+        $("#pP").on("click", function () {
+            if ($("#pgNum").val() > 1) {
+                $("#pgNum").val($("#pgNum").val() - 1);
+                $("#pgNum").trigger("change");
+            }
+        });
+
+        $("#nP").on("click", function () {
+            if ($("#pgNum").val() < $("#pgTotal").text()) {
+                var pgNum = parseInt($("#pgNum").val());
+                $("#pgNum").val(pgNum + 1);
+                $("#pgNum").trigger("change");
+            }
+        });
+
+        $("#btnPdSearch").on("click", function () {
+            if ($("#pdSearch").val() != "") {
+                var pdKeyword = $("#pdSearch").val()
+                sessionStorage.setItem("strCate", "all")
+                sessionStorage.setItem("isSearching", true);
+                sessionStorage.setItem("pdKeyword", pdKeyword);
+                $("#pgNum").val(1);
+                showCou($("#pgNum").val(), $("#pgSize").val());
+            }
+            else {
+                sessionStorage.removeItem("isSearching");
+                isSearching = sessionStorage.getItem("isSearching");
+                parameters.keyword = null;
+            }
+        });
+    });
+</script>

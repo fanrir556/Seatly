@@ -1,0 +1,61 @@
+﻿<div>
+    <div class="d-flex justify-content-center">
+        <h2 class="m-auto text-gradient">管理員，請證明身分</h2>
+    </div>
+    <div class="d-flex justify-content-center"><input type="text" id="managerPw" class="form-control p-2" placeholder="可悲阿，竟然是管理員" autocomplete="off" /></div>
+</div>
+
+<script>
+    $(function () {
+        $('#mainModal').on('shown.bs.modal', function () {
+            // 尋找id為managerPw的input元素並將焦點設定在該元素上
+            $('#managerPw').focus();
+        });
+        $("#managerPw").on("keypress", function (e) {
+            // 如果按下的鍵是Enter鍵 (keyCode為13)
+            if (e.keyCode === 13) {
+                // 觸發button元素的點擊事件
+                $("#managerLogin").trigger("click");
+            }
+        });
+        $("#managerLogin").on("click", function () {
+            $("#mainModalFooter").hide();
+            if ($("#managerPw").val() == "5487"){
+                setTimeout(function () {
+                    $("#mainModalBody").html('<div class="d-flex justify-content-center"><h2 class="m-auto text-gradient">歡迎回來，肝苦人</h2></div>');
+                }, 0);
+                sessionStorage.setItem("isManager", "true");
+
+                var form = new FormData();
+                form.append("key", "true");
+                fetch(`@Url.Action("isMG", "Home")`, {
+                    method: "POST",
+                    body: form,
+                }).then(function (response) {
+                    // console.log(response);
+                }).catch(function (err) {
+                    alert(err);
+                });
+                setTimeout(function () {
+                    $("#mainModalFooter").show();
+                    location.reload();
+                }, 500);
+            }
+            else{
+                $("#mainModalBody").html('<div class="d-flex justify-content-center"><h2 class="m-auto text-gradient">你這個騙子!!!</h2></div>');
+                setTimeout(function () {
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("mainModal", "Home")', // 將 Razor 語法包裹在引號中
+                    }).done(function (data) {
+                        $("#mainModalBody").html(data);
+                        $("#mainModalFooter").show();
+                        $('#managerPw').focus();
+                    }).fail(function (err) {
+                        alert(err.responseText);
+                    });
+                }, 500);
+            }
+        });
+    });
+</script>

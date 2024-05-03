@@ -1,0 +1,50 @@
+﻿@model PointStore
+
+<div class="row g-0">
+    <div class="col-12 d-flex justify-content-center">
+        <img src="~/images/@Model.ProductImage" class="img-fluid rounded-start" style="width:150px" alt="ProductName" title="@Model.ProductName">
+    </div>
+    <div class="col-12">
+        <div>
+            <div class="text-gradient d-inline">商品名稱:</div>
+            <div class="d-inline ms-2">@Model.ProductName</div>
+        </div>
+        <div>
+            <div class="text-gradient d-inline">商品價格:</div>
+            <div class="d-inline ms-2 me-2" id="pdPoints" data-pdId="@Model.ProductId">@Model.ProductPrice</div>
+            <div class="text-gradient d-inline">點數</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#pShopExchange").on("click", function () { 
+            // var now = new Date(Date.now());
+            // var formattedDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
+
+            var p = {
+                Id: $("#userPoints").data("userid"),
+                Points: parseInt($("#userPoints").text()) - parseInt($("#pdPoints").text()),
+                MemberId: $("#userPoints").data("userid"),
+                ProductId: $("#pdPoints").data("pdid"),
+                Active: true
+            };
+            fetch(`@Url.Action("pointsShopContentBody", "Points")`, {
+                method: "POST",
+                body: JSON.stringify(p),
+                headers: { 'Content-Type': 'application/json' }
+            }).then(response => { 
+                return response.text();
+            }).then(data => {
+                $("#exchangeModalBody").html(`<h2 class="col-12 text-gradient text-center">${data}</h2>`);
+                setTimeout(function () { 
+                    $("#exchangeModal").modal("hide");
+                    $("#pgNum").trigger("change");
+                }, 500);
+            }).catch(err => { 
+                alert(err);
+            });
+        });
+    });
+</script>

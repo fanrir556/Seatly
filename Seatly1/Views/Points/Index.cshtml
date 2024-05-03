@@ -1,0 +1,216 @@
+﻿@section Styles
+{
+    <style>
+        @* 轉場動畫 *@
+        #animationTrans {
+            position: fixed;
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            min-width: 100%;
+            overflow: hidden;
+            z-index: 20;
+            background-color: white;
+            animation-duration:0.2s;
+        }
+
+        .animationP {
+            position: absolute;
+            background-color: rgba(231, 49, 64, 0.5);
+            left: 0;
+            height: 5vh;
+            min-width: 100%;
+            z-index: 1;
+        }
+
+        .ball {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            animation: drop 0.8s linear forwards;
+        }
+
+        @@keyframes drop {
+            0% {
+                bottom: 100vh;
+                transform: translateX(-50%);
+            }
+
+            100% {
+                bottom: -50px;
+                transform: translateX(-50%);
+            }
+        }
+
+        @@keyframes earthquake{
+            0%{
+                left:20px;
+            }
+            25%{
+                left:-20px;
+            }
+            50%{
+                left:20px;
+            }
+            75%{
+                left:-20px;
+            }
+            100%{
+                left:20px;
+            }
+        }
+        @* 轉場動畫 *@
+    </style>
+}
+
+@{
+    ViewData["Title"] = "點數專區";
+}
+@* 轉場動畫 *@
+<div id="animationTrans">
+    @for (var i = 0; i < 100; i += 10)
+    {
+        var topH = "top:" + i + "vh;";
+        <p class="animationP" style="@topH"></p>
+    }
+    <img class="ball" src="@Url.Content("~/images/queuely.png")"></img>
+</div>
+@* 轉場動畫 *@
+
+<div class="row m-4 mb-2">
+    <h2 class="text-gradient" id="pointsTitle">點數商城</h2>
+</div>
+
+<div class="row ps-5 pe-5">
+    <div class="col-12 col-md-2 p-3">
+        <ul class="list-group">
+            <li class="list-group-item bg-white">
+                <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsShopSide">點數商城</a>
+            </li>
+            <li class="list-group-item bg-white">
+                <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="couponSide">持有優惠券</a>
+            </li>
+            <li class="list-group-item bg-white">
+                <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsHistorySide">點數交易紀錄</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-12 col-md-10 p-3" id="pointsContentHead">
+    </div>
+
+
+</div>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            /*轉場動畫*/
+            var dropSmall = setInterval(function () {
+                var strRanLeft = Math.random() * 100 + "vw;";
+                $("#animationTrans").append(`<img class="ball" style="left:${strRanLeft}" src="@Url.Content("~/images/queuely.png")"></img>`);
+            }, 50)
+
+            var dropLarge = setInterval(function () {
+                var strRanLeft = Math.random() * 100 + "vw;";
+                $("#animationTrans").append(`<img class="ball" style="left:${strRanLeft}; width:150px; height:150px;animation-duration: 1.0s;" src="@Url.Content("~/images/queuely.png")"></img>`);
+            }, 100)
+
+            $("#animationTrans").append(`<img class="ball" style="left:50vw; width:100vh; height:100vh;animation-duration: 1.8s;" src="@Url.Content("~/images/queuely.png")"></img>`);
+
+            setTimeout(function () {
+                $("#animationTrans").css("animation-name", "earthquake")
+            }, 1800);
+
+            setTimeout(function () {
+                $("#animationTrans").animate({ "top": "100vh" }, 500, function () {
+                    clearInterval(dropSmall);
+                    clearInterval(dropLarge);
+                    $("#animationTrans").remove();
+                });
+            }, 2000);
+            /*轉場動畫*/
+
+            $("#pointsShopSide").on("click", function (e) {
+                e.preventDefault();
+                strPoints = "pointsShop";
+                sessionStorage.setItem('strPoints', strPoints);
+                sessionStorage.setItem('strCate', "all");
+                sessionStorage.removeItem("isSearching");
+                sessionStorage.removeItem("pdKeyword");
+                $("#pointsTitle").text("點數商城");
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("pointsShopContentHead", "Points")`
+                }).done(function (data) {
+                    $("#pointsContentHead").html(data); // 將局部視圖的內容設置為 #pointsContent 元素的HTML內容
+                }).fail(function (err) {
+                    alert(err.responseText);
+                });
+            });
+            $("#couponSide").on("click", function (e) {
+                e.preventDefault();
+                sessionStorage.removeItem("isTranSearching");
+                sessionStorage.removeItem("tranKeyword");
+                sessionStorage.removeItem("schCate");
+                if (isMG){
+                    $("#pointsHistorySide").trigger("click");
+                }
+                else if (isUser) {
+                    strPoints = "coupon";
+                    sessionStorage.setItem('strPoints', strPoints);
+                    $("#pointsTitle").text("持有優惠券");
+                    $.ajax({
+                        type: "GET",
+                        url: `@Url.Action("couponContent", "Points")`
+                    }).done(function (data) {
+                        $("#pointsContentHead").html(data);
+                    }).fail(function (err) {
+                        alert(err.responseText);
+                    });
+                }
+                else {
+                    window.location.href = "/Identity/Account/Login";
+                }
+            });
+            $("#pointsHistorySide").on("click", function (e) {
+                e.preventDefault();
+                sessionStorage.removeItem("isTranSearching");
+                if (isUser || isMG) {
+                    strPoints = "pointsHistory";
+                    sessionStorage.setItem('strPoints', strPoints);
+                    $("#pointsTitle").text("點數交易紀錄");
+                    $.ajax({
+                        type: "GET",
+                        url: `@Url.Action("pointsHistoryContent", "Points")`
+                    }).done(function (data) {
+                        $("#pointsContentHead").html(data);
+                    }).fail(function (err) {
+                        alert(err.responseText);
+                    });
+                }
+                else {
+                    window.location.href = "/Identity/Account/Login";
+                }
+
+            });
+            switch (strPoints) {
+                case "pointsShop":
+                    $("#pointsShopSide").trigger("click");
+                    break;
+                case "pointsHistory":
+                    $("#pointsHistorySide").trigger("click");
+                    break;
+                case "coupon":
+                    $("#couponSide").trigger("click");
+                    break;
+                default:
+                    alert("?")
+                    break;
+            }
+        });
+    </script>
+}

@@ -7,7 +7,7 @@ public partial class CollectionItem
 {
     public int SerialId { get; set; }
 
-    public int? UserId { get; set; }
+    public string? UserId { get; set; }
 
-    public int? RestaurantId { get; set; }
+    public int? ActivityId { get; set; }
 }
