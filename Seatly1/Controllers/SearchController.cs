@@ -97,63 +97,177 @@ namespace Seatly1.Controllers
 
 
         [HttpPost]
-        public IActionResult GetActivitiesByCategories(List<string>? categories, string? searchString, DateTime? searchDate)
+        public async Task<IActionResult> GetActivitiesByCategories(List<string>? categories, string? searchString, DateTime? searchDate, DateTime? startDate, DateTime? endDate)
         {
-            if (searchString != null)
+            if (searchString != null) // 從首頁輸入關鍵字進來
             {
-                if (categories == null)
+                if (categories != null && startDate != null && endDate != null)
                 {
-                    var act = _context.NotificationRecords
-                       .Where(p => p.ActivityName.Contains(searchString))
-                       .ToListAsync();
+                    // 分類+區間都有選
+                    var filteredActivities = await _context.NotificationRecords
+        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
+            && a.StartTime.Value.Date >= startDate.Value.Date
+            && a.EndTime.Value.Date <= endDate.Value.Date
+            && categories.Any(c =>
+                    a.HashTag1.Contains(c) ||
+                    a.HashTag2.Contains(c) ||
+                    a.HashTag3.Contains(c) ||
+                    a.HashTag4.Contains(c) ||
+                    a.HashTag5.Contains(c)))
+        .ToListAsync();
 
-                    return PartialView("_searchPartial", act);
+                    return PartialView("_searchPartial", filteredActivities);
+                }
+                
+                else if (categories != null && startDate == null && endDate == null) 
+                {
+                    // 只選了分類
+                    var filteredActivities = await _context.NotificationRecords
+                        .Where(a => a.ActivityName.Contains(searchString) &&
+                                    categories.Any(c =>
+                                        a.HashTag1.Contains(c) ||
+                                        a.HashTag2.Contains(c) ||
+                                        a.HashTag3.Contains(c) ||
+                                        a.HashTag4.Contains(c) ||
+                                        a.HashTag5.Contains(c)))
+                        .ToListAsync();
+
+                    return PartialView("_searchPartial", filteredActivities);
+                }
+                else if (categories == null && startDate != null && endDate !=null)
+                {
+                    // 只選了區間
+                    var filteredActivities = await _context.NotificationRecords
+                           .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
+                               && a.StartTime.Value.Date >= startDate.Value.Date
+                               && a.EndTime.Value.Date <= endDate.Value.Date)
+                           .ToListAsync();
+
+                    return PartialView("_searchPartial", filteredActivities);
                 }
                 else
                 {
-                    var filteredActivities = _context.NotificationRecords
-                       .Where(a => a.ActivityName.Contains(searchString) &&
-                                   categories.Any(c =>
-                                       a.HashTag1.Contains(c) ||
-                                       a.HashTag2.Contains(c) ||
-                                       a.HashTag3.Contains(c) ||
-                                       a.HashTag4.Contains(c) ||
-                                       a.HashTag5.Contains(c)));
-                       
-                    return PartialView("_searchPartial", filteredActivities);
-
-                }
-            }
-            else if (searchDate != null)
-            {
-                if (categories == null)
-                {
-                    var act = _context.NotificationRecords
-                       .Where(p => p.StartTime.HasValue && p.EndTime.HasValue && p.StartTime.Value.Date <= searchDate.Value.Date && p.EndTime.Value.Date >= searchDate.Value.Date)
-                       .ToListAsync();
+                    // 原始搜尋結果
+                    var act = await _context.NotificationRecords
+                        .Where(p => p.ActivityName.Contains(searchString))
+                        .ToListAsync();
 
                     return PartialView("_searchPartial", act);
                 }
+            }
+            else if (searchDate != null) // 從首頁輸入指定日期進來
+            {
+                if ((startDate != null && endDate != null) || categories == null)
+                {
+                    if (startDate != null && endDate != null)
+                    {
+                        var filteredActivities = await _context.NotificationRecords
+                            .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
+                                && a.StartTime.Value.Date >= startDate.Value.Date
+                                && a.EndTime.Value.Date <= endDate.Value.Date)
+                            .ToListAsync();
+
+                        return PartialView("_searchPartial", filteredActivities);
+                    }
+                    else
+                    {
+                        var act = await _context.NotificationRecords
+                            .Where(p => p.StartTime.HasValue && p.EndTime.HasValue && p.StartTime.Value.Date <= searchDate.Value.Date && p.EndTime.Value.Date >= searchDate.Value.Date)
+                            .ToListAsync();
+
+                        return PartialView("_searchPartial", act);
+                    }
+                }
                 else
                 {
-                    var filteredActivities = _context.NotificationRecords
-                       .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date &&
-                                   categories.Any(c =>
-                                       a.HashTag1.Contains(c) ||
-                                       a.HashTag2.Contains(c) ||
-                                       a.HashTag3.Contains(c) ||
-                                       a.HashTag4.Contains(c) ||
-                                       a.HashTag5.Contains(c)));
-                       
-                    return PartialView("_searchPartial", filteredActivities);
+                    var filteredActivities = await _context.NotificationRecords
+                        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date &&
+                                    categories.Any(c =>
+                                        a.HashTag1.Contains(c) ||
+                                        a.HashTag2.Contains(c) ||
+                                        a.HashTag3.Contains(c) ||
+                                        a.HashTag4.Contains(c) ||
+                                        a.HashTag5.Contains(c)))
+                        .ToListAsync();
 
+                    return PartialView("_searchPartial", filteredActivities);
                 }
             }
+
             return NotFound();
         }
 
 
-        
+
+
+        //[HttpPost]
+        //public IActionResult GetActivitiesByCategories(List<string>? categories, string? searchString, DateTime? searchDate)
+        //{
+        //    if (searchString != null)
+        //    {
+        //        if (categories == null)
+        //        {
+        //            var act = _context.NotificationRecords
+        //               .Where(p => p.ActivityName.Contains(searchString))
+        //               .ToListAsync();
+
+        //            return PartialView("_searchPartial", act);
+        //        }
+        //        else
+        //        {
+        //            var filteredActivities = _context.NotificationRecords
+        //               .Where(a => a.ActivityName.Contains(searchString) &&
+        //                           categories.Any(c =>
+        //                               a.HashTag1.Contains(c) ||
+        //                               a.HashTag2.Contains(c) ||
+        //                               a.HashTag3.Contains(c) ||
+        //                               a.HashTag4.Contains(c) ||
+        //                               a.HashTag5.Contains(c)));
+
+        //            return PartialView("_searchPartial", filteredActivities);
+
+        //        }
+        //    }
+        //    else if (searchDate != null)
+        //    {
+        //        if (categories == null)
+        //        {
+        //            var act = _context.NotificationRecords
+        //               .Where(p => p.StartTime.HasValue && p.EndTime.HasValue && p.StartTime.Value.Date <= searchDate.Value.Date && p.EndTime.Value.Date >= searchDate.Value.Date)
+        //               .ToListAsync();
+
+        //            return PartialView("_searchPartial", act);
+        //        }
+        //        else
+        //        {
+        //            var filteredActivities = _context.NotificationRecords
+        //               .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date &&
+        //                           categories.Any(c =>
+        //                               a.HashTag1.Contains(c) ||
+        //                               a.HashTag2.Contains(c) ||
+        //                               a.HashTag3.Contains(c) ||
+        //                               a.HashTag4.Contains(c) ||
+        //                               a.HashTag5.Contains(c)));
+
+        //            return PartialView("_searchPartial", filteredActivities);
+
+        //        }
+        //    }
+        //    return NotFound();
+        //}
+
+
+        //public IActionResult GetActivitiesByDateRange(DateTime startDate, DateTime endDate)
+        //{
+        //    var filteredActivities = _context.NotificationRecords
+        //        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
+        //            && a.StartTime.Value.Date >= startDate.Date
+        //            && a.EndTime.Value.Date <= endDate.Date)
+        //        .ToListAsync();
+
+        //    return PartialView("_searchPartial", filteredActivities);
+        //}
+
 
         //[HttpPost]
         //public IActionResult SearchByDate(string searchDate)
