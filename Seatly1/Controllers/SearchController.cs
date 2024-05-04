@@ -101,7 +101,7 @@ namespace Seatly1.Controllers
         {
             if (searchString != null) // 從首頁輸入關鍵字進來
             {
-                if (categories != null && startDate != null && endDate != null)
+                if (categories.Count > 0  && startDate != null && endDate != null)
                 {
                     // 分類+區間都有選
                     var filteredActivities = await _context.NotificationRecords
@@ -119,7 +119,7 @@ namespace Seatly1.Controllers
                     return PartialView("_searchPartial", filteredActivities);
                 }
                 
-                else if (categories != null && startDate == null && endDate == null) 
+                else if (categories.Count > 0 && startDate == null && endDate == null) 
                 {
                     // 只選了分類
                     var filteredActivities = await _context.NotificationRecords
@@ -134,7 +134,7 @@ namespace Seatly1.Controllers
 
                     return PartialView("_searchPartial", filteredActivities);
                 }
-                else if (categories == null && startDate != null && endDate !=null)
+                else if (categories.Count == 0 && startDate != null && endDate !=null)
                 {
                     // 只選了區間
                     var filteredActivities = await _context.NotificationRecords

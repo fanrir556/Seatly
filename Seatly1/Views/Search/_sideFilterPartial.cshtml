@@ -47,8 +47,7 @@
 
 
 <script>
-    var selectedStartDate;
-    var selectedEndDate;
+
 
     var searchKeyword = sessionStorage.getItem("searchString");
     var parameters = {
@@ -72,9 +71,8 @@
         });
 
         // 监听日期选择器变化事件
-        $('#searchDurtion').click(function () {
-            var selectedStartDate = $('#startDatePicker').val();
-            var selectedEndDate = $('#endDatePicker').val();
+        $('#searchDurtion').click(handleDuration)
+           
 
             // console.log(selectedStartDate);
             // console.log(selectedEndDate);
@@ -85,7 +83,6 @@
             // parametersDate.startDate = selectedStartDate;
             // parametersDate.endDate = selectedEndDate;
 
-            handleCheckboxClickInsert(selectedStartDate, selectedEndDate); // 调用封装的函数
 
 
             // // 在控制台输出更新后的参数对象
@@ -94,12 +91,12 @@
 
             // // 在这里执行 AJAX 请求或其他操作，使用更新后的 parameters 对象或 parametersDate 对象作为数据
            
-        });
+        
 
         // 监听复选框点击事件
         $('input[type="checkbox"]').click(handleCheckboxClick);
 
-        // 封装复选框点击事件的函数
+        // checkbox篩選
         function handleCheckboxClick() {
             var selectedCategories = [];
             var checked = $('input[type="checkbox"]:checked');
@@ -117,10 +114,10 @@
             parameters.categories = selectedCategories;
             parametersDate.categories = selectedCategories;
 
-            parameters.startDate = selectedStartDate;
-            parameters.endDate = selectedEndDate;
-            parametersDate.startDate = selectedStartDate;
-            parametersDate.endDate = selectedEndDate;
+            // parameters.startDate = selectedStartDate;
+            // parameters.endDate = selectedEndDate;
+            // parametersDate.startDate = selectedStartDate;
+            // parametersDate.endDate = selectedEndDate;
 
             // 在这里执行 AJAX 请求或其他操作，使用更新后的 parameters 对象或 parametersDate 对象作为数据
             if (searchKeyword !== null) {
@@ -180,32 +177,22 @@
             }
         }
 
-        // 封装复选框点击事件的函数有insert值
-        function handleCheckboxClickInsert(selectedStartDate, selectedEndDate) {
-            var selectedCategories = [];
-            var checked = $('input[type="checkbox"]:checked');
-
-            if ($(this).attr("id") !== "all" && $("#all").prop("checked")) {
-                $("#all").prop("checked", false);
-            } else if (checked.length == 0) {
-                $("#all").prop("checked", true);
-            }
-            $('input[type="checkbox"]:checked').each(function () {
-                selectedCategories.push($(this).data('category'));
-            });
+        // 日期篩選
+        function handleDuration() {
+            $("#all").prop("checked", false)
+            var selectedStartDate = $('#startDatePicker').val();
+            var selectedEndDate = $('#endDatePicker').val();
 
             // 更新参数对象的 categories 属性
-            parameters.categories = selectedCategories;
-            parametersDate.categories = selectedCategories;
+            // parameters.categories = selectedCategories;
+            // parametersDate.categories = selectedCategories;
 
-            parameters.startDate = selectedStartDate;
-            parameters.endDate = selectedEndDate;
-            parametersDate.startDate = selectedStartDate;
-            parametersDate.endDate = selectedEndDate;
+            
+           
 
             // 在这里执行 AJAX 请求或其他操作，使用更新后的 parameters 对象或 parametersDate 对象作为数据
             if (searchKeyword !== null) {
-                if (selectedCategories.includes('all')) {
+                if (selectedStartDate == null && selectedEndDate == null) {
                     // 根据 searchString 进行初始搜索
                     $.ajax({
                         type: "GET",
@@ -218,6 +205,9 @@
                     });
                 } else {
                     // 根据选中的筛选项进行搜索
+                    parameters.categories = undefined;
+                    parameters.startDate = selectedStartDate;
+                    parameters.endDate = selectedEndDate;
                     $.ajax({
                         type: "POST",
                         url: "/Search/GetActivitiesByCategories",
@@ -233,7 +223,7 @@
                     });
                 }
             } else if (searchDateStart !== null) {
-                if (selectedCategories.includes('all')) {
+                if (selectedStartDate == null && selectedEndDate == null) {
                     // 根据 searchString 进行初始搜索
                     $.ajax({
                         type: "GET",
@@ -246,6 +236,9 @@
                     });
                 } else {
                     // 根据选中的日期进行搜索
+                    parametersDate.categories = undefined;
+                    parametersDate.startDate = selectedStartDate;
+                    parametersDate.endDate = selectedEndDate;
                     $.ajax({
                         type: "POST",
                         url: "/Search/GetActivitiesByCategories",
