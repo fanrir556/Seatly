@@ -107,8 +107,8 @@ namespace Seatly1.Controllers
                     var filteredActivities = await _context.NotificationRecords
                     .Where(p => p.ActivityName.Contains(searchString) &&
         p.StartTime.HasValue && p.EndTime.HasValue &&
-        p.StartTime.Value.Date >= startDate.Value.Date &&
-        p.EndTime.Value.Date <= endDate.Value.Date &&
+        p.StartTime.Value.Date <= startDate.Value.Date &&
+        p.EndTime.Value.Date >= endDate.Value.Date && p.EndTime.Value.Date >= startDate.Value.Date &&
         categories.Any(c =>
             p.HashTag1.Contains(c) ||
             p.HashTag2.Contains(c) ||
@@ -139,9 +139,9 @@ namespace Seatly1.Controllers
                 {
                     // 只選了區間
                     var filteredActivities = await _context.NotificationRecords
-                           .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
-                               && a.StartTime.Value.Date >= startDate.Value.Date
-                               && a.EndTime.Value.Date <= endDate.Value.Date)
+                           .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue
+                               && a.StartTime.Value.Date <= startDate.Value.Date &&
+        a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date)
                            .ToListAsync();
 
                     return PartialView("_searchPartial", filteredActivities);
@@ -163,14 +163,16 @@ namespace Seatly1.Controllers
                     // 分類+區間都有選
                     var filteredActivities = await _context.NotificationRecords
                         .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
-                            && a.StartTime.Value.Date >= startDate.Value.Date
-                            && a.EndTime.Value.Date <= endDate.Value.Date
+                               && a.StartTime.Value.Date <= startDate.Value.Date &&
+        a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date
                             && categories.Any(c =>
                                 a.HashTag1.Contains(c) ||
                                 a.HashTag2.Contains(c) ||
                                 a.HashTag3.Contains(c) ||
                                 a.HashTag4.Contains(c) ||
-                                a.HashTag5.Contains(c)))
+                                a.HashTag5.Contains(c) &&
+        a.StartTime.Value.Date <= searchDate.Value.Date &&
+        a.EndTime.Value.Date >= searchDate.Value.Date))
                         .ToListAsync();
 
                     return PartialView("_searchPartial", filteredActivities);
@@ -179,7 +181,7 @@ namespace Seatly1.Controllers
                 {
                     // 只選了分類
                     var filteredActivities = await _context.NotificationRecords
-                        .Where(a => categories.Any(c =>
+                        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date && categories.Any(c =>
                                 a.HashTag1.Contains(c) ||
                                 a.HashTag2.Contains(c) ||
                                 a.HashTag3.Contains(c) ||
@@ -193,9 +195,9 @@ namespace Seatly1.Controllers
                 {
                     // 只選了區間
                     var filteredActivities = await _context.NotificationRecords
-                        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
-                            && a.StartTime.Value.Date >= startDate.Value.Date
-                            && a.EndTime.Value.Date <= endDate.Value.Date)
+                        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date
+                               && a.StartTime.Value.Date <= startDate.Value.Date &&
+        a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date)
                         .ToListAsync();
 
                     return PartialView("_searchPartial", filteredActivities);

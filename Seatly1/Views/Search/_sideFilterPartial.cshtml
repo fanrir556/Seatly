@@ -39,8 +39,8 @@
     <label><input type="date" id="startDatePicker" class="form-control"></label>
     <legend class="search-filter-group_header">活動結束日期</legend>
     <label><input type="date" id="endDatePicker" class="form-control"></label>
-    <button class="btn btn-primary" type="button" id="searchDurtion">日期區間搜尋</button>
-    <button class="btn btn-primary" type="button" id="clearDurtion">清除日期</button>
+    <button class="btn btn-primary m-1" type="button" id="searchDurtion">日期區間搜尋</button>
+    <button class="btn btn-primary m-1" type="button" id="clearDurtion">清除日期</button>
 
    
 </fieldset>
@@ -70,30 +70,10 @@
             $("#all").prop("checked", true); 
         });
 
-        // 监听日期选择器变化事件
+        // 日期篩選變化
         $('#searchDurtion').click(handleDuration)
-           
 
-            // console.log(selectedStartDate);
-            // console.log(selectedEndDate);
-
-            // 更新参数对象的 startDate 和 endDate 属性
-            // parameters.startDate = selectedStartDate;
-            // parameters.endDate = selectedEndDate;
-            // parametersDate.startDate = selectedStartDate;
-            // parametersDate.endDate = selectedEndDate;
-
-
-
-            // // 在控制台输出更新后的参数对象
-            // console.log(parameters);
-            // console.log(parametersDate);
-
-            // // 在这里执行 AJAX 请求或其他操作，使用更新后的 parameters 对象或 parametersDate 对象作为数据
-           
-        
-
-        // 监听复选框点击事件
+        // 分類篩選變化
         $('input[type="checkbox"]').click(handleCheckboxClick);
 
         // checkbox篩選
@@ -110,7 +90,7 @@
                 selectedCategories.push($(this).data('category'));
             });
 
-            // 更新参数对象的 categories 属性
+            // 更新 categories 
             parameters.categories = selectedCategories;
             parametersDate.categories = selectedCategories;
 
@@ -119,10 +99,9 @@
             // parametersDate.startDate = selectedStartDate;
             // parametersDate.endDate = selectedEndDate;
 
-            // 在这里执行 AJAX 请求或其他操作，使用更新后的 parameters 对象或 parametersDate 对象作为数据
             if (searchKeyword !== null) {
                 if (selectedCategories.includes('all')) {
-                    // 根据 searchString 进行初始搜索
+                    // 原始搜尋
                     $.ajax({
                         type: "GET",
                         url: '@Url.Action("SearchPartial", "Search")',
@@ -133,7 +112,7 @@
                         alert(err.responseText);
                     });
                 } else {
-                    // 根据选中的筛选项进行搜索
+                    // 
                     $.ajax({
                         type: "POST",
                         url: "/Search/GetActivitiesByCategories",
@@ -150,7 +129,7 @@
                 }
             } else if (searchDateStart !== null) {
                 if (selectedCategories.includes('all')) {
-                    // 根据 searchString 进行初始搜索
+                    // 
                     $.ajax({
                         type: "GET",
                         url: '@Url.Action("SearchPartial", "Search")',
@@ -161,7 +140,7 @@
                         alert(err.responseText);
                     });
                 } else {
-                    // 根据选中的日期进行搜索
+                    // 
                     $.ajax({
                         type: "POST",
                         url: "/Search/GetActivitiesByCategories",
@@ -183,17 +162,11 @@
             var selectedStartDate = $('#startDatePicker').val();
             var selectedEndDate = $('#endDatePicker').val();
 
-            // 更新参数对象的 categories 属性
-            // parameters.categories = selectedCategories;
-            // parametersDate.categories = selectedCategories;
-
             
-           
 
-            // 在这里执行 AJAX 请求或其他操作，使用更新后的 parameters 对象或 parametersDate 对象作为数据
             if (searchKeyword !== null) {
                 if (selectedStartDate == null && selectedEndDate == null) {
-                    // 根据 searchString 进行初始搜索
+                    // 首頁輸入關鍵字 原始搜尋 
                     $.ajax({
                         type: "GET",
                         url: '@Url.Action("SearchPartial", "Search")',
@@ -204,7 +177,7 @@
                         alert(err.responseText);
                     });
                 } else {
-                    // 根据选中的筛选项进行搜索
+                    // 加入篩選
                     parameters.categories = undefined;
                     parameters.startDate = selectedStartDate;
                     parameters.endDate = selectedEndDate;
@@ -224,7 +197,7 @@
                 }
             } else if (searchDateStart !== null) {
                 if (selectedStartDate == null && selectedEndDate == null) {
-                    // 根据 searchString 进行初始搜索
+                    // 首頁輸入日期 原始搜尋
                     $.ajax({
                         type: "GET",
                         url: '@Url.Action("SearchPartial", "Search")',
@@ -235,7 +208,7 @@
                         alert(err.responseText);
                     });
                 } else {
-                    // 根据选中的日期进行搜索
+                    // 加入篩選
                     parametersDate.categories = undefined;
                     parametersDate.startDate = selectedStartDate;
                     parametersDate.endDate = selectedEndDate;
@@ -254,16 +227,26 @@
             }
         }
 
-
-
-
-
         // 清除日期
         $('#clearDurtion').click(function () {
             $('#startDatePicker').val('');
             $('#endDatePicker').val('');
 
+            parameters.startDate = null;
+            parameters.endDate = null;
+            parametersDate.startDate = null;
+            parametersDate.endDate = null;
+
+            // 儲存已選中的分類篩選項目
+            var selectedCategories = [];
+            $('input[type="checkbox"]:checked').each(function () {
+                selectedCategories.push($(this).data('category'));
+            });
+
+          
             handleCheckboxClick();
+
+           
         })
     });
 
