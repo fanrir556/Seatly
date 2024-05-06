@@ -56,24 +56,13 @@ var vueApp = {
             reader.onload = function () {
                 // 將 Data URL 轉成 Base64 字串
                 const base64String = reader.result.split(',')[1]
-                // 將 Base64 字串轉成 byte 陣列
-                const byteArray = []
-                for (let i = 0; i < base64String.length; i += 4) {
-                    const bytes = atob(base64String.slice(i, i + 4))
-                    for (let j = 0; j < bytes.length; j++) {
-                        byteArray.push(bytes.charCodeAt(j))
-                    }
-                }
-                // 輸出 varbinary 字串
-                console.log(byteArray.join(','))
-                const vbUploadedFile = new Blob([new Uint8Array(byteArray)]); // 轉換回 Blob 對象
 
                 // 建立formdata
                 const formData = new FormData()
 
                 // 将需要上传的数据添加到 FormData 对象中
                 formData.append('OrganizerId', organizeridInt);
-                formData.append('ActivityPhoto', vbUploadedFile, uploadedFile.name); // 添加被轉換成 Blob 的圖片
+                formData.append('ActivityPhoto', base64String); // 添加被轉換成 Blob 的圖片
                 formData.append('StartTime', this.StartTime);
                 formData.append('EndTime', this.EndTime);
                 formData.append('Capacity', this.Capacity);
