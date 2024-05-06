@@ -28,24 +28,6 @@ var vueApp = {
             }
             return organizerid;
         },
-        // 上傳照片
-        uploadFile() {
-            console.log(this)
-            const uploadedFile = this.$refs.files.files[0]
-            const vm = this
-            const formData = new FormData()
-            formData.append('ActivityPhoto', uploadedFile)
-            const url = `/api/OrganizersApi/activity`
-            this.$http.post(url, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then((response) => {
-                if (response.data.success) {
-                    vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl)
-                }
-            })
-        },
         submitAddForm() {
             // 执行 Bootstrap 5 表单验证
             let forms = document.querySelectorAll('.needs-validation');
@@ -59,27 +41,39 @@ var vueApp = {
                 this.addActivity();
             }
         },
+        // 新增活動
         addActivity() {
             // 透過Session取得活動方的id並轉為數字
-            let organizeridInt = parseInt(`${sessionStorage.getItem("OrganizerId")}`); 
+            let organizeridInt = parseInt(`${sessionStorage.getItem("OrganizerId")}`);
 
-            // Send a POST request
-            axios.post('/api/OrganizersApi/activity', {
-                OrganizerId: organizeridInt,
-                ActivityPhoto: null,
-                StartTime: this.StartTime,
-                EndTime: this.EndTime,
-                Capacity: this.Capacity,
-                ActivityName: this.ActivityName,
-                DescriptionN: this.DescriptionN,
-                RecurringTime: this.RecurringTime,
-                IsRecurring: Boolean(this.IsRecurring), // 字串轉成布林值傳送
+            const uploadedFile = this.$refs.files.files[0]
+
+            const formData = new FormData()
+
+            // 将需要上传的数据添加到 FormData 对象中
+            formData.append('OrganizerId', organizeridInt);
+            formData.append('ActivityPhoto', uploadedFile); // 添加 Blob 对象
+            formData.append('StartTime', this.StartTime);
+            formData.append('EndTime', this.EndTime);
+            formData.append('Capacity', this.Capacity);
+            formData.append('ActivityName', this.ActivityName);
+            formData.append('DescriptionN', this.DescriptionN);
+            formData.append('RecurringTime', this.RecurringTime);
+            formData.append('IsRecurring', Boolean(this.IsRecurring));
+
+            // 发送 POST 请求
+            axios.post('/api/OrganizersApi/activity', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
+                }
             })
                 .then(function (response) {
                     console.log(response);
+                    alert("新增活動成功");
                 })
                 .catch(function (error) {
                     console.log(error);
+                    alert("新增活動失敗");
                 });
         },
         photopreview() {
