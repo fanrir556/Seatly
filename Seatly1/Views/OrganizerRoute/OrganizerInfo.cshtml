@@ -1,0 +1,205 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>活動方資訊頁</title>
+</head>
+
+<body>
+
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+        <!--資訊頁開始-->
+        <section class="py-8 overflow-hidden">
+            <div id="app" class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-start text-md-center mb-3">活動方資訊頁</h1>
+                    </div>
+                    <!-- col-8 start -->
+                    <div class="col-12 col-md-8 offset-md-2">
+                        <!-- 表單 start -->
+                        <form id="modifyOrganizerForm" class="needs-validation" novalidate>
+                            <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
+                            <div class="row">
+                                <div class="col-12 col-md-3">
+                                    <label for="account" class="form-label">活動方帳號</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <!-- input.form-control[type="text"] -->
+                                    <input type="text" id="account" name="account" class="form-control" placeholder="請輸入活動方帳號"
+                                           disabled readonly>
+                                    <div class="invalid-feedback">此為必填欄位</div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="name" class="form-label">修改活動方名稱</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <!-- input.form-control[type="text"] -->
+                                    <input type="text" id="name" name="name" class="form-control" placeholder="請輸入活動方名稱"
+                                           required>
+                                    <div class="invalid-feedback">
+                                        此為必填欄位
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="category" class="form-label">修改活動方分類</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="text" id="category" name="category" class="form-control" placeholder="請輸入活動方分類"
+                                           required>
+                                    <div id="invalid_category" class="invalid-feedback">
+                                        此為必填欄位
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="menu" class="form-label">修改菜單</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="text" id="menu" name="menu" class="form-control" placeholder="請輸入菜單" required>
+                                    <div id="invalid_menu" class="invalid-feedback">
+                                        此為必填欄位
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="address" class="form-label">修改地址</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="text" id="address" name="地址" class="form-control" placeholder="請輸入地址">
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="final-enter" class="form-label">修改活動方網址</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="text" id="URL" name="URL" class="form-control" placeholder="請輸入活動網址" required>
+                                    <div id="invalid_url" class="invalid-feedback">
+                                        此為必填欄位
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="hashtag" class="form-label">修改hashtag</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="text" id="hashtag" name="hashtag" class="form-control" placeholder="請輸入hashtag" required>
+                                    <div id="invalid_hashtag" class="invalid-feedback">
+                                        此為必填欄位
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="email" class="form-label">修改Email</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="text" id="email" name="email" class="form-control" placeholder="name@example.com" required>
+                                    <div id="invalid_email" class="invalid-feedback">
+                                        此為必填欄位
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="phone" class="form-label">修改連絡電話</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="text" id="phone" name="phone" class="form-control" placeholder="請輸入電話/手機號碼" required>
+                                    <div id="invalid_phone" class="invalid-feedback">
+                                        此為必填欄位
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="password1" class="form-label">
+                                        修改密碼
+                                    </label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="password" id="password1" name="password1" class="form-control"
+                                           placeholder="請輸入密碼" required>
+                                    <div id="invalid_password1" class="invalid-feedback">
+                                        此為必填欄位
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="password2" class="form-label">確認密碼</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="password" id="password2" name="password2" class="form-control"
+                                           placeholder="請再次輸入密碼" required>
+                                    <div id="invalid_password2" class="invalid-feedback">
+                                        此為必填欄位
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label for="photo" class="form-label">修改活動方照片</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    @* 顯示圖片預覽 *@
+                                    <img style="width:320px;height:240px" id="preview" src="~/images/NoImage.jpg" class="img-fluid mb-3">
+                                    <input type="file" id="imageInput" name="imageInput" class="form-control" aria-label="file example"
+                                           placeholder="請上傳活動方照片" required>
+                                    <div id="invalid_imageInput" class="invalid-feedback">
+                                        請選擇要上傳的圖片
+                                    </div>
+                                </div>
+                                <div id="status" class="valid-feedback">
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column flex-md-row bd-highlight mb-3 justify-content-md-start justify-content-sm-end">
+                                <div class="p-2 bd-highlight sm-w-100 ml-auto">
+                                    <button id="submit" type="submit" class="btn btn-primary" formnovalidate>送出修改</button>
+                                </div>
+                                <div class="p-2 bd-highlight sm-w-100 ml-auto">
+                                    <button id="submit2" type="button" class="btn btn-danger" formnovalidate>申請刪除活動方</button>
+                                </div>
+                                <div class="p-2 bd-highlight sm-w-100 ml-auto">
+                                    <button id="submit3" type="button" class="btn btn-primary" formnovalidate>更新活動資訊</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <!-- 表單 end -->
+            </div>
+            <!-- col-8 end -->
+        </section>
+        <!--註冊頁結束-->
+
+    </main>
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    @section Scripts{
+        <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/OrganizerInfo.js"></script>
+    }
+</body>
+
+</html>

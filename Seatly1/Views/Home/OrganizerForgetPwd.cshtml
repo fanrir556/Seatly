@@ -1,0 +1,115 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@* <!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>忘記密碼</title>
+</head>
+
+<body>
+    <main class="main" id="top">
+        <!--登入頁開始-->
+        <section class="py-8 overflow-hidden">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-start text-md-center mb-3">活動方登入</h1>
+                    </div>
+                    <div class="col-12 col-md-8 offset-md-2">
+                        <!-- 表單 start -->
+                        <form id="forgetPasswordForm" class="needs-validation" novalidate>
+                            <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
+                            <div class="row">
+                                <div class="col-12 col-md-3">
+                                    <label for="forgetPasswordEmail" class="form-label">請輸入註冊信箱</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <!-- input.form-control[type="text"] -->
+                                    <input type="text" id="loginaccount" name="loginaccount" class="form-control"
+                                           placeholder="請輸入帳號" required>
+                                    <div class="valid-feedback"></div>
+                                    <div class="invalid-feedback">
+                                        帳號不可為空。
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label for="loginpassword" class="form-label">密碼</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="password" id="loginpassword" name="loginpassword" class="form-control"
+                                           placeholder="請輸入密碼" required>
+                                    <div class="valid-feedback"></div>
+                                    <div class="invalid-feedback">
+                                        密碼不可為空。
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="col-12 mb-3">
+                            <input type="checkbox" id="check" class="form-check-input">
+                            <label for="check" class="form-check-label">我已詳閱並同意 <a href="#">使用者條款</a> & <a href="#">隱私權保護政策</a></label>
+                            </div> -->
+                            <div class="row">
+                                <div class="col-md-12 col-sm-4 mb-3 d-flex flex-row-reverse bd-highlight">
+                                    <button id="login" type="submit" class="btn btn-primary margin-right mx-2">登入</button>
+                                    <button id="forget" type="button"
+                                            class="btn btn-primary margin-right">
+                                        忘記密碼
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+
+                        <!-- 登入失敗Modal -->
+                        <div class="modal fade" id="loginErrorModal" tabindex="-1" role="dialog" aria-labelledby="loginErrorModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="loginErrorModalLabel">登入失敗</h5>
+                                        <button type="button" id="closeErrorModalBtn2" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p id="errorMessage"></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" id="closeErrorModalBtn" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- 表單 end -->
+            </div>
+        </section>
+
+    </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!--加入jquery-->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> <!--加入Vue.js-->
+    @*     <script src="vendors/@popperjs/popper.min.js"></script> *@
+@*     <script src="vendors/bootstrap/bootstrap.min.js"></script>
+    <script src="vendors/is/is.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+    <script src="vendors/fontawesome/all.min.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="~/js/organizer.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap"
+          rel="stylesheet">
+</body>
+
+</html> *@

@@ -1,0 +1,221 @@
+﻿@model IEnumerable<Seatly1.Models.NotificationRecord>
+
+@{
+    ViewData["Title"] = "NotificationRecord";
+}
+
+<style>
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+        margin:2px;
+    }
+
+</style>
+
+
+
+<h1>活動瀏覽</h1>
+
+<button class="btn btn-primary btn-sm" id="createButton">
+    新增活動
+</button>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ActivityId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActivityPhoto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Capacity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActivityName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescriptionN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsRecurring)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecurringTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActivityMethod)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActivity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HashTag1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HashTag2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HashTag3)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HashTag4)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HashTag5)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActivityId)
+                </td>
+                <td>
+                    <partial name="_ShowActivityPhoto" model="@item" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Capacity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActivityName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DescriptionN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsRecurring)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RecurringTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActivityMethod)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActivity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HashTag1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HashTag2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HashTag3)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HashTag4)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HashTag5)
+                </td>
+
+
+            </tr>
+
+             <td class="float-end" @* style="width: 200px;" *@>
+                <div class="btn-group" role="group">
+                <button class="activity-button edit-button btn btn-secondary btn-sm" data-clickid="@item.ActivityId" style="min-width: 70px;">編輯</button>
+                <button class="activity-button delete-button btn btn-primary btn-sm" data-clickid="@item.ActivityId" style="min-width: 70px;">刪除</button>
+                </div>
+            </td>
+
+        }
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+
+
+        function Load() {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_NotificationRecord", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        } 
+
+
+        $("#createButton").click(function () {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("Create", "NotificationRecord")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        });
+
+        $(".edit-button").click(function () {
+            var clickid = $(this).data("clickid");
+            // alert(clickid)
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("Edit", "NotificationRecord")`,
+                data: {id:clickid},
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        });
+
+        //刪除按鈕
+        $(".delete-button").click(function () {
+            var clickid = $(this).data("clickid");
+            // alert(clickid)
+            var ret = confirm("確定要刪除?");
+            //確認刪除後進入到ajax
+            if (ret == true) {
+                $.ajax({
+                    type: "POST",
+                    url: `@Url.Action("_NotificationRecord_Delete", "Admin")`,
+                    data: { id: clickid },
+                        success: function (response) {
+                            alert("刪除成功");
+                            Load();
+                        },
+                        error: function (xhr, status, error) {
+                            // 刪除失敗後的處理
+                            console.error(xhr.responseText);
+                        }
+                });
+            }
+        });
+    });
+</script>
