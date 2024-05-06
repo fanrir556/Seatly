@@ -46,35 +46,57 @@ var vueApp = {
             // 透過Session取得活動方的id並轉為數字
             let organizeridInt = parseInt(`${sessionStorage.getItem("OrganizerId")}`);
 
+            // 讀取圖片
             const uploadedFile = this.$refs.files.files[0]
 
-            const formData = new FormData()
+            const reader = new FileReader()
+            // 轉換成 Data URL
+            reader.readAsDataURL(uploadedFile);
 
-            // 将需要上传的数据添加到 FormData 对象中
-            formData.append('OrganizerId', organizeridInt);
-            formData.append('ActivityPhoto', uploadedFile); // 添加 Blob 对象
-            formData.append('StartTime', this.StartTime);
-            formData.append('EndTime', this.EndTime);
-            formData.append('Capacity', this.Capacity);
-            formData.append('ActivityName', this.ActivityName);
-            formData.append('DescriptionN', this.DescriptionN);
-            formData.append('RecurringTime', this.RecurringTime);
-            formData.append('IsRecurring', Boolean(this.IsRecurring));
-
-            // 发送 POST 请求
-            axios.post('/api/OrganizersApi/activity', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
+            reader.onload = function () {
+                // 將 Data URL 轉成 Base64 字串
+                const base64String = reader.result.split(',')[1]
+                // 將 Base64 字串轉成 byte 陣列
+                const byteArray = []
+                for (let i = 0; i < base64String.length; i += 4) {
+                    const bytes = atob(base64String.slice(i, i + 4))
+                    for (let j = 0; j < bytes.length; j++) {
+                        byteArray.push(bytes.charCodeAt(j))
+                    }
                 }
-            })
-                .then(function (response) {
-                    console.log(response);
-                    alert("新增活動成功");
+                // 輸出 varbinary 字串
+                console.log(byteArray.join(','))
+                const vbUploadedFile = new Blob([new Uint8Array(byteArray)]); // 轉換回 Blob 對象
+
+                // 建立formdata
+                const formData = new FormData()
+
+                // 将需要上传的数据添加到 FormData 对象中
+                formData.append('OrganizerId', organizeridInt);
+                formData.append('ActivityPhoto', vbUploadedFile, uploadedFile.name); // 添加被轉換成 Blob 的圖片
+                formData.append('StartTime', this.StartTime);
+                formData.append('EndTime', this.EndTime);
+                formData.append('Capacity', this.Capacity);
+                formData.append('ActivityName', this.ActivityName);
+                formData.append('DescriptionN', this.DescriptionN);
+                formData.append('RecurringTime', this.RecurringTime);
+                formData.append('IsRecurring', Boolean(this.IsRecurring));
+
+                // 发送 POST 请求
+                axios.post('/api/OrganizersApi/activity', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
+                    }
                 })
-                .catch(function (error) {
-                    console.log(error);
-                    alert("新增活動失敗");
-                });
+                    .then(function (response) {
+                        console.log(response);
+                        alert("新增活動成功");
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        alert("新增活動失敗");
+                    });
+            }
         },
         photopreview() {
             // 上傳圖片預覽

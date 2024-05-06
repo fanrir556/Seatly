@@ -95,14 +95,6 @@ function addRow() {
 function editRow() {
     alert("edit");
 }
-// Function to edit a row
-//function editRow(button) {
-//    var row = button.parentNode.parentNode;
-//    var cells = row.getElementsByTagName("td");
-//    for (var i = 0; i < cells.length - 1; i++) {
-//        cells[i].setAttribute("contenteditable", "true");
-//    }
-//}
 
 // 刪除活動
 function deleteRow() {
