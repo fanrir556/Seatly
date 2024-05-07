@@ -44,13 +44,9 @@
                                             <label class="visually-hidden" for="inputDelivery">Keyword</label>
                                             <input class="form-control input-box form-foodwagon-control" name="searchString" id="inputDelivery" type="text" placeholder="請輸入關鍵字" />
                                         </div>
+                                        <a class="d-grid gap-3 col-sm-auto" id="customSearchButton" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger">搜尋活動關鍵字</button></a>
                                     </div>
-                                    <div class="d-grid gap-3 col-sm-auto">
-
-                                        <button class="btn btn-danger"><a id="customSearchButton" asp-area="" asp-controller="Search" asp-action="searchIndex">搜尋活動關鍵字</a></button>
-
-
-                                    </div>
+                                    
                                     <form asp-action="Search" method="get" class="row gx-2 gy-2 align-items-center">
                                     </form>
                                 </div>
@@ -61,10 +57,9 @@
                                             <label class="visually-hidden" for="inputPickup">Date</label>
                                             <input class="form-control input-box form-foodwagon-control" name="searchDate" id="inputPickup" type="date" placeholder="請選擇日期" />
                                         </div>
+                                        <a class="d-grid gap-3 col-sm-auto" id="customSearchButtonDate" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger">依日期搜尋</button></a>
                                     </div>
-                                    <div class="d-grid gap-3 col-sm-auto">
-                                        <button class="btn btn-danger"><a id="customSearchButtonDate" asp-area="" asp-controller="Search" asp-action="searchIndex">依日期搜尋</a></button>
-                                    </div>
+                                   
                                     <form asp-action="Search" method="get" class="row gx-2 gy-2 align-items-center">
                                     </form>
                                 </div>

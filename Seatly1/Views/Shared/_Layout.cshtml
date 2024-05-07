@@ -45,11 +45,14 @@
     @* <link href="~/css/theme-rtl.css" rel="stylesheet" /> *@
 
     @RenderSection("Styles", required: false) <!-- 如果提供了 Styles 部分，则渲染 Styles 部分 -->
+   
 </head>
 <body>
     @* ====================================================== *@
         @* nav bar *@
     @* ====================================================== *@
+
+   
 
     @*簽到判定*@
     @{
@@ -70,6 +73,10 @@
                 <span class="navbar-toggler-icon"> </span>
             </button>
 
+            <div id="app" class="collapse navbar-collapse border-top border-lg-0 justify-content-end">
+                <input id="layoutSearch" class=" input-box form-foodwagon-control" type="text" v-model="searchKeyword" placeholder="輸入關鍵字...">
+                <a id="layoutSearchBtn" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger">搜尋</button></a>
+            </div>
 
             <div class="collapse navbar-collapse border-top border-lg-0 justify-content-end" id="navbarSupportedContent">
                 <a class="text-gradient" asp-area="" asp-controller="Admin" asp-action="Index">管理員連接測試</a>
@@ -209,7 +216,8 @@
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/js/layout.js"></script>
-    <script src="https://unpkg.com/vue@latest"></script>
+   
+    
     @* <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js" asp-append-version="true"></script>
@@ -235,4 +243,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap" rel="stylesheet">
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+<!-- ===============================================-->
+<!--    Vue.js-->
+<!-- ===============================================-->
+@* <script src="https://unpkg.com/vue@latest"></script> *@
+<script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
+
+
+
+<script>
+    // layout搜尋
+    $("#layoutSearchBtn").on("click", function (e) {
+        // e.preventDefault();
+        sessionStorage.clear()
+        var searchKeyword = $("#layoutSearch").val()
+        console.log(searchKeyword)
+        sessionStorage.setItem("searchString", searchKeyword)
+        sessionStorage.setItem("isSearching", "true")
+    });
+</script>
 </html>

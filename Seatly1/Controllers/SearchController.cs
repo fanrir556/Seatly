@@ -14,12 +14,14 @@ namespace Seatly1.Controllers
             _context = context;
         }
 
+        // 顯示search view
         public IActionResult searchIndex()
         {
 
             return View();
         }
 
+        // 顯示右半部search partial
         public async Task<IActionResult> searchPartial(string? searchString, DateTime? searchDate)
         {
             if (searchString != null)
@@ -57,6 +59,7 @@ namespace Seatly1.Controllers
             return NotFound();
         }
 
+        // 顯示左半部篩選partial
         [HttpPost]
         public IActionResult sideFilterPartial([FromBody] List<string> hashtags)
         {
@@ -97,7 +100,7 @@ namespace Seatly1.Controllers
             return PartialView("_sideFilterPartial");
         }
 
-
+        // 篩選結果判斷
         [HttpPost]
         public async Task<IActionResult> GetActivitiesByCategories(List<string>? categories, string? searchString, DateTime? searchDate, DateTime? startDate, DateTime? endDate)
         {
@@ -279,17 +282,7 @@ namespace Seatly1.Controllers
         //}
 
 
-        //public IActionResult GetActivitiesByDateRange(DateTime startDate, DateTime endDate)
-        //{
-        //    var filteredActivities = _context.NotificationRecords
-        //        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
-        //            && a.StartTime.Value.Date >= startDate.Date
-        //            && a.EndTime.Value.Date <= endDate.Date)
-        //        .ToListAsync();
-
-        //    return PartialView("_searchPartial", filteredActivities);
-        //}
-
+       
 
         //[HttpPost]
         //public IActionResult SearchByDate(string searchDate)
