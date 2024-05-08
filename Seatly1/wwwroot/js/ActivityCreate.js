@@ -10,7 +10,7 @@ var vueApp = {
             DescriptionN: null,
             RecurringTime: null,
             IsRecurring: '',
-            options: {
+            RecurringOptions: {
                 True: '是',
                 False: '否'
             }
@@ -86,6 +86,7 @@ var vueApp = {
                     .then(function (response) {
                         console.log(response);
                         alert("新增活動成功");
+                        window.location.href = './NotificationRecord';
                     })
                     .catch(function (error) {
                         console.log(error);

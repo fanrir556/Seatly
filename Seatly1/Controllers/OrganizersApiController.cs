@@ -85,6 +85,7 @@ namespace Seatly1.Controllers
                 EndTime = activity.EndTime,
                 Capacity = activity.Capacity,
                 ActivityName = activity.ActivityName,
+                ActivityMethod = activity.ActivityMethod,
                 DescriptionN = activity.DescriptionN,
                 IsRecurring = activity.IsRecurring,
                 RecurringTime = activity.RecurringTime,

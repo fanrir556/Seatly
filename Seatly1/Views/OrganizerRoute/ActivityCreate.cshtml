@@ -74,6 +74,20 @@
                                     </div>
 
                                     <div class="col-12 col-md-3">
+                                        <label for="ActivityMethod" class="form-label">活動方法</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <select v-model="ActivityMethod" class="form-select" id="ActivityMethod" required>
+                                            <option>公告</option>
+                                            <option>排隊</option>
+                                            <option>抽籤</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
                                         <label for="DescriptionN" class="form-label">活動敘述</label>
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
@@ -85,7 +99,7 @@
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
                                         <select v-model="IsRecurring" class="form-select" id="IsRecurring" required>
-                                            <option v-for="(value, key) in options" :value="key">{{ value }}</option>
+                                            <option v-for="(value, key) in RecurringOptions" :value="key">{{ value }}</option>
                                         </select>
                                         <div class="invalid-feedback">
                                             此為必填欄位

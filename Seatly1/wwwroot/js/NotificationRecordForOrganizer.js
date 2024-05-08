@@ -47,7 +47,6 @@ function readRow(activity) {
     var newRow = table.insertRow();
         newRow.innerHTML = `
         <td>${activity.activityId}</td>
-        <td>${activity.organizerId}</td>
         <td><img style="width:240px;height:180px" src="${e.target.result}" alt="Activity Photo"></td>
         <td>${activity.startTime}</td>
         <td>${activity.endTime}</td>

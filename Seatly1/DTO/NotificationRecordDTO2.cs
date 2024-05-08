@@ -15,6 +15,7 @@
         public int? Capacity { get; set; }
 
         public string? ActivityName { get; set; }
+        public string? ActivityMethod { get; set; }
 
         public string? DescriptionN { get; set; }
 
