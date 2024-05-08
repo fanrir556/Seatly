@@ -1,12 +1,12 @@
 ﻿namespace Seatly1.DTO
 {
-    public class NotificactionRecordDTO
+    public class NotificationRecordDTO2
     {
-        public int? ActivityId { get; set; }
+        public int ActivityId { get; set; }
 
         public int? OrganizerId { get; set; }
 
-        public byte[]? ActivityPhoto { get; set; }
+        public IFormFile? ActivityPhoto { get; set; }
 
         public DateTime? StartTime { get; set; }
 

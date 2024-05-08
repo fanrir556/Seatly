@@ -50,26 +50,32 @@ var vueApp = {
             const uploadedFile = this.$refs.files.files[0]
 
             const reader = new FileReader()
-            // 轉換成 Data URL
-            reader.readAsDataURL(uploadedFile);
+
+            // 在回調函數外部保存 `this` 的值
+            const self = this;
 
             reader.onload = function () {
-                // 將 Data URL 轉成 Base64 字串
-                const base64String = reader.result.split(',')[1]
+
+                // reader.result 包含了讀取到的二進位資料
+                var binaryData = reader.result;
+                console.log('Binary Data:', binaryData);
+
+                var blob = new Blob([binaryData]);
+                console.log('blob Data:', blob);
 
                 // 建立formdata
                 const formData = new FormData()
 
                 // 将需要上传的数据添加到 FormData 对象中
                 formData.append('OrganizerId', organizeridInt);
-                formData.append('ActivityPhoto', base64String); // 添加被轉換成 Blob 的圖片
-                formData.append('StartTime', this.StartTime);
-                formData.append('EndTime', this.EndTime);
-                formData.append('Capacity', this.Capacity);
-                formData.append('ActivityName', this.ActivityName);
-                formData.append('DescriptionN', this.DescriptionN);
-                formData.append('RecurringTime', this.RecurringTime);
-                formData.append('IsRecurring', Boolean(this.IsRecurring));
+                formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
+                formData.append('StartTime', self.StartTime);
+                formData.append('EndTime', self.EndTime);
+                formData.append('Capacity', self.Capacity);
+                formData.append('ActivityName', self.ActivityName);
+                formData.append('DescriptionN', self.DescriptionN);
+                formData.append('RecurringTime', self.RecurringTime);
+                formData.append('IsRecurring', Boolean(self.IsRecurring));
 
                 // 发送 POST 请求
                 axios.post('/api/OrganizersApi/activity', formData, {
@@ -86,6 +92,8 @@ var vueApp = {
                         alert("新增活動失敗");
                     });
             }
+            // 讀取檔案為 ArrayBuffer
+            reader.readAsArrayBuffer(uploadedFile);
         },
         photopreview() {
             // 上傳圖片預覽
@@ -105,7 +113,7 @@ var vueApp = {
                     console.log(files);
                 });
             });
-        },
+        }
     },
     // 在應用程式創建時立即執行方法
     created() {

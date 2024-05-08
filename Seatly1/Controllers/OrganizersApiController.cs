@@ -42,6 +42,7 @@ namespace Seatly1.Controllers
         [HttpGet("activities/{organizerId}")]
         public async Task<IEnumerable<NotificationRecordDTO>> GetActivitiesForOrganizer(int organizerId)
         {
+
             var activities = await _context.NotificationRecords
                 .Where(activity => activity.OrganizerId == organizerId)
                 .Select(activity => new NotificationRecordDTO
@@ -63,13 +64,23 @@ namespace Seatly1.Controllers
         }
 
         [HttpPost("activity")]
-        public async Task<string> PostActivitiesForOrganizer(NotificationRecordDTO activity)
+        public async Task<string> PostActivitiesForOrganizer(NotificationRecordDTO2 activity)
         {
+            if (activity.ActivityPhoto == null)
+            {
+                return "未提供活動照片";
+            }
+
+            //MemoryStream 用於將 IFormFile 讀取為 byte 陣列，然後將 byte 陣列儲存到 varbinary 欄位。
+            using var memoryStream = new MemoryStream();
+            await activity.ActivityPhoto.CopyToAsync(memoryStream);
+            var photoBytes = memoryStream.ToArray();
+
             NotificationRecord act = new NotificationRecord
             {
                 ActivityId = activity.ActivityId,
                 OrganizerId = activity.OrganizerId,
-                ActivityPhoto = activity.ActivityPhoto,
+                ActivityPhoto = photoBytes,
                 StartTime = activity.StartTime,
                 EndTime = activity.EndTime,
                 Capacity = activity.Capacity,
@@ -78,6 +89,7 @@ namespace Seatly1.Controllers
                 IsRecurring = activity.IsRecurring,
                 RecurringTime = activity.RecurringTime,
             };
+
             _context.NotificationRecords.Add(act);
             await _context.SaveChangesAsync();
             return "新增活動成功";
