@@ -11,6 +11,7 @@ using System.Drawing;
 using QRCoder;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Cors;
 
 namespace Seatly1.Controllers
 {
@@ -733,5 +734,18 @@ namespace Seatly1.Controllers
             return NotFound();
         }
 
+        //取得logo圖示
+        [HttpGet]
+        [EnableCors("AllowAny")]
+        public IActionResult GetLogo()
+        {
+            var imgUrl = Url.Content("~/images/queuely.png");
+            var cookieOptions = new CookieOptions
+            {
+                Secure = true
+            };
+            Response.Cookies.Append("imageCookie", imgUrl, cookieOptions);
+            return File(imgUrl, "image/png");
+        }
     }
 }
