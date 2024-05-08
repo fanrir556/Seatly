@@ -10,6 +10,7 @@ var vueApp = {
             DescriptionN: null,
             RecurringTime: null,
             IsRecurring: '',
+            ActivityMethod: '',
             RecurringOptions: {
                 True: '是',
                 False: '否'
@@ -28,7 +29,7 @@ var vueApp = {
             }
             return organizerid;
         },
-        submitAddForm() {
+        submitForm() {
             // 执行 Bootstrap 5 表单验证
             let forms = document.querySelectorAll('.needs-validation');
             Array.prototype.slice.call(forms).forEach(function (form) {
@@ -73,6 +74,7 @@ var vueApp = {
                 formData.append('EndTime', self.EndTime);
                 formData.append('Capacity', self.Capacity);
                 formData.append('ActivityName', self.ActivityName);
+                formData.append('ActivityMethod', self.ActivityMethod);
                 formData.append('DescriptionN', self.DescriptionN);
                 formData.append('RecurringTime', self.RecurringTime);
                 formData.append('IsRecurring', Boolean(self.IsRecurring));

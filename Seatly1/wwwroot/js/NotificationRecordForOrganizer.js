@@ -52,6 +52,7 @@ function readRow(activity) {
         <td>${activity.endTime}</td>
         <td>${activity.capacity}</td>
         <td>${activity.activityName}</td>
+        <td>${activity.activityMethod}</td>
         <td>${activity.descriptionN}</td>
         <td>${activity.isRecurring}</td>
         <td>${activity.recurringTime}</td>

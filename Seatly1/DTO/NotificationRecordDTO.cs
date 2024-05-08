@@ -16,6 +16,8 @@
 
         public string? ActivityName { get; set; }
 
+        public string? ActivityMethod { get; set; }
+
         public string? DescriptionN { get; set; }
 
         public bool? IsRecurring { get; set; }

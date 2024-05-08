@@ -48,12 +48,12 @@ namespace Seatly1.Controllers
                 .Select(activity => new NotificationRecordDTO
                 {
                     ActivityId = activity.ActivityId,
-                    OrganizerId = activity.OrganizerId,
                     ActivityPhoto = activity.ActivityPhoto,
                     StartTime = activity.StartTime,
                     EndTime = activity.EndTime,
                     Capacity = activity.Capacity,
                     ActivityName = activity.ActivityName,
+                    ActivityMethod = activity.ActivityMethod,
                     DescriptionN = activity.DescriptionN,
                     IsRecurring = activity.IsRecurring,
                     RecurringTime = activity.RecurringTime,
