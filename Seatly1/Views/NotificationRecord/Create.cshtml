@@ -19,8 +19,8 @@
 
             <div class="form-group">
                 <label asp-for="ActivityPhoto" class="control-label"></label>
-                <partial name="_ShowActivityPhoto"/>
-                <input type="file" id="ActivityPhoto" name="ActivityPhoto" class="form-control" accept="image/*" style="margin:7px;"/>
+                <partial name="_ShowActivityPhoto" />
+                <input type="file" id="ActivityPhoto" name="ActivityPhoto" class="form-control" accept="image/*" style="margin:7px;" />
             </div>
 
             <div class="form-group">
@@ -107,67 +107,63 @@
     </div>
 </div>
 
-<div>
-    <a id="NotificationRecord_Create_back">Back to List</a>
-</div>
 
 
 
-    <script>
-        function previewImage(inputFile, img) {
-            if (inputFile.files && inputFile.files[0]) {
-                var file = inputFile.files[0];
-                var allowType = "image.*";
-                if (file.type.match(allowType)) {
-                    //預覽
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        img.attr("src", e.target.result);
-                        img.attr("title", inputFile.files[0].name);
-                    };
+<script>
+    function previewImage(inputFile, img) {
+        if (inputFile.files && inputFile.files[0]) {
+            var file = inputFile.files[0];
+            var allowType = "image.*";
+            if (file.type.match(allowType)) {
+                //預覽
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    img.attr("src", e.target.result);
+                    img.attr("title", inputFile.files[0].name);
+                };
 
-                    reader.readAsDataURL(inputFile.files[0]);
-                    $(".btn").prop("disabled", false);
+                reader.readAsDataURL(inputFile.files[0]);
+                $(".btn").prop("disabled", false);
 
-                }
+            }
 
-                else {
-                    alert("不支援檔案類型");
-                    $(".btn").prop("disabled", true);
-                }
+            else {
+                alert("不支援檔案類型");
+                $(".btn").prop("disabled", true);
             }
         }
+    }
 
 
-        $("#ActivityPhoto").change(function () {
-            previewImage(this, $("#ActivityPhoto").prev());
+    $("#ActivityPhoto").change(function () {
+        previewImage(this, $("#ActivityPhoto").prev());
+    });
+
+
+
+
+    $("#createButton").click(function (e) {
+        e.preventDefault(); // 防止表單的默認提交行為
+        // var formData = $("form").serialize();
+        var formData = new FormData($("form")[0]);
+        // 發送 AJAX 請求
+        $.ajax({
+            type: "POST",
+            url: `/NotificationRecord/Create`, // 如果路徑正確，則可以直接指定URL
+            data: formData, // 將序列化後的表單數據發送到服務器
+            contentType: false, // 不設置 contentType，讓 jQuery 自動設置為 multipart/form-data
+            processData: false, // 不處理數據，讓 jQuery 不將數據轉為字串
+            success: function (data) {
+                $("#adminBody").html(data);
+            },
+            error: function (xhr, status, error) {
+                // 請求失敗時的處理
+                console.error(xhr.responseText);
+            }
         });
+    });
 
 
 
-
-        $("#createButton").click(function (e) {
-            e.preventDefault(); // 防止表單的默認提交行為
-            // var formData = $("form").serialize();
-             var formData = new FormData($("form")[0]);
-            // 發送 AJAX 請求
-            $.ajax({
-                type: "POST",
-                url: `/NotificationRecord/Create`, // 如果路徑正確，則可以直接指定URL
-                data: formData, // 將序列化後的表單數據發送到服務器
-                contentType: false, // 不設置 contentType，讓 jQuery 自動設置為 multipart/form-data
-                processData: false, // 不處理數據，讓 jQuery 不將數據轉為字串
-                success: function (data) {
-                    $("#adminBody").html(data);
-                },
-                error: function (xhr, status, error) {
-                    // 請求失敗時的處理
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-
-
-
-    </script>
-
+</script>

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Seatly1.Models;
 
+
 public partial class CollectionItem
 {
     [Key]
