@@ -735,17 +735,33 @@ namespace Seatly1.Controllers
         }
 
         //取得logo圖示
-        [HttpGet]
-        [EnableCors("AllowAny")]
-        public IActionResult GetLogo()
-        {
-            var imgUrl = Url.Content("~/images/queuely.png");
-            var cookieOptions = new CookieOptions
-            {
-                Secure = true
-            };
-            Response.Cookies.Append("imageCookie", imgUrl, cookieOptions);
-            return File(imgUrl, "image/png");
-        }
+        //[HttpGet]
+        //[EnableCors("AllowAny")]
+        //public IActionResult GetLogo()
+        //{
+        //    var imgUrl = Url.Content("~/images/queuely.png");
+        //    var cookieOptions = new CookieOptions
+        //    {
+        //        Secure = true
+        //    };
+        //    Response.Cookies.Append("imageCookie", imgUrl, cookieOptions);
+        //    return File(imgUrl, "image/png");
+        //}
+
+        //設定strPoint session
+        //[HttpPost]
+        //public IActionResult SetStrPoints([FromBody] string data)
+        //{
+        //    HttpContext.Session.SetString("strPoints", data);
+        //    return Ok();
+        //}
+
+        //取得strPoint session
+        //public IActionResult GetStrPoints()
+        //{
+        //    var strPoints = HttpContext.Session.GetString("strPoints");
+        //    return Ok(strPoints);
+        //}
+
     }
 }

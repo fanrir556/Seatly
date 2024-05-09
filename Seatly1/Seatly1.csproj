@@ -56,6 +56,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="Models\NewFolder\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
