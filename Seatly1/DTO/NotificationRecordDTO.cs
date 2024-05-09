@@ -1,4 +1,7 @@
-﻿namespace Seatly1.DTO
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace Seatly1.DTO
 {
     public class NotificationRecordDTO
     {
@@ -23,5 +26,15 @@
         public bool? IsRecurring { get; set; }
 
         public string? RecurringTime { get; set; }
+
+        public string? HashTag1 { get; set; }
+
+        public string? HashTag2 { get; set; }
+
+        public string? HashTag3 { get; set; }
+
+        public string? HashTag4 { get; set; }
+
+        public string? HashTag5 { get; set; }
     }
 }

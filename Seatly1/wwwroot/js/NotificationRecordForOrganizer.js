@@ -49,10 +49,14 @@ function read(activity) {
         $("#activities").append(`
             <div id="card" class="col-12 col-md-4 col-lg-3 mb-5">
                 <div class="card">
-                    <img src="${e.target.result}" style="height: 200px;  width: 50%;" class="d-block w-100 card-img-top" alt="https://placehold.co/300x250">
+                    <img src="${e.target.result}" style="height: 200px;  width: 100%;" class="d-block w-100 card-img-top" alt="https://placehold.co/300x250">
                     <div class="card-body">
+                        <p class="card-text">${activity.startTime} - ${activity.endTime}</p>
                         <h5 class="card-title">${activity.activityName}</h5>
                     </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">#${activity.hashTag1} #${activity.hashTag2} #${activity.hashTag3} #${activity.hashTag4} #${activity.hashTag5}</li>
+                    </ul>
                 </div>
             </div>
         `)
