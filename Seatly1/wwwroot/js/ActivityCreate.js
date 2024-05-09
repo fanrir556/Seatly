@@ -56,12 +56,8 @@ var vueApp = {
             const self = this;
 
             reader.onload = function () {
-
-                // reader.result 包含了讀取到的二進位資料
-                var binaryData = reader.result;
-                console.log('Binary Data:', binaryData);
-
-                var blob = new Blob([binaryData]);
+                // 將讀取到的二進位資料轉換為blbo物件
+                var blob = new Blob([reader.result]);
                 console.log('blob Data:', blob);
 
                 // 建立formdata

@@ -19,35 +19,29 @@
     <!-- content start -->
     <div class="container">
         <!-- Add Button -->
-        <button type="button" class="btn btn-primary mb-3" onclick="addRow()">新增活動</button>
-        <div class="row">
+        <button type="button" class="btn btn-primary mb-3" onclick="add()">新增活動</button>
+        <div id="activities" class="row">
             <div class="col-12">
                 <h1 class="text-center">活動管理</h1>
             </div>
-            <table id="dataTable" class="table table-bordered table-primary">
-                <colgroup>
-                    <col style="background-color: #0f0" />
-                    <col span="2" />
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th id="activityId">活動ID</th>
-                        <th>活動照片</th>
-                        <th>活動開始時間</th>
-                        <th>活動結束時間</th>
-                        <th>活動人數上限</th>
-                        <th>活動名稱</th>
-                        <th>活動方法</th>
-                        <th>活動敘述</th>
-                        <th>活動是否重複</th>
-                        <th>活動重複時間</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
         </div>
+        <nav aria-label="活動分頁導覽" class="">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
   <!-- content end -->

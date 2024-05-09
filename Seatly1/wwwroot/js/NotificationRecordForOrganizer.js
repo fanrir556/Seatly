@@ -7,14 +7,17 @@ if (organizerid == null) {
     window.location.href = '/OrganizerRoute/OrganizerLogin';
 }
 
+// 要顯示的資料筆數
+count = 50;
+
 // 顯示活動資訊
 $.ajax({
-    url: `/api/OrganizersApi/activities/${organizerid}`, // 后端 API 的 URL
+    url: `/api/OrganizersApi/activities/${organizerid}/${count}`, // 后端 API 的 URL
     type: 'GET',
     success: function (activities) {
         console.log(activities);
         activities.forEach(function (activity) {
-            readRow(activity);
+            read(activity);
         });
     },
     error: function (err) {
@@ -33,7 +36,7 @@ function convertToPM(dateTimeString) {
 }
 
 // Function to add a new row
-function readRow(activity) {
+function read(activity) {
     activity.startTime = convertToPM(activity.startTime);
     activity.endTime = convertToPM(activity.endTime);
     activityPhoto = binaryStringToBlob(activity.activityPhoto);
@@ -43,23 +46,16 @@ function readRow(activity) {
     const fileReader = new FileReader();
 
     fileReader.onload = e => {
-    var table = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
-    var newRow = table.insertRow();
-        newRow.innerHTML = `
-        <td>${activity.activityId}</td>
-        <td><img style="width:240px;height:180px" src="${e.target.result}" alt="Activity Photo"></td>
-        <td>${activity.startTime}</td>
-        <td>${activity.endTime}</td>
-        <td>${activity.capacity}</td>
-        <td>${activity.activityName}</td>
-        <td>${activity.activityMethod}</td>
-        <td>${activity.descriptionN}</td>
-        <td>${activity.isRecurring}</td>
-        <td>${activity.recurringTime}</td>
-        <td>
-        <button type="button" class="btn btn-success btn-sm me-2" onclick="editRow(this)">修改</button>
-        <button type="button" class="btn btn-danger btn-sm me-2" onclick="deleteRow(this)">刪除</button>
-        </td>`;
+        $("#activities").append(`
+            <div id="card" class="col-12 col-md-4 col-lg-3 mb-5">
+                <div class="card">
+                    <img src="${e.target.result}" style="height: 200px;  width: 50%;" class="d-block w-100 card-img-top" alt="https://placehold.co/300x250">
+                    <div class="card-body">
+                        <h5 class="card-title">${activity.activityName}</h5>
+                    </div>
+                </div>
+            </div>
+        `)
     };
     fileReader.readAsDataURL(activityPhoto);
 }
@@ -88,15 +84,10 @@ function binaryStringToBlob(binaryString, contentType) {
 }
 
 // 新增活動
-function addRow() {
+function add() {
     window.location.href = '/OrganizerRoute/ActivityCreate';
 }
 // 修改活動
-function editRow() {
-    alert("edit");
-}
-
-// 刪除活動
-function deleteRow() {
-    alert("delete");
+function edit() {
+    window.location.href = '/OrganizerRoute/ActivityEdit';
 }

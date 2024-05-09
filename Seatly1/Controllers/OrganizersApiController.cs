@@ -39,10 +39,9 @@ namespace Seatly1.Controllers
         }
 
         // 列出個別活動方的所有活動
-        [HttpGet("activities/{organizerId}")]
-        public async Task<IEnumerable<NotificationRecordDTO>> GetActivitiesForOrganizer(int organizerId)
+        [HttpGet("activities/{organizerId}/{count}")]
+        public async Task<IEnumerable<NotificationRecordDTO>> GetActivitiesForOrganizer(int organizerId, int count)
         {
-
             var activities = await _context.NotificationRecords
                 .Where(activity => activity.OrganizerId == organizerId)
                 .Select(activity => new NotificationRecordDTO
@@ -58,6 +57,7 @@ namespace Seatly1.Controllers
                     IsRecurring = activity.IsRecurring,
                     RecurringTime = activity.RecurringTime,
                 })
+                .Take(count) // 限制資料筆數
                 .ToListAsync();
 
             return activities;
@@ -94,6 +94,42 @@ namespace Seatly1.Controllers
             _context.NotificationRecords.Add(act);
             await _context.SaveChangesAsync();
             return "新增活動成功";
+        }
+
+        [HttpPut("activity/{id}")]
+        public async Task<string> PutActivitiesForOrganizer(int id, NotificationRecordDTO2 activity)
+        {
+            var existingActivity = await _context.NotificationRecords.FindAsync(id);
+            if (existingActivity == null)
+            {
+                return "活動不存在";
+            }
+
+            if (activity.ActivityPhoto == null)
+            {
+                return "未提供活動照片";
+            }
+
+            // 將 IFormFile 讀取為 byte 陣列，然後將 byte 陣列儲存到 varbinary 欄位。
+            using var memoryStream = new MemoryStream();
+            await activity.ActivityPhoto.CopyToAsync(memoryStream);
+            var photoBytes = memoryStream.ToArray();
+
+            // 更新現有活動的屬性
+            existingActivity.ActivityPhoto = photoBytes;
+            existingActivity.StartTime = activity.StartTime;
+            existingActivity.EndTime = activity.EndTime;
+            existingActivity.Capacity = activity.Capacity;
+            existingActivity.ActivityName = activity.ActivityName;
+            existingActivity.ActivityMethod = activity.ActivityMethod;
+            existingActivity.DescriptionN = activity.DescriptionN;
+            existingActivity.IsRecurring = activity.IsRecurring;
+            existingActivity.RecurringTime = activity.RecurringTime;
+
+            // 儲存變更
+            await _context.SaveChangesAsync();
+
+            return "修改活動成功";
         }
 
         // 活動方資訊取得api
