@@ -45,7 +45,7 @@ namespace Seatly1.Controllers
         // GET: OrganizersAdmin/Create
         public IActionResult Create()
         {
-            return View();
+            return PartialView();
         }
 
         // POST: OrganizersAdmin/Create
@@ -77,7 +77,7 @@ namespace Seatly1.Controllers
             {
                 return NotFound();
             }
-            return View(organizer);
+            return PartialView(organizer);
         }
 
         // POST: OrganizersAdmin/Edit/5
@@ -85,9 +85,11 @@ namespace Seatly1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrganizerId,OrganizerAccount,LoginPassword,OrganizerName,OrganizerCategory,OrganizerPhoto,Menu,Address,ReservationUrl,Hashtag,Email,Phone,Validation")] Organizer organizer)
+        public async Task<IActionResult> Edit([Bind("OrganizerId,OrganizerAccount,LoginPassword,OrganizerName,OrganizerCategory,OrganizerPhoto,Menu,Address,ReservationUrl,Hashtag,Email,Phone,Validation")] Organizer organizer)
         {
-            if (id != organizer.OrganizerId)
+            Organizer O1 = await _context.Organizers.AsNoTracking().FirstOrDefaultAsync(u => u.OrganizerId == organizer.OrganizerId);
+
+            if (O1.OrganizerId != organizer.OrganizerId)
             {
                 return NotFound();
             }
@@ -112,7 +114,7 @@ namespace Seatly1.Controllers
                 }
                 return View("~/Views/Admin/Index.cshtml");
             }
-            return View(organizer);
+            return PartialView(organizer);
         }
 
         // GET: OrganizersAdmin/Delete/5

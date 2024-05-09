@@ -13,6 +13,8 @@
         margin:2px;
     }
 
+
+
 </style>
 
 
@@ -24,8 +26,8 @@
 </button>
 <br />
 
-<table class="table">
-    <thead>
+<table class="table table-striped">
+    <thead class="bg-primary text-white">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.ActivityId)
@@ -46,34 +48,6 @@
                 @Html.DisplayNameFor(model => model.ActivityName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DescriptionN)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsRecurring)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RecurringTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ActivityMethod)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActivity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HashTag1)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HashTag2)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HashTag3)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HashTag4)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HashTag5)
             </th>
 
         </tr>
@@ -81,66 +55,36 @@
     <tbody>
         @foreach (var item in Model)
         {
+        <div class="m-3">
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ActivityId)
+                        @Html.DisplayFor(modelItem => item.ActivityId)
                 </td>
                 <td>
                     <partial name="_ShowActivityPhoto" model="@item" />
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.StartTime)
+                        @Html.DisplayFor(modelItem => item.StartTime)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.EndTime)
+                        @Html.DisplayFor(modelItem => item.EndTime)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Capacity)
+                        @Html.DisplayFor(modelItem => item.Capacity)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ActivityName)
+                        @Html.DisplayFor(modelItem => item.ActivityName)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DescriptionN)
+                <td class="text-end" @* style="width: 200px;" *@>
+                    <div class="btn-group" role="group">
+                        <button class="activity-button edit-button btn btn-secondary btn-sm" data-clickid="@item.ActivityId" style="min-width: 70px;">編輯</button>
+                        <button class="activity-button delete-button btn btn-primary btn-sm" data-clickid="@item.ActivityId" style="min-width: 70px;">刪除</button>
+                    </div>
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsRecurring)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RecurringTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ActivityMethod)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsActivity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HashTag1)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HashTag2)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HashTag3)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HashTag4)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HashTag5)
-                </td>
-
-
             </tr>
-
-             <td class="float-end" @* style="width: 200px;" *@>
-                <div class="btn-group" role="group">
-                <button class="activity-button edit-button btn btn-secondary btn-sm" data-clickid="@item.ActivityId" style="min-width: 70px;">編輯</button>
-                <button class="activity-button delete-button btn btn-primary btn-sm" data-clickid="@item.ActivityId" style="min-width: 70px;">刪除</button>
-                </div>
-            </td>
-
+        </div>
+           
+    
         }
     </tbody>
 </table>
@@ -217,5 +161,6 @@
                 });
             }
         });
+
     });
 </script>

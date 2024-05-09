@@ -3,6 +3,13 @@
 @{
     ViewData["Title"] = "Create";
 }
+<style>
+    textarea {
+        width: 300px; /* 設置寬度 */
+        height: 150px; /* 設置高度 */
+        resize: none; /* 禁用調整大小功能 */
+    }
+</style>
 
 <h1>活動表單</h1>
 <hr />
@@ -13,7 +20,7 @@
 
             <div class="form-group">
                 <label asp-for="OrganizerId" class="control-label"></label>
-                <input asp-for="OrganizerId" class="form-control" />
+                <input asp-for="OrganizerId" class="form-control" readyonly/>
                 <span asp-validation-for="OrganizerId" class="text-danger"></span>
             </div>
 
@@ -49,7 +56,7 @@
 
             <div class="form-group">
                 <label asp-for="DescriptionN" class="control-label"></label>
-                <input asp-for="DescriptionN" class="form-control" />
+                <textarea asp-for="DescriptionN" class="form-control"></textarea>
                 <span asp-validation-for="DescriptionN" class="text-danger"></span>
             </div>
 
@@ -67,7 +74,11 @@
 
             <div class="form-group">
                 <label asp-for="ActivityMethod" class="control-label"></label>
-                <input asp-for="ActivityMethod" class="form-control" />
+                <select asp-for="ActivityMethod" class="form-control">
+                    <option value="公告">公告</option>
+                    <option value="排隊">排隊</option>
+                    <option value="抽籤">抽籤</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -107,9 +118,6 @@
     </div>
 </div>
 
-<div>
-    <a id="NotificationRecord_Create_back">Back to List</a>
-</div>
 
 
 
@@ -138,13 +146,9 @@
             }
         }
 
-
         $("#ActivityPhoto").change(function () {
             previewImage(this, $("#ActivityPhoto").prev());
         });
-
-
-
 
         $("#createButton").click(function (e) {
             e.preventDefault(); // 防止表單的默認提交行為

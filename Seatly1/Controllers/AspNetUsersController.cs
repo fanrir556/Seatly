@@ -24,28 +24,10 @@ namespace Seatly1.Controllers
             return View(await _context.AspNetUsers.ToListAsync());
         }
 
-        // GET: AspNetUsers/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var aspNetUser = await _context.AspNetUsers
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (aspNetUser == null)
-            {
-                return NotFound();
-            }
-
-            return View(aspNetUser);
-        }
-
         // GET: AspNetUsers/Create
         public IActionResult Create()
         {
-            return View();
+            return PartialView();
         }
 
         // POST: AspNetUsers/Create
@@ -61,7 +43,7 @@ namespace Seatly1.Controllers
                 await _context.SaveChangesAsync();
                 return View("~/Views/Admin/Index.cshtml");
             }
-            return View(aspNetUser);
+            return PartialView(aspNetUser);
         }
 
         // GET: AspNetUsers/Edit/5
@@ -77,7 +59,7 @@ namespace Seatly1.Controllers
             {
                 return NotFound();
             }
-            return View(aspNetUser);
+            return PartialView(aspNetUser);
         }
 
         // POST: AspNetUsers/Edit/5
@@ -85,9 +67,11 @@ namespace Seatly1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount,Age,Birthday,CreatAt,MemberRealName,MemberNickname,Permission,Points,Sex")] AspNetUser aspNetUser)
+        public async Task<IActionResult> Edit([Bind("Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount,Age,Birthday,CreatAt,MemberRealName,MemberNickname,Permission,Points,Sex")] AspNetUser aspNetUser)
         {
-            if (id != aspNetUser.Id)
+            AspNetUser ANU = await _context.AspNetUsers.AsNoTracking().FirstOrDefaultAsync(u => u.Id == aspNetUser.Id);
+
+            if (ANU.Id != aspNetUser.Id)
             {
                 return NotFound();
             }
@@ -96,7 +80,8 @@ namespace Seatly1.Controllers
             {
                 try
                 {
-                    _context.Update(aspNetUser);
+
+                    _context.Entry(aspNetUser).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

@@ -47,17 +47,37 @@ namespace Seatly1.Controllers
             return PartialView("~/Views/Admin/_AspNetUsers-Index.cshtml", _AspNetUsers);
         }
 
+        //POST:Admin/_AspNetUsers_Delete
+        [HttpPost]
+        public async Task _AspNetUsers_Delete(string id)
+        {
+            var ANU = await _context.AspNetUsers.FirstOrDefaultAsync(a=>a.Id== id);
+            if (ANU != null)
+            {
+                _context.AspNetUsers.Remove(ANU);
+            }
 
-
+            await _context.SaveChangesAsync();
+        }
 
         public IActionResult _OrganizersAdmin()
         {
             var _OrganizersAdmin = _context.Organizers.ToList();
             return PartialView("~/Views/Admin/_OrganizersAdmin-Index.cshtml", _OrganizersAdmin);
         }
-      
 
+        //POST:Admin/_AspNetUsers_Delete
+        [HttpPost]
+        public async Task _OrganizersAdmin_Delete(int id)
+        {
+            var O1 = await _context.Organizers.FirstOrDefaultAsync(a => a.OrganizerId == id);
+            if (O1 != null)
+            {
+                _context.Organizers.Remove(O1);
+            }
 
+            await _context.SaveChangesAsync();
+        }
 
 
 

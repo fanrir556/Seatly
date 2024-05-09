@@ -26,11 +26,6 @@ namespace Seatly1.Controllers
         {
             return View(await _context.NotificationRecords.ToListAsync());
         }
-        public IActionResult _NotificationRecord()
-        {
-            var notificationRecords = _context.NotificationRecords.ToList();
-            return PartialView("~/Views/Admin/NotificationRecord/_index.cshtml", notificationRecords);
-        }
 
         // GET: NotificationRecord/_Details/
         //_Details部分檢視
@@ -126,7 +121,6 @@ namespace Seatly1.Controllers
                     SetPhoto(notificationRecord);
                 }
 
-                
                 _context.Add(notificationRecord);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("_NotificationRecord", "Admin");

@@ -2,10 +2,10 @@
 
 @if (Model != null && Model.ActivityPhoto != null)
 {
-    <img src="@Url.Action("GetActivityPhoto","NotificationRecord",new {id=Model.ActivityId})" title="@Model.ActivityName" style="height:240px;width:320px;" class="md-5" />
+    <img src="@Url.Action("GetActivityPhoto","NotificationRecord",new {id=Model.ActivityId})" title="@Model.ActivityName" style="height:240px;width:320px;margin-bottom:7px;" />
 }
 
 else
 {
-    <img src="@Url.Content("~/images/NoImage.jpg")" title="NoImage" style="height:240px;width:320px" />
+    <img src="@Url.Content("~/images/NoImage.jpg")" title="NoImage" style="height:240px;width:320px;margin:7px;" />
 }

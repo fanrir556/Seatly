@@ -4,13 +4,28 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<style>
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+        margin: 2px;
+    }
 
-<p>
-    <a asp-controller="AspNetUsers" asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+</style>
+
+
+
+<h1>使用者帳號設定</h1>
+
+<button class="btn btn-primary btn-sm" id="createButton">
+    新增使用者帳號
+</button>
+<br />
+
+<table class="table table-striped " style="max-width:100%">
+    <thead class="bg-primary text-white">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.UserName)
@@ -83,7 +98,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr class="m-3">
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
             </td>
@@ -150,15 +165,93 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Sex)
             </td>
-            <td>
-                    <a asp-controller="AspNetUsers" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-controller="AspNetUsers" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-controller="AspNetUsers" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <td class="float-end" @* style="width: 200px;" *@>
+                <div class="btn-group" role="group">
+                    <button class="activity-button edit-button btn btn-secondary btn-sm" data-clickid="@item.Id" style="min-width: 70px;">編輯</button>
+                    <button class="activity-button delete-button btn btn-primary btn-sm" data-clickid="@item.Id" style="min-width: 70px;">刪除</button>
+                </div>
             </td>
         </tr>
+     
 }
     </tbody>
-
 </table>
+<script>
+    $(function () {
 
+
+        function Load() {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_AspNetUsers", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        }
+
+
+        $("#createButton").click(function () {
+            // alert("aa")
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("Create", "AspNetUsers")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        });
+
+
+        $(".edit-button").click(function () {
+            $("#dancingtime").show();
+            var clickid = $(this).data("clickid");
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("Edit", "AspNetUsers")`,
+                data: { id: clickid },
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        });
+
+        //刪除按鈕
+        $(".delete-button").click(function () {
+            // alert("cca")
+            $("#dancingtime").show();
+            var clickid = $(this).data("clickid");
+ 
+            var ret = confirm("確定要刪除?");
+            if (ret == true) {
+                $.ajax({
+                    type: "POST",
+                    url: `@Url.Action("_AspNetUsers_Delete", "Admin")`,
+                    data: { id: clickid },
+                    success: function (response) {
+                        alert("刪除成功");
+                        Load();
+                    },
+                    error: function (xhr, status, error) {
+                        // 刪除失敗後的處理
+                        alert("刪除不成功");
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        }); 
+
+    });
+</script>
 

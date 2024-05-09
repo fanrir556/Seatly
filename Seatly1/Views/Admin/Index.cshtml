@@ -28,41 +28,9 @@
     </div>
 </body>
 
-
-@* <table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <td v-for="column in tableColumns" :key="column.key">{{ column.label }}</td>
-        </tr>
-    </thead>
-
-    <tbody>
-        <tr v-for="empDTO in EmpDTOesArray" :key="empDTO.employeeId">
-            <template v-for="column in tableColumns">
-                <td v-if="!column.editable">{{ empDTO[column.field] }}</td>
-                <td v-else>
-                    <input type="text" v-model="empDTO[column.field]" />
-                </td>
-            </template>
-            <td>
-                <template v-if="empDTO.Edit">
-                    <button type="button" class="btn btn-success" @@click="update(empDTO)">更新</button>
-                    <button type="button" class="btn btn-warning" @@click="cancel">取消</button>
-                </template>
-                <template v-else>
-                    <button type="button" class="btn btn-primary" @@click="edit(empDTO.employeeId)">編輯</button>
-                    <button type="button" class="btn btn-success" @@click="deleteEmployee(empDTO.employeeId)">刪除</button>
-                </template>
-            </td>
-        </tr>
-    </tbody>
-</table>
- *@
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js" integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
 
-@* <script src="AdminVue.js" type="module"></script> *@
 
 @section Scripts {
 
@@ -124,6 +92,7 @@
 
         // //---------------主要頁面結尾------------------------------
 
+
         //--------------------圖片即時顯示開始-----
         function previewImage(inputFile, img) {
             if (inputFile.files && inputFile.files[0]) {
@@ -152,10 +121,7 @@
         $(document).on("change", "#ActivityPhoto", function () {
             previewImage(this, $("#ActivityPhoto").prev());
         });
-
-
         //--------------------圖片即時顯示結束-----
-
 
     </script>
 
