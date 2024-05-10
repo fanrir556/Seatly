@@ -1,26 +1,85 @@
-﻿// 透過 Session 取得活動方的 ID
+﻿/*全域變數*/
+let page = 1; // 頁碼
+
+// 透過 Session 取得活動方的 ID
 const organizerId = sessionStorage.getItem("OrganizerId");
-console.log(`OrganizerId：${organizerId}`);
+/*全域變數*/
 
 // 如果未登入，則導向登入頁面
 if (organizerId == null) {
     window.location.href = '/OrganizerRoute/OrganizerLogin';
 }
 
-let page = 1; // 頁碼值
+// 取得活動內容
+getActivity(organizerId, page);
 
-// 透過 axios 發送 GET 請求，傳遞給 API 的參數為活動方 ID 和頁碼，每頁顯示50筆資料
-axios.get(`/api/OrganizersApi/activities/${organizerId}?page=${page}`)
-    .then(response => {
-        const activities = response.data;
-        activities.forEach(activity => {
-            read(activity);
+// 監聽點擊事件，按下 "next" 時頁碼 + 1
+$('#next').on('click', function () {
+    event.preventDefault(); // 防止頁面跳到最上面
+    $('#activities').empty();
+
+    // 取得目前頁碼的文本
+    page = parseInt($('#pageNumber').find('a').text());
+
+    // 防止頁碼小於 1
+    if (page < 1) {
+        page = 1;
+
+        console.log(page);
+        $('#pageNumber').find('a').text(page);
+        getActivity(organizerId, page);
+    }
+    else {
+        // 頁碼 + 1
+        page++;
+
+        console.log(page);
+        // 更新頁碼
+        $('#pageNumber').find('a').text(page);
+        getActivity(organizerId, page);
+    }
+});
+
+// 監聽點擊事件，按下 "previous" 時頁碼 - 1
+$('#previous').on('click', function () {
+    event.preventDefault(); // 防止頁面跳到最上面
+    $('#activities').empty();
+
+    // 取得目前頁碼的文本
+    page = parseInt($('#pageNumber').find('a').text());
+
+    // 防止頁碼小於 1
+    if (page <= 1) {
+        page = 1;
+        console.log(page);
+
+        $('#pageNumber').find('a').text(page);
+        getActivity(organizerId, page);
+    }
+    else {
+        // 頁碼 + 1
+        page--;
+
+        console.log(page);
+        // 更新頁碼
+        $('#pageNumber').find('a').text(page);
+        getActivity(organizerId, page);
+    }
+});
+
+function getActivity(organizerId, page) {
+    // 透過 axios 發送 GET 請求，傳遞給 API 的參數為活動方 ID 和頁碼，每頁顯示50筆資料
+    axios.get(`/api/OrganizersApi/activities/${organizerId}?page=${page}`)
+        .then(response => {
+            const activities = response.data;
+            activities.forEach(activity => {
+                read(activity);
+            });
+        })
+        .catch(error => {
+            console.error('取得活動資料時發生錯誤:', error);
         });
-    })
-    .catch(error => {
-        console.error('取得活動資料時發生錯誤:', error);
-    });
-
+}
 function convertToPM(dateTimeString) {
     // 如果日期時間字串包含 'T'，則將 'T' 去除
     if (dateTimeString.includes('T')) {

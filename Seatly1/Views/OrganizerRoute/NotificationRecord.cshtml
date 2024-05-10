@@ -21,22 +21,18 @@
         <!-- Add Button -->
         <button type="button" class="btn btn-primary mb-3" onclick="add()">新增活動</button>
         <div id="activities" class="row">
-            <div class="col-12">
-                <h1 class="text-center">活動管理</h1>
-            </div>
+            <!--取得的活動會顯示在這裡-->
         </div>
         <nav aria-label="活動分頁導覽" class="">
             <ul class="pagination justify-content-center">
                 <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
+                    <a id="previous" class="page-link" href="#" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li id="pageNumber" class="page-item"><a class="page-link" href="#">1</a></li>
                 <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
+                    <a id="next" class="page-link" href="#" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
