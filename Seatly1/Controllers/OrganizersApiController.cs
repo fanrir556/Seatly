@@ -38,7 +38,7 @@ namespace Seatly1.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // 列出個別活動方的所有活動
+        // 列出個別活動方的活動
         [HttpGet("activities/{organizerId}/{count}")]
         public async Task<IEnumerable<NotificationRecordDTO>> GetActivitiesForOrganizer(int organizerId, int count)
         {
@@ -57,7 +57,7 @@ namespace Seatly1.Controllers
                     IsRecurring = activity.IsRecurring,
                     RecurringTime = activity.RecurringTime,
                 })
-                .Take(count) // 限制資料筆數
+                .Take(count) // 設定後端要傳送的資料筆數
                 .ToListAsync();
 
             return activities;
@@ -130,6 +130,26 @@ namespace Seatly1.Controllers
             await _context.SaveChangesAsync();
 
             return "修改活動成功";
+        }
+        [HttpDelete("activity/{id}")]
+        public async Task<string> DeleteActivity(int id)
+        {
+            var activity = await _context.NotificationRecords.FindAsync(id);
+            if(activity == null)
+            {
+                return "找不到要刪除的活動";
+            }
+            try
+            {
+                _context.NotificationRecords.Remove(activity);
+                await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return "刪除失敗";
+            }
+            return "刪除成功";
         }
 
         // 活動方資訊取得api
