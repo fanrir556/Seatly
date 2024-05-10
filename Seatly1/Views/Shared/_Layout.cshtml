@@ -74,7 +74,7 @@
             </button>
 
             @* 搜尋框 *@
-            <div id="app" class="collapse navbar-collapse border-top border-lg-0 justify-content-end">
+            <div id="" class="collapse navbar-collapse border-top border-lg-0 justify-content-end">
                 <input id="layoutSearch" class="input-box form-foodwagon-control" type="text" v-model="searchKeyword" placeholder="🔎輸入關鍵字...">
                 <a id="layoutSearchBtn" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger">搜尋</button></a>
             </div>
@@ -240,6 +240,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
  *@
 
+<script src="https://unpkg.com/vue@latest"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap" rel="stylesheet">
     @await RenderSectionAsync("Scripts", required: false)
@@ -247,7 +248,6 @@
 <!-- ===============================================-->
 <!--    Vue.js-->
 <!-- ===============================================-->
-<script src="https://unpkg.com/vue@latest"></script>
 @* <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script> *@
 
 

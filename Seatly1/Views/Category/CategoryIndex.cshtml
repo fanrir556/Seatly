@@ -1,0 +1,237 @@
+﻿@model IEnumerable<Seatly1.Models.NotificationRecord>
+
+@{
+    ViewData["Title"] = "Search Activity";
+}
+
+<div id="app">
+    <h2>Search Activity</h2>
+       @*  <router-link v-bind:to="{name:'pJapanese'}">查看日式</router-link>
+        <router-view></router-view> *@
+    <button class="btn btn-secondary m-2" v-on:click="changeCategory('japanese')">查看日式</button>
+    <button class="btn btn-secondary m-2" v-on:click="changeCategory('chinese')">查看中式</button>
+    <button class="btn btn-secondary m-2" v-on:click="changeCategory('american')">查看美式</button>
+    <button class="btn btn-secondary m-2" v-on:click="changeCategory('italian')">查看義式</button>
+    <button class="btn btn-secondary m-2" v-on:click="changeCategory('korean')">查看韓式</button>
+
+
+    
+    <section v-if="cate=='japanese'" style="width: 65rem;">
+        <h3>日式</h3>
+        <div class="row">
+            <div class="col-md-4" v-for="activity in activities" :key="activity.ActivityId">
+                <div class="card">
+                    <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ activity.activityName }}</h5>
+                        <p class="card-text">開始時間: {{ activity.startTime }}</p>
+                        <p class="card-text">結束時間: {{ activity.endTime }}</p>
+                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
+                        <p class="card-text">
+                            <template v-for="i in 5">
+                                <span v-if="activity['hashTag'+i]">#<span class="hash-tag">{{ activity['hashTag'+i] }}</span></span>
+                            </template>
+                        </p>
+                        <a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a>
+                        @* <a href="#" class="btn btn-primary">查看詳情</a> *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section v-else-if="cate == 'chinese'" style="width: 65rem;">
+        <h3>中式</h3>
+        <div class="row">
+            <div class="col-md-4" v-for="activity in activities" :key="activity.ActivityId">
+                <div class="card">
+                    <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ activity.activityName }}</h5>
+                        <p class="card-text">開始時間: {{ activity.startTime }}</p>
+                        <p class="card-text">結束時間: {{ activity.endTime }}</p>
+                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
+                        <p class="card-text">
+                            <template v-for="i in 5">
+                                <span v-if="activity['hashTag'+i]">#<span class="hash-tag">{{ activity['hashTag'+i] }}</span></span>
+                            </template>
+                        </p>
+                        <a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section v-else-if="cate == 'american'" style="width: 65rem;">
+        <h3>美式</h3>
+        <div class="row">
+            <div class="col-md-4" v-for="activity in activities" :key="activity.ActivityId">
+                <div class="card">
+                    <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ activity.activityName }}</h5>
+                        <p class="card-text">開始時間: {{ activity.startTime }}</p>
+                        <p class="card-text">結束時間: {{ activity.endTime }}</p>
+                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
+                        <p class="card-text">
+                            <template v-for="i in 5">
+                                <span v-if="activity['hashTag'+i]">#<span class="hash-tag">{{ activity['hashTag'+i] }}</span></span>
+                            </template>
+                        </p>
+                        <a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section v-else-if="cate == 'italian'" style="width: 65rem;">
+        <h3>義式</h3>
+        <div class="row">
+            <div class="col-md-4" v-for="activity in activities" :key="activity.ActivityId">
+                <div class="card">
+                    <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ activity.activityName }}</h5>
+                        <p class="card-text">開始時間: {{ activity.startTime }}</p>
+                        <p class="card-text">結束時間: {{ activity.endTime }}</p>
+                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
+                        <p class="card-text">
+                            <template v-for="i in 5">
+                                <span v-if="activity['hashTag'+i]">#<span class="hash-tag">{{ activity['hashTag'+i] }}</span></span>
+                            </template>
+                        </p>
+                        <a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section v-else-if="cate == 'korean'" style="width: 65rem;">
+        <h3>韓式</h3>
+        <div class="row">
+            <div class="col-md-4" v-for="activity in activities" :key="activity.ActivityId">
+                <div class="card">
+                    <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ activity.activityName }}</h5>
+                        <p class="card-text">開始時間: {{ activity.startTime }}</p>
+                        <p class="card-text">結束時間: {{ activity.endTime }}</p>
+                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
+                        <p class="card-text">
+                            <template v-for="i in 5">
+                                <span v-if="activity['hashTag'+i]">#<span class="hash-tag">{{ activity['hashTag'+i] }}</span></span>
+                            </template>
+                        </p>
+                        <a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+@*     <template v-else>
+        <p>查無此活動</p>
+    </template> *@
+</div>
+
+
+@section Scripts{
+@* <script src="https://unpkg.com/vue-router@4"></script> *@
+<script>
+    // var JapaneseResult = {
+    //     name: 'japanese',
+    //     template: `<div><h3>JapaneseResult<h3></div>`
+    // };
+
+    // var routes = [
+    //     { path: '/japanese',name:'pJapanese' ,component: JapaneseResult },
+    // ];
+
+    // const router = VueRouter.createRouter({
+    //     history: VueRouter.createWebHashHistory(), routes,
+    // });
+
+    // const app = Vue.createApp({});
+    // app.use(router);
+    // app.mount('#app');
+        const { createApp, ref } = Vue;
+        var vueApp = {
+            data() {
+                return {
+                    cate: 'japanese',
+                    activities: [], // 添加 activities 屬性，用於存儲從後端獲取的活動數據
+                }
+            },
+            methods: {
+                async changeCategory(category) {
+                    try {
+                        this.cate = category;
+                        let hashtag = '';
+                        switch (category) {
+                            case 'japanese':
+                                hashtag = '日式';
+                                break;
+                            case 'chinese':
+                                hashtag = '中式';
+                                break;
+                            case 'american':
+                                hashtag = '美式';
+                                break;
+                            case 'italian':
+                                hashtag = '義式'
+                                break;
+                            case 'korean':
+                                hashtag = '韓式'
+                                break;
+                            default:
+                                hashtag = ''; // 預設情況
+                                break;
+                        }
+                        console.log(this.cate);
+                        const response = await fetch(`/Category/GetActivitiesByHashtag?hashtag=${hashtag}`);
+                        const data = await response.json();
+                        console.log(data);
+                        this.activities = data;
+                        this.activities.forEach(activity => {
+                            const imgUrl = this.convertToImageUrl(activity.activityPhoto);
+                            // console.log(base64Image)
+                            activity.imgUrl = imgUrl
+                            // console.log(base)
+                            // activity.imageSrc = `data:image;base64,${base64Image}`;
+                            // this.convertToImageUrl(activity.activityId, activity.activityPhoto);
+                            // console.log(activity.activityPhoto)
+                        });
+                       
+                    } catch (e) {
+                        console.log(e);
+                    }
+                },
+                // convertToImageUrl(activityId, photoData) {
+                //     const blob = new Blob([photoData]);
+                //     const imageUrl = URL.createObjectURL(blob);
+                //     this.imageUrls[activityId] = imageUrl;
+                //     console.log(imageUrl)
+                // }
+                // convertToBase64(arrayBuffer) {
+                //     let binary = '';
+                //     const bytes = new Uint8Array(arrayBuffer);
+                //     for (let i = 0; i < bytes.length; i++) {
+                //         binary += String.fromCharCode(bytes[i]);
+                //     }
+                //     return window.btoa(binary);
+                // },
+                // 轉換圖片格式
+                convertToImageUrl(photoData) {
+                    const imageUrl = 'data:image/png;base64,' + photoData;
+                    return imageUrl;
+                }
+            },
+            created() {
+                console.log(this.cate);
+            },
+            mounted() {
+                this.changeCategory('japanese'); // 初始加載時加載日式活動
+            }
+        };
+        var app = createApp(vueApp).mount("#app");
+     
+</script>
+}
