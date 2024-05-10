@@ -48,7 +48,7 @@ function read(activity) {
         card.className = 'col-12 col-md-4 col-lg-3 mb-5';
         card.innerHTML = `
             <div class="card">
-                <img src="${e.target.result}" style="height: 200px;  width: 150px;" class="d-block w-100 card-img-top" alt="https://placehold.co/300x250" onclick="viewActivity(${activity.id})">
+                <img src="${e.target.result}" style="height: 200px;  width: 150px;" class="d-block w-100 card-img-top" alt="https://placehold.co/300x250" onclick="viewActivity(${activity.activityId})">
                 <div class="card-body">
                     <p class="card-text">${activity.startTime} - ${activity.endTime}</p>
                     <h5 class="card-title">${activity.activityName}</h5>
