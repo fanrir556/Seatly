@@ -7,11 +7,10 @@ if (organizerId == null) {
     window.location.href = '/OrganizerRoute/OrganizerLogin';
 }
 
-// 設定後端要傳送的資料筆數，可設定一頁要顯示幾筆
-const count = 50;
+let page = 1; // 頁碼值
 
-// 顯示活動資訊
-axios.get(`/api/OrganizersApi/activities/${organizerId}/${count}`)
+// 透過 axios 發送 GET 請求，傳遞給 API 的參數為活動方 ID 和頁碼，每頁顯示50筆資料
+axios.get(`/api/OrganizersApi/activities/${organizerId}?page=${page}`)
     .then(response => {
         const activities = response.data;
         activities.forEach(activity => {

@@ -39,11 +39,18 @@ namespace Seatly1.Controllers
         }
 
         // 列出個別活動方的活動
-        [HttpGet("activities/{organizerId}/{count}")]
-        public async Task<IEnumerable<NotificationRecordDTO>> GetActivitiesForOrganizer(int organizerId, int count)
+        [HttpGet("activities/{organizerId}")]
+        public async Task<IEnumerable<NotificationRecordDTO>> GetActivitiesForOrganizerByPage(int organizerId, int page)
         {
+            const int pageSize = 50; // 每頁顯示的資料筆數
+
+            var offset = (page - 1) * pageSize; // 計算偏移量
+
             var activities = await _context.NotificationRecords
                 .Where(activity => activity.OrganizerId == organizerId)
+                .OrderBy(activity => activity.ActivityId) // 如果有一個唯一的 ID，可以用它來排序，否則用其他適合的方式排序
+                .Skip(offset) // 跳過偏移量
+                .Take(pageSize) // 取得指定頁數的資料
                 .Select(activity => new NotificationRecordDTO
                 {
                     ActivityId = activity.ActivityId,
@@ -57,7 +64,6 @@ namespace Seatly1.Controllers
                     IsRecurring = activity.IsRecurring,
                     RecurringTime = activity.RecurringTime,
                 })
-                .Take(count) // 設定後端要傳送的資料筆數
                 .ToListAsync();
 
             return activities;
