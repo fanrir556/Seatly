@@ -16,7 +16,7 @@ getActivity(organizerId, page);
 // 監聽點擊事件，按下 "next" 時頁碼 + 1
 $('#next').on('click', function () {
     event.preventDefault(); // 防止頁面跳到最上面
-    $('#activities').empty();
+    $('#activities').empty(); // 換頁時，清除原先顯示的活動
 
     // 取得目前頁碼的文本
     page = parseInt($('#pageNumber').find('a').text());
@@ -43,7 +43,7 @@ $('#next').on('click', function () {
 // 監聽點擊事件，按下 "previous" 時頁碼 - 1
 $('#previous').on('click', function () {
     event.preventDefault(); // 防止頁面跳到最上面
-    $('#activities').empty();
+    $('#activities').empty(); // 換頁時，清除原先顯示的活動
 
     // 取得目前頁碼的文本
     page = parseInt($('#pageNumber').find('a').text());
