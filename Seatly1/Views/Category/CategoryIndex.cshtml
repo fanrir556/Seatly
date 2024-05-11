@@ -13,9 +13,14 @@
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('american')">查看美式</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('italian')">查看義式</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('korean')">查看韓式</button>
+    <hr />
+    <button class="btn btn-secondary m-2" v-on:click="filterByTypeAndLocation(null, '台北')">台北</button>
+    <button class="btn btn-secondary m-2" v-on:click="filterByTypeAndLocation(null, '台中')">台中</button>
+    <button class="btn btn-secondary m-2" v-on:click="filterByTypeAndLocation(null, '高雄')">高雄</button>
 
 
-    
+
+    @* 日式 *@
     <section v-if="cate=='japanese'" style="width: 65rem;">
         <h3>日式</h3>
         <div class="row">
@@ -40,6 +45,7 @@
             </div>
         </div>
     </section>
+    @* 中式 *@
     <section v-else-if="cate == 'chinese'" style="width: 65rem;">
         <h3>中式</h3>
         <div class="row">
@@ -63,6 +69,7 @@
             </div>
         </div>
     </section>
+    @* 美式 *@
     <section v-else-if="cate == 'american'" style="width: 65rem;">
         <h3>美式</h3>
         <div class="row">
@@ -87,6 +94,7 @@
             </div>
         </div>
     </section>
+    @* 義式 *@
     <section v-else-if="cate == 'italian'" style="width: 65rem;">
         <h3>義式</h3>
         <div class="row">
@@ -110,6 +118,7 @@
             </div>
         </div>
     </section>
+    @* 韓式 *@
     <section v-else-if="cate == 'korean'" style="width: 65rem;">
         <h3>韓式</h3>
         <div class="row">
@@ -142,22 +151,7 @@
 @section Scripts{
 @* <script src="https://unpkg.com/vue-router@4"></script> *@
 <script>
-    // var JapaneseResult = {
-    //     name: 'japanese',
-    //     template: `<div><h3>JapaneseResult<h3></div>`
-    // };
-
-    // var routes = [
-    //     { path: '/japanese',name:'pJapanese' ,component: JapaneseResult },
-    // ];
-
-    // const router = VueRouter.createRouter({
-    //     history: VueRouter.createWebHashHistory(), routes,
-    // });
-
-    // const app = Vue.createApp({});
-    // app.use(router);
-    // app.mount('#app');
+   
         const { createApp, ref } = Vue;
         var vueApp = {
             data() {
@@ -210,20 +204,16 @@
                         console.log(e);
                     }
                 },
-                // convertToImageUrl(activityId, photoData) {
-                //     const blob = new Blob([photoData]);
-                //     const imageUrl = URL.createObjectURL(blob);
-                //     this.imageUrls[activityId] = imageUrl;
-                //     console.log(imageUrl)
-                // }
-                // convertToBase64(arrayBuffer) {
-                //     let binary = '';
-                //     const bytes = new Uint8Array(arrayBuffer);
-                //     for (let i = 0; i < bytes.length; i++) {
-                //         binary += String.fromCharCode(bytes[i]);
-                //     }
-                //     return window.btoa(binary);
-                // },
+                async filterByLocation(location) {
+                    try {
+                        const response = await fetch(`/Category/GetActivitiesByLocation?location=${location}`);
+                        const data = await response.json();
+                        this.activities = data;
+                    } catch (error) {
+                        console.error(error);
+                    }
+                },
+               
                 // 轉換圖片格式
                 convertToImageUrl(photoData) {
                     const imageUrl = 'data:image/png;base64,' + photoData;

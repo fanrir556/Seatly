@@ -150,125 +150,294 @@ namespace Seatly1.Controllers
         [HttpPost]
         public async Task<IActionResult> GetActivitiesByCategories(List<string>? categories, string? searchString, DateTime? searchDate, DateTime? startDate, DateTime? endDate)
         {
+
+            List<string> hashtags = new List<string>();
+            List<string> locations = new List<string>();
+
+            // 分類哈希標籤和地點
+            foreach (var category in categories)
+            {
+                // 判斷是否為地點
+                if (IsLocation(category))
+                {
+                    locations.Add(category);
+                }
+                else
+                {
+                    hashtags.Add(category);
+                }
+            }
+
             if (searchString != null) // 從首頁輸入關鍵字進來
-            {
-                if (categories.Count > 0 && startDate != null && endDate != null)
                 {
-                    // 分類+區間都有選
-                    var filteredActivities = await _context.NotificationRecords
-                    .Where(p => p.ActivityName.Contains(searchString) &&
-                                p.StartTime.HasValue && p.EndTime.HasValue &&
-                                p.StartTime.Value.Date <= startDate.Value.Date &&
-                                p.EndTime.Value.Date >= endDate.Value.Date && p.EndTime.Value.Date >= startDate.Value.Date &&
-                                categories.Any(c =>
-                                p.HashTag1.Contains(c) ||
-                                p.HashTag2.Contains(c) ||
-                                p.HashTag3.Contains(c) ||
-                                p.HashTag4.Contains(c) ||
-                                p.HashTag5.Contains(c)))
-                                .ToListAsync();
+                    if (hashtags.Count > 0 && locations.Count == 0 && startDate != null && endDate != null)
+                    {
+                        // 分類+區間都有選
+                        var filteredActivities = await _context.NotificationRecords
+                        .Where(p => p.ActivityName.Contains(searchString) &&
+                                    p.StartTime.HasValue && p.EndTime.HasValue &&
+                                    p.StartTime.Value.Date <= startDate.Value.Date &&
+                                    p.EndTime.Value.Date >= endDate.Value.Date && p.EndTime.Value.Date >= startDate.Value.Date &&
+                                    hashtags.Any(c =>
+                                    p.HashTag1.Contains(c) ||
+                                    p.HashTag2.Contains(c) ||
+                                    p.HashTag3.Contains(c) ||
+                                    p.HashTag4.Contains(c) ||
+                                    p.HashTag5.Contains(c)))
+                                    .ToListAsync();
 
-                    return PartialView("_searchPartial", filteredActivities);
-                }
+                        return PartialView("_searchPartial", filteredActivities);
+                    }
 
-                else if (categories.Count > 0 && startDate == null && endDate == null)
+                    else if (hashtags.Count > 0 && locations.Count == 0 && startDate == null && endDate == null)
+                    {
+                        // 只選了分類
+                        var filteredActivities = await _context.NotificationRecords
+                            .Where(a => a.ActivityName.Contains(searchString) &&
+                                        hashtags.Any(c =>
+                                            a.HashTag1.Contains(c) ||
+                                            a.HashTag2.Contains(c) ||
+                                            a.HashTag3.Contains(c) ||
+                                            a.HashTag4.Contains(c) ||
+                                            a.HashTag5.Contains(c)))
+                            .ToListAsync();
+
+                        return PartialView("_searchPartial", filteredActivities);
+                    }
+                    else if (hashtags.Count == 0 && locations.Count == 0 && startDate != null && endDate != null)
+                    {
+                        // 只選了區間
+                        var filteredActivities = await _context.NotificationRecords
+                               .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue
+                                   && a.StartTime.Value.Date <= startDate.Value.Date &&
+                                        a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date)
+                               .ToListAsync();
+
+                        return PartialView("_searchPartial", filteredActivities);
+                    }
+                else if (hashtags.Count == 0 && locations.Count > 0 && startDate == null && endDate == null)
                 {
-                    // 只選了分類
+                    // 只選了地點
                     var filteredActivities = await _context.NotificationRecords
-                        .Where(a => a.ActivityName.Contains(searchString) &&
-                                    categories.Any(c =>
-                                        a.HashTag1.Contains(c) ||
-                                        a.HashTag2.Contains(c) ||
-                                        a.HashTag3.Contains(c) ||
-                                        a.HashTag4.Contains(c) ||
-                                        a.HashTag5.Contains(c)))
+                        .Where(a => a.ActivityName.Contains(searchString) && a.Location != null && a.Location != "" && locations.Any(l =>
+                                a.Location.Contains(l)))
                         .ToListAsync();
 
                     return PartialView("_searchPartial", filteredActivities);
                 }
-                else if (categories.Count == 0 && startDate != null && endDate != null)
+                else if (hashtags.Count == 0 && locations.Count > 0 && startDate != null && endDate != null)
                 {
-                    // 只選了區間
+                    // 地點+區間
                     var filteredActivities = await _context.NotificationRecords
-                           .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue
-                               && a.StartTime.Value.Date <= startDate.Value.Date &&
-                                    a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date)
-                           .ToListAsync();
+                        .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue &&
+                                a.StartTime.Value.Date <= startDate.Value.Date &&
+                                a.EndTime.Value.Date >= endDate.Value.Date &&
+                                a.EndTime.Value.Date >= startDate.Value.Date &&
+                                a.Location != null && a.Location != "" &&
+                                locations.Any(l =>
+                                a.Location.Contains(l)))
+                        .ToListAsync();
 
                     return PartialView("_searchPartial", filteredActivities);
                 }
-                else
+                else if (hashtags.Count > 0 && locations.Count > 0 && startDate == null && endDate == null)
                 {
-                    // 原始搜尋結果
-                    var act = await _context.NotificationRecords
-                        .Where(p => p.ActivityName.Contains(searchString))
-                        .ToListAsync();
-
-                    return PartialView("_searchPartial", act);
-                }
-            }
-            else if (searchDate != null) // 從首頁輸入指定日期進來
-            {
-                if (categories.Count > 0 && startDate != null && endDate != null)
-                {
-                    // 分類+區間都有選
+                    // 分類+地點
                     var filteredActivities = await _context.NotificationRecords
-                        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
-                               && a.StartTime.Value.Date <= startDate.Value.Date &&
-                                  a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date
-                            && categories.Any(c =>
+                        .Where(a => a.ActivityName.Contains(searchString) && hashtags.Any(c =>
                                 a.HashTag1.Contains(c) ||
                                 a.HashTag2.Contains(c) ||
                                 a.HashTag3.Contains(c) ||
                                 a.HashTag4.Contains(c) ||
-                                a.HashTag5.Contains(c) &&
-                                a.StartTime.Value.Date <= searchDate.Value.Date &&
-                                a.EndTime.Value.Date >= searchDate.Value.Date))
-                                .ToListAsync();
-
-                    return PartialView("_searchPartial", filteredActivities);
-                }
-                else if (categories.Count > 0 && startDate == null && endDate == null)
-                {
-                    // 只選了分類
-                    var filteredActivities = await _context.NotificationRecords
-                        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date && categories.Any(c =>
-                                a.HashTag1.Contains(c) ||
-                                a.HashTag2.Contains(c) ||
-                                a.HashTag3.Contains(c) ||
-                                a.HashTag4.Contains(c) ||
-                                a.HashTag5.Contains(c)))
+                                a.HashTag5.Contains(c)) &&
+                                a.Location != null && a.Location != "" &&
+                                locations.Any(l =>
+                                a.Location.Contains(l)))
                         .ToListAsync();
 
                     return PartialView("_searchPartial", filteredActivities);
                 }
-                else if (categories.Count == 0 && startDate != null && endDate != null)
+                else if (hashtags.Count > 0 && locations.Count > 0 && startDate != null && endDate != null)
                 {
-                    // 只選了區間
+                    // 分類+地區+區間
                     var filteredActivities = await _context.NotificationRecords
-                        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date
-                               && a.StartTime.Value.Date <= startDate.Value.Date &&
-                                    a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date)
+                        .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue &&
+                                a.StartTime.Value.Date <= startDate.Value.Date &&
+                                a.EndTime.Value.Date >= endDate.Value.Date &&
+                                a.EndTime.Value.Date >= startDate.Value.Date &&
+                                hashtags.Any(c =>
+                                a.HashTag1.Contains(c) ||
+                                a.HashTag2.Contains(c) ||
+                                a.HashTag3.Contains(c) ||
+                                a.HashTag4.Contains(c) ||
+                                a.HashTag5.Contains(c)) &&
+                                a.Location != null && a.Location != "" &&
+                                locations.Any(l =>
+                                a.Location.Contains(l)))
                         .ToListAsync();
 
                     return PartialView("_searchPartial", filteredActivities);
                 }
                 else
+                    {
+                        // 原始搜尋結果
+                        var act = await _context.NotificationRecords
+                            .Where(p => p.ActivityName.Contains(searchString))
+                            .ToListAsync();
+
+                        return PartialView("_searchPartial", act);
+                    }
+                }
+                else if (searchDate != null) // 從首頁輸入指定日期進來
                 {
-                    // 原始搜尋結果
-                    var act = await _context.NotificationRecords
+                    if (hashtags.Count > 0 && startDate != null && endDate != null)
+                    {
+                        // 分類+區間都有選
+                        var filteredActivities = await _context.NotificationRecords
+                            .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
+                                   && a.StartTime.Value.Date <= startDate.Value.Date &&
+                                      a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date
+                                && hashtags.Any(c =>
+                                    a.HashTag1.Contains(c) ||
+                                    a.HashTag2.Contains(c) ||
+                                    a.HashTag3.Contains(c) ||
+                                    a.HashTag4.Contains(c) ||
+                                    a.HashTag5.Contains(c) &&
+                                    a.StartTime.Value.Date <= searchDate.Value.Date &&
+                                    a.EndTime.Value.Date >= searchDate.Value.Date))
+                                    .ToListAsync();
+
+                        return PartialView("_searchPartial", filteredActivities);
+                    }
+                    else if (hashtags.Count > 0 && startDate == null && endDate == null)
+                    {
+                        // 只選了分類
+                        var filteredActivities = await _context.NotificationRecords
+                            .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date && hashtags.Any(c =>
+                                    a.HashTag1.Contains(c) ||
+                                    a.HashTag2.Contains(c) ||
+                                    a.HashTag3.Contains(c) ||
+                                    a.HashTag4.Contains(c) ||
+                                    a.HashTag5.Contains(c)))
+                            .ToListAsync();
+
+                        return PartialView("_searchPartial", filteredActivities);
+                    }
+                    else if (hashtags.Count == 0 && startDate != null && endDate != null)
+                    {
+                        // 只選了區間
+                        var filteredActivities = await _context.NotificationRecords
+                            .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date
+                                   && a.StartTime.Value.Date <= startDate.Value.Date &&
+                                        a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date)
+                            .ToListAsync();
+
+                        return PartialView("_searchPartial", filteredActivities);
+                    }
+                else if (hashtags.Count == 0 && locations.Count > 0 && startDate == null && endDate == null)
+                {
+                    // 只選了地點
+                    var filteredActivities = await _context.NotificationRecords
                         .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
-                            && a.StartTime.Value.Date <= searchDate.Value.Date
-                            && a.EndTime.Value.Date >= searchDate.Value.Date)
+                                && a.StartTime.Value.Date <= searchDate.Value.Date
+                                && a.EndTime.Value.Date >= searchDate.Value.Date && a.Location != null && a.Location != "" && locations.Any(l =>
+                                a.Location.Contains(l)))
                         .ToListAsync();
 
-                    return PartialView("_searchPartial", act);
+                    return PartialView("_searchPartial", filteredActivities);
+                }
+                else if (hashtags.Count == 0 && locations.Count > 0 && startDate != null && endDate != null)
+                {
+                    // 地點+區間
+                    var filteredActivities = await _context.NotificationRecords
+                        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
+                                && a.StartTime.Value.Date <= searchDate.Value.Date
+                                && a.EndTime.Value.Date >= searchDate.Value.Date && a.StartTime.HasValue && a.EndTime.HasValue &&
+                                a.StartTime.Value.Date <= startDate.Value.Date &&
+                                a.EndTime.Value.Date >= endDate.Value.Date &&
+                                a.EndTime.Value.Date >= startDate.Value.Date &&
+                                a.Location != null && a.Location != "" &&
+                                locations.Any(l =>
+                                a.Location.Contains(l)))
+                        .ToListAsync();
+
+                    return PartialView("_searchPartial", filteredActivities);
+                }
+                else if (hashtags.Count > 0 && locations.Count > 0 && startDate == null && endDate == null)
+                {
+                    // 分類+地點
+                    var filteredActivities = await _context.NotificationRecords
+                        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
+                                && a.StartTime.Value.Date <= searchDate.Value.Date
+                                && a.EndTime.Value.Date >= searchDate.Value.Date && hashtags.Any(c =>
+                                a.HashTag1.Contains(c) ||
+                                a.HashTag2.Contains(c) ||
+                                a.HashTag3.Contains(c) ||
+                                a.HashTag4.Contains(c) ||
+                                a.HashTag5.Contains(c)) &&
+                                a.Location != null && a.Location != "" &&
+                                locations.Any(l =>
+                                a.Location.Contains(l)))
+                        .ToListAsync();
+
+                    return PartialView("_searchPartial", filteredActivities);
+                }
+                else if (hashtags.Count > 0 && locations.Count > 0 && startDate != null && endDate != null)
+                {
+                    // 分類+地區+區間
+                    var filteredActivities = await _context.NotificationRecords
+                        .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
+                                && a.StartTime.Value.Date <= searchDate.Value.Date
+                                && a.EndTime.Value.Date >= searchDate.Value.Date && a.StartTime.HasValue && a.EndTime.HasValue &&
+                                a.StartTime.Value.Date <= startDate.Value.Date &&
+                                a.EndTime.Value.Date >= endDate.Value.Date &&
+                                a.EndTime.Value.Date >= startDate.Value.Date &&
+                                hashtags.Any(c =>
+                                a.HashTag1.Contains(c) ||
+                                a.HashTag2.Contains(c) ||
+                                a.HashTag3.Contains(c) ||
+                                a.HashTag4.Contains(c) ||
+                                a.HashTag5.Contains(c)) &&
+                                a.Location != null && a.Location != "" &&
+                                locations.Any(l =>
+                                a.Location.Contains(l)))
+                        .ToListAsync();
+
+                    return PartialView("_searchPartial", filteredActivities);
+                }
+                else
+                    {
+                        // 原始搜尋結果
+                        var act = await _context.NotificationRecords
+                            .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
+                                && a.StartTime.Value.Date <= searchDate.Value.Date
+                                && a.EndTime.Value.Date >= searchDate.Value.Date)
+                            .ToListAsync();
+
+                        return PartialView("_searchPartial", act);
+                    }
+                }
+                return NotFound();
+            }
+        //    return NotFound();
+        //}
+
+        // 判斷是否為地點
+        private bool IsLocation(string category)
+        {
+            // 假設地點都是台北、台中、高雄、台南等城市名稱
+            // 並且哈希標籤不包含 '#' 符號
+
+            string[] cities = { "台北", "台中", "高雄", "台南" };
+            foreach (var city in cities)
+            {
+                if (category.StartsWith(city))
+                {
+                    return true;
                 }
             }
-            return NotFound();
+            return false;
         }
-
-
 
 
         //[HttpPost]
@@ -328,7 +497,7 @@ namespace Seatly1.Controllers
         //}
 
 
-       
+
 
         //[HttpPost]
         //public IActionResult SearchByDate(string searchDate)
