@@ -256,7 +256,8 @@
     // layout搜尋
     $("#layoutSearchBtn").on("click", function (e) {
         // e.preventDefault();
-        sessionStorage.clear()
+        sessionStorage.removeItem("searchDate")
+        sessionStorage.removeItem("searchString")
         var searchKeyword = $("#layoutSearch").val()
         console.log(searchKeyword)
         sessionStorage.setItem("searchString", searchKeyword)

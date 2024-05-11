@@ -823,7 +823,8 @@
         // 依名稱關鍵字搜尋
         $("#customSearchButton").on("click", function (e) {
             // e.preventDefault();
-            sessionStorage.clear()
+            sessionStorage.removeItem("searchDate")
+            sessionStorage.removeItem("searchString")
             var searchKeyword = $("#inputDelivery").val()
             console.log(searchKeyword)
             sessionStorage.setItem("searchString", searchKeyword)
@@ -835,7 +836,8 @@
 
         // 依日期搜尋
         $("#customSearchButtonDate").on("click", function (e) {
-            sessionStorage.clear()
+            sessionStorage.removeItem("searchDate")
+            sessionStorage.removeItem("searchString")
             var searchDate = $("#inputPickup").val();
             console.log(searchDate)
             var formattedDate = formatDate(searchDate);
@@ -857,10 +859,10 @@
             return formattedDate;
         }
 
-        // 監聽 window.onpopstate 事件
-        window.onpopstate = function (event) {
-            // 清空 sessionStorage
-            sessionStorage.clear();
-        };
+        // // 監聽 window.onpopstate 事件
+        // window.onpopstate = function (event) {
+        //     // 清空 sessionStorage
+        //     sessionStorage.clear();
+        // };
     </script>
 }

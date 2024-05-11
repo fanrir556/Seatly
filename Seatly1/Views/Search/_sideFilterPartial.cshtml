@@ -34,15 +34,29 @@
             </label>
         </div>
     }
-
+    <br />
+    <div>
     <legend class="search-filter-group_header">活動開始日期</legend>
     <label><input type="date" id="startDatePicker" class="form-control"></label>
     <legend class="search-filter-group_header">活動結束日期</legend>
     <label><input type="date" id="endDatePicker" class="form-control"></label>
     <button class="btn btn-primary m-1" type="button" id="searchDurtion">日期區間搜尋</button>
     <button class="btn btn-primary m-1" type="button" id="clearDurtion">清除日期</button>
+    </div>
+    <br />
 
-
+    <legend class="search-filter-group_header">活動地點</legend>
+    @foreach (var location in ViewBag.AllLocations)
+    {
+        <div class="search-filter search-checkbox-filter">
+            <label class="search-checkbox">
+                <div class="search-checkbox_box">
+                    <input type="checkbox" name="" value="@location" data-category="@location"><span class="search-checkbox_label">@location</span>
+                </div>
+            </label>
+        </div>
+    }
+    <br />
 </fieldset>
 
 

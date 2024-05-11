@@ -29,6 +29,8 @@ public partial class NotificationRecord
 
     public bool? IsActivity { get; set; }
 
+    public string? Location { get; set; }
+
     public string? HashTag1 { get; set; }
 
     public string? HashTag2 { get; set; }

@@ -242,6 +242,7 @@ public partial class SeatlyContext : DbContext
             entity.Property(e => e.HashTag3).HasMaxLength(50);
             entity.Property(e => e.HashTag4).HasMaxLength(50);
             entity.Property(e => e.HashTag5).HasMaxLength(50);
+            entity.Property(e => e.Location).HasMaxLength(50);
             entity.Property(e => e.OrganizerId).HasColumnName("OrganizerID");
             entity.Property(e => e.RecurringTime).HasMaxLength(50);
             entity.Property(e => e.StartTime).HasColumnType("datetime");
