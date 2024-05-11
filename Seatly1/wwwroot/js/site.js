@@ -69,7 +69,9 @@ $(function () {
 
     /* 管理員登入 */
     $("#home").on("mousedown", function () {
-        $("#logo").css("animation-name","logoSpin")
+        setTimeout(function () {
+            $("#logo").css("animation-name", "logoSpin")
+        }, 1000);
         timer = setTimeout(function () {
             $("#logo").css("animation-name", "");
             if (isMG == "true")
@@ -193,8 +195,8 @@ $(function () {
             });
         });
         setTimeout(function () {
-            sessionStorage.getItem("oriPosRel") == "true" ? sessionStorage.removeItem("oriPosRel") : gameTargets.eq(randEl).removeClass("position-relative");
-            gameTargets.eq(randEl).find("#gameLogo").remove();
+            sessionStorage.getItem("oriPosRel") == "true" ? sessionStorage.removeItem("oriPosRel") : $("main").find("#gameLogo").parent().removeClass("position-relative");
+            $("main").find("#gameLogo").remove();
         }, 4000);
     }
     

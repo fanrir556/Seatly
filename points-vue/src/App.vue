@@ -143,7 +143,7 @@ nav a:first-of-type {
     <h2 v-else-if="strPoint == 'pointsHistory'" class="text-gradient">點數交易紀錄</h2>
   </div>
 
-  <div class="row ps-5 pe-5">
+  <div class="row ps-5 pe-5 m-0">
     <div class="col-12 col-md-2 p-3">
       <ul class="list-group">
         <li class="list-group-item bg-white">
@@ -157,12 +157,11 @@ nav a:first-of-type {
         </li>
       </ul>
     </div>
-
     <div class="col-12 col-md-10 p-3">
-      <component :is="components[strPoint]"></component>
-      <!-- <pointsShop v-if="strPoint == 'pointsShop'" />
+      <!-- <component :is="components[strPoint]"></component> -->
+      <pointsShop v-if="strPoint == 'pointsShop'" />
       <coupon v-else-if="strPoint == 'coupon'" />
-      <pointsHistory v-else-if="strPoint == 'pointsHistory'" /> -->
+      <pointsHistory v-else-if="strPoint == 'pointsHistory'" />
     </div>
   </div>
 </template>

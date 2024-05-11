@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,10 +8,13 @@ using Seatly1.Data;
 using Seatly1.DTO;
 using Seatly1.Models;
 using Seatly1.ViewModels;
+using System.ComponentModel;
+using System.Reflection;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Seatly1.Controllers
 {
+    [EnableCors("PointsAPI")]
     [Route("api/[controller]")]
     [ApiController]
     public class PointsAPIController : ControllerBase
@@ -25,6 +29,7 @@ namespace Seatly1.Controllers
         }
 
         //點數商城VUE
+        [HttpPost("pointsShop")]
         public async Task<ActionResult<PointsPagingDTO>> pointsShopVue([FromBody] PointsSearchDTO search)
         {
             var isMg = HttpContext.Session.GetString("isMg"); //管理員登入判定
@@ -59,8 +64,6 @@ namespace Seatly1.Controllers
             products = products.Skip(skipCount).Take(pageSize);
 
             PointsPagingDTO pointsPaging = new PointsPagingDTO();
-            var PSCategories = await _context.PointStores.Select(s => s.Category).Distinct().ToListAsync();
-            pointsPaging.List1 = new SelectList(PSCategories);
             pointsPaging.TotalPages = totalPages;
             pointsPaging.Shops = await products.ToListAsync();
 
@@ -70,9 +73,47 @@ namespace Seatly1.Controllers
                 // 在這裡進行相關處理
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
                 var aspUser = await _context.AspNetUsers.FindAsync(user.Id);
-                pointsPaging.UserPoints = aspUser.Points;
+                if (aspUser.Points == null)
+                {
+                    pointsPaging.UserPoints = 0;
+                }
+                else
+                {
+                    pointsPaging.UserPoints = aspUser.Points;
+                }
             }
 
+            if (isMg == "true")
+            {
+                List<string> DNames = new List<string>();
+                var PSCategories = await _context.PointStores.Select(s => s.Category).Distinct().ToListAsync();
+                pointsPaging.SList1 = new SelectList(PSCategories);
+                // 取得 PointStore 類別
+                Type pointStoreType = typeof(PointStore);
+
+                // 取得 PointStore 類別的所有屬性
+                PropertyInfo[] propertyInfos = pointStoreType.GetProperties();
+
+                // 遍歷所有屬性
+                foreach (PropertyInfo propertyInfo in propertyInfos)
+                {
+                    // 取得屬性的 Display 屬性
+                    DisplayNameAttribute displayNameAttribute = propertyInfo.GetCustomAttribute<DisplayNameAttribute>();
+
+                    // 如果屬性有 Display 屬性
+                    if (displayNameAttribute != null)
+                    {
+                        // 取得屬性名稱和顯示名稱
+                        string propertyName = propertyInfo.Name;
+                        string displayName = displayNameAttribute.DisplayName;
+
+                        DNames.Add(displayName);
+                    }
+                }
+                pointsPaging.DNames = DNames;
+                pointsPaging.isMg = true;
+            }
+            
             return pointsPaging;
         }
     }
