@@ -3,28 +3,62 @@
 @{
     ViewData["Title"] = "Search Activity";
 }
+@section Styles{
+    <style>
+        #filiter span{
+            padding: 3px;
+            margin: 3px;
+        }
+        #filiter{
+            width:500px;
+            height: 200px;
+            border: 1px solid #ccc;
+        }
+        .current{
+            background-color: #ccc;
+        }
+        .red{
+            background-color: tomato;
+        }
+    </style>
+}
 
 <div id="app">
     <h2>Search Activity</h2>
-       @*  <router-link v-bind:to="{name:'pJapanese'}">查看日式</router-link>
-        <router-view></router-view> *@
+      
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('japanese')">查看日式</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('chinese')">查看中式</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('american')">查看美式</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('italian')">查看義式</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('korean')">查看韓式</button>
     <hr />
-    <button class="btn btn-secondary m-2" v-on:click="filterByTypeAndLocation(null, '台北')">台北</button>
-    <button class="btn btn-secondary m-2" v-on:click="filterByTypeAndLocation(null, '台中')">台中</button>
-    <button class="btn btn-secondary m-2" v-on:click="filterByTypeAndLocation(null, '高雄')">高雄</button>
 
+    <div id="filiter">
+        <p> 目前選擇:
+            <span id="chooseItem" v-for="item,key in choose">
+                {{item}}
+                <i v-on:click="removeHandle(key)">x</i>
+            </span>
+        </p>
+        <ul>
+            <li v-for="item,index in dataList">
+                {{item.title}}
+                <span v-for="option,i in item.list" v-on:click="addChooseHandle(option,index,i)" :class="{red: item.index === i}">{{option}}</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 排序按钮 -->
+    <div class="btn-group" role="group" aria-label="Sort Activities">
+        <button type="button" class="btn btn-secondary" v-on:click="toggleSortOrder">目前排序: 依時間{{ sortBy === 'asc' ? '正序' : '倒序' }}</button>
+    </div>
 
 
     @* 日式 *@
     <section v-if="cate=='japanese'" style="width: 65rem;">
         <h3>日式</h3>
         <div class="row">
-            <div class="col-md-4" v-for="activity in activities" :key="activity.ActivityId">
+            <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
                     <div class="card-body">
@@ -49,7 +83,7 @@
     <section v-else-if="cate == 'chinese'" style="width: 65rem;">
         <h3>中式</h3>
         <div class="row">
-            <div class="col-md-4" v-for="activity in activities" :key="activity.ActivityId">
+            <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
                     <div class="card-body">
@@ -73,7 +107,7 @@
     <section v-else-if="cate == 'american'" style="width: 65rem;">
         <h3>美式</h3>
         <div class="row">
-            <div class="col-md-4" v-for="activity in activities" :key="activity.ActivityId">
+            <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
                     <div class="card-body">
@@ -98,7 +132,7 @@
     <section v-else-if="cate == 'italian'" style="width: 65rem;">
         <h3>義式</h3>
         <div class="row">
-            <div class="col-md-4" v-for="activity in activities" :key="activity.ActivityId">
+            <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
                     <div class="card-body">
@@ -122,7 +156,7 @@
     <section v-else-if="cate == 'korean'" style="width: 65rem;">
         <h3>韓式</h3>
         <div class="row">
-            <div class="col-md-4" v-for="activity in activities" :key="activity.ActivityId">
+            <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
                     <div class="card-body">
@@ -149,15 +183,45 @@
 
 
 @section Scripts{
-@* <script src="https://unpkg.com/vue-router@4"></script> *@
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+
 <script>
-   
-        const { createApp, ref } = Vue;
+    const { createApp, ref, reactive } = Vue;
+    let chooseData = [
+        {
+            title:"地點:",
+            list:["台北","台中","台南","高雄"]
+        },
+        {
+            title: "地點",
+            list: ["台北", "台中", "台南", "高雄"]
+        },
+        // {
+        //     title: "地點",
+        //     list: ["台北", "台中", "台南", "高雄"]
+        // },
+    ]
+   //使用foreach給數組每個對象添加index屬性
+    chooseData.forEach(item => { item.index = -1; })
+        
         var vueApp = {
             data() {
                 return {
                     cate: 'japanese',
                     activities: [], // 添加 activities 屬性，用於存儲從後端獲取的活動數據
+                    dataList: reactive(chooseData), // 使用 reactive 创建响应式数据
+                    choose: reactive({}),
+                    sortBy: 'desc', // sortBy 目前排序方式 正序
+                }
+            },
+            computed: {
+                sortedActivities() {
+                    // 根據 sortBy 决定正序或倒序
+                    if (this.sortBy === 'asc') {
+                        return this.activities.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+                    } else {
+                        return this.activities.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+                    }
                 }
             },
             methods: {
@@ -204,21 +268,31 @@
                         console.log(e);
                     }
                 },
-                async filterByLocation(location) {
-                    try {
-                        const response = await fetch(`/Category/GetActivitiesByLocation?location=${location}`);
-                        const data = await response.json();
-                        this.activities = data;
-                    } catch (error) {
-                        console.error(error);
-                    }
-                },
-               
+                               
                 // 轉換圖片格式
                 convertToImageUrl(photoData) {
                     const imageUrl = 'data:image/png;base64,' + photoData;
                     return imageUrl;
-                }
+                },
+
+                toggleSortOrder() {
+                    // 切换排序方式
+                    this.sortBy = this.sortBy === 'asc' ? 'desc' : 'asc';
+                },
+
+                addChooseHandle(option, index, i) {
+                    // 使用set添加對象
+                    // Vue.set(this.choose, index, option)
+                    this.choose[index] = option;
+                    console.log(this.choose)
+                    // 找到操作的一行 把這一行數據中的index進行設定
+                    this.dataList[index].index = i
+                },
+
+                removeHandle(key) {
+                   delete this.choose[key]
+                   this.dataList[key].index=-1
+                },
             },
             created() {
                 console.log(this.cate);
