@@ -3,17 +3,28 @@
 *@
 @{
 }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <div id="app">
-    <p>#{{HashTag1}} #{{HashTag2}} #{{HashTag3}} #{{HashTag4}} #{{HashTag5}}</p>
-    <h1>{{ActivityName}}</h1>
-    <img :src="ActivityPhoto" class="vw-100 vh-100"/>
-    <p>活動開始時間：{{StartTime}}</p>
-    <p>活動結束時間：{{EndTime}}</p>
+    <!--登入頁開始-->
+    <section class="py-8 overflow-hidden">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-8 offset-md-2">
+                    <div class="card">
+                        <h5 class="card-header">#{{HashTag1}} #{{HashTag2}} #{{HashTag3}} #{{HashTag4}} #{{HashTag5}}</h5>
+                        <img :src="ActivityPhoto" class="card-img-top vw-md-50 vh-md-50" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ActivityName}}</h5>
+                            <p class="card-text"><i class="bi bi-alarm"></i> {{StartTime}} - {{EndTime}}</p>
+                            <a href="#" class="btn btn-secondary mx-auto">編輯</a> <a href="#" class="btn btn-primary">刪除</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
-<div class="btn-group" role="group">
-    <button class="btn btn-secondary btn-sm">編輯</button>
-    <button class="btn btn-primary btn-sm">刪除</button>
-</div>
+
 @section Scripts {
     <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
     <script src="https://unpkg.com/vue-router@4.3.2/dist/vue-router.global.js"></script>
