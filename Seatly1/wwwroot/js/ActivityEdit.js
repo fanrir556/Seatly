@@ -76,7 +76,7 @@ var vueApp = {
                 formData.append('IsRecurring', Boolean(self.IsRecurring));
 
                 // 发送 put 请求
-                axios.put('/api/OrganizersApi/activity', formData, {
+                axios.put('/api/OrganizersApi/activity/1', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
                     }

@@ -1,0 +1,23 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div id="app">
+    <p>#{{HashTag1}} #{{HashTag2}} #{{HashTag3}} #{{HashTag4}} #{{HashTag5}}</p>
+    <h1>{{ActivityName}}</h1>
+    <img v-if="ActivityPhoto" :src="ActivityPhoto" class="vw-100 vh-100"/>
+    <p>活動開始時間：{{StartTime}}</p>
+    <p>活動結束時間：{{EndTime}}</p>
+</div>
+<div class="btn-group" role="group">
+    <button class="btn btn-secondary btn-sm">編輯</button>
+    <button class="btn btn-primary btn-sm">刪除</button>
+</div>
+@section Scripts {
+    <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4.3.2/dist/vue-router.global.js"></script>
+    <script src="https://unpkg.com/axios@1.6.8/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/Activity.js"></script>
+}

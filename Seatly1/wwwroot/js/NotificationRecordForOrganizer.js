@@ -110,6 +110,7 @@ function read(activity) {
                 <div class="card-body">
                     <p class="card-text">${activity.startTime} - ${activity.endTime}</p>
                     <h5 class="card-title">${activity.activityName}</h5>
+                    <button onclick="viewActivity(${activity.activityId})" class="btn btn-primary mt-3">進入活動</button>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">#${activity.hashTag1} #${activity.hashTag2} #${activity.hashTag3} #${activity.hashTag4} #${activity.hashTag5}</li>
@@ -146,7 +147,7 @@ function binaryStringToBlob(binaryString, contentType) {
 
 // 進入活動資訊頁面
 function viewActivity(activityId) {
-    window.location.href = `/OrganizerRoute/Activity?id=${activityId}`;
+    window.location.href = `/OrganizerRoute/Activity/${activityId}`;
 }
 
 // 新增活動

@@ -40,4 +40,6 @@ public partial class NotificationRecord
     public string HashTag4 { get; set; }
 
     public string HashTag5 { get; set; }
+
+    public string Location { get; set; }
 }

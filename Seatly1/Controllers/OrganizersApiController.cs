@@ -38,7 +38,7 @@ namespace Seatly1.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // 列出個別活動方的活動
+        // 列出個別活動方的所有活動
         [HttpGet("activities/{organizerId}")]
         public async Task<IEnumerable<NotificationRecordDTO>> GetActivitiesForOrganizerByPage(int organizerId, int page)
         {
@@ -67,6 +67,34 @@ namespace Seatly1.Controllers
                 .ToListAsync();
 
             return activities;
+        }
+        // 根據活動id取得活動資訊
+        [HttpGet("activity/{activityid}")]
+        public async Task<NotificationRecordDTO?> GetActivity(int activityid)
+        {
+            var activity = await _context.NotificationRecords.FindAsync(activityid);
+            if (activity == null)
+            {
+                return null;
+            }
+            NotificationRecordDTO activityDTO = new NotificationRecordDTO
+            {
+                ActivityId = activity.ActivityId,
+                ActivityPhoto = activity.ActivityPhoto,
+                StartTime = activity.StartTime,
+                EndTime = activity.EndTime,
+                Capacity = activity.Capacity,    
+                ActivityName = activity.ActivityName,
+                ActivityMethod = activity.ActivityMethod,
+                DescriptionN = activity.DescriptionN,
+                IsRecurring = activity.IsRecurring,
+                HashTag1 = activity.HashTag1,
+                HashTag2 = activity.HashTag2,
+                HashTag3 = activity.HashTag3,
+                HashTag4 = activity.HashTag4,
+                HashTag5 = activity.HashTag5,
+            };
+            return activityDTO;
         }
 
         [HttpPost("activity")]

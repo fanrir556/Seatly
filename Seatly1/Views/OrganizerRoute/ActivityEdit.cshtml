@@ -90,7 +90,7 @@
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
                                         <select v-model="IsRecurring" class="form-select" id="IsRecurring" required>
-                                            <option v-for="(value, key) in options" :value="key">{{ value }}</option>
+                                            <option v-for="(value, key) in RecurringOptions" :value="key">{{ value }}</option>
                                         </select>
                                         <div class="invalid-feedback">
                                             此為必填欄位
