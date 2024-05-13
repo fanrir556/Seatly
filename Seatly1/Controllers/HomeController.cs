@@ -113,5 +113,19 @@ namespace Seatly1.Controllers
             }
             return Ok();
         }
+
+        //首頁呈現熱門項
+        public IActionResult HotItems()
+        {
+            var hotItems = _context.NotificationRecords
+                .Where(r => r.HashTag1.Contains("熱門") ||
+                r.HashTag2.Contains("熱門") ||
+                r.HashTag3.Contains("熱門") ||
+                r.HashTag4.Contains("熱門") ||
+                r.HashTag5.Contains("熱門"))
+                .ToList();
+
+            return View(hotItems);
+        }
     }
 }
