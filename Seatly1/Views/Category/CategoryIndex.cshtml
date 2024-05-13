@@ -181,7 +181,7 @@
                 return {
                     cate: 'tapei',
                     activities: [], // 添加 activities 屬性，用於存儲從後端獲取的活動數據
-                    dataList: reactive(chooseData), // 使用 reactive 创建响应式数据
+                    dataList: reactive(chooseData), // 使用 reactive 存標籤
                     choose: reactive({}),
                     sortBy: 'desc', // sortBy 目前排序方式 正序
                     selectedType: sessionStorage.getItem('selectedType') || '' // 初始化 selectedType

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Seatly1.Data;
 using Seatly1.Models;
 using Seatly1.Controllers;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Seatly1.Areas.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,11 @@ builder.Services.AddDbContext<SeatlyContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Seatly")));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+// 註冊發送驗證信
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddControllersWithViews();
+
 
 // ���UDI�e��
 builder.Services.AddDbContext<SeatlyContext>(options => {
