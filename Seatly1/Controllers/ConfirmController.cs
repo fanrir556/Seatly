@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Seatly1.Models;
 using Seatly1.ViewModels;
+using Seatly1.DTO;
 
 namespace Seatly1.Controllers
 {
@@ -21,7 +22,7 @@ namespace Seatly1.Controllers
         }
 
 
-      
+
 
         // GET: ConfirmController
         public IActionResult Index(int? NId)
@@ -41,14 +42,14 @@ namespace Seatly1.Controllers
 
                 return View(viewModel);
             }
-            else 
+            else
             {
                 return Redirect("/Identity/Account/Login");
             }
         }
 
 
-  
+
         private BookingOrder BookO(int? NId)
         {
             var NontiData = _context.NotificationRecords.FirstOrDefault(n => n.ActivityId == NId);
@@ -84,7 +85,7 @@ namespace Seatly1.Controllers
                 newBookingOrder.WaitingNumber = 1;
             }
 
-            if (loggedInUserName != null) 
+            if (loggedInUserName != null)
             {
                 newBookingOrder.UserName = loggedInUserName;
             }
@@ -124,74 +125,51 @@ namespace Seatly1.Controllers
             }
         }
 
+        //活動檢查頁面
+        public IActionResult OrganizerActiveCheckIndex() {
 
-        // GET: ConfirmController/Details/5
-        public ActionResult Details(int id)
-        {
             return View();
         }
 
-        // GET: ConfirmController/Create
-        public ActionResult Create()
-        {
-            return View();
+
+        //輸出活動列表
+        //GET:/Confirm/ActiveList
+        [HttpGet]
+        public async Task<IEnumerable<NotificationRecordDTO>> ActiveList(int id) {
+            var aa = await _context.NotificationRecords
+                .Where(e => e.OrganizerId == id && e.IsActivity == true)
+                .Select(
+                e => new NotificationRecordDTO
+                {
+                    ActivityId = e.ActivityId,
+                    ActivityName = e.ActivityName,
+                    ActivityPhoto = e.ActivityPhoto,
+                    StartTime = e.StartTime,
+                    EndTime = e.EndTime,
+                }).ToListAsync();
+
+            return aa;
         }
 
-        // POST: ConfirmController/Create
+        //改變欄位
+        //POST:/Confirm/TransActive
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task TransActive(int id) 
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var aa = _context.NotificationRecords.FirstOrDefault(e => e.ActivityId == id);
+            aa.IsActivity = false;
+            await _context.SaveChangesAsync();
         }
 
-        // GET: ConfirmController/Edit/5
-        public ActionResult Edit(int id)
+
+        //回傳排隊頁面
+        //要拿到活動ID在BookOrder做事
+        //Get:/Confirm/OrganizerActiveCheck
+        [HttpGet]
+        public IActionResult OrganizerActiveCheck(int id) 
         {
             return View();
         }
 
-        // POST: ConfirmController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ConfirmController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ConfirmController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

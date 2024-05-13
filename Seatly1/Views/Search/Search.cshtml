@@ -19,15 +19,15 @@
                     var base64Image = Convert.ToBase64String(activity.ActivityPhoto);
                     var imageSrc = $"data:image;base64,{base64Image}";
                 }
-                <img src="@imageSrc" alt="Activity Photo" />
-            <li>活動名稱: @activity.ActivityName</li>
-            <li>開始時間: @activity.StartTime</li>
-            <li>結束時間: @activity.EndTime</li>
-            <li>活動內容: @activity.DescriptionN</li>
+                <img src="@imageSrc" alt="Activity Photo"/>
+                <li>活動名稱: @activity.ActivityName</li>
+                <li>開始時間: @activity.StartTime</li>
+                <li>結束時間: @activity.EndTime</li>
+                <li>活動內容: @activity.DescriptionN</li>
 
-            <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
-                <button>查看活動</button>
-            </form>
+                <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
+                    <button>查看活動</button>
+                </form>
 
             </div>
             <br />

@@ -48,6 +48,7 @@
             }).done(function (data) {
                 $("#adminBody").html(data);
                 $("#dancingtime").hide();
+                console.log("bb")
             }).fail(function (err) {
                 alert(err.responseText);
                 $("#dancingtime").hide();

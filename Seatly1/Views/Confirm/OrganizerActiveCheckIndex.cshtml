@@ -1,0 +1,244 @@
+﻿<!--
+    活動check頁面
+
+    1.讀取啟用中的活動
+    2.可選擇關閉活動
+        2-2 活動紀錄額外做一頁
+
+ -->
+
+
+
+    <div id="app">
+        <div class="container mt-3">
+            <h5>活動check</h5>
+            <div>
+                <p>進行中活動</p>
+            </div>
+
+            <div class="row mt-3">
+                <div class="mt-2" style="background-color:rgba(255,255,255,0.7);">
+
+                    <div style="width:100%;">
+                        <div style="text-align:center;margin:auto 0;display:none" id="loading">資料載入中...</div>
+                    </div>
+                   
+
+                    <table class="table">
+                        <thead style="position: sticky; top: 0; z-index: 1; background-color: white;">
+                            <tr>
+                                <th scope="col">活動id</th>
+                                <th scope="col">活動照片</th>
+                                <th scope="col">活動名稱</th>
+                                <th scope="col">開始時間</th>
+                                <th scope="col">結束時間 </th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr v-for="N in Activity">
+                                <th scope="row">{{N.activityId}}</th>@* 活動ID *@
+                                <td><img :src="N.activityPhoto" :alt="N.activityId"></img></td>@* 活動照片 *@
+                                <td>{{N.activityName}}</td>@* 活動名稱 *@
+                                <td>{{N.startTime}}</td>@* 開始時間 *@
+                                <td>{{N.endTime}}</td>@* 結束時間 *@
+                                <td style="width:150px;">
+                                    <button :btn-id="N.activityId" class="btn btn-sm btn-secondary" @@click="check">
+                                        活動檢查
+                                    </button>
+                                    <button :btn-id="N.activityId" class="btn btn-sm btn-primary" @@click="endactive">
+                                        結束活動
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+ 
+                </div>
+            </div>
+
+           @*  <!--結束欄位-->
+            <div class="row">
+                <div class="mt-2 row" style="height:350px; background-color:rgba(255,150,150,0.3);">
+
+                    <div class="col-1 mt-5">結束活動</div>
+
+                    <div class="col-11" style="max-height:350px; overflow-y: scroll;">
+                        <table class="table">
+                        <!--結束欄位標題-->
+                            <thead style="background-color:rgba(255,150,150,0);color:rgba(255,150,150,0)">
+                                <tr>
+                                    <th scope="col">活動id</th>
+                                    <th scope="col">活動照片</th>
+                                    <th scope="col">活動名稱</th>
+                                    <th scope="col">開始時間</th>
+                                    <th scope="col">結束時間 </th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <!--結束欄位標題-->
+                            <!--結束欄位內容-->
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>活動照片</td>
+                                    <td>活動名稱</td>
+                                    <td>開始時間</td>
+                                    <td>結束時間</td>
+                                    <td style="width:150px;">
+                                        <button class="btn btn-sm btn-secondary">活動檢查</button>
+                                        <button class="btn btn-sm btn-primary">結束活動</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <!--結束欄位內容-->
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--結束欄位--> *@
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!--時間轉型工具-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+
+    <script>
+
+        //路徑
+        const vuebase = "https://localhost:7271"
+  
+        //活動方id
+        const organizerid = sessionStorage.getItem("OrganizerId");
+
+
+        // 將二進制數據轉換為 Base64 字符串
+        function arrayBufferToBase64(buffer) {
+            let binary = '';
+            let bytes = new Uint8Array(buffer);
+            let len = bytes.byteLength;
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+      
+        //vue本體
+        const vueApp = {
+            data() {
+                return {
+                    Activity: [],
+                    activityId:"",
+                    activityName:"",
+                    activityPhoto:"",
+                    startTime:"",
+                    endTime: "",
+                };
+            },
+            methods: {
+                //---------------------------------------------------
+                //生成列表
+                //呼叫api選擇active的狀態
+                list:function() { 
+                    // alert("list")
+                    let _this = this
+
+                    axios.get(`${vuebase}/Confirm/ActiveList/${organizerid}`)
+                        .then(response => {
+                            // console.log(response)
+                            $("#loading").show();
+
+                            //這邊幫資料轉型
+                            let res = response.data.map(
+                                e => {
+
+                                    //先把 2進位制資料 轉成 圖片
+
+                                    // 將二進制數據轉換為 Base64 字符串
+                                    let base64String = arrayBufferToBase64(e.ActivityPhoto)
+                                    // 構建圖片的 data URL
+                                    let imageUrl = `data:image/jpeg;base64,${base64String}`;
+
+                                    // // 將二進制數據轉換為 Base64 字符串
+                                    // let base64String = btoa(unescape(encodeURIComponent(e.ActivityPhoto)));
+
+                                    return {
+                                        activityId: e.activityId,
+                                        activityPhoto: imageUrl,
+                                        activityName: e.activityName,
+                                       //使用轉型工具設定
+                                        startTime: moment(e.StartTime).format('YYYY-MM-DD/HH'),
+                                        endTime: moment(e.EndTime).format('YYYY-MM-DD/HH'),
+                                    }
+                                }
+                            )
+                            _this.Activity = res;
+                            $("#loading").hide();
+
+                        })
+                        .catch(err => {
+                            alert(err)
+                        })
+                },
+                //---------------------------------------------------
+                //檢查活動按鈕
+                check:function(event) {
+                    alert("check");
+                    // 從事件對象(event object)中取得觸發事件的按鈕元素
+                    const btn = event.target;
+
+                    // 從按鈕元素中取得自定義屬性"btn-id"
+                    const btnId = btn.getAttribute("btn-id");
+                    // alert(btnId)
+
+                    //呼叫api轉換頁面
+                    axios.get(`${vuebase}/Confirm/OrganizerActiveCheck/${btnId}`)
+                    .then(response => {
+                        console.log(response);
+                        window.location.href = response.data;
+                    })
+                    .catch(error => {
+                        alert(error);
+                    });
+
+                },
+               //-----------------------------------------------------------
+                //更改活動按鈕
+                //更改活動狀態為不啟動
+                endactive: function(event) {
+                    let _this = this;
+
+                    // alert("delete");
+                    // 從事件對象(event object)中取得觸發事件的按鈕元素
+                    const btn = event.target;
+
+                    // 從按鈕元素中取得自定義屬性"btn-id"
+                    const btnId = btn.getAttribute("btn-id");
+                    // alert(btnId)
+                    var ret = confirm("確定要結束活動?");
+                    if (ret == true) { 
+                    axios.post(`${vuebase}/Confirm/TransActive/${btnId}`)
+                    .then(e => { 
+                        alert("結束成功");
+                         _this.list();
+                    })
+                    .catch(err => {
+                        alert(err)
+                    })
+
+                    }
+                },
+            },
+            mounted: function(){
+                let _this = this;
+                _this.list();
+            }
+        };
+
+        Vue.createApp(vueApp).mount("#app");
+    </script>

@@ -8,7 +8,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form  enctype="multipart/form-data">
+        <form id="fform" enctype="multipart/form-data">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ActivityId" value="@Model.ActivityId" readonly/>
@@ -16,6 +16,11 @@
                 <label asp-for="OrganizerId" class="control-label"></label>
                 <input asp-for="OrganizerId" class="form-control" readonly />
                 <span asp-validation-for="OrganizerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActivityId" class="control-label"></label>
+                <input asp-for="ActivityId" class="form-control" readonly />
+                <span asp-validation-for="ActivityId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ActivityPhoto" class="control-label"></label>
@@ -58,6 +63,52 @@
                 <span asp-validation-for="RecurringTime" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="ActivityMethod" class="control-label"></label>
+                <select asp-for="ActivityMethod" class="form-control">
+                    <option value="公告">公告</option>
+                    <option value="排隊">排隊</option>
+                    <option value="抽籤">抽籤</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsActivity" class="control-label"></label>
+                <select asp-for="ActivityMethod" class="form-control">
+                    <option value="True">true</option>
+                    <option value="False">false</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HashTag1" class="control-label"></label>
+                <input asp-for="HashTag1" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HashTag2" class="control-label"></label>
+                <input asp-for="HashTag2" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HashTag3" class="control-label"></label>
+                <input asp-for="HashTag3" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HashTag4" class="control-label"></label>
+                <input asp-for="HashTag4" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HashTag5" class="control-label"></label>
+                <input asp-for="HashTag5" class="form-control" />
+            </div>
+
+            <div class="form-group">
                 <button value="Save" class="btn btn-primary" id="Editt"/>save</button>
             </div>
         </form>
@@ -95,7 +146,7 @@
 
         $("#Editt").click(function (e) {
             e.preventDefault(); // 防止表單的默認提交行為
-            var formData = new FormData($("form")[0]);
+        var formData = new FormData($("#fform")[0]);
             // 發送 AJAX 請求
              // alert(formData)
             $.ajax({
@@ -106,7 +157,7 @@
                 processData: false, // 不處理數據，讓 jQuery 不將數據轉為字串
                 cache: false,
                 success: function (data) {
-                    $("#adminBody").html(data);
+                    Load();
                 },
                 error: function (xhr, status, error) {
                     // 請求失敗時的處理
@@ -115,7 +166,23 @@
             });
         });
 
-    </script>
+        function Load() {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_NotificationRecord", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+                console.log("cc")
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        }
+
+
+</script>
 
 
 

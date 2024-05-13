@@ -15,12 +15,12 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form id="fform" asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
                 <label asp-for="OrganizerId" class="control-label"></label>
-                <input asp-for="OrganizerId" class="form-control" readyonly/>
+                <input asp-for="OrganizerId" class="form-control" />
                 <span asp-validation-for="OrganizerId" class="text-danger"></span>
             </div>
 
@@ -73,6 +73,12 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="ActivityMethod" class="control-label"></label>
                 <select asp-for="ActivityMethod" class="form-control">
                     <option value="公告">公告</option>
@@ -118,6 +124,8 @@
     </div>
 </div>
 
+<script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 
 
@@ -153,7 +161,7 @@
         $("#createButton").click(function (e) {
             e.preventDefault(); // 防止表單的默認提交行為
             // var formData = $("form").serialize();
-             var formData = new FormData($("form")[0]);
+        var formData = new FormData($("#fform")[0]);
             // 發送 AJAX 請求
             $.ajax({
                 type: "POST",
@@ -170,6 +178,11 @@
                 }
             });
         });
+
+
+
+
+
 
 
 

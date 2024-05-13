@@ -120,6 +120,9 @@ namespace Seatly1.Controllers
                 {
                     SetPhoto(notificationRecord);
                 }
+                if (notificationRecord.IsActivity == null) {
+                    notificationRecord.IsActivity = true;
+                }
 
                 _context.Add(notificationRecord);
                 await _context.SaveChangesAsync();
@@ -169,7 +172,7 @@ namespace Seatly1.Controllers
                     NotificationRecord c = await _context.NotificationRecords.FindAsync(notificationRecord.ActivityId);
                     if (Request.Form.Files["ActivityPhoto"] != null)
                     {
-                        SetPhoto(notificationRecord);
+                       await SetPhoto(notificationRecord);
                     }
                     else {
                         notificationRecord.ActivityPhoto = c.ActivityPhoto;
@@ -195,13 +198,15 @@ namespace Seatly1.Controllers
             return PartialView(notificationRecord);
         }
 
-        private void SetPhoto(NotificationRecord notificationRecord)
+        private Task <bool> SetPhoto(NotificationRecord notificationRecord)
         {
             using (BinaryReader br = new
             BinaryReader(Request.Form.Files["ActivityPhoto"].OpenReadStream())) //BinaryReader一次性
             {
                 notificationRecord.ActivityPhoto = br.ReadBytes((int)Request.Form.Files["ActivityPhoto"].Length);
             }
+
+            return Task.FromResult(true);
         }
 
         // GET: NotificationRecord/Delete/5

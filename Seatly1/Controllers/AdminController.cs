@@ -81,5 +81,14 @@ namespace Seatly1.Controllers
 
 
 
+
+        //POST:Admin/_NotificationRecord_Activty
+        [HttpPost]
+        public async Task<IEnumerable<NotificationRecord>> _find_Activty(NotificationRecord NTB)
+        {
+            return _context.NotificationRecords.Where(e => e.OrganizerId == NTB.OrganizerId).ToList();
+        }
+
+
     }
 }

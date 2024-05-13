@@ -2,7 +2,7 @@
 
 @if (Model != null && Model.ActivityPhoto != null)
 {
-    <img src="@Url.Action("GetActivityPhoto","NotificationRecord",new {id=Model.ActivityId})" title="@Model.ActivityName" style="height:240px;width:320px;margin-bottom:7px;" />
+    <img src="@Url.Action("GetActivityPhoto","NotificationRecord",new {id=Model.ActivityId})?v=@DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")" title="@Model.ActivityName" style="height:240px;width:320px;margin-bottom:7px;" />
 }
 
 else
