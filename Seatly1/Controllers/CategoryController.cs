@@ -20,17 +20,45 @@ namespace Seatly1.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetActivitiesByHashtag (string? hashtag)
+        public async Task<IActionResult> GetActivitiesByLocation (string? location,string? selectedType)
         {
-            var activities = await _context.NotificationRecords.Where(a => 
-                                a.HashTag1.Contains(hashtag) || 
-                                a.HashTag2.Contains(hashtag) ||
-                                a.HashTag3.Contains(hashtag) ||
-                                a.HashTag4.Contains(hashtag) ||
-                                a.HashTag5.Contains(hashtag)).ToListAsync();
+            if (string.IsNullOrEmpty(location))
+            {
+                return BadRequest("Location parameter is required.");
+            }
+
+            var activities = await _context.NotificationRecords
+        .Where(a => a.Location == location && (
+                a.HashTag1.Contains(selectedType) ||
+                a.HashTag2.Contains(selectedType) ||
+                a.HashTag3.Contains(selectedType) ||
+                a.HashTag4.Contains(selectedType) ||
+                a.HashTag5.Contains(selectedType)
+            ))
+        .ToListAsync();
+
             return Json(activities);
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> GetActivitiesByHashtag(string? selectedType)
+        //{
+        //    if (string.IsNullOrEmpty(selectedType))
+        //    {
+        //        return BadRequest("SelectedType parameter is required.");
+        //    }
+
+        //    // 根據 selectedType 找到符合條件的活動資料
+        //    var activities = await _context.NotificationRecords
+        //        .Where(a => a.HashTag1.Contains(selectedType) ||
+        //                    a.HashTag2.Contains(selectedType) ||
+        //                    a.HashTag3.Contains(selectedType) ||
+        //                    a.HashTag4.Contains(selectedType) ||
+        //                    a.HashTag5.Contains(selectedType))
+        //        .ToListAsync();
+
+        //    return Json(activities);
+        //}
         //[HttpGet]
         //public async Task<IActionResult> GetActivitiesByTypeAndLocation(string type, string location)
         //{
