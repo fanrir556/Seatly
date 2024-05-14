@@ -26,8 +26,13 @@ namespace Seatly1.Controllers
             {
                 return BadRequest("Location parameter is required.");
             }
+            var query = _context.NotificationRecords.AsQueryable();
+            var now = DateTime.UtcNow;
 
-            var activities = await _context.NotificationRecords
+            // 添加檢查 isActivity 的條件
+            query = query.Where(p => p.IsActivity == true && p.EndTime > now);
+
+            var activities = await query
         .Where(a => a.Location == location && (
                 a.HashTag1.Contains(selectedType) ||
                 a.HashTag2.Contains(selectedType) ||

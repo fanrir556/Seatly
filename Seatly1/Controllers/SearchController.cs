@@ -79,11 +79,16 @@ namespace Seatly1.Controllers
         // 顯示右半部search partial
         public async Task<IActionResult> searchPartial(string? searchString, DateTime? searchDate)
         {
+            var query = _context.NotificationRecords.AsQueryable();
+            var now = DateTime.UtcNow;
+
+            // 添加檢查 isActivity 的條件
+            query = query.Where(p => p.IsActivity==true && p.EndTime> now);
 
 
             if (searchString != null)
             {
-                var act = await _context.NotificationRecords
+                var act = await query
                     .Where(p => p.ActivityName.Contains(searchString))
                     .ToListAsync();
 
@@ -99,7 +104,7 @@ namespace Seatly1.Controllers
             }
             else if (searchDate != null)
             {
-                var act = await _context.NotificationRecords
+                var act = await query
                 .Where(p => p.StartTime.HasValue && p.EndTime.HasValue && p.StartTime.Value.Date <= searchDate.Value.Date && p.EndTime.Value.Date >= searchDate.Value.Date)
                 .ToListAsync();
 
@@ -122,7 +127,6 @@ namespace Seatly1.Controllers
         public IActionResult sideFilterPartial([FromBody] FilterData filterData)
         {
             // 從初始搜索結果中提取所有標籤
-            // 待修!! 應該要從searchPartial裡抓搜尋結果的標籤
 
             // 從requestData中提取hashtags和locations
             List<string> hashtags = filterData.Hashtags;
@@ -167,13 +171,18 @@ namespace Seatly1.Controllers
                     hashtags.Add(category);
                 }
             }
-
+                var query = _context.NotificationRecords.AsQueryable();
+                var now = DateTime.UtcNow;
             if (searchString != null) // 從首頁輸入關鍵字進來
                 {
-                    if (hashtags.Count > 0 && locations.Count == 0 && startDate != null && endDate != null)
+
+                // 添加檢查 isActivity 的條件
+                query = query.Where(p => p.IsActivity == true && p.EndTime > now);
+
+                if (hashtags.Count > 0 && locations.Count == 0 && startDate != null && endDate != null)
                     {
                         // 分類+區間都有選
-                        var filteredActivities = await _context.NotificationRecords
+                        var filteredActivities = await query
                         .Where(p => p.ActivityName.Contains(searchString) &&
                                     p.StartTime.HasValue && p.EndTime.HasValue &&
                                     p.StartTime.Value.Date <= startDate.Value.Date &&
@@ -192,7 +201,7 @@ namespace Seatly1.Controllers
                     else if (hashtags.Count > 0 && locations.Count == 0 && startDate == null && endDate == null)
                     {
                         // 只選了分類
-                        var filteredActivities = await _context.NotificationRecords
+                        var filteredActivities = await query
                             .Where(a => a.ActivityName.Contains(searchString) &&
                                         hashtags.Any(c =>
                                             a.HashTag1.Contains(c) ||
@@ -207,7 +216,7 @@ namespace Seatly1.Controllers
                     else if (hashtags.Count == 0 && locations.Count == 0 && startDate != null && endDate != null)
                     {
                         // 只選了區間
-                        var filteredActivities = await _context.NotificationRecords
+                        var filteredActivities = await query
                                .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue
                                    && a.StartTime.Value.Date <= startDate.Value.Date &&
                                         a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date)
@@ -218,7 +227,7 @@ namespace Seatly1.Controllers
                 else if (hashtags.Count == 0 && locations.Count > 0 && startDate == null && endDate == null)
                 {
                     // 只選了地點
-                    var filteredActivities = await _context.NotificationRecords
+                    var filteredActivities = await query
                         .Where(a => a.ActivityName.Contains(searchString) && a.Location != null && a.Location != "" && locations.Any(l =>
                                 a.Location.Contains(l)))
                         .ToListAsync();
@@ -228,7 +237,7 @@ namespace Seatly1.Controllers
                 else if (hashtags.Count == 0 && locations.Count > 0 && startDate != null && endDate != null)
                 {
                     // 地點+區間
-                    var filteredActivities = await _context.NotificationRecords
+                    var filteredActivities = await query
                         .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue &&
                                 a.StartTime.Value.Date <= startDate.Value.Date &&
                                 a.EndTime.Value.Date >= endDate.Value.Date &&
@@ -243,7 +252,7 @@ namespace Seatly1.Controllers
                 else if (hashtags.Count > 0 && locations.Count > 0 && startDate == null && endDate == null)
                 {
                     // 分類+地點
-                    var filteredActivities = await _context.NotificationRecords
+                    var filteredActivities = await query
                         .Where(a => a.ActivityName.Contains(searchString) && hashtags.Any(c =>
                                 a.HashTag1.Contains(c) ||
                                 a.HashTag2.Contains(c) ||
@@ -260,7 +269,7 @@ namespace Seatly1.Controllers
                 else if (hashtags.Count > 0 && locations.Count > 0 && startDate != null && endDate != null)
                 {
                     // 分類+地區+區間
-                    var filteredActivities = await _context.NotificationRecords
+                    var filteredActivities = await query
                         .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue &&
                                 a.StartTime.Value.Date <= startDate.Value.Date &&
                                 a.EndTime.Value.Date >= endDate.Value.Date &&
@@ -281,7 +290,7 @@ namespace Seatly1.Controllers
                 else
                     {
                         // 原始搜尋結果
-                        var act = await _context.NotificationRecords
+                        var act = await query   
                             .Where(p => p.ActivityName.Contains(searchString))
                             .ToListAsync();
 
@@ -293,7 +302,7 @@ namespace Seatly1.Controllers
                     if (hashtags.Count > 0 && startDate != null && endDate != null)
                     {
                         // 分類+區間都有選
-                        var filteredActivities = await _context.NotificationRecords
+                        var filteredActivities = await query        
                             .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
                                    && a.StartTime.Value.Date <= startDate.Value.Date &&
                                       a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date
@@ -312,7 +321,7 @@ namespace Seatly1.Controllers
                     else if (hashtags.Count > 0 && startDate == null && endDate == null)
                     {
                         // 只選了分類
-                        var filteredActivities = await _context.NotificationRecords
+                        var filteredActivities = await query
                             .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date && hashtags.Any(c =>
                                     a.HashTag1.Contains(c) ||
                                     a.HashTag2.Contains(c) ||
@@ -326,7 +335,7 @@ namespace Seatly1.Controllers
                     else if (hashtags.Count == 0 && startDate != null && endDate != null)
                     {
                         // 只選了區間
-                        var filteredActivities = await _context.NotificationRecords
+                        var filteredActivities = await query
                             .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date
                                    && a.StartTime.Value.Date <= startDate.Value.Date &&
                                         a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date)
@@ -337,7 +346,7 @@ namespace Seatly1.Controllers
                 else if (hashtags.Count == 0 && locations.Count > 0 && startDate == null && endDate == null)
                 {
                     // 只選了地點
-                    var filteredActivities = await _context.NotificationRecords
+                    var filteredActivities = await query
                         .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
                                 && a.StartTime.Value.Date <= searchDate.Value.Date
                                 && a.EndTime.Value.Date >= searchDate.Value.Date && a.Location != null && a.Location != "" && locations.Any(l =>
@@ -349,7 +358,7 @@ namespace Seatly1.Controllers
                 else if (hashtags.Count == 0 && locations.Count > 0 && startDate != null && endDate != null)
                 {
                     // 地點+區間
-                    var filteredActivities = await _context.NotificationRecords
+                    var filteredActivities = await query
                         .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
                                 && a.StartTime.Value.Date <= searchDate.Value.Date
                                 && a.EndTime.Value.Date >= searchDate.Value.Date && a.StartTime.HasValue && a.EndTime.HasValue &&
@@ -366,7 +375,7 @@ namespace Seatly1.Controllers
                 else if (hashtags.Count > 0 && locations.Count > 0 && startDate == null && endDate == null)
                 {
                     // 分類+地點
-                    var filteredActivities = await _context.NotificationRecords
+                    var filteredActivities = await query
                         .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
                                 && a.StartTime.Value.Date <= searchDate.Value.Date
                                 && a.EndTime.Value.Date >= searchDate.Value.Date && hashtags.Any(c =>
@@ -385,7 +394,7 @@ namespace Seatly1.Controllers
                 else if (hashtags.Count > 0 && locations.Count > 0 && startDate != null && endDate != null)
                 {
                     // 分類+地區+區間
-                    var filteredActivities = await _context.NotificationRecords
+                    var filteredActivities = await query
                         .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
                                 && a.StartTime.Value.Date <= searchDate.Value.Date
                                 && a.EndTime.Value.Date >= searchDate.Value.Date && a.StartTime.HasValue && a.EndTime.HasValue &&
@@ -408,7 +417,7 @@ namespace Seatly1.Controllers
                 else
                     {
                         // 原始搜尋結果
-                        var act = await _context.NotificationRecords
+                        var act = await query
                             .Where(a => a.StartTime.HasValue && a.EndTime.HasValue
                                 && a.StartTime.Value.Date <= searchDate.Value.Date
                                 && a.EndTime.Value.Date >= searchDate.Value.Date)
