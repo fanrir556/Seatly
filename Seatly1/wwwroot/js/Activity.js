@@ -28,14 +28,15 @@
             }
             return organizerid;
         },
-        getActivityInfo() {
+        getActivityId() {
             // 取得該活動資訊頁面網址最後的活動id
             const url = window.location.pathname;
             const activityId = url.substring(url.lastIndexOf('/') + 1);
-            console.log("活動 ID:", activityId);
-
+            return activityId;
+        },
+        getActivityInfo() {
             // 依照活動id取得活動資訊
-            axios.get(`/api/OrganizersApi/activity/${activityId}`)
+            axios.get(`/api/OrganizersApi/activity/${this.getActivityId() }`)
                 .then(response => {
                     console.log(response.data);
                     const activity = response.data;
@@ -93,6 +94,12 @@
 
             const blob = new Blob(byteArrays, { type: contentType });
             return blob;
+        },
+        edit() {
+            window.location.href = `/OrganizerRoute/ActivityEdit/${this.getActivityId()}`;
+        },
+        delete() {
+
         },
     },
     // 在應用程式創建時立即執行方法

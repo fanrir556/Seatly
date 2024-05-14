@@ -3,10 +3,12 @@
 var vueApp = {
     data() {
         return {
+            ActivityPhoto: null,
             StartTime: null,
             EndTime: null,
             Capacity: null,
             ActivityName: null,
+            ActivityMethod: null,
             DescriptionN: null,
             RecurringTime: null,
             IsRecurring: '',
@@ -18,6 +20,37 @@ var vueApp = {
         };
     },
     methods: {
+        getActivityInfo() {
+            // 取得該活動資訊頁面網址最後的活動id
+            const url = window.location.pathname;
+            const activityId = url.substring(url.lastIndexOf('/') + 1);
+            return activityId;
+
+            // 依照活動id取得活動資訊
+            axios.get(`/api/OrganizersApi/activity/${this.getActivityId()}`)
+                .then(response => {
+                    console.log(response.data);
+                    const activity = response.data;
+                    this.ActivityPhoto = this.binaryStringToBlob(activity.activityPhoto);
+                    this.StartTime = this.convertToPM(activity.startTime);
+                    this.EndTime = this.convertToPM(activity.endTime);
+                    this.ActivityName = activity.activityName;
+                    this.ActivityMethod = activity.activityMethod;
+                    this.DescriptionN = activity.descriptionN;
+                    this.IsRecurring = activity.isRecurring;
+
+                    // blob 物件轉換成圖片
+                    const fileReader = new FileReader();
+
+                    fileReader.onload = e => {
+                        this.ActivityPhoto = e.target.result; // 顯示活動圖片
+                    };
+                    fileReader.readAsDataURL(this.ActivityPhoto);
+                })
+                .catch(error => {
+                    console.error('取得活動資訊時發生錯誤:', error);
+                });
+        },
         getOrganizerId() {
             // 透過Session取得活動方的id
             let organizerid = sessionStorage.getItem("OrganizerId");
@@ -93,6 +126,28 @@ var vueApp = {
             }
             // 讀取檔案為 ArrayBuffer
             reader.readAsArrayBuffer(uploadedFile);
+        },
+        // 二進位字串轉換成 blob 物件
+        binaryStringToBlob(binaryString, contentType) {
+            contentType = contentType || '';
+            const sliceSize = 512;
+            const byteCharacters = atob(binaryString);
+            const byteArrays = [];
+
+            for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                const byteNumbers = new Array(slice.length);
+                for (let i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+
+                const byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+
+            const blob = new Blob(byteArrays, { type: contentType });
+            return blob;
         },
         photopreview() {
             // 上傳圖片預覽

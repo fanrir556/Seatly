@@ -51,7 +51,6 @@ $('#previous').on('click', function () {
     // 防止頁碼小於 1
     if (page <= 1) {
         page = 1;
-        console.log(page);
 
         $('#pageNumber').find('a').text(page);
         getActivity(organizerId, page);
@@ -60,7 +59,6 @@ $('#previous').on('click', function () {
         // 頁碼 + 1
         page--;
 
-        console.log(page);
         // 更新頁碼
         $('#pageNumber').find('a').text(page);
         getActivity(organizerId, page);
@@ -95,7 +93,6 @@ function read(activity) {
     activity.startTime = convertToPM(activity.startTime);
     activity.endTime = convertToPM(activity.endTime);
     activityPhoto = binaryStringToBlob(activity.activityPhoto);
-    console.log(activityPhoto);
 
     // blob 物件轉換成圖片
     const fileReader = new FileReader();
