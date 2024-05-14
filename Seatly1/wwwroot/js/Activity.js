@@ -36,7 +36,7 @@
         },
         getActivityInfo() {
             // 依照活動id取得活動資訊
-            axios.get(`/api/OrganizersApi/activity/${this.getActivityId() }`)
+            axios.get(`/api/OrganizersApi/activity/${this.getActivityId()}`)
                 .then(response => {
                     console.log(response.data);
                     const activity = response.data;

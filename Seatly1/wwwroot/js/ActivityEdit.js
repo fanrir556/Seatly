@@ -24,20 +24,21 @@ var vueApp = {
             // 取得該活動資訊頁面網址最後的活動id
             const url = window.location.pathname;
             const activityId = url.substring(url.lastIndexOf('/') + 1);
-            return activityId;
 
             // 依照活動id取得活動資訊
-            axios.get(`/api/OrganizersApi/activity/${this.getActivityId()}`)
+            axios.get(`/api/OrganizersApi/activity/${activityId}`)
                 .then(response => {
                     console.log(response.data);
                     const activity = response.data;
                     this.ActivityPhoto = this.binaryStringToBlob(activity.activityPhoto);
                     this.StartTime = this.convertToPM(activity.startTime);
                     this.EndTime = this.convertToPM(activity.endTime);
+                    this.Capacity = activity.capacity
                     this.ActivityName = activity.activityName;
                     this.ActivityMethod = activity.activityMethod;
                     this.DescriptionN = activity.descriptionN;
                     this.IsRecurring = activity.isRecurring;
+                    this.ActivityMethod = activity.activityMethod;
 
                     // blob 物件轉換成圖片
                     const fileReader = new FileReader();
@@ -149,6 +150,15 @@ var vueApp = {
             const blob = new Blob(byteArrays, { type: contentType });
             return blob;
         },
+        convertToPM(dateTimeString) {
+            // 如果日期時間字串包含 'T'，則將 'T' 去除
+            if (dateTimeString.includes('T')) {
+                // 將 'T' 取代為空格
+                return dateTimeString.replace('T', ' ');
+            }
+            // 如果不包含 'T'，則直接返回原始字串
+            return dateTimeString;
+        },
         photopreview() {
             // 上傳圖片預覽
             // 引用自：https://codepen.io/tohousanae/pen/mdgzYxZ
@@ -173,6 +183,7 @@ var vueApp = {
     created() {
         this.getOrganizerId();
         this.photopreview();
+        this.getActivityInfo();
     },
 };
 var app = Vue.createApp(vueApp).mount("#app");
