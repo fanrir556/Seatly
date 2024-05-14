@@ -23,6 +23,7 @@ namespace Seatly1.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             /*簽到判定*/
             if (User.Identity.IsAuthenticated)
             {
@@ -59,7 +60,18 @@ namespace Seatly1.Controllers
                 }
             }
             /*簽到判定*/
-            return View();
+
+            // 首頁熱門選項
+            var hotItems = await _context.NotificationRecords
+                .Where(r => r.HashTag1.Contains("HOT") ||
+                r.HashTag2.Contains("HOT") ||
+                r.HashTag3.Contains("HOT") ||
+                r.HashTag4.Contains("HOT") ||
+                r.HashTag5.Contains("HOT"))
+                .ToListAsync();
+            Debug.WriteLine("熱門:" + hotItems.Count);
+
+            return View(hotItems);
         }
 
         public IActionResult Privacy()
@@ -114,18 +126,6 @@ namespace Seatly1.Controllers
             return Ok();
         }
 
-        //首頁呈現熱門項
-        public IActionResult HotItems()
-        {
-            var hotItems = _context.NotificationRecords
-                .Where(r => r.HashTag1.Contains("熱門") ||
-                r.HashTag2.Contains("熱門") ||
-                r.HashTag3.Contains("熱門") ||
-                r.HashTag4.Contains("熱門") ||
-                r.HashTag5.Contains("熱門"))
-                .ToList();
-
-            return View(hotItems);
-        }
+        
     }
 }
