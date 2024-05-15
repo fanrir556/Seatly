@@ -88,6 +88,7 @@ namespace Seatly1.Controllers
                 ActivityMethod = activity.ActivityMethod,
                 DescriptionN = activity.DescriptionN,
                 IsRecurring = activity.IsRecurring,
+                RecurringTime = activity.RecurringTime,
                 HashTag1 = activity.HashTag1,
                 HashTag2 = activity.HashTag2,
                 HashTag3 = activity.HashTag3,

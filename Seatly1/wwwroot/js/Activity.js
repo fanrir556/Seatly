@@ -14,6 +14,7 @@
             HashTag3: null,
             HashTag4: null,
             HashTag5: null,
+            openDeleteModal: false,
         };
     },
     methods: {
@@ -98,8 +99,14 @@
         edit() {
             window.location.href = `/OrganizerRoute/ActivityEdit/${this.getActivityId()}`;
         },
-        delete() {
-
+        deleteActivity() {
+            axios.delete(`/api/OrganizersApi/activity/${this.getActivityId()}`)
+                .then(response => {
+                    console.log(response.data);
+                    window.location.href = `/OrganizerRoute/NotificationRecord`;
+                }).catch(err => {
+                    console.log(err);
+                });
         },
     },
     // 在應用程式創建時立即執行方法

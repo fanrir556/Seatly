@@ -79,6 +79,20 @@
                                     </div>
 
                                     <div class="col-12 col-md-3">
+                                        <label for="ActivityMethod" class="form-label">活動方法</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <select v-model="ActivityMethod" class="form-select" id="ActivityMethod" required>
+                                            <option>公告</option>
+                                            <option>排隊</option>
+                                            <option>抽籤</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
                                         <label for="DescriptionN" class="form-label">活動敘述</label>
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
@@ -112,7 +126,7 @@
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
                                         @* 顯示圖片預覽 *@
-                                        <img style="width:320px;height:240px" id="preview" src="~/images/NoImage.jpg" :src="ActivityPhoto" class="img-fluid mb-3">
+                                        <img style="width:320px;height:240px" id="preview" :src="ActivityPhoto" class="img-fluid mb-3">
                                         <input type="file" ref="files" id="imageInput" class="form-control" aria-label="file example"
                                                placeholder="請上傳活動方照片" required>
                                         <div class="invalid-feedback">

@@ -38,6 +38,7 @@ var vueApp = {
                     this.ActivityMethod = activity.activityMethod;
                     this.DescriptionN = activity.descriptionN;
                     this.IsRecurring = activity.isRecurring;
+                    this.RecurringTime = activity.recurringTime;
                     this.ActivityMethod = activity.activityMethod;
 
                     // blob 物件轉換成圖片
@@ -78,6 +79,10 @@ var vueApp = {
         },
         // 修改活動
         editActivity() {
+            // 取得該活動資訊頁面網址最後的活動id
+            const url = window.location.pathname;
+            const activityId = url.substring(url.lastIndexOf('/') + 1);
+
             // 透過Session取得活動方的id並轉為數字
             let organizeridInt = parseInt(`${sessionStorage.getItem("OrganizerId")}`);
 
@@ -110,7 +115,7 @@ var vueApp = {
                 formData.append('IsRecurring', Boolean(self.IsRecurring));
 
                 // 发送 put 请求
-                axios.put('/api/OrganizersApi/activity/1', formData, {
+                axios.put(`/api/OrganizersApi/activity/${activityId}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
                     }
@@ -118,7 +123,7 @@ var vueApp = {
                     .then(function (response) {
                         console.log(response);
                         alert("修改活動成功");
-                        window.location.href = './NotificationRecord';
+                        window.location.href = `/OrganizerRoute/Activity/${activityId}`;
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -181,7 +186,7 @@ var vueApp = {
     },
     // 在應用程式創建時立即執行方法
     created() {
-        this.getOrganizerId();
+        this.getOrganizerId(); 
         this.photopreview();
         this.getActivityInfo();
     },
