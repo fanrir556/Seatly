@@ -89,6 +89,11 @@ namespace Seatly1.Controllers
             return _context.NotificationRecords.Where(e => e.OrganizerId == NTB.OrganizerId).ToList();
         }
 
+        //輸出Partial頁面
+        public IActionResult _Check()
+        { 
+            return PartialView();
+        }
 
     }
 }

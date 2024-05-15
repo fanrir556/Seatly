@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -155,7 +156,8 @@ namespace Seatly1.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Edit([Bind("ActivityId,OrganizerId,ActivityPhoto,StartTime,EndTime,Capacity,ActivityName,DescriptionN,IsRecurring,RecurringTime")] NotificationRecord notificationRecord)
+        public async Task<IActionResult> Edit([Bind("ActivityId,OrganizerId,ActivityPhoto,StartTime,EndTime,Capacity,ActivityName,DescriptionN,IsRecurring,RecurringTime,ActivityMethod,Location,IsActivity,HashTag1,HashTag2,HashTag3,HashTag4,HashTag5")] NotificationRecord notificationRecord)
+
         {
             NotificationRecord nr = await _context.NotificationRecords.FindAsync(notificationRecord.ActivityId);
 

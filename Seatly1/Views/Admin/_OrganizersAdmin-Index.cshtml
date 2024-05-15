@@ -13,6 +13,10 @@
         margin:2px;
     }
 
+    .table-container {
+        overflow: auto;
+    }
+
 </style>
 
 
@@ -23,99 +27,103 @@
     新增活動帳號
 </button>
 <br />
+<div class="table-container">
+    <table class="table table-striped m-3">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrganizerAccount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LoginPassword)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrganizerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrganizerCategory)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrganizerPhoto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Menu)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReservationUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Hashtag)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Validation)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="m-3">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrganizerAccount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LoginPassword)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrganizerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrganizerCategory)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrganizerPhoto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Menu)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReservationUrl)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hashtag)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Validation)
+                    </td>
+                    <td class="float-end" @* style="width: 200px;" *@>
+                        <div class="btn-group" role="group">
+                            <button class="activity-button edit-button btn btn-secondary btn-sm" data-clickid="@item.OrganizerId" style="min-width: 70px;">編輯</button>
+                            <button class="activity-button delete-button btn btn-primary btn-sm" data-clickid="@item.OrganizerId" style="min-width: 70px;">刪除</button>
+                        </div>
+                    </td>
+                </tr>
 
-<table class="table table-striped m-3">
-    <thead class="bg-primary text-white">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.OrganizerAccount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LoginPassword)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrganizerName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrganizerCategory)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrganizerPhoto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Menu)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReservationUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Hashtag)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Validation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-         <tr class="m-3">
-            <td>
-                @Html.DisplayFor(modelItem => item.OrganizerAccount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoginPassword)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrganizerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrganizerCategory)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrganizerPhoto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Menu)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReservationUrl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Hashtag)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Validation)
-            </td>
-            <td class="float-end" @* style="width: 200px;" *@>
-                <div class="btn-group" role="group">
-                    <button class="activity-button edit-button btn btn-secondary btn-sm" data-clickid="@item.OrganizerId" style="min-width: 70px;">編輯</button>
-                    <button class="activity-button delete-button btn btn-primary btn-sm" data-clickid="@item.OrganizerId" style="min-width: 70px;">刪除</button>
-                </div>
-            </td>
-        </tr>
-       
-}
-    </tbody>
-</table>
+            }
+        </tbody>
+    </table>
+
+</div>
+
 
 <script>
 

@@ -20,9 +20,6 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
         public void OnGet()
         {
             var friends = _context.Friends;
-
- 
-
         }
 
 

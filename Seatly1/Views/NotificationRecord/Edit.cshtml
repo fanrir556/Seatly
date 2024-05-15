@@ -4,7 +4,12 @@
     ViewData["Title"] = "Edit";
 }
 
+
 <h1>編輯活動</h1>
+<div style="width:100%; text-align: right;">
+    <a class="btn btn-primary btn-sm" id="check" btn-id="@Model.ActivityId">簽到狀態</a>
+</div>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -77,9 +82,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="IsActivity" class="control-label"></label>
-                <select asp-for="ActivityMethod" class="form-control">
-                    <option value="True">true</option>
-                    <option value="False">false</option>
+                <select asp-for="IsActivity" class="form-control">
+                    <option value="True" selected=@(Model.IsActivity == true ? "True" : "")>True</option>
+                    <option value="False" selected=@(Model.IsActivity == false ? "false" : "")>False</option>
                 </select>
             </div>
 
@@ -166,11 +171,19 @@
             });
         });
 
-        function Load() {
-            $("#dancingtime").show();
+
+        $("#check").click(function () {
+            // 從事件對象(event object)中取得觸發事件的按鈕元素
+            const btn = event.target;
+            // 從按鈕元素中取得自定義屬性"btn-id"
+            const btnId = btn.getAttribute("btn-id");
+            // alert(btnId)
+            sessionStorage.removeItem("ActID");
+            sessionStorage.setItem("ActID", btnId);
+            // alert("check")
             $.ajax({
                 type: "GET",
-                url: `@Url.Action("_NotificationRecord", "Admin")`
+            url: `@Url.Action("_Check", "Admin")`
             }).done(function (data) {
                 $("#adminBody").html(data);
                 $("#dancingtime").hide();
@@ -179,8 +192,25 @@
                 alert(err.responseText);
                 $("#dancingtime").hide();
             });
+        })
+
+
+        function Load() {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_NotificationRecord", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+                
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
         }
 
+       
 
 </script>
 

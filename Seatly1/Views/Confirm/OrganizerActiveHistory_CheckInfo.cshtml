@@ -1,15 +1,13 @@
-﻿<!--
-    OrganizerActiveCheck
-    活動排隊check
-
-    1.檢查排隊使用者的順序
-    2.顯示cheak欄位
-    3.更改排隊號碼的欄位狀況
+﻿<!--OrganizerActiveHistory_CheckInfo-->
+<!--
+    活動排隊check的檢視
+    只是要看歷史
  -->
+
 <!---->
 
 <div id="app">
-    <div class = "container mt-3">
+    <div class="container mt-3">
         <h4>活動編號 : {{activityId}}</h4>
         <img src="{{activityPhoto}}" :alt="activityName" />
         <h5>活動名稱 : {{activityName}}</h5>
@@ -35,23 +33,14 @@
                     <td>{{ book.waitingNumber }}</td>
                     <td>{{ book.activityBarcode }}</td>
                     <td :class="{'text-secondary': book.checked, 'text-danger': !book.checked}">{{ book.checked ? '已簽到' : '未簽到' }}</td>
-                    <td>
-                        <button class="btn btn-secondary btn-sm"
-                                :btn-Barcode="book.activityBarcode"
-                                :waitNum="book.waitingNumber"
-                                v-show="!book.checked"
-                                @@click="check">
-                            確認簽到
-                        </button>
-                    </td>
                 </tr>
             </tbody>
 
         </table>
 
     </div>
- 
-    
+
+
 </div>
 
 <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
@@ -68,7 +57,6 @@
     const ActId = sessionStorage.getItem("ActID");
     // console.log(ActId)
 
-
     //掛載Vue
     const vueApp = {
         data() {
@@ -82,11 +70,11 @@
 
                 //排隊資訊
                 BookOrder: [],
-                orderId:"",
-                userName:"",
-                waitingNumber:"",
-                activityBarcode:"",
-                checked:"",
+                orderId: "",
+                userName: "",
+                waitingNumber: "",
+                activityBarcode: "",
+                checked: "",
             }
         },
         methods: {
@@ -105,13 +93,12 @@
                         if (res[0].activityName != null) {
                             _this.activityName = res[0].activityName
                         }
-                        else 
-                        {
+                        else {
                             _this.activityName = "沒有名稱"
                         }
 
-                        _this.startTime = moment(res[0].StartTime).format('YYYY-MM-DD/HH')
-                        _this.endTime = moment(res[0].EndTime).format('YYYY-MM-DD/HH')
+                        _this.startTime = moment(res[0].startTime).format('YYYY-MM-DD/HH')
+                        _this.endTime = moment(res[0].endTime).format('YYYY-MM-DD/HH')
                     })
                     .catch(err => {
                         alert(err);
@@ -119,7 +106,7 @@
                     });
             },
             //排隊訂單資訊
-            BookInfo: function () { 
+            BookInfo: function () {
                 let _this = this;
                 // alert("Book")
                 axios.get(`${vuebase}/Confirm/BookInfo/${ActId}`)
@@ -144,26 +131,6 @@
                         alert(err)
                     });
             },
-            //簽到按鈕
-            check: function () { 
-                let _this = this;
-                // alert("check");
-                // 從事件對象(event object)中取得觸發事件的按鈕元素
-                const btn = event.target;
-                // 從按鈕元素中取得自定義屬性"btn-id"
-                const btnBarcode = btn.getAttribute("btn-Barcode");
-                // console.log(btnBarcode);
-                const waitNum1 = btn.getAttribute("waitNum");
-                // console.log(waitNum1);
-
-                var ret = confirm("確認簽到?");
-                if (ret == true) { 
-                    axios.post(`${vuebase}/Confirm/TransCheck/?Barcode=${btnBarcode}&waitNum=${waitNum1}`)
-                    .then(res => {_this.BookInfo();})
-                    .catch(err=> { alert(err)})
-                }
-   
-             },
         },
         mounted: function () {
             let _this = this;

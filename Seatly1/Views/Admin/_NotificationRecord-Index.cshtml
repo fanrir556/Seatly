@@ -22,28 +22,29 @@
 <button class="btn btn-primary btn-sm" id="createButton">
     新增活動
 </button>
+
 <br />
 
 <table class="table table-striped m-3">
     <thead class="bg-primary text-white">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ActivityId)
+                活動ID @* @Html.DisplayNameFor(model => model.ActivityId) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ActivityPhoto)
+                活動照片  @* @Html.DisplayNameFor(model => model.ActivityPhoto) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartTime)
+                開始時間 @*  @Html.DisplayNameFor(model => model.StartTime) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndTime)
+                結束時間  @* @Html.DisplayNameFor(model => model.EndTime) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Capacity)
+                人數上限 @* @Html.DisplayNameFor(model => model.Capacity) *@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ActivityName)
+                活動名稱 @*  @Html.DisplayNameFor(model => model.ActivityName) *@
             </th>
             <th>
             </th>
@@ -67,7 +68,7 @@
                 <td>
                         @Html.DisplayFor(modelItem => item.EndTime)
                 </td>
-                <td>
+                <td style="text-align:center;">
                         @Html.DisplayFor(modelItem => item.Capacity)
                 </td>
                 <td>

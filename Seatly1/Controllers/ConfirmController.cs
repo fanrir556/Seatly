@@ -23,7 +23,7 @@ namespace Seatly1.Controllers
 
 
 
-
+        //排隊最後列表
         // GET: ConfirmController
         public IActionResult Index(int? NId)
         {
@@ -49,7 +49,7 @@ namespace Seatly1.Controllers
         }
 
 
-
+        //篩選排隊邏輯
         private BookingOrder BookO(int? NId)
         {
             var NontiData = _context.NotificationRecords.FirstOrDefault(n => n.ActivityId == NId);
@@ -109,7 +109,7 @@ namespace Seatly1.Controllers
             return newBookingOrder;
         }
 
-
+        //寫入排隊
         private void AddBookingOrder(BookingOrder newBookingOrder)
         {
             try
@@ -125,19 +125,22 @@ namespace Seatly1.Controllers
             }
         }
 
-        //活動檢查頁面
+
+        //活動檢查頁面-OrganizerActiveCheckIndex
         public IActionResult OrganizerActiveCheckIndex() {
 
             return View();
         }
 
 
+
+        //OrganizerActiveCheckIndex使用
         //輸出活動列表
         //GET:/Confirm/ActiveList
         [HttpGet]
         public async Task<IEnumerable<NotificationRecordDTO>> ActiveList(int id) {
             var aa = await _context.NotificationRecords
-                .Where(e => e.OrganizerId == id && e.IsActivity == true)
+                .Where(e => e.OrganizerId == id && e.IsActivity == true && e.EndTime > DateTime.Now)
                 .Select(
                 e => new NotificationRecordDTO
                 {
@@ -151,7 +154,8 @@ namespace Seatly1.Controllers
             return aa;
         }
 
-        //改變欄位
+        //OrganizerActiveCheckIndex使用
+        //改變活動欄位
         //POST:/Confirm/TransActive
         [HttpPost]
         public async Task TransActive(int id) 
@@ -162,14 +166,125 @@ namespace Seatly1.Controllers
         }
 
 
-        //回傳排隊頁面
-        //要拿到活動ID在BookOrder做事
+        //回傳排隊頁面-OrganizerActiveCheck
         //Get:/Confirm/OrganizerActiveCheck
         [HttpGet]
         public IActionResult OrganizerActiveCheck(int id) 
         {
+            return View(id);
+        }
+
+
+        //OrganizerActiveCheck使用
+        //輸出個別活動//輸出還是array
+        //GET:/Confirm/ActiveInfo
+        [HttpGet]
+        public async Task<IEnumerable<NotificationRecordDTO>> ActiveInfo(int id)
+        {
+            var aa = await _context.NotificationRecords
+                .Where(e => e.ActivityId == id)
+                .Select(
+                e => new NotificationRecordDTO
+                {
+                    ActivityId = e.ActivityId,
+                    ActivityName = e.ActivityName,
+                    ActivityPhoto = e.ActivityPhoto,
+                    StartTime = e.StartTime,
+                    EndTime = e.EndTime,
+                }).ToListAsync();
+
+            return aa;
+        }
+
+
+        //OrganizerActiveCheck使用
+        //GET:/Confirm/BookInfo
+        [HttpGet]
+        public async Task<IEnumerable<BookingOrder>> BookInfo(int id)
+        {
+            var BookInfo = await _context.BookingOrders.Where(
+                e => e.ActivityId == id).ToListAsync();
+            
+           return BookInfo;
+             
+        }
+
+        //OrganizerActiveCheck使用
+        //POST:/Confirm/TransCheck
+        [HttpPost]
+        public async Task TransCheck(string Barcode,int waitNum)
+        {
+            var aa = _context.BookingOrders.FirstOrDefault(
+                    e => e.ActivityBarcode == Barcode && e.WaitingNumber == waitNum
+                );
+            aa.Checked = true;
+            await _context.SaveChangesAsync();
+        }
+
+        //管理者使用 -
+        //POST:/Confirm/TransUnCheck
+        [HttpPost]
+        public async Task TransUnCheck(string Barcode, int waitNum)
+        {
+            var aa = _context.BookingOrders.FirstOrDefault(
+                    e => e.ActivityBarcode == Barcode && e.WaitingNumber == waitNum
+                );
+            aa.Checked = false;
+            await _context.SaveChangesAsync();
+        }
+
+
+        //呼叫活動歷史頁面OrganizerActiveHistoryIndex
+        //GET:Confirm/OrganizerActiveHistoryIndex
+        [HttpGet]
+        public IActionResult OrganizerActiveHistoryIndex()
+        {
             return View();
         }
+
+
+
+        //OrganizerActiveHistoryIndex使用
+        //輸出活動列表
+        //GET:/Confirm/ActiveList
+        [HttpGet]
+        public async Task<IEnumerable<NotificationRecordDTO>> ActiveHistoryList(int id)
+        {
+            var aa = await _context.NotificationRecords
+                .Where(e => e.OrganizerId == id && e.EndTime < DateTime.Now && e.IsActivity == false)
+
+                .Select(
+                e => new NotificationRecordDTO
+                {
+                    ActivityId = e.ActivityId,
+                    ActivityName = e.ActivityName,
+                    ActivityPhoto = e.ActivityPhoto,
+                    StartTime = e.StartTime,
+                    EndTime = e.EndTime,
+                }).ToListAsync();
+
+            return aa;
+        }
+
+        //OrganizerActiveHistoryIndex使用
+        //輸出活動列表
+        //GET:/Confirm/OrganizerActiveHistory_CheckInfo
+        [HttpGet]
+        public IActionResult OrganizerActiveHistory_CheckInfo() 
+        {
+            return View();
+        }
+
+        //呼叫OrganizerActiveHistory_ActInfo
+        //活動資訊
+        //GET:/Confirm/OrganizerActiveHistory_ActInfo
+        [HttpGet]
+        public IActionResult OrganizerActiveHistory_ActInfo()
+        {
+            return View();
+        }
+
+
 
     }
 }
