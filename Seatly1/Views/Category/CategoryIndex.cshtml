@@ -32,21 +32,7 @@
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('kaohsiung')">高雄</button>
     <hr />
 
-    @* 標籤選擇項 *@
-    <div id="filiter">
-        <p> 目前選擇:
-            <span id="chooseItem" v-for="item,key in choose">
-                {{item}}
-                <i v-on:click="removeHandle(key)">x</i>
-            </span>
-        </p>
-        <ul>
-            <li v-for="item,index in dataList">
-                {{item.title}}
-                <span v-for="option,i in item.list" v-on:click="addChooseHandle(option,index,i)" :class="{red: item.index === i}">{{option}}</span>
-            </li>
-        </ul>
-    </div>
+
 
     <div class="time-selector">
         <label for="startTime">開始時間:</label>
@@ -56,8 +42,8 @@
         <label for="endTime">結束時間:</label>
         <input type="datetime-local" id="endTime">
     </div>
-    <button id="applyFilter" @@click="applyTimeFilter">套用</button>
-    <button id="clearFilter" @@click="clearTimeFilter">清除時間篩選</button>
+    <button id="applyFilter" class="btn btn-primary m-2" @@click="applyTimeFilter">套用時間</button>
+    <button id="clearFilter" class="btn btn-primary m-2" @@click="clearTimeFilter">清除時間篩選</button>
 
     <!-- 排序按钮 -->
     <div class="btn-group" role="group" aria-label="Sort Activities">
@@ -176,24 +162,15 @@
 <script>
 
     const { createApp, ref, reactive } = Vue;
-    let chooseData = [
-        {
-            title:"地點:",
-            list:["台北","台中","台南","高雄"]
-        },
-       
-       
-    ]
-   //使用foreach給數組每個對象添加index屬性
-    chooseData.forEach(item => { item.index = -1; })
+
+   
         
         var vueApp = {
             data() {
                 return {
                     cate: 'tapei',
                     activities: [], // 添加 activities 屬性，用於存儲從後端獲取的活動數據
-                    dataList: reactive(chooseData), // 使用 reactive 存標籤
-                    choose: reactive({}),
+                   
                     sortBy: 'desc', // sortBy 目前排序方式 正序
                     selectedType: sessionStorage.getItem('selectedType') || '' // 初始化 selectedType
                 }
@@ -266,19 +243,9 @@
                     this.sortBy = this.sortBy === 'asc' ? 'desc' : 'asc';
                 },
 
-                addChooseHandle(option, index, i) {
-                    // 使用set添加對象
-                    // Vue.set(this.choose, index, option)
-                    this.choose[index] = option;
-                    console.log(this.choose)
-                    // 找到操作的一行 把這一行數據中的index進行設定
-                    this.dataList[index].index = i
-                },
+                
 
-                removeHandle(key) {
-                   delete this.choose[key]
-                   this.dataList[key].index=-1
-                },
+                
                 // 更新 selectedType 到 sessionStorage
                 selectFoodType(type) {
                     this.selectedType = type;
