@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Seatly1.Controllers.CollectionsController.CollectionViewModel>
+
+@{
+    ViewData["Title"] = "Collections";
+}
+
+<h2>收藏清單</h2>
+
+@if (Model.Any())
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Activity ID</th>
+                <th>Activity Name</th> <!-- 假设你有活动名称这个字段 -->
+                <!-- 你可以根据需要添加更多字段 -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ActivityId</td>
+                    <td>@item.ActivityName</td> <!-- 假设你有活动名称这个字段 -->
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>沒有收藏項目。</p>
+}
