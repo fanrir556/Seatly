@@ -57,6 +57,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="Views\Friends\" />
     <Folder Include="wwwroot\src\router\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>

@@ -20,7 +20,7 @@ namespace Seatly1.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetActivitiesByLocation (string? location,string? selectedType)
+        public async Task<IActionResult> GetActivitiesByLocation (string? location,string? selectedType, string? startTime, string? endTime)
         {
             if (string.IsNullOrEmpty(location))
             {
@@ -31,6 +31,15 @@ namespace Seatly1.Controllers
 
             // 添加檢查 isActivity 的條件
             query = query.Where(p => p.IsActivity == true && p.EndTime > now);
+
+            // 添加時間篩選條件
+            if (!string.IsNullOrEmpty(startTime) && !string.IsNullOrEmpty(endTime))
+            {
+                DateTime startDateTime = DateTime.Parse(startTime);
+                DateTime endDateTime = DateTime.Parse(endTime);
+
+                query = query.Where(a => a.StartTime <= startDateTime && a.EndTime >= endDateTime);
+            }
 
             var activities = await query
         .Where(a => a.Location == location && (

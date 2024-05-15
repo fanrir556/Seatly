@@ -1,23 +1,33 @@
-﻿@page
-@model CollectionsModel
+﻿@* @model IEnumerable<CollectionItem> *@
 
-@* <!-- 收藏列表 -->
-<ul>
-    @foreach(var collection in Model.Collections)
-    {
-        <li>@collection.ActivityId</li>
-    }
-</ul>
+@* @foreach (var item in Model)
+{
+    <p>======================</p>
+    <p>@item.SerialId</p>
+    <p>@item.UserId</p>
+    <p>@item.ActivityId</p>
+} *@
 
+@page
+@model Seatly1.Areas.Identity.Pages.Account.Manage.CollectionsModel
 
-<!-- 添加收藏项表单 -->
-<form method="post" asp-page-handler="AddToCollection">
-    <!-- 添加收藏项的表单字段 -->
-    <button type="submit">添加到收藏</button>
-</form> *@
+@{
+    ViewData["Title"] = "收藏清單";
+    ViewData["ActivePage"] = ManageNavPages.Collections;
+}
 
-@section Secripts{ 
+<h1>@ViewData["Title"]</h1>
 
-   
-
+@if (Model.Collections != null && Model.Collections.Any())
+{
+    <ul>
+        @foreach (var item in Model.Collections)
+        {
+            <li>@item.UserId - @item.ActivityId</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No collections found.</p>
 }
