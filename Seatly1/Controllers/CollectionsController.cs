@@ -18,6 +18,20 @@ namespace Seatly1.Controllers
         {
             public int ActivityId { get; set; }
             public string ActivityName { get; set; }
+            public byte[] ActivityPhoto {  get; set; }
+            public string Location { get; set; }
+            public DateTime StartTime { get; set; }
+            public DateTime EndTime { get; set; }
+            public string HashTag1 { get; set; }
+            public string HashTag2 { get; set; }
+            public string HashTag3 { get; set; }
+            public string HashTag4 { get; set; }
+            public string HashTag5 { get; set; }
+        }
+
+        public class RemoveCollectionRequest
+        {
+            public int ActivityId { get; set; }
         }
 
         public CollectionsController(SeatlyContext context, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
@@ -49,7 +63,16 @@ namespace Seatly1.Controllers
                                      select new CollectionViewModel
                                      {
                                          ActivityId = (int)c.ActivityId,
-                                         ActivityName = n.ActivityName
+                                         ActivityName = n.ActivityName,
+                                         ActivityPhoto = n.ActivityPhoto,
+                                         Location = n.Location,
+                                         StartTime = (DateTime)n.StartTime,
+                                         EndTime = (DateTime)n.EndTime,
+                                         HashTag1 = n.HashTag1,
+                                         HashTag2 = n.HashTag2,
+                                         HashTag3 = n.HashTag3,
+                                         HashTag4 = n.HashTag4,
+                                         HashTag5 = n.HashTag5,
                                      }).ToListAsync();
 
             // 输出 Session 中的值
@@ -73,6 +96,7 @@ namespace Seatly1.Controllers
         //    return Json(new { success = false, error = "Model validation failed" }); // Return error details as JSON
         //}
 
+        // 加入收藏
         [HttpPost]
         public async Task<IActionResult> AddToCollection(int activityId)
         {
@@ -96,6 +120,32 @@ namespace Seatly1.Controllers
             }
 
             return Json(new { success = false, error = "模型验证失败" }); // 返回错误详情的 JSON 响应
+        }
+
+        // 移除收藏
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCollection([FromBody] RemoveCollectionRequest request)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized(); // 用户未登录
+            }
+
+            var userId = user.Id;
+            Debug.WriteLine($"Attempting to remove collection item with ActivityId: {request.ActivityId} for UserId: {userId}");
+
+            var collectionItem = await _context.CollectionItems
+                .FirstOrDefaultAsync(c => c.ActivityId == request.ActivityId && c.UserId == user.Id);
+
+            if (collectionItem != null)
+            {
+                _context.CollectionItems.Remove(collectionItem);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true }); // 返回有效的 JSON 响应
+            }
+
+            return Json(new { success = false, error = "未找到收藏项" }); // 返回错误详情的 JSON 响应
         }
     }
 }
