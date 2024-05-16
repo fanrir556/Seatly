@@ -27,6 +27,7 @@ namespace Seatly1.Controllers
             public string HashTag3 { get; set; }
             public string HashTag4 { get; set; }
             public string HashTag5 { get; set; }
+            public string DescriptionN { get; set; }
         }
 
         public class RemoveCollectionRequest
@@ -73,6 +74,7 @@ namespace Seatly1.Controllers
                                          HashTag3 = n.HashTag3,
                                          HashTag4 = n.HashTag4,
                                          HashTag5 = n.HashTag5,
+                                         DescriptionN = n.DescriptionN,
                                      }).ToListAsync();
 
             // 输出 Session 中的值
@@ -82,19 +84,7 @@ namespace Seatly1.Controllers
             return View(collections);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddToCollection(CollectionItem collectionItem)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.CollectionItems.Add(collectionItem);
-        //        await _context.SaveChangesAsync();
-
-        //        return Json(new { success = true }); // Return a valid JSON response
-        //    }
-
-        //    return Json(new { success = false, error = "Model validation failed" }); // Return error details as JSON
-        //}
+        
 
         // 加入收藏
         [HttpPost]
