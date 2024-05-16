@@ -673,6 +673,7 @@
             }
         }
 
+        // 熱門活動收藏
         var vueApp = {
             data() {
                 return {} },
@@ -683,28 +684,28 @@
                         const userLogin = sessionStorage.getItem('userLogin');
                         const userId = sessionStorage.getItem('userId');
 
-                        // 判断用户是否已登录
+                        // 判斷用戶是否已登錄
                         if (userLogin !== 'true') {
-                        // 如果用户未登录，提示用户先登录
+                        
                         alert('請先登錄會員！');
                         return;
                         }
 
                         try {
-                        // 发送收藏请求
+                        
                          const response = await fetch(`/Collections/AddToCollection?activityId=${activityId}&userId=${userId}`, {
                          method: 'POST',
                          headers: {
                         'Content-Type': 'application/json'
                          },
                          body: JSON.stringify({ activityId: activityId, userId: userId })
-                         // 这里可以根据需要传递其他数据
+                         
                          });
                         const data = await response.json();
-                        // 处理收藏成功的情况
+                        
                         alert('收藏成功！');
                         } catch (error) {
-                        // 处理错误情况
+                        
                         console.error('Error:', error);
                         alert('收藏失敗，請稍後再試！');
                         }
