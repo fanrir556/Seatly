@@ -142,10 +142,10 @@ namespace Seatly1.Controllers
             {
                 _context.CollectionItems.Remove(collectionItem);
                 await _context.SaveChangesAsync();
-                return Json(new { success = true }); // 返回有效的 JSON 响应
+                return Json(new { success = true }); // 返回有效的 JSON 回應
             }
 
-            return Json(new { success = false, error = "未找到收藏项" }); // 返回错误详情的 JSON 响应
+            return Json(new { success = false, error = "未找到收藏项" }); 
         }
     }
 }

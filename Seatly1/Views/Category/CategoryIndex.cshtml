@@ -20,6 +20,16 @@
         .red{
             background-color: tomato;
         }
+
+        .love-icon {
+            /* font-size: 2rem; */
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+            .love-icon:hover {
+                transform: scale(1.2);
+            }
     </style>
 }
 
@@ -58,20 +68,24 @@
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
-                    <div class="card-body">
+                    <div class="card-body ">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
                         <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
-                        <p class="card-text">活動地點: {{ activity.location }}</p>
-                        <p class="card-text mb-5">
+                        
+                        <p class="card-text">
                             <span  v-for="i in 5">
                                 <span v-if="activity['hashTag'+i]">#<span class="hash-tag">{{ activity['hashTag'+i] }}</span></span>
                             </span>
                         </p>
+                        <p class="card-text mb-5   position-relative">
+                            <span>📍{{ activity.location }} </span>
+                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
+                        </p>
                         <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                         @* <a href="#" class="btn btn-primary">查看詳情</a> *@
-                        <button  @@click="addToCollection(activity.activityId)">加入收藏</button>
+                        
 
                     </div>
                 </div>
@@ -91,10 +105,14 @@
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
                         <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
                         <p class="card-text">活動地點: {{ activity.location }}</p>
-                        <p class="card-text mb-5">
-                            <span  v-for="i in 5">
+                        <p class="card-text">
+                            <span v-for="i in 5">
                                 <span v-if="activity['hashTag'+i]">#<span class="hash-tag">{{ activity['hashTag'+i] }}</span></span>
                             </span>
+                        </p>
+                        <p class="card-text mb-5   position-relative">
+                            <span>📍{{ activity.location }} </span>
+                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
                         </p>
                         <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                     </div>
@@ -116,10 +134,14 @@
                         <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
-                        <p class="card-text mb-5">
-                            <span  v-for="i in 5">
+                        <p class="card-text">
+                            <span v-for="i in 5">
                                 <span v-if="activity['hashTag'+i]">#<span class="hash-tag">{{ activity['hashTag'+i] }}</span></span>
                             </span>
+                        </p>
+                        <p class="card-text mb-5   position-relative">
+                            <span>📍{{ activity.location }} </span>
+                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
                         </p>
                         <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                     </div>
@@ -141,10 +163,14 @@
                         <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
-                        <p class="card-text mb-5">
+                        <p class="card-text">
                             <span v-for="i in 5">
                                 <span v-if="activity['hashTag'+i]">#<span class="hash-tag">{{ activity['hashTag'+i] }}</span></span>
                             </span>
+                        </p>
+                        <p class="card-text mb-5   position-relative">
+                            <span>📍{{ activity.location }} </span>
+                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
                         </p>
                         <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                     </div>

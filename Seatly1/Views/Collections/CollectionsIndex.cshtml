@@ -4,6 +4,29 @@
     ViewData["Title"] = "Collections";
 }
 
+@section Styles{
+    <style>
+    .expired-card {
+    position: relative;
+    background-color: #f2f2f2; /* Light gray background */
+    opacity: 0.7;
+    }
+
+    .expired-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    text-align: center;
+    }
+    </style>
+}
+
 <h2>收藏清單</h2>
 
 @if (Model.Any())
@@ -11,8 +34,11 @@
     <div class="row">
         @foreach (var item in Model)
         {
+            
+                bool isExpired = item.EndTime < DateTime.Now;
+            
             <div class="col-md-6">
-                <div class="card mb-4 d-flex flex-row">
+                <div class="card mb-4 d-flex flex-row @((isExpired) ? "expired-card" : "")">
                     <div class="card-img-left " style="width:200px">
                         @if (item.ActivityPhoto != null)
                         {
@@ -28,12 +54,13 @@
                     <div class="card-body">
                         <h5 class="card-title">@item.ActivityName</h5>
                         <p class="card-text">活動 ID: @item.ActivityId</p>
-                        <div><span class="text-warning me-2">📍</span><span class="text-primary">@item.Location</span></div>
+                        
                         @{
                             string formattedStartTime = string.Format("{0:yyyy-MM-dd}", item.StartTime);
                             string formattedEndTime = string.Format("{0:yyyy-MM-dd}", item.EndTime);
                         }
                         <span class="text-1000 fw-bold">@formattedStartTime ~ @formattedEndTime</span>
+                        <div><span class="text-warning me-2">📍</span><span class="text-primary">@item.Location</span></div>
                         <p>
                             @for (int k = 1; k <= 5; k++)
                             {
@@ -45,8 +72,16 @@
                                 }
                             }
                         </p>
-                        <a href="@Url.Action("UsersView", "NotificationRecord", new { id = item.ActivityId })" class="btn btn-primary">查看詳情</a>
-                        <button class="btn btn-danger" onclick="removeFromCollection(@item.ActivityId)">移除收藏</button>
+                        @if (isExpired)
+                        {
+                            <div class="expired-overlay">活動已結束</div>
+                            <button class="btn btn-danger" onclick="removeFromCollection(@item.ActivityId)">移除收藏</button>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("UsersView", "NotificationRecord", new { id = item.ActivityId })" class="btn btn-primary">查看詳情</a>
+                            <button class="btn btn-danger" onclick="removeFromCollection(@item.ActivityId)">移除收藏</button>
+                        }
                     </div>
                 </div>
             </div>
