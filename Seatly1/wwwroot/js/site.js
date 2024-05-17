@@ -149,7 +149,7 @@ $(function () {
     var gameSrc = $("#game").data("src");
     var gameUri = $("#game").data("uri");
     function gameLogoPop() {
-        var gameTargets = $("main div,p,h1,h2,h3,h4,h5,h6");
+        var gameTargets = $("main").find("div, p, h1, h2, h3, h4, h5, h6").not(".expired-overlay");
         var randEl = Math.floor(Math.random() * gameTargets.length);
         var aniNum = Math.ceil(Math.random() * 4);
         if (gameTargets.eq(randEl).hasClass("position-relative")) {
@@ -199,8 +199,8 @@ $(function () {
             $("main").find("#gameLogo").remove();
         }, 4000);
     }
-    
-    if ($("#game").index() != -1) {
+
+    if ($("#game").index() != -1 && $(".spinBtn").index() == -1) {
         var gameLoop = setInterval(function () {
             gameLogoPop();
         }, 4100);

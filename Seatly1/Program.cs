@@ -47,9 +47,6 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: PolicyName, policy => {
         policy.WithOrigins("*").WithHeaders("*").WithMethods("*");
     });
-    options.AddPolicy(name: "PointsAPI", policy => {
-        policy.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-    });
 });
 
 var app = builder.Build();

@@ -2,8 +2,11 @@
 
 <template>
   <div>
-    <button class="btn btn-gradient mb-2 btn-cate" data-cate="all">全部</button>
-
+    <button class="btn btn-gradient mb-2 me-1 btn-cate" @click="console.log('all');showProducts()">全部</button>
+    <button v-for="cate in results.sList" :key="cate" class="btn btn-gradient mb-2 me-1 btn-cate"
+            @click="searchTerm.cate = cate;searchTerm.keyword = '';this.$refs.pdSearch.value = '';showProducts()">
+        {{cate}}
+    </button>
     <!-- @foreach (var cate in Model.Select(s => s.Category).Distinct())
     {
         <button class="btn btn-gradient mb-2 btn-cate" data-cate="@cate">@cate</button>
@@ -122,7 +125,6 @@ const showProducts = async () => {
   const response = await fetch(APIUrl, {
     method: 'POST',
     body: JSON.stringify(searchTerm),
-    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     }
@@ -132,7 +134,7 @@ const showProducts = async () => {
   results.totalPg = datas.totalPages
   results.shops = datas.shops
   results.userPoints = datas.userPoints
-  results.sList = datas.sList
+  results.sList = datas.sList1
   results.dNames = datas.dNames
   results.shops.forEach((shop) => {
     shop.productImage = import.meta.env.VITE_API_SeatlyUrl + '/images/' + shop.productImage
@@ -140,12 +142,12 @@ const showProducts = async () => {
   isMg.value = datas.isMg
   console.log(results)
 
-  if (results.totalPg <= 1) {
-    firstPage.value = true
-    lastPage.value = true
-  } else {
-    lastPage.value = false
-  }
+    if (results.totalPg <= 1) {
+        firstPage.value = true
+        lastPage.value = true
+    } else if (searchTerm.pgNum < results.totalPg) {
+        lastPage.value = false
+    }
 }
 
 const pP = () => {

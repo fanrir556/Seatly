@@ -14,7 +14,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Seatly1.Controllers
 {
-    [EnableCors("PointsAPI")]
+    [EnableCors("AllowAny")]
     [Route("api/[controller]")]
     [ApiController]
     public class PointsAPIController : ControllerBase
@@ -67,6 +67,8 @@ namespace Seatly1.Controllers
             pointsPaging.TotalPages = totalPages;
             pointsPaging.Shops = await products.ToListAsync();
 
+            pointsPaging.SList1 = await _context.PointStores.Select(s => s.Category).Distinct().ToListAsync();
+
             if (User.Identity.IsAuthenticated)
             {
                 // 使用者已登入
@@ -86,8 +88,6 @@ namespace Seatly1.Controllers
             if (isMg == "true")
             {
                 List<string> DNames = new List<string>();
-                var PSCategories = await _context.PointStores.Select(s => s.Category).Distinct().ToListAsync();
-                pointsPaging.SList1 = new SelectList(PSCategories);
                 // 取得 PointStore 類別
                 Type pointStoreType = typeof(PointStore);
 

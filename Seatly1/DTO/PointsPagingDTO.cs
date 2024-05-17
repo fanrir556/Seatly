@@ -13,9 +13,9 @@ namespace Seatly1.DTO
 
         public int? UserPoints { get; set; }
 
-        public SelectList? SList1 { get; set; }
+        public List<string>? SList1 { get; set; }
 
-        public SelectList? SList2 { get; set; }
+        public List<string>? SList2 { get; set; }
         public List<string>? DNames { get; set; }
         public bool isMg { get; set; } = false;
     }
