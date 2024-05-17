@@ -26,8 +26,8 @@
 
             <div class="form-group">
                 <label asp-for="ActivityPhoto" class="control-label"></label>
-                <partial name="_ShowActivityPhoto"/>
-                <input type="file" id="ActivityPhoto" name="ActivityPhoto" class="form-control" accept="image/*" style="margin:7px;"/>
+                <partial name="_ShowActivityPhoto" />
+                <input type="file" id="ActivityPhoto" name="ActivityPhoto" class="form-control" accept="image/*" style="margin:7px;" />
             </div>
 
             <div class="form-group">
@@ -129,30 +129,30 @@
 
 
 
-    <script>
-        function previewImage(inputFile, img) {
-            if (inputFile.files && inputFile.files[0]) {
-                var file = inputFile.files[0];
-                var allowType = "image.*";
-                if (file.type.match(allowType)) {
-                    //預覽
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        img.attr("src", e.target.result);
-                        img.attr("title", inputFile.files[0].name);
-                    };
+<script>
+    function previewImage(inputFile, img) {
+        if (inputFile.files && inputFile.files[0]) {
+            var file = inputFile.files[0];
+            var allowType = "image.*";
+            if (file.type.match(allowType)) {
+                //預覽
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    img.attr("src", e.target.result);
+                    img.attr("title", inputFile.files[0].name);
+                };
 
-                    reader.readAsDataURL(inputFile.files[0]);
-                    $(".btn").prop("disabled", false);
+                reader.readAsDataURL(inputFile.files[0]);
+                $(".btn").prop("disabled", false);
 
-                }
+            }
 
-                else {
-                    alert("不支援檔案類型");
-                    $(".btn").prop("disabled", true);
-                }
+            else {
+                alert("不支援檔案類型");
+                $(".btn").prop("disabled", true);
             }
         }
+    }
 
         $("#ActivityPhoto").change(function () {
             previewImage(this, $("#ActivityPhoto").prev());

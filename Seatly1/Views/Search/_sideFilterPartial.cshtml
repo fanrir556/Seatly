@@ -34,15 +34,29 @@
             </label>
         </div>
     }
-
+    <br />
+    <div>
     <legend class="search-filter-group_header">活動開始日期</legend>
     <label><input type="date" id="startDatePicker" class="form-control"></label>
     <legend class="search-filter-group_header">活動結束日期</legend>
     <label><input type="date" id="endDatePicker" class="form-control"></label>
     <button class="btn btn-primary m-1" type="button" id="searchDurtion">日期區間搜尋</button>
     <button class="btn btn-primary m-1" type="button" id="clearDurtion">清除日期</button>
+    </div>
+    <br />
 
-
+    <legend class="search-filter-group_header">活動地點</legend>
+    @foreach (var location in ViewBag.AllLocations)
+    {
+        <div class="search-filter search-checkbox-filter">
+            <label class="search-checkbox">
+                <div class="search-checkbox_box">
+                    <input type="checkbox" name="" value="@location" data-category="@location"><span class="search-checkbox_label">@location</span>
+                </div>
+            </label>
+        </div>
+    }
+    <br />
 </fieldset>
 
 
@@ -94,10 +108,18 @@
             parameters.categories = selectedCategories;
             parametersDate.categories = selectedCategories;
 
-            // parameters.startDate = selectedStartDate;
-            // parameters.endDate = selectedEndDate;
-            // parametersDate.startDate = selectedStartDate;
-            // parametersDate.endDate = selectedEndDate;
+           
+
+            // 檢查是否有選擇了日期
+            if (parameters.startDate !== null && parameters.endDate !== null || parametersDate.startDate !== null && parametersDate.endDate !== null ) {
+                // 如果有選擇了日期，則更新 parameters 物件中的 startDate 和 endDate
+                var selectedStartDate = $('#startDatePicker').val();
+                var selectedEndDate = $('#endDatePicker').val();
+                parameters.startDate = selectedStartDate;
+                parameters.endDate = selectedEndDate;
+                parametersDate.startDate = selectedStartDate;
+                parametersDate.endDate = selectedEndDate;
+            }
 
             if (searchKeyword !== null) {
                 if (selectedCategories.includes('all')) {
@@ -162,7 +184,26 @@
             var selectedStartDate = $('#startDatePicker').val();
             var selectedEndDate = $('#endDatePicker').val();
 
+            // 更新 parameters 物件中的 startDate 和 endDate
+            parameters.startDate = selectedStartDate;
+            parameters.endDate = selectedEndDate;
+            parametersDate.startDate = selectedStartDate;
+            parametersDate.endDate = selectedEndDate;
 
+            // 檢查是否有選擇了分類
+            if (parameters.categories !== null || parametersDate.categories !== null ) {
+                // 如果有選擇了分類，則更新 parameters 物件中的
+                var selectedCategories = [];
+                var checked = $('input[type="checkbox"]:checked');
+                $('input[type="checkbox"]:checked').each(function () {
+                    selectedCategories.push($(this).data('category'));
+                });
+
+                // 更新 categories
+                parameters.categories = selectedCategories;
+                parametersDate.categories = selectedCategories;
+
+            }
 
             if (searchKeyword !== null) {
                 if (selectedStartDate == null && selectedEndDate == null) {
@@ -178,9 +219,9 @@
                     });
                 } else {
                     // 加入篩選
-                    parameters.categories = undefined;
-                    parameters.startDate = selectedStartDate;
-                    parameters.endDate = selectedEndDate;
+                    // parameters.categories = undefined;
+                    // parameters.startDate = selectedStartDate;
+                    // parameters.endDate = selectedEndDate;
                     $.ajax({
                         type: "POST",
                         url: "/Search/GetActivitiesByCategories",
@@ -209,9 +250,9 @@
                     });
                 } else {
                     // 加入篩選
-                    parametersDate.categories = undefined;
-                    parametersDate.startDate = selectedStartDate;
-                    parametersDate.endDate = selectedEndDate;
+                    // parametersDate.categories = undefined;
+                    // parametersDate.startDate = selectedStartDate;
+                    // parametersDate.endDate = selectedEndDate;
                     $.ajax({
                         type: "POST",
                         url: "/Search/GetActivitiesByCategories",

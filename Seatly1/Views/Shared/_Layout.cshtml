@@ -20,7 +20,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="~/favicon_io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="~/favicon_io/favicon-16x16.png">
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon_io/favicon.ico">
-    @* <link rel="manifest" href="~/img/favicons/manifest.json"> *@
+    <link rel="manifest" href="~/img/favicons/manifest.json">
     @* <meta name="msapplication-TileImage" content="~/img/favicons/mstile-150x150.png"> *@
     @* <meta name="theme-color" content="#ffffff"> *@
 
@@ -45,11 +45,14 @@
     @* <link href="~/css/theme-rtl.css" rel="stylesheet" /> *@
 
     @RenderSection("Styles", required: false) <!-- 如果提供了 Styles 部分，则渲染 Styles 部分 -->
+   
 </head>
 <body>
     @* ====================================================== *@
         @* nav bar *@
     @* ====================================================== *@
+
+   
 
     @*簽到判定*@
     @{
@@ -70,8 +73,15 @@
                 <span class="navbar-toggler-icon"> </span>
             </button>
 
+            @* 搜尋框 *@
+            <div id="" class="collapse navbar-collapse border-top border-lg-0 justify-content-end">
+                <input id="layoutSearch" class="input-box form-foodwagon-control" type="text" v-model="searchKeyword" placeholder="🔎輸入關鍵字...">
+                <a id="layoutSearchBtn" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger">搜尋</button></a>
+            </div>
 
             <div class="collapse navbar-collapse border-top border-lg-0 justify-content-end" id="navbarSupportedContent">
+                <a class="text-gradient me-1" id="userCollections" asp-area="" asp-controller="Collections" asp-action="CollectionsIndex">❤收藏清單</a>
+
                 <a class="text-gradient" asp-area="" asp-controller="Admin" asp-action="Index">管理員連接測試</a>
 
                 @* 點數專區開始 *@
@@ -209,7 +219,8 @@
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/js/layout.js"></script>
-    <script src="https://unpkg.com/vue@latest"></script>
+   
+    
     @* <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js" asp-append-version="true"></script>
@@ -231,8 +242,28 @@
     <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
  *@
 
+<script src="https://unpkg.com/vue@latest"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap" rel="stylesheet">
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+<!-- ===============================================-->
+<!--    Vue.js-->
+<!-- ===============================================-->
+@* <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script> *@
+
+
+
+<script>
+    // layout搜尋
+    $("#layoutSearchBtn").on("click", function (e) {
+        // e.preventDefault();
+        sessionStorage.removeItem("searchDate")
+        sessionStorage.removeItem("searchString")
+        var searchKeyword = $("#layoutSearch").val()
+        console.log(searchKeyword)
+        sessionStorage.setItem("searchString", searchKeyword)
+        sessionStorage.setItem("isSearching", "true")
+    });
+</script>
 </html>

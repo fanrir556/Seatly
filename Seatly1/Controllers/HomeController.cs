@@ -23,6 +23,7 @@ namespace Seatly1.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             /*簽到判定*/
             if (User.Identity.IsAuthenticated)
             {
@@ -59,7 +60,26 @@ namespace Seatly1.Controllers
                 }
             }
             /*簽到判定*/
-            return View();
+
+            // 首頁熱門選項
+            var query = _context.NotificationRecords.AsQueryable();
+            var now = DateTime.UtcNow;
+
+            // 添加檢查 isActivity 的條件
+            query = query.Where(p => p.IsActivity == true && p.EndTime > now);
+
+            var hotItems = await query
+                .Where(r => r.HashTag1.Contains("HOT") ||
+                r.HashTag2.Contains("HOT") ||
+                r.HashTag3.Contains("HOT") ||
+                r.HashTag4.Contains("HOT") ||
+                r.HashTag5.Contains("HOT"))
+                 .OrderBy(r => Guid.NewGuid()) // 隨機排序
+                 .Take(10) // 選取10筆
+                 .ToListAsync();
+            Debug.WriteLine("熱門:" + hotItems.Count);
+
+            return View(hotItems);
         }
 
         public IActionResult Privacy()
@@ -113,5 +133,7 @@ namespace Seatly1.Controllers
             }
             return Ok();
         }
+
+        
     }
 }

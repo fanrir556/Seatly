@@ -42,19 +42,19 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        $(function () {
-            $("#collections").on("click", function (e) {
-                e.preventDefault();
-                // alert("1111");
-                $.ajax({
-                    type: "GET",
-                    url: `@Url.Action("collectionsPartial", "Friends")`
-                }).done(function (data) {
-                    $("#memberBody").html(data);
-                }).fail(function (err) {
-                    alert(err.responseText);
-                });
-            });
-        });
+        // $(function () {
+        //     $("#collections").on("click", function (e) {
+        //         e.preventDefault();
+        //         // alert("1111");
+        //         $.ajax({
+        //             type: "GET",
+        //             url: `@Url.Action("collectionsPartial", "Friends")`
+        //         }).done(function (data) {
+        //             $("#memberBody").html(data);
+        //         }).fail(function (err) {
+        //             alert(err.responseText);
+        //         });
+        //     });
+        // });
     </script>
 }

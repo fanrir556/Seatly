@@ -27,10 +27,10 @@ namespace Seatly1.Controllers
 
         }
 
-        public async Task<IActionResult> collectionsPartial()
-        {
-            return PartialView("_collectionsPartial", await _context.CollectionItems.ToListAsync());
-        }
+        //public async Task<IActionResult> collectionsPartial()
+        //{
+        //    return PartialView("_collectionsPartial", await _context.CollectionItems.ToListAsync());
+        //}
 
 
     }

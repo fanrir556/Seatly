@@ -5,11 +5,29 @@
 } *@
 
 
+@* <!-- 分页控制按钮 -->
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" id="prevPage">
+            <a class="page-link" href="#" onclick="prevPage()">Previous</a>
+        </li>
+        <li class="page-item" id="nextPage">
+            <a class="page-link" href="#" onclick="nextPage()">Next</a>
+        </li>
+    </ul>
+</nav>
 
+<!-- 分页信息 -->
+<div id="paginationInfo" class="text-center">
+    <span id="currentPage"></span>
+</div>
+ *@
 @if (Model != null && Model.Any())
 {
+   
+@* 卡片內容 *@
     <div>
-        <ul>
+        <ul id="activityList">
             @foreach (var activity in Model)
             {
                 <div class="card mb-3">
@@ -19,7 +37,7 @@
                                 var base64Image = Convert.ToBase64String(activity.ActivityPhoto);
                                 var imageSrc = $"data:image;base64,{base64Image}";
                             }
-                            <img src="@imageSrc" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2" />
+                            <img src="@imageSrc" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2 w-75"  />
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -28,6 +46,7 @@
                                 <p class="card-text">開始時間: @activity.StartTime</p>
                                 <p class="card-text">結束時間: @activity.EndTime</p>
                                 <p class="card-text">活動內容: @activity.DescriptionN</p>
+                                <p class="card-text ">活動地點: <span class="location">@activity.Location</span></p>
                                 <p class="card-text">
                                     @for (int i = 1; i <= 5; i++)
                                     {
@@ -60,6 +79,9 @@ else
 
 
 <script>
+    // // 当前页码
+    // let currentActivityPage = 1;
+
     $(function () {
         var isSearching = sessionStorage.getItem("isSearching");
         if (isSearching == "true") {
@@ -68,13 +90,25 @@ else
                 var tag = $(this).text()
                 hashtags.push(`${tag}`)
             });
-
+            
+            var locations = [];
+            $('.location').each(function () {
+                var location = $(this).text()
+                locations.push(`${location}`)
+            })
 
             console.log(hashtags)
+            console.log(locations)
+
+            var filterData = {
+                hashtags: hashtags,
+                locations: locations
+            };
+
 
             fetch(`@Url.Action("sideFilterPartial", "Search")`, {
                 method: "POST",
-                body: JSON.stringify(hashtags),
+                body: JSON.stringify(filterData),
                 headers: { 'Content-type': 'application/json' }
             }).then(function (response) {
                 return response.text();
@@ -88,5 +122,134 @@ else
 
     });
 
+    
+    // // 每页显示的数据量
+    // const pageSize = 5;
+    // // 所有数据
+    // let allActivities = [];
+
+    // // 页面加载时获取所有数据
+    // window.onload = function () {
+    //     fetchAllActivities();
+    // };
+
+    // // 获取所有数据
+    // function fetchAllActivities() {
+    //     fetch('@Url.Action("searchPartial", "Search")')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             allActivities = data;
+    //             renderPage(currentActivityPage);
+    //         })
+    //         .catch(error => console.error('Error fetching activities:', error));
+    // }
+
+    // // 渲染当前页的数据和分页信息
+    // function renderPage(page) {
+    //     const startIndex = (page - 1) * pageSize;
+    //     const endIndex = startIndex + pageSize;
+    //     const currentPageActivities = allActivities.slice(startIndex, endIndex);
+    //     updateActivityList(currentPageActivities);
+
+    //     // 更新分页按钮显示的当前页和总页数
+    //     const totalPages = Math.ceil(allActivities.length / pageSize);
+    //     document.getElementById('prevPage').innerHTML = `<a class="page-link" href="#" onclick="prevPage()">Previous</a>`;
+    //     document.getElementById('nextPage').innerHTML = `<a class="page-link" href="#" onclick="nextPage()">Next</a>`;
+
+    //     // 添加分頁信息顯示
+    //     document.getElementById('paginationInfo').innerHTML = `<span id="currentPage">Page ${page} of ${totalPages}</span>`;
+    // }
+
+    // // 更新数据显示区域
+    // function updateActivityList(activities) {
+    //     const activityList = document.getElementById('activityList');
+    //     activityList.innerHTML = '';
+    //     activities.forEach(activity => {
+    //         const activityCard = document.createElement('div');
+    //         activityCard.className = 'card mb-3';
+    //         activityCard.innerHTML = `
+    //                     <div class="row g-0">
+    //                         <div class="col-md-4">
+    //                             <img src="${activity.ImageSrc}" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2 w-75" />
+    //                         </div>
+    //                         <div class="col-md-8">
+    //                             <div class="card-body">
+    //                                 <h3 class="card-title fs-3">活動名稱: ${activity.ActivityName}</h3>
+    //                                 <p class="card-text">活動代碼: ${activity.ActivityId}</p>
+    //                                 <p class="card-text">開始時間: ${activity.StartTime}</p>
+    //                                 <p class="card-text">結束時間: ${activity.EndTime}</p>
+    //                                 <p class="card-text">活動內容: ${activity.DescriptionN}</p>
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                     <br />
+    //                 `;
+    //         activityList.appendChild(activityCard);
+    //     });
+    // }
+
+    // // 切换到上一页
+    // function prevPage() {
+    //     if (currentActivityPage > 1) {
+    //         currentActivityPage--;
+    //         renderPage(currentActivityPage);
+    //     }
+    // }
+
+    // // 切换到下一页
+    // function nextPage() {
+    //     const totalPages = Math.ceil(allActivities.length / pageSize);
+    //     if (currentActivityPage < totalPages) {
+    //         currentActivityPage++;
+    //         renderPage(currentActivityPage);
+    //     }
+    // }
+
+    // function fetchActivities(page) {
+    //     fetch(`@Url.Action("searchPartial", "Search")?page=${page}`)
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             return response.text();
+    //         })
+    //         .then(data => {
+    //             updateActivityList(data);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching activities:', error);
+    //         });
+    // }
+
+    //     function updateActivityList(data) {
+    //         $('#activityList').empty();
+
+    //         data.forEach(activity => {
+    //             var activityCard = $('<div class="card mb-3"></div>');
+
+    //             var cardContent = `
+    //             <div class="row g-0">
+    //                 <div class="col-md-4">
+    //                     <img src="${activity.ImageSrc}" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2 w-75" />
+    //                 </div>
+    //                 <div class="col-md-8">
+    //                     <div class="card-body">
+    //                         <h3 class="card-title fs-3">活動名稱: ${activity.ActivityName}</h3>
+    //                         <p class="card-text">活動代碼: ${activity.ActivityId}</p>
+    //                         <p class="card-text">開始時間: ${activity.StartTime}</p>
+    //                         <p class="card-text">結束時間: ${activity.EndTime}</p>
+    //                         <p class="card-text">活動內容: ${activity.DescriptionN}</p>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <br />
+    //         `;
+
+    //             activityCard.append(cardContent);
+
+    //             $('#activityList').append(activityCard);
+    //         });
+    //     }
+    
 
 </script>

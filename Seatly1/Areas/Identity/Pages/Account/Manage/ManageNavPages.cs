@@ -68,7 +68,7 @@ namespace  Seatly1.Areas.Identity.Pages.Account.Manage
 
         public static string Friends => "Friends";
 
-        public static string Collections => "Collectons";
+        public static string Collections => "Collections";
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -122,19 +122,19 @@ namespace  Seatly1.Areas.Identity.Pages.Account.Manage
 
         public static string CollectionsNavClass(ViewContext viewContext) => PageNavClass(viewContext, Collections);
 
-        public class FriendsController : Controller
-        {
-            SeatlyContext _context;
-             public FriendsController(SeatlyContext context)
-            {
-                _context = context;
-            }
+        //public class FriendsController : Controller
+        //{
+        //    SeatlyContext _context;
+        //     public FriendsController(SeatlyContext context)
+        //    {
+        //        _context = context;
+        //    }
 
-            public async Task<IActionResult> collectionsPartial()
-            {
-                return PartialView("_collectionsPartial", await _context.CollectionItems.ToListAsync());
-            }
-        }
+        //    public async Task<IActionResult> collectionsPartial()
+        //    {
+        //        return PartialView("_collectionsPartial", await _context.CollectionItems.ToListAsync());
+        //    }
+        //}
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

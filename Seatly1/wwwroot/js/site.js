@@ -46,11 +46,13 @@ $(function () {
     if (isLogin.length != 0) {
         //alert("tr");
         $("#OrganizersLoginRegisterNav").hide();
+        $("#userCollections").show();
         sessionStorage.setItem("userLogin", "true");
     }
     else {
         //alert("fa");
         $("#OrganizersLoginRegisterNav").show();
+        $("#userCollections").hide();
         sessionStorage.removeItem("userLogin");
     }
     /*會員登入隱藏活動方*/

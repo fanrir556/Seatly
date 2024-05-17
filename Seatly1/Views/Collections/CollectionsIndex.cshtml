@@ -1,0 +1,162 @@
+﻿@model IEnumerable<Seatly1.Controllers.CollectionsController.CollectionViewModel>
+
+@{
+    ViewData["Title"] = "Collections";
+}
+
+@section Styles{
+    <style>
+    .expired-card {
+    position: relative;
+    background-color: #f2f2f2; /* Light gray background */
+    opacity: 0.7;
+    }
+
+    .expired-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    text-align: center;
+    }
+    </style>
+}
+
+<h2>收藏清單</h2>
+
+@if (Model.Any())
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            
+                bool isExpired = item.EndTime < DateTime.Now;
+            
+            <div class="col-md-6">
+                <div class="card mb-4 d-flex flex-row @((isExpired) ? "expired-card" : "")">
+                    <div class="card-img-left " style="width:200px">
+                        @if (item.ActivityPhoto != null)
+                        {
+                            var base64Image = Convert.ToBase64String(item.ActivityPhoto);
+                            var imageSrc = $"data:image;base64,{base64Image}";
+                            <img class="img-fluid rounded-3 h-100" src="@imageSrc" alt="ActivityPhoto" />
+                        }
+                        else
+                        {
+                            <img src="~/images/noimage.jpg" />
+                        }
+                        
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@item.ActivityName</h5>
+                        <p class="card-text">活動 ID: @item.ActivityId</p>
+                        
+                        @{
+                            string formattedStartTime = string.Format("{0:yyyy-MM-dd}", item.StartTime);
+                            string formattedEndTime = string.Format("{0:yyyy-MM-dd}", item.EndTime);
+                        }
+                        <span class="text-1000 fw-bold">@formattedStartTime ~ @formattedEndTime</span>
+                        <div><span class="text-warning me-2">📍</span><span class="text-primary">@item.Location</span></div>
+                        <p>
+                            @for (int k = 1; k <= 5; k++)
+                            {
+                                var tagName = "HashTag" + k;
+                                var tagValue = item.GetType().GetProperty(tagName)?.GetValue(item, null)?.ToString();
+                                if (!string.IsNullOrEmpty(tagValue) && tagValue != "HOT")
+                                {
+                                    <span>#<span class="hash-tag">@tagValue</span></span>
+                                }
+                            }
+                        </p>
+                        @if (isExpired)
+                        {
+                            <div class="expired-overlay">活動已結束</div>
+                            <button class="btn btn-danger" onclick="removeFromCollection(@item.ActivityId)">移除收藏</button>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("UsersView", "NotificationRecord", new { id = item.ActivityId })" class="btn btn-primary">查看詳情</a>
+                            <button class="btn btn-danger" onclick="removeFromCollection(@item.ActivityId)">移除收藏</button>
+                        }
+                        @* <meta property="og:title" content="@item.ActivityName">
+                        <meta property="og:description" content="@item.DescriptionN">
+                        <meta property="og:site_name" content="Queuely">
+                        <meta property="og:url" content="https://google.com"> *@
+                        @* <button class="btn btn-success" onclick="shareToFacebook('@item.ActivityId')">分享到 Facebook</button> *@
+
+                        <!-- Facebook Share Button -->
+                        <div class="fb-share-button"
+                             data-href="https://yourdomain.com/Collections/CollectionsIndex/@item.ActivityId"
+                             data-layout="button_count">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>沒有收藏項目。</p>
+}
+
+@section Scripts{
+    @Html.AntiForgeryToken()
+<script>
+    async function removeFromCollection(activityId) {
+        if (confirm('確定要移除該收藏項目嗎？')) {
+            try {
+                    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                    const payload = { activityId: activityId };
+
+                    console.log('Payload:', payload);
+
+                const response = await fetch('/Collections/RemoveFromCollection', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': token
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert('收藏項目已移除');
+                    location.reload(); // 刷新页面以更新视图
+                } else {
+                    alert('移除收藏項目失敗：' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('移除收藏項目失敗，請稍後再試！');
+            }
+        }
+    }
+
+        function shareToFacebook(activityId) {
+            const cardDetailUrl = encodeURIComponent('https://localhost:7271/Collections/CollectionsIndex/${activityId}');
+                const facebook = `http://www.facebook.com/sharer/sharer.php?u=${cardDetailUrl}`;
+                window.open(facebook, '_blank');
+    }
+
+       
+</script>
+    <!-- Load Facebook SDK for JavaScript -->
+    <div id="fb-root"></div>
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+}
