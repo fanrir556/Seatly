@@ -285,6 +285,5 @@ namespace Seatly1.Controllers
         }
 
 
-
     }
 }

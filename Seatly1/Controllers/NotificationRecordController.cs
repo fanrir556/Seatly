@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 using Seatly1.Models;
 using Seatly1.ViewModels;
+using System.Web;
 
 namespace Seatly1.Controllers
 {
@@ -125,6 +126,8 @@ namespace Seatly1.Controllers
                     notificationRecord.IsActivity = true;
                 }
 
+
+
                 _context.Add(notificationRecord);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("_NotificationRecord", "Admin");
@@ -132,7 +135,7 @@ namespace Seatly1.Controllers
             return RedirectToAction("_NotificationRecord", "Admin");
         }
 
-
+        
 
 
 
