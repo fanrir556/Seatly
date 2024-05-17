@@ -1,0 +1,174 @@
+﻿<!-- 
+    OrganizerActiveCheckIndex
+    活動check頁面
+
+    1.讀取啟用中的活動
+    2.可選擇關閉活動
+        2-2 活動紀錄額外做一頁
+
+ -->
+
+
+
+    <div id="app">
+        <div class="container mt-3">
+            <h5>活動check</h5>
+            <div>
+                <p>進行中活動</p>
+            </div>
+            <div>
+            <a class="btn btn-success btn-sm" asp-controller="confirm" asp-action="OrganizerActiveHistoryIndex">歷史紀錄</a>
+            </div>
+            <div class="row mt-3">
+                <div class="mt-2" style="background-color:rgba(255,255,255,0.7);">
+                    <table class="table">
+                        <thead class="bg-primary" style="position: sticky; top: 0; z-index: 1;color:white">
+                            <tr>
+                                <th scope="col">活動id</th>
+                                <th scope="col">活動照片</th>
+                                <th scope="col">活動名稱</th>
+                                <th scope="col">開始時間</th>
+                                <th scope="col">結束時間 </th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr v-for="N in Activity">
+                                <th scope="row">{{N.activityId}}</th>@* 活動ID *@
+                                <td><img :src="N.activityPhoto" :alt="N.activityId"></img></td>@* 活動照片 *@
+                                <td>{{N.activityName}}</td>@* 活動名稱 *@
+                                <td>{{N.startTime}}</td>@* 開始時間 *@
+                                <td>{{N.endTime}}</td>@* 結束時間 *@
+                                <td style="width:200px;">
+                                <button :btn-id="N.activityId" class="btn btn-sm btn-secondary mb-1" style="width:170px;" @@click="check">
+                                        活動簽到確認
+                                    </button>
+                                    <br />
+                                <button :btn-id="N.activityId" class="btn btn-sm btn-primary" style="width:170px;" @@click="endactive">
+                                        結束活動
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+ 
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!--時間轉型工具-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+
+    <script>
+
+        //路徑
+        const vuebase = "https://localhost:7271" 
+       //活動方id
+        const organizerid = sessionStorage.getItem("OrganizerId");
+
+        //vue本體
+        const vueApp = {
+            data() {
+                return {
+                    Activity: [],
+                    activityId:"",
+                    activityName:"",
+                    activityPhoto:"",
+                    startTime:"",
+                    endTime: "",
+                };
+            },
+            methods: {
+                //---------------------------------------------------
+                //生成列表
+                //呼叫api選擇active的狀態
+                list:function() { 
+                    // alert("list")
+                    let _this = this
+
+                        //轉換圖片的function
+
+                    axios.get(`${vuebase}/Confirm/ActiveList/${organizerid}`)
+                        .then(async response => {
+                            let res = [];
+                            for (let e of response.data) {
+
+                                res.push({
+                                    activityId: e.activityId,
+                                    // activityPhoto: e.activityPhoto,
+                                    activityName: e.activityName,
+                                    startTime: moment(e.startTime).format('YYYY-MM-DD HH:mm'),
+                                    endTime: moment(e.endTime).format('YYYY-MM-DD HH:mm'),
+                                });
+                            }
+                            _this.Activity = res;
+                        })
+                        .catch(err => {
+                            alert(err)
+                        })
+                },
+                //---------------------------------------------------
+                //檢查活動按鈕
+                check:function(event) {
+                    // alert("check");
+                    // 從事件對象(event object)中取得觸發事件的按鈕元素
+                    const btn = event.target;
+                    // 從按鈕元素中取得自定義屬性"btn-id"
+                    const btnId = btn.getAttribute("btn-id");
+                    // alert(btnId)
+                    sessionStorage.removeItem("ActID");
+                    sessionStorage.setItem("ActID", btnId);
+
+                    //呼叫api轉換頁面
+                    axios.get(`${vuebase}/Confirm/OrganizerActiveCheck/${btnId}`)
+                    .then(response => {
+                        // console.log(response);
+                        window.location.href = `${vuebase}/Confirm/OrganizerActiveCheck/${btnId}`
+                    })
+                    .catch(error => {
+                        alert(error);
+                    });
+
+                },
+               //-----------------------------------------------------------
+                //更改活動按鈕
+                //更改活動狀態為不啟動
+                endactive: function(event) {
+                    let _this = this;
+
+                    // alert("delete");
+                    // 從事件對象(event object)中取得觸發事件的按鈕元素
+                    const btn = event.target;
+                    // 從按鈕元素中取得自定義屬性"btn-id"
+                    const btnId = btn.getAttribute("btn-id");
+
+                    // alert(btnId)
+                    var ret = confirm("確定要結束活動?");
+                    if (ret == true) { 
+                    axios.post(`${vuebase}/Confirm/TransActive/${btnId}`)
+                    .then(e => { 
+                        alert("結束成功");
+                         _this.list();
+                    })
+                    .catch(err => {
+                        alert(err)
+                    })
+
+                    }
+                },
+            },
+            mounted: function(){
+                let _this = this;
+                _this.list();
+            }
+        };
+
+        Vue.createApp(vueApp).mount("#app");
+    </script>

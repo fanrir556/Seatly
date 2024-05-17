@@ -1,53 +1,270 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tw">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Seatly1</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Seatly1.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - Queuely</title>
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>Foodwagon | Responsive, Ecommerce &amp; Business Templatee</title>
+
+
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/favicon_io/favicon-16x16.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon_io/favicon.ico">
+    <link rel="manifest" href="~/img/favicons/manifest.json">
+    @* <meta name="msapplication-TileImage" content="~/img/favicons/mstile-150x150.png"> *@
+    @* <meta name="theme-color" content="#ffffff"> *@
+
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+    @* <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" /> *@
+    <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/theme.css" rel="stylesheet" asp-append-version="true" />
+    @* <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css" rel="stylesheet" /> *@
+    @* <link rel="stylesheet" href="~/Seatly1.styles.css" asp-append-version="true" /> *@
+    @* <link href="~/css/theme-rtl.min.css" rel="stylesheet" asp-append-version="true" /> *@
+    @* <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" /> *@
+    @* <link href="~/css/theme-rtl.css" rel="stylesheet" /> *@
+
+    @RenderSection("Styles", required: false) <!-- 如果提供了 Styles 部分，则渲染 Styles 部分 -->
+   
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Seatly1</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
+    @* ====================================================== *@
+        @* nav bar *@
+    @* ====================================================== *@
+
+   
+
+    @*簽到判定*@
+    @{
+        var isCheckedIn = HttpContextAccessor.HttpContext.Session.GetString("checkedIn");
+        var isGamed = HttpContextAccessor.HttpContext.Session.GetString("gamed");
+    }
+    @*簽到判定*@
+
+    <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-light justify-content-center" data-navbar-on-scroll="data-navbar-on-scroll">
+        <div class="container-fluid m-0" style="min-width: 98vw;">
+            <a class="navbar-brand d-inline-flex" asp-area="" asp-controller="Home" asp-action="Index" id="home" data-uri="@Url.Action("Index", "Home")">
+                <img class="d-inline-block" src="@Url.Content("~/images/logo.svg")" alt="logo" id="logo" data-url="@Url.Action("isMG", "Home")" style="width: 40px; height: 40px;" />
+                <span class="text-1000 fs-3 fw-bold ms-2 text-gradient">Queuely</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"> </span>
+            </button>
+
+            @* 搜尋框 *@
+            <div id="" class="collapse navbar-collapse border-top border-lg-0 justify-content-end">
+                <input id="layoutSearch" class="input-box form-foodwagon-control" type="text" v-model="searchKeyword" placeholder="🔎輸入關鍵字...">
+                <a id="layoutSearchBtn" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger">搜尋</button></a>
             </div>
-        </nav>
-    </header>
-    <div class="container">
+
+            <div class="collapse navbar-collapse border-top border-lg-0 justify-content-end" id="navbarSupportedContent">
+                <a class="text-gradient me-1" id="userCollections" asp-area="" asp-controller="Collections" asp-action="CollectionsIndex">❤收藏清單</a>
+
+                <a class="text-gradient" asp-area="" asp-controller="Admin" asp-action="Index">管理員連接測試</a>
+
+                @* 點數專區開始 *@
+                <li class="nav-item dropdown text-gradient list-group">
+                    <a id="pointsNav" class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        點數專區
+                    </a>
+                    <ul id="pointsDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsShop">點數商城</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="coupon">持有優惠券</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsHistory">點數交易紀錄</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="VueIndex">Vue</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="MVCVue">MVCVue</a></li>
+                    </ul>
+                </li>
+                @* 點數專區結束 *@
+                <partial name="_LoginPartial" />
+
+                @* 活動方專區開始 *@
+
+                @* 活動方未登入顯示的區域 *@
+                <li id="OrganizersLoginRegisterNav" class="nav-item dropdown text-gradient list-group">
+                    <a class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        活動方登入/註冊
+                    </a>
+                    <ul id="OrganizersLoginRegisterDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a id="o-register" class="dropdown-item text-gradient" asp-area="" asp-controller="OrganizerRoute" asp-action="OrganizerRegister">活動方註冊</a></li>
+                        <li><a id="o-login" class="dropdown-item text-gradient" asp-area="" asp-controller="OrganizerRoute" asp-action="OrganizerLogin">活動方登入</a></li>
+                    </ul>
+                </li>
+
+                @* 活動方登入後顯示的區域 *@
+                <li id="OrganizersManageNav" class="nav-item dropdown text-gradient list-group">
+
+                    @* 活動方管理Navbar，顯示帳號與活動方名稱 *@
+                    <a class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        活動方管理
+                    </a>
+                    <ul id="OrganizersManageDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a id="o-index" class="dropdown-item text-gradient" asp-area="" asp-controller="OrganizerRoute" asp-action="Index">活動方主頁</a></li>
+                        <li><a id="o-logout" class="dropdown-item text-gradient">登出</a></li>
+                    </ul>
+                </li>
+
+                <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="logoutModalLabel">提示</h5>
+                                <button type="button" id="logoutModalBtn2" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p id="logoutModalMessage">確定要登出嗎?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="closelogoutModalBtn" class="btn btn-secondary" data-dismiss="modal">登出</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @* 活動方專區結束 *@
+
+            </div>
+        </div>
+    </nav>
+
+  
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    @* Modal *@
+    <div class="modal fade" id="mainModal" tabindex="-1" aria-labelledby="mainModalLabel" aria-hidden="true" data-url="@Url.Action("mainModal", "Home")">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" id="mainModalHeader">
+                    <h5 class="modal-title" id="mainModalLabel">請輸入通關密語</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="mainModalBody">
+                </div>
+                <div class="modal-footer" id="mainModalFooter">
+                    <button class="btn btn-gradient p-0 text-align-center" style="width:100px;height:45px" id="managerLogin">芝麻開門</button>
+                    <button class="btn btn-secondary p-0 text-align-center" style="width:100px;height:45px" data-bs-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* Modal *@
+
+    @*簽到按鈕*@
+    @if (isCheckedIn == "false")
+    {
+        <button id="checkIn" class="position-fixed bottom-0 start-0 mb-5 ms-2 btn btn-gradient p-0 rounded-3" style="width: 50px; height: 50px;" data-uri="@Url.Action("CheckIn", "Points")">
+            簽
+        </button>
+    } 
+    @*簽到按鈕*@
+
+    @*小遊戲*@
+    @if (isGamed == "false")
+    {
+        @* <img id="gameLogo" class="position-absolute p-0" style="width: 30px; height: 30px; z-index: -1;" src="@Url.Content("~/images/queuely.png")" data-uri="@Url.Action("GamePoints", "Points")"> *@
+        <span id="game" class="d-none" data-src="@Url.Content("~/images/queuely.png")" data-uri="@Url.Action("GamePoints", "Points")"></span>
+    }
+    @*小遊戲*@
+
+    @*toast*@
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3 toast-container" style="z-index: 11;">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+            <div class="toast-header">
+                @* <strong class="me-auto">Bootstrap</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> *@
+            </div>
+            <div class="toast-body">
+                @* Hello, world! This is a toast message. *@
+            </div>
+        </div>
+    </div>
+    @*toast*@
+
+    <footer class="border-top footer text-muted position-fixed bottom-0">
+        <div class="container-fluid">
             &copy; 2024 - Seatly1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/js/layout.js"></script>
+   
+    
+    @* <script src="~/public/vendors/@@popperjs/popper.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="module" src="~/lib/bootstrap/dist/js/bootstrap.esm.min.js" asp-append-version="true"></script>
+    <script src="~/public/vendors/is/is.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.js?features=window.scroll"></script>
+    <script src="~/public/vendors/fontawesome/all.min.js"></script>
+    <script src="~/js/bootstrap-navbar.js"></script>
+    <script type="module" src="~/js/scroll-to-top.js"></script>
+    <script src="~/js/theme.min.js"></script>
+    <script type="module" src="~/js/detector.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/utils.js" asp-append-version="true"></script>
+    <script src="~/public/assets/js/theme.min.js"></script>
+
+    <script src="~/gulp/build.gulp.js"></script>
+    <script src="~/gulp/clean.gulp.js"></script>
+    import { createPopper } from '@popperjs/core';
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/esm/createPopper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+ *@
+
+<script src="https://unpkg.com/vue@latest"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&amp;display=swap" rel="stylesheet">
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+<!-- ===============================================-->
+<!--    Vue.js-->
+<!-- ===============================================-->
+@* <script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script> *@
+
+
+
+<script>
+    // layout搜尋
+    $("#layoutSearchBtn").on("click", function (e) {
+        // e.preventDefault();
+        sessionStorage.removeItem("searchDate")
+        sessionStorage.removeItem("searchString")
+        var searchKeyword = $("#layoutSearch").val()
+        console.log(searchKeyword)
+        sessionStorage.setItem("searchString", searchKeyword)
+        sessionStorage.setItem("isSearching", "true")
+    });
+</script>
 </html>

@@ -1,0 +1,204 @@
+﻿@model IEnumerable<Seatly1.Models.Organizer>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+        margin:2px;
+    }
+
+    .table-container {
+        overflow: auto;
+    }
+
+</style>
+
+
+
+<h1>活動舉辦帳號設定</h1>
+
+<button class="btn btn-primary btn-sm" id="createButton">
+    新增活動帳號
+</button>
+<br />
+<div class="table-container">
+    <table class="table table-striped m-3">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrganizerAccount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LoginPassword)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrganizerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrganizerCategory)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrganizerPhoto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Menu)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReservationUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Hashtag)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Validation)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="m-3">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrganizerAccount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LoginPassword)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrganizerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrganizerCategory)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrganizerPhoto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Menu)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReservationUrl)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hashtag)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Validation)
+                    </td>
+                    <td class="float-end" @* style="width: 200px;" *@>
+                        <div class="btn-group" role="group">
+                            <button class="activity-button edit-button btn btn-secondary btn-sm" data-clickid="@item.OrganizerId" style="min-width: 70px;">編輯</button>
+                            <button class="activity-button delete-button btn btn-primary btn-sm" data-clickid="@item.OrganizerId" style="min-width: 70px;">刪除</button>
+                        </div>
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+<script>
+
+    function Load() {
+        $("#dancingtime").show();
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("_OrganizersAdmin", "Admin")`
+        }).done(function (data) {
+            $("#adminBody").html(data);
+            $("#dancingtime").hide();
+        }).fail(function (err) {
+            alert(err.responseText);
+            $("#dancingtime").hide();
+        });
+    }
+
+
+    $("#createButton").click(function () {
+        // alert("aa")
+        $("#dancingtime").show();
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("Create", "OrganizersAdmin")`
+        }).done(function (data) {
+            $("#adminBody").html(data);
+            $("#dancingtime").hide();
+        }).fail(function (err) {
+            alert(err.responseText);
+            $("#dancingtime").hide();
+        });
+    });
+
+    $(".edit-button").click(function () {
+        var clickid = $(this).data("clickid");
+        // alert(clickid)
+        $("#dancingtime").show();
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("Edit", "OrganizersAdmin")`,
+            data: { id: clickid },
+        }).done(function (data) {
+            $("#adminBody").html(data);
+            $("#dancingtime").hide();
+        }).fail(function (err) {
+            alert(err.responseText);
+            $("#dancingtime").hide();
+        });
+    });
+
+    //刪除按鈕
+    $(".delete-button").click(function () {
+        // alert("cca")
+        var clickid = $(this).data("clickid");
+        // alert(clickid)
+        var ret = confirm("確定要刪除?");
+        //確認刪除後進入到ajax
+        if (ret == true) {
+            $.ajax({
+                type: "POST",
+                url: `@Url.Action("_OrganizersAdmin_Delete", "Admin")`,
+                data: { id: clickid },
+                success: function (response) {
+                    alert("刪除成功");
+                    Load();
+                },
+                error: function (xhr, status, error) {
+                    // 刪除失敗後的處理
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+
+
+
+
+</script>

@@ -1,0 +1,187 @@
+﻿<body>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-2 list-group">
+                <ul>
+                    <li class="list-group-item">
+                        <a class="nav-link" id="Notification">活動資訊頁面</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="nav-link" id="AspNetUsers">使用者頁面</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="nav-link" id="OrganizersAdmin">活動舉辦方頁面</a>
+                    </li>
+                </ul>
+            </div>
+             <div class="col-md-10">
+                <div id="adminBody">
+                      <img id="dancingtime" src="~/images/dancingtime.gif" style="display:none;" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+@section Scripts {
+
+<script>
+
+    //---------------主要頁面開頭------------------------------
+    //活動主頁
+    $("#Notification").on("click", (e) => {
+            $("#dancingtime").show();
+                $.ajax({
+                    type: "GET",
+                    url: `@Url.Action("_NotificationRecord", "Admin")`
+                }).done(function (data) {
+                    $("#adminBody").html(data);
+                    $("#dancingtime").hide();
+                }).fail(function (err) {
+                    alert(err.responseText);
+                    $("#dancingtime").hide();
+                });
+        })
+
+        //使用者資訊主頁
+        $("#AspNetUsers").on("click", (e) => {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_AspNetUsers", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        })
+
+
+        //活動主辦方
+        $("#OrganizersAdmin").on("click", (e) => {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_OrganizersAdmin", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        })
+
+
+        // //---------------主要頁面結尾------------------------------
+
+        // //---------------------------活動頁面操作開始--------------------
+        // // 呼叫Details頁面
+        // $(document).on("click", ".NotificationRecord_details", function (e) {
+        //     e.preventDefault();
+        //     var id = $(this).data("id");
+        //     $("#dancingtime").show();
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "@Url.Action("_Details", "NotificationRecord")",
+        //         data: { id: id }
+        //     }).done(function (data) {
+        //         $("#adminBody").html(data);
+        //         $("#dancingtime").hide();
+        //     }).fail(function (err) {
+        //         alert(err.responseText);
+        //         $("#dancingtime").hide();
+        //     });
+        // });
+
+        //     //Details頁面回活動主頁
+        // $(document).on("click", "#NotificationRecord_Details_back", function (e) {
+        //         $("#dancingtime").show();
+        //         $.ajax({
+        //             type: "GET",
+        //             url: `@Url.Action("_NotificationRecord", "Admin")`
+        //         }).done(function (data) {
+        //             $("#adminBody").html(data);
+        //             $("#dancingtime").hide();
+        //         }).fail(function (err) {
+        //             alert(err.responseText);
+        //             $("#dancingtime").hide();
+        //         });
+        //     })
+
+        // //呼叫Create頁面
+        // $(document).on("click", "#NotificationRecord_Create", function (e) {
+        //     $("#dancingtime").show();
+        //     $.ajax({
+        //         type: "GET",
+        //         url: `@Url.Action("_Create", "NotificationRecord")`
+        //     }).done(function (data) {
+        //         $("#adminBody").html(data);
+        //         $("#dancingtime").hide();
+        //     }).fail(function (err) {
+        //         alert(err.responseText);
+        //         $("#dancingtime").hide();
+        //     });
+        // })
+
+        // //Create頁面回到主頁面
+        // $(document).on("click", "#NotificationRecord_Create_back", function (e) {
+        //     $("#dancingtime").show();
+        //     $.ajax({
+        //         type: "GET",
+        //         url: `@Url.Action("_NotificationRecord", "Admin")`
+        //     }).done(function (data) {
+        //         $("#adminBody").html(data);
+        //         $("#dancingtime").hide();
+        //     }).fail(function (err) {
+        //         alert(err.responseText);
+        //         $("#dancingtime").hide();
+        //     });
+        // })
+
+
+
+        // //---------------------------活動頁面操作結束--------------------
+        //--------------------圖片即時顯示開始-----
+        function previewImage(inputFile, img) {
+            if (inputFile.files && inputFile.files[0]) {
+                var file = inputFile.files[0];
+                var allowType = "image.*";
+                if (file.type.match(allowType)) {
+                    //預覽
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        img.attr("src", e.target.result);
+                        img.attr("title", inputFile.files[0].name);
+                    };
+
+                    reader.readAsDataURL(inputFile.files[0]);
+                    $(".btn").prop("disabled", false);
+
+                }
+
+                else {
+                    alert("不支援檔案類型");
+                    $(".btn").prop("disabled", true);
+                }
+            }
+        }
+
+        $(document).on("change", "#ActivityPhoto", function () {
+            previewImage(this, $("#ActivityPhoto").prev());
+        });
+
+
+        //--------------------圖片即時顯示結束-----
+
+</script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

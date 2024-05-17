@@ -1,0 +1,11 @@
+﻿@model NotificationRecord
+
+@if (Model != null && Model.ActivityPhoto != null)
+{
+    <img src="@Url.Action("GetActivityPhoto","NotificationRecord",new {id=Model.ActivityId})?v=@DateTime.Now.ToString("dd-HH-mm-ss")" title="@Model.ActivityName" style="height:150px;width:200px" />
+}
+
+else
+{
+    <img src="@Url.Content("~/images/NoImage.jpg")" title="NoImage" style="height:150px;width:200px" />
+}

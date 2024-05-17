@@ -1,0 +1,55 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>活動管理</title>
+  <style>
+
+  </style>
+</head>
+<body>
+
+    <!-- content start -->
+    <div class="container">
+        <!-- Add Button -->
+        <button type="button" class="btn btn-primary mb-3" onclick="add()">新增活動</button>
+        <div class="col-12">
+            <h1 class="text-center">活動管理</h1>
+        </div>
+        <div id="activities" class="row">
+            <!--取得的活動會顯示在這裡-->
+        </div>
+        <nav aria-label="活動分頁導覽" class="">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a id="previous" class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li id="pageNumber" class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item">
+                    <a id="next" class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+  <!-- content end -->
+@section Scripts {
+    <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/NotificationRecordForOrganizer.js"></script>
+        }
+</body>
+</html>

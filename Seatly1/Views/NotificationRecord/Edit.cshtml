@@ -1,0 +1,218 @@
+﻿@model Seatly1.Models.NotificationRecord
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<h1>編輯活動</h1>
+<div style="width:100%; text-align: right;">
+    <a class="btn btn-primary btn-sm" id="check" btn-id="@Model.ActivityId">簽到狀態</a>
+</div>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="fform" enctype="multipart/form-data">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ActivityId" value="@Model.ActivityId" readonly/>
+            <div class="form-group">
+                <label asp-for="OrganizerId" class="control-label"></label>
+                <input asp-for="OrganizerId" class="form-control" readonly />
+                <span asp-validation-for="OrganizerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActivityId" class="control-label"></label>
+                <input asp-for="ActivityId" class="form-control" readonly />
+                <span asp-validation-for="ActivityId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActivityPhoto" class="control-label"></label>
+                <partial name="_ShowActivityPhoto" />
+                <input type="file" asp-for="ActivityPhoto" class="form-control" accept="image/*"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartTime" class="control-label"></label>
+                <input asp-for="StartTime" class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndTime" class="control-label"></label>
+                <input asp-for="EndTime" class="form-control" />
+                <span asp-validation-for="EndTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Capacity" class="control-label"></label>
+                <input asp-for="Capacity" class="form-control" />
+                <span asp-validation-for="Capacity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActivityName" class="control-label"></label>
+                <input asp-for="ActivityName" class="form-control" />
+                <span asp-validation-for="ActivityName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DescriptionN" class="control-label"></label>
+                <input asp-for="DescriptionN" class="form-control" />
+                <span asp-validation-for="DescriptionN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsRecurring" class="control-label"></label>
+                <input asp-for="IsRecurring" class="form-control" />
+                <span asp-validation-for="IsRecurring" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecurringTime" class="control-label"></label>
+                <input asp-for="RecurringTime" class="form-control" />
+                <span asp-validation-for="RecurringTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActivityMethod" class="control-label"></label>
+                <select asp-for="ActivityMethod" class="form-control">
+                    <option value="公告">公告</option>
+                    <option value="排隊">排隊</option>
+                    <option value="抽籤">抽籤</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsActivity" class="control-label"></label>
+                <select asp-for="IsActivity" class="form-control">
+                    <option value="True" selected=@(Model.IsActivity == true ? "True" : "")>True</option>
+                    <option value="False" selected=@(Model.IsActivity == false ? "false" : "")>False</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HashTag1" class="control-label"></label>
+                <input asp-for="HashTag1" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HashTag2" class="control-label"></label>
+                <input asp-for="HashTag2" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HashTag3" class="control-label"></label>
+                <input asp-for="HashTag3" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HashTag4" class="control-label"></label>
+                <input asp-for="HashTag4" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HashTag5" class="control-label"></label>
+                <input asp-for="HashTag5" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <button value="Save" class="btn btn-primary" id="Editt"/>save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+    <script>
+        function previewImage(inputFile, img) {
+            if (inputFile.files && inputFile.files[0]) {
+                var file = inputFile.files[0];
+                var allowType = "image.*";
+                if (file.type.match(allowType)) {
+                    //預覽
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        img.attr("src", e.target.result);
+                        img.attr("title", inputFile.files[0].name);
+                    };
+                    reader.readAsDataURL(inputFile.files[0]);
+                    $(".btn").prop("disabled", false);
+                }
+                else {
+                    alert("不支援檔案類型");
+                    $(".btn").prop("disabled", true);
+                }
+            }
+        }
+
+        $("#ActivityPhoto").change(function () {
+            previewImage(this, $("#ActivityPhoto").prev());
+        });
+
+
+        $("#Editt").click(function (e) {
+            e.preventDefault(); // 防止表單的默認提交行為
+        var formData = new FormData($("#fform")[0]);
+            // 發送 AJAX 請求
+             // alert(formData)
+            $.ajax({
+                type: "POST",
+                url: `/NotificationRecord/Edit`, // 如果路徑正確，則可以直接指定URL
+                data: formData, // 將序列化後的表單數據發送到服務器
+                contentType: false, // 不設置 contentType，讓 jQuery 自動設置為 multipart/form-data
+                processData: false, // 不處理數據，讓 jQuery 不將數據轉為字串
+                cache: false,
+                success: function (data) {
+                    Load();
+                },
+                error: function (xhr, status, error) {
+                    // 請求失敗時的處理
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+
+        $("#check").click(function () {
+            // 從事件對象(event object)中取得觸發事件的按鈕元素
+            const btn = event.target;
+            // 從按鈕元素中取得自定義屬性"btn-id"
+            const btnId = btn.getAttribute("btn-id");
+            // alert(btnId)
+            sessionStorage.removeItem("ActID");
+            sessionStorage.setItem("ActID", btnId);
+            // alert("check")
+            $.ajax({
+                type: "GET",
+            url: `@Url.Action("_Check", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+                console.log("cc")
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        })
+
+
+        function Load() {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_NotificationRecord", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+                
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        }
+
+       
+
+</script>
+
+
+

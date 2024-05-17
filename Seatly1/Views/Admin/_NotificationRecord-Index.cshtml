@@ -1,0 +1,165 @@
+﻿@model IEnumerable<Seatly1.Models.NotificationRecord>
+
+@{
+    ViewData["Title"] = "NotificationRecord";
+}
+
+<style>
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+        margin:2px;
+    }
+
+</style>
+
+
+
+<h1>活動瀏覽</h1>
+
+<button class="btn btn-primary btn-sm" id="createButton">
+    新增活動
+</button>
+
+<br />
+
+<table class="table table-striped m-3">
+    <thead class="bg-primary text-white">
+        <tr>
+            <th>
+                活動ID @* @Html.DisplayNameFor(model => model.ActivityId) *@
+            </th>
+            <th>
+                活動照片  @* @Html.DisplayNameFor(model => model.ActivityPhoto) *@
+            </th>
+            <th>
+                開始時間 @*  @Html.DisplayNameFor(model => model.StartTime) *@
+            </th>
+            <th>
+                結束時間  @* @Html.DisplayNameFor(model => model.EndTime) *@
+            </th>
+            <th>
+                人數上限 @* @Html.DisplayNameFor(model => model.Capacity) *@
+            </th>
+            <th>
+                活動名稱 @*  @Html.DisplayNameFor(model => model.ActivityName) *@
+            </th>
+            <th>
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <div class="m-3">
+            <tr>
+                <td>
+                        @Html.DisplayFor(modelItem => item.ActivityId)
+                </td>
+                <td>
+                    <partial name="_ShowActivityPhoto" model="@item" />
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td style="text-align:center;">
+                        @Html.DisplayFor(modelItem => item.Capacity)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.ActivityName)
+                </td>
+                <td class="text-end" @* style="width: 200px;" *@>
+                    <div class="btn-group" role="group">
+                        <button class="activity-button edit-button btn btn-secondary btn-sm" data-clickid="@item.ActivityId" style="min-width: 70px;">編輯</button>
+                        <button class="activity-button delete-button btn btn-primary btn-sm" data-clickid="@item.ActivityId" style="min-width: 70px;">刪除</button>
+                    </div>
+                </td>
+            </tr>
+        </div>
+           
+    
+        }
+    </tbody>
+</table>
+
+<script>
+    $(function () {
+
+
+        function Load() {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_NotificationRecord", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        } 
+
+
+        $("#createButton").click(function () {
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("Create", "NotificationRecord")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        });
+
+        $(".edit-button").click(function () {
+            var clickid = $(this).data("clickid");
+            // alert(clickid)
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("Edit", "NotificationRecord")`,
+                data: {id:clickid},
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        });
+
+        //刪除按鈕
+        $(".delete-button").click(function () {
+            var clickid = $(this).data("clickid");
+            // alert(clickid)
+            var ret = confirm("確定要刪除?");
+            //確認刪除後進入到ajax
+            if (ret == true) {
+                $.ajax({
+                    type: "POST",
+                    url: `@Url.Action("_NotificationRecord_Delete", "Admin")`,
+                    data: { id: clickid },
+                        success: function (response) {
+                            alert("刪除成功");
+                            Load();
+                        },
+                        error: function (xhr, status, error) {
+                            // 刪除失敗後的處理
+                            console.error(xhr.responseText);
+                        }
+                });
+            }
+        });
+
+    });
+</script>

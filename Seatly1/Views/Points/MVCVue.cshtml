@@ -1,0 +1,624 @@
+﻿@section Styles {
+  <style>
+    @*轉場動畫*@#animationTrans {
+      position: fixed;
+      top: 0;
+      left: 0;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      min-width: 100%;
+      overflow: hidden;
+      z-index: 20;
+      background-color: white;
+      animation-duration: 0.2s;
+    }
+
+    .animationP {
+      position: absolute;
+      background-color: rgba(231, 49, 64, 0.5);
+      left: 0;
+      height: 5vh;
+      min-width: 100%;
+      z-index: 1;
+    }
+
+    .ball {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      animation: drop 0.8s linear forwards;
+    }
+
+    @@keyframes drop {
+      0% {
+        bottom: 100vh;
+        transform: translateX(-50%);
+      }
+
+      100% {
+        bottom: -50px;
+        transform: translateX(-50%);
+      }
+    }
+
+    @@keyframes earthquake {
+      0% {
+        left: 20px;
+      }
+
+      25% {
+        left: -20px;
+      }
+
+      50% {
+        left: 20px;
+      }
+
+      75% {
+        left: -20px;
+      }
+
+      100% {
+        left: 20px;
+      }
+    }
+
+    /*轉場動畫*/
+    section {
+      padding: 0 !important;
+    }
+
+    .table {
+      --bs-table-striped-bg: rgba(231, 49, 64, 0.05);
+    }
+  </style>
+}
+
+
+@{
+  ViewData["Title"] = "點數專區";
+}
+
+<div id="PointsApp">
+  <section>
+    @* 轉場動畫 *@
+    <div id="animationTrans">
+      <p v-for="i in Array.from({ length: 10 }, (_, j) => j * 10)" :key="i" class="animationP"
+        :style="{ top: i + 'vh' }"></p>
+    </div>
+    @* 轉場動畫 *@
+  </section>
+
+  <div class="row m-4 mb-2">
+    <h2 v-if="strPoint == 'pointsShop'" class="text-gradient">點數商城</h2>
+    <h2 v-else-if="strPoint == 'coupon'" class="text-gradient">持有優惠券</h2>
+    <h2 v-else-if="strPoint == 'pointsHistory'" class="text-gradient">點數交易紀錄</h2>
+  </div>
+
+  <div class="row ps-5 pe-5 m-0">
+    <div class="col-12 col-md-2 p-3">
+      <ul class="list-group">
+        <li class="list-group-item bg-white">
+          <a class="dropdown-item text-gradient" @@click.prevent="showPointStore">點數商城</a>
+        </li>
+        <li class="list-group-item bg-white">
+          <a class="dropdown-item text-gradient" @@click.prevent="showCoupon">持有優惠券</a>
+        </li>
+        <li class="list-group-item bg-white">
+          <a class="dropdown-item text-gradient" @@click.prevent="showHistory">點數交易紀錄</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-12 col-md-10 p-3">
+      <section v-if="strPoint == 'pointsShop'">
+        <div>
+          <button class="btn btn-gradient mb-2 me-1 btn-cate"
+            @@click="searchTerm.cate = null;searchTerm.keyword = '';this.$refs.pdSearch.value = '';showProducts()">全部</button>
+          @* <button
+          v-for="cate in shopResults.shops.map(shop => shop.category).filter((value, index, self) => self.indexOf(value)
+          === index)"
+          :key="cate" class="btn btn-gradient mb-2 me-1 btn-cate"
+          @@click="searchTerm.cate = cate; showProducts()">{{cate}}</button> *@
+          <button v-for="cate in shopResults.sList" :key="cate" class="btn btn-gradient mb-2 me-1 btn-cate"
+            @@click="searchTerm.cate = cate;searchTerm.keyword = '';this.$refs.pdSearch.value = '';showProducts()">{{cate}}</button>
+        </div>
+
+        <div class="d-flex align-items-center">
+          <label for="pdSearch" class="text-gradient form-label m-0">關鍵字:</label>
+          <input id="pdSearch" ref="pdSearch" class="form-control ms-2 me-2 w-25" autocomplete="off" />
+          <button class="btn btn-gradient me-1"
+            @@click="searchTerm.keyword = this.$refs.pdSearch.value;showProducts()">搜尋</button>
+          <button class="btn btn-gradient"
+            @@click="searchTerm.keyword = '';this.$refs.pdSearch.value = '';showProducts()">清除搜尋</button>
+        </div>
+        <div class="d-flex justify-content-end align-items-center">
+          <span class="me-2">每頁顯示<select v-model="searchTerm.pgSize" @@change="showProducts()">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>筆資料。</span>
+          <button class="btn btn-gradient me-1 p-0" @@click="pP" style="width: 30px; height: 30px; text-align: center"
+            :disabled="firstPage">
+            上
+          </button>
+          第
+          <input class="me-1 p-0" v-model="searchTerm.pgNum" @@change="showProducts()"
+            style="width: 30px; height: 30px; text-align: center" min="1" />
+          頁，共<span>{{ shopResults.totalPg }}</span>頁
+          <button class="btn btn-gradient me-1 p-0" @@click="nP" style="width: 30px; height: 30px; text-align: center"
+            :disabled="lastPage">
+            下
+          </button>
+        </div>
+
+        <div class="col-12" id="pointsContentBody">
+          <section v-if="isMg == true">
+            <div class="d-flex justify-content-between mt-1">
+              <button class="btn btn-gradient mb-2 me-1" @@click="isAdding = !isAdding">新增商品</button>
+              <button class="btn btn-gradient mb-2 me-1" id="btnSaveEditPS">儲存修改</button>
+              <button v-if="isAdding" class="btn btn-gradient mb-2 me-1">
+                儲存新增
+              </button>
+              <button class="btn btn-gradient mb-2 ms-auto" id="btnDeleteSelected">刪除勾選商品</button>
+            </div>
+            <div id="requiredContent"></div>
+            <table class="table table-striped text-center">
+              <thead>
+                <tr>
+                  <th v-for="dName in shopResults.dNames" :key="dName">
+                    {{ dName }}
+                  </th>
+                  <th style="width: 50px">刪除</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-if="isAdding" class="align-middle">
+                  <td></td>
+                  <td>
+                    <img :src="noImgUrl" class="img-fluid rounded" style="width: 100px" alt="..." title=".." />
+                    <input class="form-control p-0 pimg" type="file" accept="image/*" />
+                  </td>
+                  <td><input class="form-control p-0 text-center ms-auto me-auto" style="width: 120px" type="text" />
+                  </td>
+                  <td><input class="form-control p-0 text-center ms-auto me-auto" style="width: 80px" type="number" />
+                  </td>
+                  <td>
+                    <select class="form-control p-0 text-center ms-auto me-auto">
+                      <option disabled selected>請選擇</option>
+                      <option v-for="cate in shopResults.sList" :key="cate" :value="cate">{{ cate }}</option>
+                    </select>
+                    <input class="form-control p-0 text-center ms-auto me-auto" style="width: 104px; display: none"
+                      placeholder="請輸入類別" />
+                    <p class="text-gradient" id="addCategory">新增類別?</p>
+                  </td>
+                  <td><textarea class="form-control p-0"></textarea></td>
+                  <td></td>
+                </tr>
+                <tr v-for="{
+          productId,
+          productName,
+          category,
+          productPrice,
+          productDescription,
+          productImage
+        } in shopResults.shops" :key="productId" class="align-middle">
+                  <td>{{productId}}</td>
+                  <td>
+                    <img :src="productImage" class="img-fluid rounded" style="width: 100px" :alt="productImage"
+                      :title="productName" />
+                    <input class="form-control p-0 pimg" type="file" accept="image/*"
+                      @@change="editPds(productId,`productImage`,$event)" />
+                  </td>
+                  <td>
+                    <input class="form-control p-0 text-center ms-auto me-auto" style="width: 120px" type="text"
+                      :value="productName" @@change="editPds(productId,`productName`,$event)" />
+                  </td>
+                  <td>
+                    <input class="form-control p-0 text-center ms-auto me-auto" style="width: 80px" type="number"
+                      :value="productPrice" @@change="editPds(productId,`productPrice`,$event)" />
+                  </td>
+                  <td>
+                    <select class="form-control p-0 text-center ms-auto me-auto" :value="category"
+                      @@change="editPds(productId,`category`,$event)">
+                      <option v-for="cate in shopResults.sList" :key="cate" :value="cate">{{ cate }}</option>
+                    </select>
+                  </td>
+                  <td>
+                    <textarea class="form-control p-0 ms-auto me-auto"
+                      @@change="editPds(productId,`productDescription`,$event)">{{ productDescription }}</textarea>
+                  </td>
+                  <td><input type="checkbox" class="form-check-input" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section v-else-if="shopResults.totalPg >= 1">
+            <div v-if="shopResults.userPoints != null">
+              <div class="text-gradient d-inline">您目前持有:</div>
+              <div class="d-inline ms-2 me-2">
+                {{ shopResults.userPoints }}
+              </div>
+              <div class="text-gradient d-inline">點數</div>
+            </div>
+            <div v-for="{
+      productId,
+      productName,
+      category,
+      productPrice,
+      productDescription,
+      productImage
+    } in shopResults.shops" :key="productId" class="card mb-3">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <img :src="productImage" class="img-fluid rounded-start" style="width: 300px" :alt="productName"
+                    :title="productName" />
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <span class="position-absolute end-0 me-2">{{ category }}</span>
+                    <h5 class="card-title text-gradient fs-3">{{ productName }}</h5>
+                    <p class="card-text">{{ productDescription }}</p>
+                    <p class="card-text text-gradient">兌換需要 {{ productPrice }} 點數</p>
+                    <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1 btn-exchange"
+                      data-bs-toggle="modal" data-bs-target="#exchangeModal" @@click="pdExchange(productId)"
+                      :disabled="shopResults.userPoints < productPrice && shopResults.userPoints != null">
+                      兌換
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section v-else>
+            <h3 class="text-gradient">查無商品!!</h3>
+          </section>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exchangeModal" ref="exchangeModal" tabindex="-1"
+          aria-labelledby="exchangeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exchangeModalLabel">您確定要兌換嗎?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <section v-if="exchangeRes == ''">
+                <div class="modal-body" id="exchangeModalBody">
+                  <div class="row g-0">
+                    <div class="col-12 d-flex justify-content-center">
+                      <img :src="exchangePd.img" class="img-fluid rounded-start" style="width:150px"
+                        title="exchangePd.name">
+                    </div>
+                    <div class="col-12">
+                      <div>
+                        <div class="text-gradient d-inline">商品名稱:</div>
+                        <div class="d-inline ms-2">{{exchangePd.name}}</div>
+                      </div>
+                      <div>
+                        <div class="text-gradient d-inline">商品價格:</div>
+                        <div class="d-inline ms-2 me-2" id="pdPoints">{{exchangePd.price}}
+                        </div>
+                        <div class="text-gradient d-inline">點數</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-gradient p-0 text-align-center" style="width: 100px; height: 45px"
+                    @@click="confirmExchange">
+                    確認兌換
+                  </button>
+                  <button class="btn btn-secondary p-0 text-align-center" style="width: 100px; height: 45px"
+                    data-bs-dismiss="modal">
+                    取消
+                  </button>
+                </div>
+              </section>
+              <section v-else>
+                <h2 class="col-12 text-gradient text-center">{{exchangeRes}}</h2>
+              </section>
+            </div>
+          </div>
+        </div>
+        <!-- Modal -->
+      </section>
+
+      <section v-else-if="strPoint == 'coupon'"></section>
+
+      <section v-else-if="strPoint == 'pointsHistory'"></section>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script>
+    const { createApp, ref, reactive, onMounted, watch } = Vue;
+
+    const app = createApp({
+      setup() {
+        var strPoint = ref(strPoints);
+        var logoSrc = ref('@Url.Content("~/images/queuely.png")');
+        var noImgUrl = ref('@Url.Content("~/images/NoImage.jpg")');
+        var dropSmallInterval = ref(null);
+        var dropLargeInterval = ref(null);
+        //------------商城變數------------
+        var firstPage = ref(true);
+        var lastPage = ref(false);
+        var isMg = ref(false);
+        var isAdding = ref(false);
+        var exchangeRes = ref('');
+        const searchTerm = reactive({
+          cate: null,
+          pgNum: 1,
+          pgSize: 10,
+          sortBy: null,
+          sortType: 'asc',
+          keyword: null
+        });
+        const shopResults = reactive({ totalPg: 0, shops: [], userPoints: null, sList: [], dNames: [] });
+        const exchangePd = reactive({ id: 0, img: '', name: '', price: 0 });
+        //------------商城變數------------
+
+        const showPointStore = () => {
+          strPoint.value = 'pointsShop'
+          sessionStorage.setItem('strPoints', 'pointsShop')
+        };
+        const showCoupon = () => {
+          strPoint.value = 'coupon'
+          sessionStorage.setItem('strPoints', 'coupon')
+        };
+        const showHistory = () => {
+          strPoint.value = 'pointsHistory'
+          sessionStorage.setItem('strPoints', 'pointsHistory')
+        };
+
+        const dropSmallFunction = () => {
+          var strRanLeft = Math.random() * 100 + 'vw;'
+          var animationTrans = document.querySelector('#animationTrans')
+          animationTrans.insertAdjacentHTML(
+            'beforeend',
+            `<img class="ball" style="left:${strRanLeft};animation-duration: 0.5s;" src="${logoSrc.value}" />`
+          )
+        };
+
+        const dropLargeFunction = () => {
+          var strRanLeft = Math.random() * 100 + 'vw;'
+          var animationTrans = document.querySelector('#animationTrans')
+          animationTrans.insertAdjacentHTML(
+            'beforeend',
+            `<img class="ball" style="left:${strRanLeft}; width:150px; height:150px;animation-duration: 1.0s;" src="${logoSrc.value}" />`
+          )
+        };
+
+        const dropXL = () => {
+          var animationTrans = document.querySelector('#animationTrans')
+          animationTrans.insertAdjacentHTML(
+            'beforeend',
+            `<img class="ball" style="left:50vw; width:100vh; height:100vh;animation-duration: 1.75s;" src="${logoSrc.value}" />`
+          )
+        };
+
+        const removeTrans = () => {
+          var animationTrans = document.querySelector('#animationTrans')
+          animationTrans.style.setProperty('animation-name', 'earthquake')
+          setTimeout(() => {
+            clearInterval(dropSmallInterval.value)
+            clearInterval(dropLargeInterval.value)
+            animationTrans.animate({ top: '200vh' }, 1000)
+          }, 200)
+
+          setTimeout(() => {
+            animationTrans.parentElement.remove()
+          }, 700)
+        };
+
+        //------------商城方法------------
+        const showProducts = async () => {
+          const APIUrl = window.location.origin + '/api/PointsAPI/pointsShop';
+          const response = await fetch(APIUrl, {
+            method: 'POST',
+            body: JSON.stringify(searchTerm),
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          const datas = await response.json()
+          //console.log(datas)
+          shopResults.totalPg = datas.totalPages
+          shopResults.shops = datas.shops
+          shopResults.userPoints = datas.userPoints
+          shopResults.sList = datas.sList1
+          shopResults.dNames = datas.dNames
+          shopResults.shops.forEach((shop) => {
+            shop.productImage = @Url.Content("~/images/") + shop.productImage
+          })
+          isMg.value = datas.isMg
+          //console.log(shopResults)
+
+          if (shopResults.totalPg <= 1) {
+            firstPage.value = true
+            lastPage.value = true
+          } else if (searchTerm.pgNum < shopResults.totalPg) {
+            lastPage.value = false
+          }
+        };
+
+        const pP = () => {
+          if (searchTerm.pgNum > 1) {
+            searchTerm.pgNum--
+            showProducts()
+          }
+        };
+
+        const nP = () => {
+          if (searchTerm.pgNum < shopResults.totalPg) {
+            searchTerm.pgNum++
+            showProducts()
+          }
+        };
+
+        const pdExchange = (productId) => {
+          if (isUser) {
+            const product = shopResults.shops.find(p => p.productId === productId)
+            exchangePd.id = product.productId
+            exchangePd.img = product.productImage
+            exchangePd.name = product.productName
+            exchangePd.price = product.productPrice
+          }
+          else {
+            window.location.href = "/Identity/Account/Login";
+          }
+        };
+
+        const confirmExchange = () => {
+          if (isUser) {
+            var p = {
+              Points: shopResults.userPoints - exchangePd.price,
+              ProductId: exchangePd.id,
+            };
+            fetch(`@Url.Action("pointsShopContentBody", "Points")`, {
+              method: "POST",
+              body: JSON.stringify(p),
+              headers: { 'Content-Type': 'application/json' }
+            }).then(response => {
+              return response.text();
+            }).then(data => {
+              exchangeRes.value = data;
+              setTimeout(function () {
+                document.querySelector('#exchangeModal').classList.remove('show');
+                document.querySelector('.modal-backdrop').classList.remove('show');
+                showProducts();
+              }, 500);
+              setTimeout(function () {
+                document.querySelector('body').classList.remove('modal-open');
+                document.querySelector('body').style = '';
+                document.querySelector('.modal-backdrop').remove();
+                exchangeRes.value = '';
+              }, 700);
+            }).catch(err => {
+              alert(err);
+            });
+          }
+        };
+
+        const editPds = (id, prop, e) => {
+          const product = shopResults.shops.find(p => p.productId === id);
+          //console.log(e);
+          if (e.target.type === 'file' && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = function (e) {
+              product[prop] = e.target.result;
+              product.edited = true;
+            };
+            e.target.style.boxShadow = "0 0 3px 3px pink";
+          }
+          else if (e.target.type === 'number') {
+            if (isNaN(e.target.value) || e.target.value == '' || e.target.value.indexOf('e') != -1) {
+              e.target.value = e.target._value;
+            }
+            else {
+              product.edited = true;
+              e.target.style.boxShadow = "0 0 3px 3px pink";
+            }
+            product[prop] = parseInt(e.target.value);
+          }
+          else {
+            product[prop] = e.target.value;
+            product.edited = true;
+
+            const index = e.target.closest("td").cellIndex;
+            const thTitle = document.querySelectorAll("th")[index].textContent;
+            const pId = e.target.closest("tr").querySelector("td").textContent;
+            const required = document.querySelector("#requiredContent");
+            const notExist = Array.from(required.querySelectorAll(`p`)).find(p => p.textContent.includes(`商品編號:「${pId}」的「${thTitle}」`));
+            if (e.target.value.trim() === '') {
+              e.target.style.boxShadow = "0 0 5px 5px red";
+              if (!notExist) {
+                required.insertAdjacentHTML("beforeend", `<p class="text-danger">請填寫商品編號:「${pId}」的「${thTitle}」</p>`);
+              }
+            } else {
+              if (notExist) {
+                required.removeChild(notExist);
+              }
+              e.target.style.boxShadow = "0 0 3px 3px pink";
+            }
+          }
+          console.log(product);
+        };
+        //------------商城方法------------
+
+        onMounted: {
+          //console.log(strPoints)
+          dropSmallInterval.value = setInterval(dropSmallFunction, 50)
+          dropLargeInterval.value = setInterval(dropLargeFunction, 100)
+          setTimeout(() => {
+            dropXL()
+          }, 50)
+          setTimeout(() => {
+            removeTrans()
+          }, 1800)
+          //------------商城方法------------
+          showProducts()
+          //------------商城方法------------
+        }
+
+        watch(searchTerm, () => {
+          if (isNaN(searchTerm.pgNum) || searchTerm.pgNum < 1) {
+            searchTerm.pgNum = 1
+          }
+          if (searchTerm.pgNum > shopResults.totalPg && shopResults.totalPg > 0) {
+            searchTerm.pgNum = shopResults.totalPg
+          }
+          if (searchTerm.pgNum === 1) {
+            firstPage.value = true
+          } else {
+            firstPage.value = false
+          }
+          if (searchTerm.pgNum === shopResults.totalPg) {
+            lastPage.value = true
+          } else {
+            lastPage.value = false
+          }
+        })
+
+        return {
+          strPoint,
+          logoSrc,
+          noImgUrl,
+          dropSmallInterval,
+          dropLargeInterval,
+          showPointStore,
+          showCoupon,
+          showHistory,
+          dropSmallFunction,
+          dropLargeFunction,
+          dropXL,
+          removeTrans,
+          //------------商城------------
+          firstPage,
+          lastPage,
+          isMg,
+          isAdding,
+          exchangeRes,
+          shopResults,
+          exchangePd,
+          searchTerm,
+          showProducts,
+          pP,
+          nP,
+          pdExchange,
+          confirmExchange,
+          editPds
+          //------------商城------------
+        }
+      }
+    });
+    app.mount('#PointsApp');
+
+  </script>
+}

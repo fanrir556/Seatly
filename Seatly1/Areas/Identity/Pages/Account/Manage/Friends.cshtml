@@ -1,0 +1,117 @@
+﻿
+@page
+@model Seatly1.Areas.Identity.Pages.Account.Manage.FriendsModel
+@* @model IEnumerable<Seatly1.Models.Friends> *@
+
+@{
+    ViewData["Title"] = "好友清單";
+    ViewData["ActivePage"] = ManageNavPages.Friends;
+}
+
+<h3>@ViewData["Title"]</h3>
+@*  @foreach (var activity in Model)
+{
+    @activity.FlowID
+
+} *@
+
+
+
+
+
+
+
+<button class="btn btn-danger" onclick="showAddFriendModal()">新增好友</button>
+
+<!-- modal -->
+<div id="addFriendModal" class="modal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+    <div class="modal-content" style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 300px;">
+        <span class="close" onclick="closeAddFriendModal()" style="color: #aaa; float: right; font-size: 28px; font-weight: bold;">&times;</span>
+        <h4 style="text-align: center;">新增好友</h4>
+        <input type="text" id="friendUsername" placeholder="請輸入好友帳號(UserName)" style="width: 100%; margin-bottom: 10px;">
+        <button onclick="addFriend()" style="width: 100%;">發送邀請</button>
+    </div>
+</div>
+
+
+
+
+<ul>
+    <li>
+   @*  @foreach (var friends in ViewBag.FriendsList)
+    {
+      
+        <strong>好友帳號:</strong> @friends.FriendUserName
+        } *@
+    </li>
+</ul>
+
+
+@section Scripts{
+
+<script>
+    // 显示模态框
+    function showAddFriendModal() {
+        var modal = document.getElementById('addFriendModal');
+        modal.style.display = 'block';
+    }
+
+    // 关闭模态框
+    function closeAddFriendModal() {
+        var modal = document.getElementById('addFriendModal');
+        modal.style.display = 'none';
+    }
+
+    // 添加好友
+    function addFriend() {
+        // 获取输入的好友用户名
+        var friendUsername = document.getElementById('friendUsername').value;
+
+        // TODO: 将好友用户名提交到后端进行处理
+
+        // 关闭模态框
+        closeAddFriendModal();
+    }
+
+
+        // $(function () {
+        //     $("#collections").on("click", function (e) {
+        //         e.preventDefault();
+        //         // alert("1111");
+        //         $.ajax({
+        //             type: "GET",
+        //             url: `@Url.Action("collectionsPartial", "Friends")`
+        //         }).done(function (data) {
+        //             $("#memberBody").html(data);
+        //         }).fail(function (err) {
+        //             alert(err.responseText);
+        //         });
+        //     });
+        // });
+
+</script>
+
+
+}
+    @*  @foreach (var friends in ViewBag.FriendsList)
+    {
+
+        $(function () {
+             $("#collections").on("click", function (e) {
+                 e.preventDefault();
+                 // alert("1111");
+                 $.ajax({
+                  type: "GET",
+                    url: `@Url.Action("collectionsPartial", "Friends")`
+               }).done(function (data) {
+                     $("#memberBody").html(data);
+                 }).fail(function (err) {
+                     alert(err.responseText);
+                 });
+             });
+         });
+
+ } *@
+
+
+            

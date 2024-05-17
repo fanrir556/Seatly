@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>新增活動</title>
+</head>
+
+<body>
+
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+        <section class="py-8 overflow-hidden">
+            <div id="app">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 class="text-start text-md-center mb-3">新增活動</h1>
+                        </div>
+                        <!-- col-8 start -->
+                        <div class="col-12 col-md-8 offset-md-2">
+                            <!-- 表單 start -->
+                            <form v-on:submit.prevent="submitForm" id="modifyOrganizerForm" class="needs-validation" novalidate>
+                                <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
+                                <div class="row">
+                                    <div class="col-12 col-md-3">
+                                        <label for="StartTime" class="form-label">活動開始時間</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <!-- input.form-control[type="text"] -->
+                                        <input type="datetime-local" v-model="StartTime" id="StartTime" class="form-control" placeholder="請輸入活動開始時間"
+                                               required>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="EndTime" class="form-label">活動結束時間</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <input type="datetime-local" v-model="EndTime" id="EndTime" class="form-control" placeholder="請輸入活動結束時間"
+                                               required>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="Capacity" class="form-label">活動人數上限</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <input type="number" v-model="Capacity" id="Capacity" class="form-control" placeholder="請輸入人數" required>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="ActivityName" class="form-label">活動名稱</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <input type="text" v-model="ActivityName" id="ActivityName" class="form-control" placeholder="請輸入活動名稱" required>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="ActivityMethod" class="form-label">活動方法</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <select v-model="ActivityMethod" class="form-select" id="ActivityMethod" required>
+                                            <option>公告</option>
+                                            <option>排隊</option>
+                                            <option>抽籤</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="photo" class="form-label">新增封面照片</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        @* 顯示圖片預覽 *@
+                                        <img style="width:320px;height:240px" id="preview" src="~/images/NoImage.jpg" :src="tempProduct.imageUrl" class="img-fluid mb-3">
+                                        <input type="file" ref="files" id="imageInput" class="form-control" aria-label="file example"
+                                               placeholder="請上傳活動方照片" required>
+                                        <div class="invalid-feedback">
+                                            請選擇要上傳的圖片
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-column flex-md-row bd-highlight mb-3 justify-content-md-start justify-content-sm-end">
+                                    <div class="p-2 bd-highlight sm-w-100 ml-auto">
+                                        <button id="submit" type="submit" class="btn btn-primary" formnovalidate>送出</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                    <!-- 表單 end -->
+                </div>
+            </div>
+            <!-- col-8 end -->
+        </section>
+
+    </main>
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    @section Scripts {
+
+        <script src="https://unpkg.com/axios@1.6.8/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <script src="~/js/ActivityCreate.js"></script>
+
+    }
+</body>
+
+</html>

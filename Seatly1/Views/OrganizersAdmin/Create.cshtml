@@ -1,0 +1,103 @@
+﻿@model Seatly1.Models.Organizer
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Organizer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="fform" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="OrganizerAccount" class="control-label"></label>
+                <input asp-for="OrganizerAccount" class="form-control" />
+                <span asp-validation-for="OrganizerAccount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LoginPassword" class="control-label"></label>
+                <input asp-for="LoginPassword" class="form-control" />
+                <span asp-validation-for="LoginPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrganizerName" class="control-label"></label>
+                <input asp-for="OrganizerName" class="form-control" />
+                <span asp-validation-for="OrganizerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrganizerCategory" class="control-label"></label>
+                <input asp-for="OrganizerCategory" class="form-control" />
+                <span asp-validation-for="OrganizerCategory" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrganizerPhoto" class="control-label"></label>
+                <input asp-for="OrganizerPhoto" class="form-control" />
+                <span asp-validation-for="OrganizerPhoto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Menu" class="control-label"></label>
+                <input asp-for="Menu" class="form-control" />
+                <span asp-validation-for="Menu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReservationUrl" class="control-label"></label>
+                <input asp-for="ReservationUrl" class="form-control" />
+                <span asp-validation-for="ReservationUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Hashtag" class="control-label"></label>
+                <input asp-for="Hashtag" class="form-control" />
+                <span asp-validation-for="Hashtag" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Validation" class="control-label"></label>
+                <input asp-for="Validation" class="form-control" />
+                <span asp-validation-for="Validation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" id="createButton" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $("#createButton").click(function (e) {
+        e.preventDefault(); // 防止表單的默認提交行為
+        // var formData = $("form").serialize();
+        var formData = new FormData($("#fform")[0]);
+        // 發送 AJAX 請求
+        $.ajax({
+            type: "POST",
+            url: `/OrganizersAdmin/Create`, // 如果路徑正確，則可以直接指定URL
+            data: formData, // 將序列化後的表單數據發送到服務器
+            contentType: false, // 不設置 contentType，讓 jQuery 自動設置為 multipart/form-data
+            processData: false, // 不處理數據，讓 jQuery 不將數據轉為字串
+            success: function (data) {
+                $("#adminBody").html(data);
+            },
+            error: function (xhr, status, error) {
+                // 請求失敗時的處理
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>

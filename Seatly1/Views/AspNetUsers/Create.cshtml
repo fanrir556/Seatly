@@ -1,0 +1,161 @@
+﻿@model Seatly1.Models.AspNetUser
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>AspNetUser</h4>
+<hr />
+<div class="row">
+    <div id="fform" class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NormalizedUserName" class="control-label"></label>
+                <input asp-for="NormalizedUserName" class="form-control" />
+                <span asp-validation-for="NormalizedUserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NormalizedEmail" class="control-label"></label>
+                <input asp-for="NormalizedEmail" class="form-control" />
+                <span asp-validation-for="NormalizedEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="EmailConfirmed" /> @Html.DisplayNameFor(model => model.EmailConfirmed)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="PasswordHash" class="control-label"></label>
+                <input asp-for="PasswordHash" class="form-control" />
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecurityStamp" class="control-label"></label>
+                <input asp-for="SecurityStamp" class="form-control" />
+                <span asp-validation-for="SecurityStamp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConcurrencyStamp" class="control-label"></label>
+                <input asp-for="ConcurrencyStamp" class="form-control" />
+                <span asp-validation-for="ConcurrencyStamp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="PhoneNumberConfirmed" /> @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="TwoFactorEnabled" /> @Html.DisplayNameFor(model => model.TwoFactorEnabled)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="LockoutEnd" class="control-label"></label>
+                <input asp-for="LockoutEnd" class="form-control" />
+                <span asp-validation-for="LockoutEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="LockoutEnabled" /> @Html.DisplayNameFor(model => model.LockoutEnabled)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="AccessFailedCount" class="control-label"></label>
+                <input asp-for="AccessFailedCount" class="form-control" />
+                <span asp-validation-for="AccessFailedCount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Birthday" class="control-label"></label>
+                <input asp-for="Birthday" class="form-control" />
+                <span asp-validation-for="Birthday" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatAt" class="control-label"></label>
+                <input asp-for="CreatAt" class="form-control" />
+                <span asp-validation-for="CreatAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MemberRealName" class="control-label"></label>
+                <input asp-for="MemberRealName" class="form-control" />
+                <span asp-validation-for="MemberRealName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MemberNickname" class="control-label"></label>
+                <input asp-for="MemberNickname" class="form-control" />
+                <span asp-validation-for="MemberNickname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Permission" class="control-label"></label>
+                <input asp-for="Permission" class="form-control" />
+                <span asp-validation-for="Permission" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Points" class="control-label"></label>
+                <input asp-for="Points" class="form-control" />
+                <span asp-validation-for="Points" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sex" class="control-label"></label>
+                <input asp-for="Sex" class="form-control" />
+                <span asp-validation-for="Sex" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" id="createButton" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $("#createButton").click(function (e) {
+        e.preventDefault(); // 防止表單的默認提交行為
+        // var formData = $("form").serialize();
+        var formData = new FormData($("#fform")[0]);
+        // 發送 AJAX 請求
+        $.ajax({
+            type: "POST",
+            url: `/AspNetUsers/Create`, // 如果路徑正確，則可以直接指定URL
+            data: formData, // 將序列化後的表單數據發送到服務器
+            contentType: false, // 不設置 contentType，讓 jQuery 自動設置為 multipart/form-data
+            processData: false, // 不處理數據，讓 jQuery 不將數據轉為字串
+            success: function (data) {
+                $("#adminBody").html(data);
+            },
+            error: function (xhr, status, error) {
+                // 請求失敗時的處理
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>
+
+
+

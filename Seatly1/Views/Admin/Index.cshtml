@@ -1,0 +1,147 @@
+﻿@section Styles {
+
+
+}
+
+<body>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-2 list-group">
+                <ul>
+                    <li class="list-group-item bg-white">
+                        <a class=" dropdown-item text-gradient" id="Notification">活動資訊頁面</a>
+                    </li>
+                    <li class="list-group-item bg-white">
+                        <a class=" dropdown-item text-gradient" id="AspNetUsers">使用者頁面</a>
+                    </li>
+                    <li class="list-group-item bg-white">
+                        <a class=" dropdown-item text-gradient" id="OrganizersAdmin">活動舉辦方頁面</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-10" id="app">
+                <div id="adminBody">
+                    <img id="dancingtime" src="~/images/dancingtime.gif" style="display:none;" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js" integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/vue@3.4.25/dist/vue.global.js"></script>
+
+
+@section Scripts {
+
+
+
+    <script>
+
+        //---------------主要頁面開頭------------------------------
+        //活動主頁
+        $("#Notification").on("click", (e) => {
+
+            //設置使用者session
+            sessionStorage.removeItem("AdminID");
+            sessionStorage.setItem("AdminID", "Notification");
+
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_NotificationRecord", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        })
+
+        //使用者資訊主頁
+        $("#AspNetUsers").on("click", (e) => {
+            //設置使用者session
+            sessionStorage.removeItem("AdminID");
+            sessionStorage.setItem("AdminID", "AspNetUsers");
+
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_AspNetUsers", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        })
+
+
+        //活動主辦方
+        $("#OrganizersAdmin").on("click", (e) => {
+            //設置使用者session
+            sessionStorage.removeItem("AdminID");
+            sessionStorage.setItem("AdminID", "OrganizersAdmin");
+
+            $("#dancingtime").show();
+            $.ajax({
+                type: "GET",
+                url: `@Url.Action("_OrganizersAdmin", "Admin")`
+            }).done(function (data) {
+                $("#adminBody").html(data);
+                $("#dancingtime").hide();
+            }).fail(function (err) {
+                alert(err.responseText);
+                $("#dancingtime").hide();
+            });
+        })
+
+        //進主頁就換
+        $(function () {
+            const AdminID = sessionStorage.getItem("AdminID");
+            $(`#${AdminID}`).trigger("click");
+        });
+
+        // //---------------主要頁面結尾------------------------------
+
+
+        //--------------------圖片即時顯示開始-----
+        function previewImage(inputFile, img) {
+            if (inputFile.files && inputFile.files[0]) {
+                var file = inputFile.files[0];
+                var allowType = "image.*";
+                if (file.type.match(allowType)) {
+                    //預覽
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        img.attr("src", e.target.result);
+                        img.attr("title", inputFile.files[0].name);
+                    };
+
+                    reader.readAsDataURL(inputFile.files[0]);
+                    $(".btn").prop("disabled", false);
+
+                }
+
+                else {
+                    alert("不支援檔案類型");
+                    $(".btn").prop("disabled", true);
+                }
+            }
+        }
+
+        $(document).on("change", "#ActivityPhoto", function () {
+            previewImage(this, $("#ActivityPhoto").prev());
+        });
+        //--------------------圖片即時顯示結束-----
+
+    </script>
+
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

@@ -1,0 +1,97 @@
+﻿<!--UserView-->
+<!--
+    檢視活動
+    加入活動
+-->
+<style>
+
+    .B {
+        width: 80%;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border: 2px solid #ffffff; /* 設定框線，寬度為2px，顏色為黑色 */
+        border-radius: 0 0 10px 10px; /* 僅下半部有圓角 */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 設定四周陰影效果 */
+    }
+
+</style>
+
+
+<div>
+    <div class="container">
+        <div class="B">
+
+            <div style="background-color: #FF2E3C; text-align: center;color:#ffffff;">
+                <p>創建活動</p>
+            </div>
+
+            <div class="m-3">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+@section Scripts
+{
+
+    <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!--時間轉型工具-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+
+    <script>
+
+        //路徑
+        const vuebase = "https://localhost:7271"
+        //活動方id
+        const organizerid = sessionStorage.getItem("OrganizerId");
+
+        //vue本體
+        const vueApp = {
+            data() {
+                return {
+                    Activity: [],
+                };
+            },
+            methods: {
+                //---------------------------------------------------
+                //生成列表
+                //呼叫api選擇active的狀態
+                list: function () {
+                    // alert("list")
+                    let _this = this
+
+                    //轉換圖片的function
+                },
+                //---------------------------------------------------
+            },
+            mounted: function () {
+                let _this = this;
+                _this.list();
+            }
+        };
+
+        Vue.createApp(vueApp).mount("#app");
+    </script>
+
+
+
+
+
+}
+
+
