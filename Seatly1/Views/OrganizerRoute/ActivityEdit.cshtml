@@ -93,36 +93,7 @@
                                     </div>
 
                                     <div class="col-12 col-md-3">
-                                        <label for="DescriptionN" class="form-label">活動敘述</label>
-                                    </div>
-                                    <div class="col-12 col-md-9 mb-3">
-                                        <textarea type="text" v-model="DescriptionN" id="DescriptionN" class="form-control" placeholder="請輸入活動敘述" rows="5" required></textarea>
-                                    </div>
-
-                                    <div class="col-12 col-md-3">
-                                        <label for="IsRecurring" class="form-label">活動是否重複</label>
-                                    </div>
-                                    <div class="col-12 col-md-9 mb-3">
-                                        <select v-model="IsRecurring" class="form-select" id="IsRecurring" required>
-                                            <option v-for="(value, key) in RecurringOptions" :value="key">{{ value }}</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            此為必填欄位
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-3">
-                                        <label for="RecurringTime" class="form-label">活動重複時間</label>
-                                    </div>
-                                    <div class="col-12 col-md-9 mb-3">
-                                        <input v-model="RecurringTime" type="text" id="RecurringTime" class="form-control" placeholder="請輸入活動重複時間" required>
-                                        <div class="invalid-feedback">
-                                            此為必填欄位
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-3">
-                                        <label for="photo" class="form-label">新增活動照片</label>
+                                        <label for="photo" class="form-label">新增封面照片</label>
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
                                         @* 顯示圖片預覽 *@

@@ -7,14 +7,7 @@ var vueApp = {
             EndTime: null,
             Capacity: null,
             ActivityName: null,
-            DescriptionN: null,
-            RecurringTime: null,
-            IsRecurring: '',
             ActivityMethod: '',
-            RecurringOptions: {
-                True: '是',
-                False: '否'
-            }
         };
     },
     methods: {
@@ -71,9 +64,6 @@ var vueApp = {
                 formData.append('Capacity', self.Capacity);
                 formData.append('ActivityName', self.ActivityName);
                 formData.append('ActivityMethod', self.ActivityMethod);
-                formData.append('DescriptionN', self.DescriptionN);
-                formData.append('RecurringTime', self.RecurringTime);
-                formData.append('IsRecurring', Boolean(self.IsRecurring));
 
                 // 发送 POST 请求
                 axios.post('/api/OrganizersApi/activity', formData, {

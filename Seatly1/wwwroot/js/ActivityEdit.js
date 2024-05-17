@@ -3,20 +3,12 @@
 var vueApp = {
     data() {
         return {
-            ActivityPhoto: null,
             StartTime: null,
             EndTime: null,
             Capacity: null,
             ActivityName: null,
-            ActivityMethod: null,
-            DescriptionN: null,
-            RecurringTime: null,
-            IsRecurring: '',
             ActivityMethod: '',
-            RecurringOptions: {
-                True: '是',
-                False: '否'
-            }
+            ActivityPhoto: null,
         };
     },
     methods: {
@@ -35,10 +27,6 @@ var vueApp = {
                     this.EndTime = this.convertToPM(activity.endTime);
                     this.Capacity = activity.capacity
                     this.ActivityName = activity.activityName;
-                    this.ActivityMethod = activity.activityMethod;
-                    this.DescriptionN = activity.descriptionN;
-                    this.IsRecurring = activity.isRecurring;
-                    this.RecurringTime = activity.recurringTime;
                     this.ActivityMethod = activity.activityMethod;
 
                     // blob 物件轉換成圖片
