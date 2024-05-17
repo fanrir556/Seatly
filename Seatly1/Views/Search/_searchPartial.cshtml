@@ -16,8 +16,6 @@
         }
 </style>
 
-
-
 @* <!-- 分页控制按钮 -->
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
@@ -40,10 +38,10 @@
    
 @* 卡片內容 *@
     <div>
-        <ul id="activityList">
+        <ul id="activityList" >
             @foreach (var activity in Model)
             {
-                <div class="card mb-3">
+                <div  class="card mb-3 position-relative">
                     <div class="row g-0">
                         <div class="col-md-4">
                             @{
@@ -71,6 +69,8 @@
                                         }
                                     }
                                 </p>
+                                <span class="position-absolute top-0 end-0 m-3"><a class="text-danger love-icon" @@click="addToCollection(@activity.ActivityId)">❤加入收藏</a></span>
+
 
                                 <span class="position-absolute top-0 end-0 m-3"><a class="text-danger love-icon" @@click="addToCollection(@activity.ActivityId)">❤加入收藏</a></span>
 
@@ -168,6 +168,37 @@ else
                     });
                     const data = await response.json();
 
+    // 加入收藏
+    var vueApp = {
+        data() {
+            return {}
+        },
+        methods: {
+            // 加入收藏
+            async addToCollection(activityId) {
+                // 从 sessionStorage 中获取 userLogin 的值
+                const userLogin = sessionStorage.getItem('userLogin');
+                const userId = sessionStorage.getItem('userId');
+
+                // 判斷用戶是否已登錄
+                if (userLogin !== 'true') {
+
+                    alert('請先登錄會員！');
+                    return;
+                }
+
+                try {
+
+                    const response = await fetch(`/Collections/AddToCollection?activityId=${activityId}&userId=${userId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ activityId: activityId, userId: userId })
+
+                    });
+                    const data = await response.json();
+
                     alert('收藏成功！');
                 } catch (error) {
 
@@ -178,6 +209,7 @@ else
         },
     }
     Vue.createApp(vueApp).mount("#activityList");
+    
     
     // // 每页显示的数据量
     // const pageSize = 5;

@@ -83,12 +83,6 @@
                             <a href="@Url.Action("UsersView", "NotificationRecord", new { id = item.ActivityId })" class="btn btn-primary">查看詳情</a>
                             <button class="btn btn-danger" onclick="removeFromCollection(@item.ActivityId)">移除收藏</button>
                         }
-                        @* <meta property="og:title" content="@item.ActivityName">
-                        <meta property="og:description" content="@item.DescriptionN">
-                        <meta property="og:site_name" content="Queuely">
-                        <meta property="og:url" content="https://google.com"> *@
-                        @* <button class="btn btn-success" onclick="shareToFacebook('@item.ActivityId')">分享到 Facebook</button> *@
-
                         <!-- Facebook Share Button -->
                         <div class="fb-share-button"
                              data-href="https://yourdomain.com/Collections/CollectionsIndex/@item.ActivityId"
@@ -145,8 +139,6 @@ else
                 const facebook = `http://www.facebook.com/sharer/sharer.php?u=${cardDetailUrl}`;
                 window.open(facebook, '_blank');
     }
-
-       
 </script>
     <!-- Load Facebook SDK for JavaScript -->
     <div id="fb-root"></div>

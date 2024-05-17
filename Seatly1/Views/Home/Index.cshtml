@@ -10,7 +10,17 @@
 @section Styles {
 
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+    <style>
+    .love-icon {
+            /* font-size: 2rem; */
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
 
+    .love-icon:hover {
+                transform: scale(1.2);
+            }
+    </style>
 }
 
 
@@ -76,7 +86,7 @@
     <!-- <section> begin ====人氣活動=================-->
 
     <section class="py-4 overflow-hidden">
-        <div class="container">
+        <div id="hotItems" class="container">
             <div class="row h-100">
                 <div class="col-lg-7 mx-auto text-center mt-7 mb-5">
                     <h5 class="fw-bold fs-3 fs-lg-5 lh-sm">熱門活動</h5>
@@ -112,7 +122,10 @@
                                                         
                                                         <div class="card-body ps-0">
                                                             <h5 class="fw-bold text-1000 text-truncate mb-1">@item.ActivityName</h5>
-                                                            <div><span class="text-warning me-2"><i class="fas fa-map-marker-alt"></i></span><span class="text-primary">@item.Location</span></div>
+                                                            <div class="position-relative">
+                                                                <span class="text-warning me-2"><i class="fas fa-map-marker-alt"></i></span><span class="text-primary">@item.Location</span>
+                                                                <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(@item.ActivityId)">❤加入收藏</a></span>
+                                                            </div>
 
                                                             @{
                                                                 string formattedStartTime = string.Format("{0:yyyy-MM-dd}", item.StartTime);
@@ -598,18 +611,7 @@
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js" integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        // $("#collections").on("click", function (e) {
-        //     e.preventDefault();
-        //     //alert("1111");
-        //     $.ajax({
-        //         type: "GET",
-        //         url: `@Url.Action("collectionsPartial", "Friends")`
-        //     }).done(function (data) {
-        //         $("#memberBody").html(data);
-        //     }).fail(function (err) {
-        //         alert(err.responseText);
-        //     });
-        // });
+       
 
         // 旋轉木馬自動換頁
         const carousel = new bootstrap.Carousel(document.getElementById('carouselSearchByFood'), {
@@ -670,6 +672,46 @@
                 console.error('Error storing type in session:', error);
             }
         }
-      
+
+        // 熱門活動收藏
+        var vueApp = {
+            data() {
+                return {} },
+            methods: { 
+                   // 加入收藏
+                   async addToCollection(activityId) {
+                        // 从 sessionStorage 中获取 userLogin 的值
+                        const userLogin = sessionStorage.getItem('userLogin');
+                        const userId = sessionStorage.getItem('userId');
+
+                        // 判斷用戶是否已登錄
+                        if (userLogin !== 'true') {
+                        
+                        alert('請先登錄會員！');
+                        return;
+                        }
+
+                        try {
+                        
+                         const response = await fetch(`/Collections/AddToCollection?activityId=${activityId}&userId=${userId}`, {
+                         method: 'POST',
+                         headers: {
+                        'Content-Type': 'application/json'
+                         },
+                         body: JSON.stringify({ activityId: activityId, userId: userId })
+                         
+                         });
+                        const data = await response.json();
+                        
+                        alert('收藏成功！');
+                        } catch (error) {
+                        
+                        console.error('Error:', error);
+                        alert('收藏失敗，請稍後再試！');
+                        }
+                    },
+            },
+        }
+        Vue.createApp(vueApp).mount("#hotItems");
     </script>
 }
