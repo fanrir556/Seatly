@@ -1,0 +1,8 @@
+[
+  {
+    "outputFileName": "public/theme.min.css",
+    "inputFiles": [
+      "public/theme.css"
+    ]
+  }
+]

@@ -59,6 +59,11 @@ namespace Seatly1.Controllers
                     }
                 }
             }
+            else
+            {
+                HttpContext.Session.Remove("checkedIn");
+                HttpContext.Session.Remove("gamed");
+            }
             /*簽到判定*/
 
             // 首頁熱門選項

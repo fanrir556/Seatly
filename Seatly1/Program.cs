@@ -49,6 +49,15 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
+//CORS
+string PolicyName = "AllowAny";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: PolicyName, policy => {
+        policy.WithOrigins("*").WithHeaders("*").WithMethods("*");
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -78,6 +87,9 @@ app.UseAuthorization();
 
 //Session
 app.UseSession();
+
+//CORS
+app.UseCors();
 
 app.MapControllerRoute(
     name: "default",

@@ -71,7 +71,9 @@ $(function () {
 
     /* 管理員登入 */
     $("#home").on("mousedown", function () {
-        $("#logo").css("animation-name","logoSpin")
+        setTimeout(function () {
+            $("#logo").css("animation-name", "logoSpin")
+        }, 1000);
         timer = setTimeout(function () {
             $("#logo").css("animation-name", "");
             if (isMG == "true")
@@ -149,7 +151,7 @@ $(function () {
     var gameSrc = $("#game").data("src");
     var gameUri = $("#game").data("uri");
     function gameLogoPop() {
-        var gameTargets = $("main div,p,h1,h2,h3,h4,h5,h6");
+        var gameTargets = $("main").find("div, p, h1, h2, h3, h4, h5, h6").not(".expired-overlay");
         var randEl = Math.floor(Math.random() * gameTargets.length);
         var aniNum = Math.ceil(Math.random() * 4);
         if (gameTargets.eq(randEl).hasClass("position-relative")) {
@@ -195,12 +197,12 @@ $(function () {
             });
         });
         setTimeout(function () {
-            sessionStorage.getItem("oriPosRel") == "true" ? sessionStorage.removeItem("oriPosRel") : gameTargets.eq(randEl).removeClass("position-relative");
-            gameTargets.eq(randEl).find("#gameLogo").remove();
+            sessionStorage.getItem("oriPosRel") == "true" ? sessionStorage.removeItem("oriPosRel") : $("main").find("#gameLogo").parent().removeClass("position-relative");
+            $("main").find("#gameLogo").remove();
         }, 4000);
     }
-    
-    if ($("#game").index() != -1) {
+
+    if ($("#game").index() != -1 && $(".spinBtn").index() == -1) {
         var gameLoop = setInterval(function () {
             gameLogoPop();
         }, 4100);

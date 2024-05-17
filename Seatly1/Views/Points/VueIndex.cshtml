@@ -1,12 +1,32 @@
-﻿<div id="app">
-    {{ count }}
-    <button @@click="increment">+</button>
-</div>
+﻿@section Styles {
+    <style>
+        .container-fluid{
+            padding:0;
+        }
+    </style>
+}
+@{
+    ViewData["Title"] = "點數專區";
+}
+
+@* <div id="app">
+</div> *@
+<iframe class="p-0 m-0 w-100 border-0" src="http://localhost:5173/"></iframe>
 
 @section Scripts {
     @* <script src="https://unpkg.com/vue@next"></script> *@
+    @* <script src="https://unpkg.com/axios@0.26.1/dist/axios.min.js"></script> *@
     <script>
-        const { createApp, ref } = Vue;
+        function setIframeHeight () {
+            var navHeight = $("nav").height();
+            var hei = $(window).height() - navHeight * 1.8;
+            $("iframe").css("height", `${hei}`);
+        }
+         $(function () {
+             setIframeHeight();
+             $(window).on("resize", setIframeHeight);
+         });
+        /*const { createApp, ref } = Vue;
 
         const app = createApp({
             setup() {
@@ -27,9 +47,7 @@
                 }
             }
         });
-
         app.mount('#app');
+        */
     </script>
-
-
 }

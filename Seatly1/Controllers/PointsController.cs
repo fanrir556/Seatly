@@ -11,6 +11,7 @@ using System.Drawing;
 using QRCoder;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Cors;
 
 namespace Seatly1.Controllers
 {
@@ -36,6 +37,10 @@ namespace Seatly1.Controllers
             return View();
         }
 
+        public IActionResult MVCVue()
+        {
+            return View();
+        }
         //點數商城導覽列
         public async Task<IActionResult> pointsShopContentHead()
         {
@@ -180,8 +185,19 @@ namespace Seatly1.Controllers
         [HttpPost]
         public async Task<string> pointsShopContentBody([FromBody] pShopExchange p)
         {
-            AspNetUser aspUser = await _context.AspNetUsers.FindAsync(p.Id);
-            if (aspUser == null)
+            var aspUser = new AspNetUser();
+            if (User.Identity.IsAuthenticated)
+            {
+                // 使用者已登入
+                // 在這裡進行相關處理
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                aspUser = await _context.AspNetUsers.FindAsync(user.Id);
+                if(aspUser == null)
+                {
+                    return "兌換失敗";
+                }
+            }
+            else
             {
                 return "兌換失敗";
             }
@@ -190,10 +206,10 @@ namespace Seatly1.Controllers
             PointTransaction trans = new PointTransaction
             {
                 Id = 0,
-                MemberId = p.MemberId,
+                MemberId = aspUser.Id,
                 ProductId = p.ProductId,
                 TransactionDate = DateTime.Now,
-                Active = p.Active
+                Active = true
             };
             if (ModelState.IsValid)
             {
@@ -732,6 +748,35 @@ namespace Seatly1.Controllers
             }
             return NotFound();
         }
+
+        //取得logo圖示
+        //[HttpGet]
+        //[EnableCors("AllowAny")]
+        //public IActionResult GetLogo()
+        //{
+        //    var imgUrl = Url.Content("~/images/queuely.png");
+        //    var cookieOptions = new CookieOptions
+        //    {
+        //        Secure = true
+        //    };
+        //    Response.Cookies.Append("imageCookie", imgUrl, cookieOptions);
+        //    return File(imgUrl, "image/png");
+        //}
+
+        //設定strPoint session
+        //[HttpPost]
+        //public IActionResult SetStrPoints([FromBody] string data)
+        //{
+        //    HttpContext.Session.SetString("strPoints", data);
+        //    return Ok();
+        //}
+
+        //取得strPoint session
+        //public IActionResult GetStrPoints()
+        //{
+        //    var strPoints = HttpContext.Session.GetString("strPoints");
+        //    return Ok(strPoints);
+        //}
 
     }
 }
