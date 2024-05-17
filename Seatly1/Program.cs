@@ -24,6 +24,8 @@ builder.Services.AddDbContext<SeatlyContext>(options => {
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
 //Session
 builder.Services.AddSession(option =>
 {
