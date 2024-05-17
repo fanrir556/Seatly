@@ -40,19 +40,26 @@ namespace Seatly1.Controllers
 
         // 列出個別活動方的所有活動
         [HttpGet("activities/{organizerId}")]
-        public async Task<IEnumerable<NotificationRecordDTO>> GetActivitiesForOrganizer(int organizerId)
+        public async Task<IEnumerable<NotificationRecordDTO>> GetActivitiesForOrganizerByPage(int organizerId, int page)
         {
+            const int pageSize = 50; // 每頁顯示的資料筆數
+
+            var offset = (page - 1) * pageSize; // 計算偏移量
+
             var activities = await _context.NotificationRecords
                 .Where(activity => activity.OrganizerId == organizerId)
+                .OrderBy(activity => activity.ActivityId) // 如果有一個唯一的 ID，可以用它來排序，否則用其他適合的方式排序
+                .Skip(offset) // 跳過偏移量
+                .Take(pageSize) // 取得指定頁數的資料
                 .Select(activity => new NotificationRecordDTO
                 {
                     ActivityId = activity.ActivityId,
-                    OrganizerId = activity.OrganizerId,
                     ActivityPhoto = activity.ActivityPhoto,
                     StartTime = activity.StartTime,
                     EndTime = activity.EndTime,
                     Capacity = activity.Capacity,
                     ActivityName = activity.ActivityName,
+                    ActivityMethod = activity.ActivityMethod,
                     DescriptionN = activity.DescriptionN,
                     IsRecurring = activity.IsRecurring,
                     RecurringTime = activity.RecurringTime,
@@ -61,26 +68,123 @@ namespace Seatly1.Controllers
 
             return activities;
         }
+        // 根據活動id取得活動資訊
+        [HttpGet("activity/{activityid}")]
+        public async Task<NotificationRecordDTO?> GetActivity(int activityid)
+        {
+            var activity = await _context.NotificationRecords.FindAsync(activityid);
+            if (activity == null)
+            {
+                return null;
+            }
+            NotificationRecordDTO activityDTO = new NotificationRecordDTO
+            {
+                ActivityId = activity.ActivityId,
+                ActivityPhoto = activity.ActivityPhoto,
+                StartTime = activity.StartTime,
+                EndTime = activity.EndTime,
+                Capacity = activity.Capacity,    
+                ActivityName = activity.ActivityName,
+                ActivityMethod = activity.ActivityMethod,
+                DescriptionN = activity.DescriptionN,
+                IsRecurring = activity.IsRecurring,
+                RecurringTime = activity.RecurringTime,
+                HashTag1 = activity.HashTag1,
+                HashTag2 = activity.HashTag2,
+                HashTag3 = activity.HashTag3,
+                HashTag4 = activity.HashTag4,
+                HashTag5 = activity.HashTag5,
+            };
+            return activityDTO;
+        }
 
         [HttpPost("activity")]
-        public async Task<string> PostActivitiesForOrganizer(NotificationRecordDTO activity)
+        public async Task<string> PostActivitiesForOrganizer(NotificationRecordDTO2 activity)
         {
+            if (activity.ActivityPhoto == null)
+            {
+                return "未提供活動照片";
+            }
+
+            //MemoryStream 用於將 IFormFile 讀取為 byte 陣列，然後將 byte 陣列儲存到 varbinary 欄位。
+            using var memoryStream = new MemoryStream();
+            await activity.ActivityPhoto.CopyToAsync(memoryStream);
+            var photoBytes = memoryStream.ToArray();
+
             NotificationRecord act = new NotificationRecord
             {
                 ActivityId = activity.ActivityId,
                 OrganizerId = activity.OrganizerId,
-                ActivityPhoto = activity.ActivityPhoto,
+                ActivityPhoto = photoBytes,
                 StartTime = activity.StartTime,
                 EndTime = activity.EndTime,
                 Capacity = activity.Capacity,
                 ActivityName = activity.ActivityName,
+                ActivityMethod = activity.ActivityMethod,
                 DescriptionN = activity.DescriptionN,
                 IsRecurring = activity.IsRecurring,
                 RecurringTime = activity.RecurringTime,
             };
+
             _context.NotificationRecords.Add(act);
             await _context.SaveChangesAsync();
             return "新增活動成功";
+        }
+
+        [HttpPut("activity/{id}")]
+        public async Task<string> PutActivitiesForOrganizer(int id, NotificationRecordDTO2 activity)
+        {
+            var existingActivity = await _context.NotificationRecords.FindAsync(id);
+            if (existingActivity == null)
+            {
+                return "活動不存在";
+            }
+
+            if (activity.ActivityPhoto == null)
+            {
+                return "未提供活動照片";
+            }
+
+            // 將 IFormFile 讀取為 byte 陣列，然後將 byte 陣列儲存到 varbinary 欄位。
+            using var memoryStream = new MemoryStream();
+            await activity.ActivityPhoto.CopyToAsync(memoryStream);
+            var photoBytes = memoryStream.ToArray();
+
+            // 更新現有活動的屬性
+            existingActivity.ActivityPhoto = photoBytes;
+            existingActivity.StartTime = activity.StartTime;
+            existingActivity.EndTime = activity.EndTime;
+            existingActivity.Capacity = activity.Capacity;
+            existingActivity.ActivityName = activity.ActivityName;
+            existingActivity.ActivityMethod = activity.ActivityMethod;
+            existingActivity.DescriptionN = activity.DescriptionN;
+            existingActivity.IsRecurring = activity.IsRecurring;
+            existingActivity.RecurringTime = activity.RecurringTime;
+
+            // 儲存變更
+            await _context.SaveChangesAsync();
+
+            return "修改活動成功";
+        }
+        [HttpDelete("activity/{id}")]
+        public async Task<string> DeleteActivity(int id)
+        {
+            var activity = await _context.NotificationRecords.FindAsync(id);
+            if(activity == null)
+            {
+                return "找不到要刪除的活動";
+            }
+            try
+            {
+                _context.NotificationRecords.Remove(activity);
+                await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return "刪除失敗";
+            }
+            return "刪除成功";
         }
 
         // 活動方資訊取得api
@@ -321,87 +425,6 @@ namespace Seatly1.Controllers
             Response.Cookies.Append("OrganizerId", "", option);
             return Ok("登出成功");
             // 返回成功响应
-        }
-
-        [HttpPost("ForgetPassword")]
-        public async Task<IActionResult> ForgotPassword(string organizeremail)
-        {
-            var email = await _context.Organizers.FirstOrDefaultAsync(u => u.Email == organizeremail);
-
-            if (email == null)
-            {
-                return NotFound("User not found");
-            }
-
-            // 生成驗證碼
-            string token = GenerateToken();
-
-            // 寄送郵件
-            bool isEmailSent = await SendEmailAsync(email.Email, token);
-
-            if (isEmailSent)
-            {
-                return Ok("Email sent successfully");
-            }
-            else
-            {
-                return StatusCode(500, "Failed to send email");
-            }
-        }
-
-        private string GenerateToken()
-        {
-            // 這裡生成驗證碼的邏輯，可以是任何您喜歡的方式
-            // 這裡只是一個簡單的範例，您可以根據需求進行修改
-            Random random = new Random();
-            return random.Next(100000, 999999).ToString();
-        }
-
-        private async Task<bool> SendEmailAsync(string email, string token)
-        {
-            try
-            {
-                // 郵件設置
-                string subject = "Password Reset Token";
-                string body = $"Your password reset token is: {token}";
-
-                // 郵件寄件者資訊
-                string senderEmail = "your-email@example.com";
-                string senderPassword = "your-email-password";
-                string smtpServer = "smtp.youremailprovider.com";
-                int smtpPort = 587;
-
-                // 創建郵件寄件者
-                var senderCredentials = new NetworkCredential(senderEmail, senderPassword);
-                var smtpClient = new SmtpClient(smtpServer, smtpPort)
-                {
-                    EnableSsl = true,
-                    Credentials = senderCredentials
-                };
-
-                // 創建郵件
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(senderEmail),
-                    Subject = subject,
-                    Body = body,
-                    IsBodyHtml = false
-                };
-
-                // 添加收件人
-                mailMessage.To.Add(email);
-
-                // 寄送郵件
-                await smtpClient.SendMailAsync(mailMessage);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                // 郵件寄送失敗時的處理邏輯
-                Console.WriteLine($"Failed to send email: {ex.Message}");
-                return false;
-            }
         }
 
         // 修改活動方資訊

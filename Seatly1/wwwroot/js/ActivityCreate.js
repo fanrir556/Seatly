@@ -7,13 +7,7 @@ var vueApp = {
             EndTime: null,
             Capacity: null,
             ActivityName: null,
-            DescriptionN: null,
-            RecurringTime: null,
-            IsRecurring: '',
-            options: {
-                True: '是',
-                False: '否'
-            }
+            ActivityMethod: '',
         };
     },
     methods: {
@@ -28,25 +22,7 @@ var vueApp = {
             }
             return organizerid;
         },
-        // 上傳照片
-        uploadFile() {
-            console.log(this)
-            const uploadedFile = this.$refs.files.files[0]
-            const vm = this
-            const formData = new FormData()
-            formData.append('ActivityPhoto', uploadedFile)
-            const url = `/api/OrganizersApi/activity`
-            this.$http.post(url, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then((response) => {
-                if (response.data.success) {
-                    vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl)
-                }
-            })
-        },
-        submitAddForm() {
+        submitForm() {
             // 执行 Bootstrap 5 表单验证
             let forms = document.querySelectorAll('.needs-validation');
             Array.prototype.slice.call(forms).forEach(function (form) {
@@ -59,28 +35,54 @@ var vueApp = {
                 this.addActivity();
             }
         },
+        // 新增活動
         addActivity() {
             // 透過Session取得活動方的id並轉為數字
-            let organizeridInt = parseInt(`${sessionStorage.getItem("OrganizerId")}`); 
+            let organizeridInt = parseInt(`${sessionStorage.getItem("OrganizerId")}`);
 
-            // Send a POST request
-            axios.post('/api/OrganizersApi/activity', {
-                OrganizerId: organizeridInt,
-                ActivityPhoto: null,
-                StartTime: this.StartTime,
-                EndTime: this.EndTime,
-                Capacity: this.Capacity,
-                ActivityName: this.ActivityName,
-                DescriptionN: this.DescriptionN,
-                RecurringTime: this.RecurringTime,
-                IsRecurring: Boolean(this.IsRecurring), // 字串轉成布林值傳送
-            })
-                .then(function (response) {
-                    console.log(response);
+            // 讀取圖片
+            const uploadedFile = this.$refs.files.files[0]
+
+            const reader = new FileReader()
+
+            // 在回調函數外部保存 `this` 的值
+            const self = this;
+
+            reader.onload = function () {
+                // 將讀取到的二進位資料轉換為blbo物件
+                var blob = new Blob([reader.result]);
+                console.log('blob Data:', blob);
+
+                // 建立formdata
+                const formData = new FormData()
+
+                // 将需要上传的数据添加到 FormData 对象中
+                formData.append('OrganizerId', organizeridInt);
+                formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
+                formData.append('StartTime', self.StartTime);
+                formData.append('EndTime', self.EndTime);
+                formData.append('Capacity', self.Capacity);
+                formData.append('ActivityName', self.ActivityName);
+                formData.append('ActivityMethod', self.ActivityMethod);
+
+                // 发送 POST 请求
+                axios.post('/api/OrganizersApi/activity', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
+                    }
                 })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                    .then(function (response) {
+                        console.log(response);
+                        alert("新增活動成功");
+                        window.location.href = './NotificationRecord';
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        alert("新增活動失敗");
+                    });
+            }
+            // 讀取檔案為 ArrayBuffer
+            reader.readAsArrayBuffer(uploadedFile);
         },
         photopreview() {
             // 上傳圖片預覽
@@ -100,7 +102,7 @@ var vueApp = {
                     console.log(files);
                 });
             });
-        },
+        }
     },
     // 在應用程式創建時立即執行方法
     created() {

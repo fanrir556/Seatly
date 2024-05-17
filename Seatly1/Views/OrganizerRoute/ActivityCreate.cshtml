@@ -27,7 +27,7 @@
                         <!-- col-8 start -->
                         <div class="col-12 col-md-8 offset-md-2">
                             <!-- 表單 start -->
-                            <form v-on:submit.prevent="submitAddForm" id="modifyOrganizerForm" class="needs-validation" novalidate>
+                            <form v-on:submit.prevent="submitForm" id="modifyOrganizerForm" class="needs-validation" novalidate>
                                 <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
                                 <div class="row">
                                     <div class="col-12 col-md-3">
@@ -74,18 +74,13 @@
                                     </div>
 
                                     <div class="col-12 col-md-3">
-                                        <label for="DescriptionN" class="form-label">活動敘述</label>
+                                        <label for="ActivityMethod" class="form-label">活動方法</label>
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
-                                        <textarea type="text" v-model="DescriptionN" id="DescriptionN" class="form-control" placeholder="請輸入活動敘述" rows="5" required></textarea>
-                                    </div>
-
-                                    <div class="col-12 col-md-3">
-                                        <label for="IsRecurring" class="form-label">活動是否重複</label>
-                                    </div>
-                                    <div class="col-12 col-md-9 mb-3">
-                                        <select v-model="IsRecurring" class="form-select" id="IsRecurring" required>
-                                            <option v-for="(value, key) in options" :value="key">{{ value }}</option>
+                                        <select v-model="ActivityMethod" class="form-select" id="ActivityMethod" required>
+                                            <option>公告</option>
+                                            <option>排隊</option>
+                                            <option>抽籤</option>
                                         </select>
                                         <div class="invalid-feedback">
                                             此為必填欄位
@@ -93,23 +88,13 @@
                                     </div>
 
                                     <div class="col-12 col-md-3">
-                                        <label for="RecurringTime" class="form-label">活動重複時間</label>
-                                    </div>
-                                    <div class="col-12 col-md-9 mb-3">
-                                        <input v-model="RecurringTime" type="text" id="RecurringTime" class="form-control" placeholder="請輸入活動重複時間" required>
-                                        <div class="invalid-feedback">
-                                            此為必填欄位
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 col-md-3">
-                                        <label for="photo" class="form-label">新增活動照片</label>
+                                        <label for="photo" class="form-label">新增封面照片</label>
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
                                         @* 顯示圖片預覽 *@
                                         <img style="width:320px;height:240px" id="preview" src="~/images/NoImage.jpg" :src="tempProduct.imageUrl" class="img-fluid mb-3">
-                                        <input type="file" @@change="uploadFile" ref="files" id="imageInput" class="form-control" aria-label="file example"
-                                               placeholder="請上傳活動方照片" @* required *@>
+                                        <input type="file" ref="files" id="imageInput" class="form-control" aria-label="file example"
+                                               placeholder="請上傳活動方照片" required>
                                         <div class="invalid-feedback">
                                             請選擇要上傳的圖片
                                         </div>
@@ -142,9 +127,8 @@
         <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
         <script src="https://unpkg.com/axios@1.6.8/dist/axios.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js" integrity="sha512-Ww1y9OuQ2kehgVWSD/3nhgfrb424O3802QYP/A5gPXoM4+rRjiKrjHdGxQKrMGQykmsJ/86oGdHszfcVgUr4hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="~/js/ActivityCreate.js"></script>
-}
+    }
 </body>
 
 </html>

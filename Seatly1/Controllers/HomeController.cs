@@ -86,26 +86,7 @@ namespace Seatly1.Controllers
         {
             return View();
         }
-
-        public IActionResult OrganizerLogin()
-        {
-            return View();
-        }
-        public IActionResult OrganizerRegister()
-        {
-            return View();
-        }
         
-        // GET: 活動方忘記密碼頁面
-        public ActionResult OrganizerForgetPwd()
-        {
-            return View();
-        }
-
-        public IActionResult OrganizerInfo()
-        {
-            return View();
-        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -15,10 +15,6 @@ public partial class SeatlyContext : DbContext
     {
     }
 
-    public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-
-    public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
-
     public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
 
     public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
@@ -150,18 +146,14 @@ public partial class SeatlyContext : DbContext
 
             entity.Property(e => e.SerialId).HasColumnName("SerialID");
             entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
-            entity.Property(e => e.UserId)
-                .HasMaxLength(50)
-                .HasColumnName("UserID");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
         });
 
         modelBuilder.Entity<Comment>(entity =>
         {
             entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFAA3A2BF899");
 
-            entity.Property(e => e.CommentId)
-                .ValueGeneratedNever()
-                .HasColumnName("CommentID");
+            entity.Property(e => e.CommentId).HasColumnName("CommentID");
             entity.Property(e => e.MemberAccount).HasMaxLength(50);
             entity.Property(e => e.ReContent)
                 .HasMaxLength(1000)
@@ -207,15 +199,13 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.MemberId).HasName("PK__Members__0CF04B38AC717DEA");
 
-            entity.Property(e => e.MemberId)
-                .ValueGeneratedNever()
-                .HasColumnName("MemberID");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.MemberAccount).HasMaxLength(20);
             entity.Property(e => e.MemberName).HasMaxLength(30);
             entity.Property(e => e.MemberNickname).HasMaxLength(10);
             entity.Property(e => e.MemberPassword).HasMaxLength(20);
+            entity.Property(e => e.MemberRealName).HasMaxLength(20);
             entity.Property(e => e.Phone).HasMaxLength(16);
             entity.Property(e => e.Sex).HasMaxLength(1);
         });
@@ -242,6 +232,8 @@ public partial class SeatlyContext : DbContext
 
         modelBuilder.Entity<Organizer>(entity =>
         {
+            entity.HasKey(e => e.OrganizerId).HasName("PK__Restaura__87454CB580C1ADB7");
+
             entity.Property(e => e.OrganizerId).HasColumnName("OrganizerID");
             entity.Property(e => e.Address).HasMaxLength(200);
             entity.Property(e => e.Email)
@@ -291,9 +283,7 @@ public partial class SeatlyContext : DbContext
         {
             entity.HasKey(e => e.RatingId).HasName("PK__Ratings__FCCDF85C06FBD4FE");
 
-            entity.Property(e => e.RatingId)
-                .ValueGeneratedNever()
-                .HasColumnName("RatingID");
+            entity.Property(e => e.RatingId).HasColumnName("RatingID");
             entity.Property(e => e.CommentTime).HasColumnType("datetime");
             entity.Property(e => e.MemberAccount).HasMaxLength(50);
             entity.Property(e => e.RestaurantAccount).HasMaxLength(50);
@@ -305,9 +295,7 @@ public partial class SeatlyContext : DbContext
 
             entity.ToTable("Reply");
 
-            entity.Property(e => e.ReplyId)
-                .ValueGeneratedNever()
-                .HasColumnName("ReplyID");
+            entity.Property(e => e.ReplyId).HasColumnName("ReplyID");
             entity.Property(e => e.ReContent)
                 .HasMaxLength(50)
                 .HasColumnName("reContent");

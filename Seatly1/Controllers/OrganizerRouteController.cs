@@ -40,5 +40,10 @@ namespace Seatly1.Controllers
         {
             return View();
         }
+        // 進入個別活動頁面
+        public IActionResult Activity()
+        {
+            return View();
+        }
     }
 }

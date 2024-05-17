@@ -31,6 +31,8 @@ builder.Services.AddDbContext<SeatlyContext>(options => {
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
 //Session
 builder.Services.AddSession(option =>
 {
@@ -104,6 +106,14 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "ActivityCreate",
     pattern: "{controller=OrganizerRoute}/{action=ActivityCreate}/{id?}");
+
+app.MapControllerRoute(
+    name: "ActivityEdit",
+    pattern: "{controller=OrganizerRoute}/{action=ActivityEdit}/{id?}");
+
+app.MapControllerRoute(
+    name: "Activity",
+    pattern: "{controller=OrganizerRoute}/{action=Activity}/{id?}");
 
 app.MapRazorPages();
 
