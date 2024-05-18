@@ -258,8 +258,27 @@ namespace Seatly1.Controllers
         }
 
 
+        // UserView 呼叫列表用
+        // GET: NotificationRecord/UserList
+        [HttpGet]
+        public async Task<IActionResult> UserList(int id)
+        {
+            // 使用異步方法來獲取數據並轉換為列表
+            var record = await _context.NotificationRecords
+                                        .Where(e => e.ActivityId == id)
+                                        .FirstOrDefaultAsync();
 
-            private bool NotificationRecordExists(int id)
+            // 檢查是否有結果，並返回相應的響應
+            if (record == null)
+            {
+                return NotFound(); // 或其他適當的狀態碼
+            }
+
+            // 返回 JSON 格式的數據
+            return Ok(record);
+        }
+
+        private bool NotificationRecordExists(int id)
         {
             return _context.NotificationRecords.Any(e => e.ActivityId == id);
         }

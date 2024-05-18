@@ -72,7 +72,8 @@
                                 <span class="position-absolute top-0 end-0 m-3"><a class="text-danger love-icon" @@click="addToCollection(@activity.ActivityId)">❤加入收藏</a></span>
 
                                 <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
-                                    <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看活動</button>
+                                    <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2" @@click="userview"
+                                            btn-Aid="@activity.ActivityId">查看活動</button>
                                 </form>
                             </div>
                         </div>
@@ -172,6 +173,18 @@ else
                     alert('收藏失敗，請稍後再試！');
                 }
             },
+
+            //資訊頁面
+            userview: function () 
+            {
+                const btn = event.target;
+                // 從按鈕元素中取得自定義屬性"btn-Aid"
+                const btnAid = btn.getAttribute("btn-Aid");
+                // 將btnAid值存入sessionStorage
+                sessionStorage.setItem("ActID", btnAid);
+                // 選擇性地顯示alert
+                // alert(btnAid);
+            }
         },
     }
     Vue.createApp(vueApp).mount("#activityList");

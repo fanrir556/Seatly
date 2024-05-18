@@ -9,7 +9,7 @@
 <div id="app">
     <div class="container mt-3">
         <h4>活動編號 : {{activityId}}</h4>
-        <img src="{{activityPhoto}}" :alt="activityName" />
+        <img :src="activityPhoto" :alt="activityName" style="width:280px;height:210px;" />
         <h5>活動名稱 : {{activityName}}</h5>
         <div>
             <span>{{startTime}}</span> ~ <span>{{endTime}}</span>
@@ -89,6 +89,10 @@
                         var res = response.data
                         // console.log(res);
                         _this.activityId = res[0].activityId
+
+                        aa = res[0].activityPhoto
+                        // console.log(aa)
+                        _this.activityPhoto = `data:image/jpeg;base64,${aa}`
 
                         if (res[0].activityName != null) {
                             _this.activityName = res[0].activityName

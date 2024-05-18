@@ -31,7 +31,7 @@
 
                         <tr v-for="N in Activity">
                             <th scope="row">{{N.activityId}}</th>@* 活動ID *@
-                            <td><img :src="N.activityPhoto" :alt="N.activityId"></img></td>@* 活動照片 *@
+                            <td><img :src="N.activityPhoto" :alt="N.activityId" style="width:160px;height:90"></img></td>@* 活動照片 *@
                             <td>{{N.activityName}}</td>@* 活動名稱 *@
                             <td>{{N.startTime}}</td>@* 開始時間 *@
                             <td>{{N.endTime}}</td>@* 結束時間 *@
@@ -91,7 +91,7 @@
 
                             res.push({
                                 activityId: e.activityId,
-                                activityPhoto: e.activityPhoto,
+                                activityPhoto: `data:image/jpeg;base64,${e.activityPhoto}`,
                                 activityName: e.activityName,
                                 startTime: moment(e.startTime).format('YYYY-MM-DD HH:mm'),
                                 endTime: moment(e.endTime).format('YYYY-MM-DD HH:mm'),
