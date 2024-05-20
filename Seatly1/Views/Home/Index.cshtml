@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<NotificationRecord>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Queuely | 輕鬆排生活";
 }
 
 @* <div class="text-center">
@@ -20,6 +20,17 @@
     .love-icon:hover {
                 transform: scale(1.2);
             }
+
+            #carouselPopularItems img{
+            height: 100px; /* Adjust the image height */
+                object-fit: cover; /* Ensure the image covers the entire area */
+            transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for transform and box-shadow */
+            }
+
+             #carouselPopularItems img:hover{
+                 transform: scale(1.1); /* Scale the image */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+             }
     </style>
 }
 
@@ -117,10 +128,11 @@
                                                         }
                                                         else
                                                         {
-                                                            <span>No photo available</span>
+                                                            @* span>No photo available</span> *@
+                                                            <img src="~/images/noimage.jpg" />
                                                         }
 
-                                                        <div class="position-absolute top-0 start-0 m-2">
+                                                       @*  <div class="position-absolute top-0 start-0 m-2">
                                                             <div class="fb-share-button"
                                                                  data-href="http://4.217.249.190/NotificationRecord/UsersView/@item.ActivityId"
                                                                  data-layout="button_count">
@@ -129,7 +141,7 @@
 
                                                         <div class="position-absolute top-0 end-0 m-2">
                                                             <div class="line-it-button" data-lang="zh_Hant" data-type="share-a" data-env="REAL" data-url="http://4.217.249.190/NotificationRecord/UsersView/@item.ActivityId" data-color="default" data-size="small" data-count="true" data-ver="3" style="display: none;"></div>
-                                                        </div>
+                                                        </div> *@
 
                                                         <div class="card-body ps-0">
                                                             <h5 class="fw-bold text-1000 text-truncate mb-1">@item.ActivityName</h5>
