@@ -8,18 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Friends\**" />
     <Compile Remove="wwwroot\gulp\**" />
     <Compile Remove="wwwroot\public\**" />
     <Compile Remove="wwwroot\src\**" />
     <Compile Remove="wwwroot\video\**" />
+    <Content Remove="Views\Friends\**" />
     <Content Remove="wwwroot\gulp\**" />
     <Content Remove="wwwroot\public\**" />
     <Content Remove="wwwroot\src\**" />
     <Content Remove="wwwroot\video\**" />
+    <EmbeddedResource Remove="Views\Friends\**" />
     <EmbeddedResource Remove="wwwroot\gulp\**" />
     <EmbeddedResource Remove="wwwroot\public\**" />
     <EmbeddedResource Remove="wwwroot\src\**" />
     <EmbeddedResource Remove="wwwroot\video\**" />
+    <None Remove="Views\Friends\**" />
     <None Remove="wwwroot\gulp\**" />
     <None Remove="wwwroot\public\**" />
     <None Remove="wwwroot\src\**" />
@@ -57,7 +61,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
-    <Folder Include="Views\Friends\" />
     <Folder Include="wwwroot\src\router\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>

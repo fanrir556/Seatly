@@ -107,19 +107,30 @@
                                         <div class="row gx-3 h-100 align-items-center">
                                             @foreach (var item in chunks[i])
                                             {
-                                                <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
-                                                    <div class="card card-span h-100 rounded-3">
-                                                        
-                                                        @if (item.ActivityPhoto != null){
+                                                <div class="col-sm-6 col-md-4 col-xl h-100">
+                                                    <div class="card card-span h-100 rounded-3 position-relative">
+                                                        @if (item.ActivityPhoto != null)
+                                                        {
                                                             var base64Image = Convert.ToBase64String(item.ActivityPhoto);
                                                             var imageSrc = $"data:image;base64,{base64Image}";
-                                                        <img class="img-fluid rounded-3 h-100" src="@imageSrc" alt="ActivityPhoto" />
+                                                            <img class="img-fluid rounded-3 h-100" src="@imageSrc" alt="ActivityPhoto" />
                                                         }
                                                         else
                                                         {
                                                             <span>No photo available</span>
                                                         }
-                                                        
+
+                                                        <div class="position-absolute top-0 start-0 m-2">
+                                                            <div class="fb-share-button"
+                                                                 data-href="http://4.217.249.190/NotificationRecord/UsersView/@item.ActivityId"
+                                                                 data-layout="button_count">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="position-absolute top-0 end-0 m-2">
+                                                            <div class="line-it-button" data-lang="zh_Hant" data-type="share-a" data-env="REAL" data-url="http://4.217.249.190/NotificationRecord/UsersView/@item.ActivityId" data-color="default" data-size="small" data-count="true" data-ver="3" style="display: none;"></div>
+                                                        </div>
+
                                                         <div class="card-body ps-0">
                                                             <h5 class="fw-bold text-1000 text-truncate mb-1">@item.ActivityName</h5>
                                                             <div class="position-relative">
@@ -146,7 +157,7 @@
                                                         </div>
                                                     </div>
                                                     <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@item.ActivityId">
-                                                    <div class="d-grid gap-2"><button class="btn btn-lg btn-danger" href="#!" role="button">Read more...</button></div>
+                                                        <div class="d-grid gap-2"><button class="btn btn-lg btn-danger" href="#!" role="button">查看活動</button></div>
                                                     </form>
                                                 </div>
                                             }
@@ -172,6 +183,7 @@
             </div>
         </div><!-- end of .container-->
     </section>
+
 
     <!-- <section> close ============================-->
     <!-- ============================================-->
@@ -702,8 +714,9 @@
                          
                          });
                         const data = await response.json();
-                        
-                        alert('收藏成功！');
+                        // alert('收藏成功！');
+                        alert(data.message);
+
                         } catch (error) {
                         
                         console.error('Error:', error);
@@ -713,5 +726,25 @@
             },
         }
         Vue.createApp(vueApp).mount("#hotItems");
+
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     FB.XFBML.parse();
+        // });
     </script>
+
+        @* 分享按鈕 *@
+    @* <!--Load Facebook SDK for JavaScript-- > *@
+        <div id= "fb-root" > </div>
+        <script>
+                    (function (d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (d.getElementById(id)) return;
+                        js = d.createElement(s); js.id = id;
+                        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));
+        </script>
+    @* LINE分享按鈕 *@
+    <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+        <script type="text/javascript">    LineIt.loadButton();</script>
 }

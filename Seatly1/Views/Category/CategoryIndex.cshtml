@@ -72,7 +72,7 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
+                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         
                         <p class="card-text">
                             <span  v-for="i in 5">
@@ -104,7 +104,7 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
+                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                             <span v-for="i in 5">
@@ -132,7 +132,7 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
+                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                         <p class="card-text">
@@ -161,7 +161,7 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
+                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                         <p class="card-text">
@@ -322,7 +322,8 @@
                         });
                         const data = await response.json();
                         // 处理收藏成功的情况
-                        alert('收藏成功！');
+                        // alert('收藏成功！');
+                        alert(data.message)
                     } catch (error) {
                         // 处理错误情况
                         console.error('Error:', error);

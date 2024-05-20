@@ -44,13 +44,13 @@ namespace Seatly1.Controllers
         public async Task<IActionResult> CollectionsIndex()
         {
 
-            // 获取当前登录用户的 UserID
+            // 取得用户的 UserID
             var user = await _userManager.GetUserAsync(User);
-            var userId = user?.Id ?? throw new UnauthorizedAccessException(); // 显式处理 null
+            var userId = user?.Id ?? throw new UnauthorizedAccessException(); // 處理 null
 
             if (userId == null)
             {
-                return Unauthorized(); // 用户未登录
+                return Unauthorized(); // 用戶未登錄
             }
 
             // 将 UserID 存储在 Session 中
@@ -96,6 +96,17 @@ namespace Seatly1.Controllers
                 return Unauthorized(); // 用户未登录
             }
 
+            var userId = user.Id;
+
+            // 检查是否已经存在该收藏项
+            var existingItem = await _context.CollectionItems
+                .FirstOrDefaultAsync(c => c.ActivityId == activityId && c.UserId == userId);
+
+            if (existingItem != null)
+            {
+                return Json(new { success = false, message = "已經收藏過囉~" });
+            }
+
             var collectionItem = new CollectionItem
             {
                 ActivityId = activityId,
@@ -106,10 +117,10 @@ namespace Seatly1.Controllers
             {
                 _context.CollectionItems.Add(collectionItem);
                 await _context.SaveChangesAsync();
-                return Json(new { success = true }); // 返回有效的 JSON 响应
+                return Json(new { success = true, message = "收藏成功!" }); // 返回有效的 JSON 响应
             }
 
-            return Json(new { success = false, error = "模型验证失败" }); // 返回错误详情的 JSON 响应
+            return Json(new { success = false, error = "模型驗證失敗" }); // 返回错误详情的 JSON 响应
         }
 
         // 移除收藏

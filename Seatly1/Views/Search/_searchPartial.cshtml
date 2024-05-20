@@ -5,34 +5,31 @@
 } *@
 
 <style>
-    .love-icon {
-        /* font-size: 2rem; */
-        cursor: pointer;
-        transition: transform 0.2s;
-    }
+.card-body {
+    position: relative;
+}
 
-        .love-icon:hover {
-            transform: scale(1.2);
-        }
+.share-buttons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.love-icon {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.love-icon:hover {
+    transform: scale(1.2);
+}
+
 </style>
 
-@* <!-- 分页控制按钮 -->
-<nav aria-label="Page navigation">
-    <ul class="pagination justify-content-center">
-        <li class="page-item" id="prevPage">
-            <a class="page-link" href="#" onclick="prevPage()">Previous</a>
-        </li>
-        <li class="page-item" id="nextPage">
-            <a class="page-link" href="#" onclick="nextPage()">Next</a>
-        </li>
-    </ul>
-</nav>
 
-<!-- 分页信息 -->
-<div id="paginationInfo" class="text-center">
-    <span id="currentPage"></span>
-</div>
- *@
 @if (Model != null && Model.Any())
 {
    
@@ -56,7 +53,7 @@
                                 <p class="card-text">活動代碼: @activity.ActivityId</p>
                                 <p class="card-text">開始時間: @activity.StartTime</p>
                                 <p class="card-text">結束時間: @activity.EndTime</p>
-                                <p class="card-text">活動內容: @activity.DescriptionN</p>
+                                @* <p class="card-text">活動內容: @activity.DescriptionN</p> *@
                                 <p class="card-text ">活動地點: <span class="location">@activity.Location</span></p>
                                 <p class="card-text">
                                     @for (int i = 1; i <= 5; i++)
@@ -69,7 +66,17 @@
                                         }
                                     }
                                 </p>
-                                <span class="position-absolute top-0 end-0 m-3"><a class="text-danger love-icon" @@click="addToCollection(@activity.ActivityId)">❤加入收藏</a></span>
+                                <div class="share-buttons">
+                                <a class="text-danger love-icon" @@click="addToCollection(@activity.ActivityId)">❤加入收藏</a>
+                                @* <!-- LINE分享按鈕 -->
+                                <div class="line-it-button" data-lang="zh_Hant" data-type="share-a" data-env="REAL" data-url="http://4.217.249.190/NotificationRecord/UsersView/@activity.ActivityId" data-color="default" data-size="small" data-count="true" data-ver="3" style="display: none;"></div>
+                                <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+                                <!-- Facebook Share Button -->
+                                <div class="fb-share-button"
+                                data-href="http://4.217.249.190/NotificationRecord/UsersView/@activity.ActivityId"
+                                data-layout="button_count">
+                                </div> *@
+                                </div>
 
                                 <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
                                     <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看活動</button>
@@ -91,8 +98,7 @@ else
 
 
 <script>
-    // // 当前页码
-    // let currentActivityPage = 1;
+  
 
     $(function () {
         var isSearching = sessionStorage.getItem("isSearching");
@@ -134,19 +140,19 @@ else
 
     });
 
-    // 加入收藏
+    // @* 加入收藏 *@
     var vueApp = {
         data() {
             return {}
         },
         methods: {
-            // 加入收藏
+            // @* 加入收藏 *@
             async addToCollection(activityId) {
-                // 从 sessionStorage 中获取 userLogin 的值
+                // @* 从 sessionStorage 中取得 userLogin 的值 *@
                 const userLogin = sessionStorage.getItem('userLogin');
                 const userId = sessionStorage.getItem('userId');
 
-                // 判斷用戶是否已登錄
+                // @* // 判斷用戶是否已登錄 *@
                 if (userLogin !== 'true') {
 
                     alert('請先登錄會員！');
@@ -165,7 +171,8 @@ else
                     });
                     const data = await response.json();
 
-                    alert('收藏成功！');
+                    // alert('收藏成功！');
+                    alert(data.message);
                 } catch (error) {
 
                     console.error('Error:', error);
@@ -177,133 +184,18 @@ else
     Vue.createApp(vueApp).mount("#activityList");
     
     
-    // // 每页显示的数据量
-    // const pageSize = 5;
-    // // 所有数据
-    // let allActivities = [];
-
-    // // 页面加载时获取所有数据
-    // window.onload = function () {
-    //     fetchAllActivities();
-    // };
-
-    // // 获取所有数据
-    // function fetchAllActivities() {
-    //     fetch('@Url.Action("searchPartial", "Search")')
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             allActivities = data;
-    //             renderPage(currentActivityPage);
-    //         })
-    //         .catch(error => console.error('Error fetching activities:', error));
-    // }
-
-    // // 渲染当前页的数据和分页信息
-    // function renderPage(page) {
-    //     const startIndex = (page - 1) * pageSize;
-    //     const endIndex = startIndex + pageSize;
-    //     const currentPageActivities = allActivities.slice(startIndex, endIndex);
-    //     updateActivityList(currentPageActivities);
-
-    //     // 更新分页按钮显示的当前页和总页数
-    //     const totalPages = Math.ceil(allActivities.length / pageSize);
-    //     document.getElementById('prevPage').innerHTML = `<a class="page-link" href="#" onclick="prevPage()">Previous</a>`;
-    //     document.getElementById('nextPage').innerHTML = `<a class="page-link" href="#" onclick="nextPage()">Next</a>`;
-
-    //     // 添加分頁信息顯示
-    //     document.getElementById('paginationInfo').innerHTML = `<span id="currentPage">Page ${page} of ${totalPages}</span>`;
-    // }
-
-    // // 更新数据显示区域
-    // function updateActivityList(activities) {
-    //     const activityList = document.getElementById('activityList');
-    //     activityList.innerHTML = '';
-    //     activities.forEach(activity => {
-    //         const activityCard = document.createElement('div');
-    //         activityCard.className = 'card mb-3';
-    //         activityCard.innerHTML = `
-    //                     <div class="row g-0">
-    //                         <div class="col-md-4">
-    //                             <img src="${activity.ImageSrc}" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2 w-75" />
-    //                         </div>
-    //                         <div class="col-md-8">
-    //                             <div class="card-body">
-    //                                 <h3 class="card-title fs-3">活動名稱: ${activity.ActivityName}</h3>
-    //                                 <p class="card-text">活動代碼: ${activity.ActivityId}</p>
-    //                                 <p class="card-text">開始時間: ${activity.StartTime}</p>
-    //                                 <p class="card-text">結束時間: ${activity.EndTime}</p>
-    //                                 <p class="card-text">活動內容: ${activity.DescriptionN}</p>
-    //                             </div>
-    //                         </div>
-    //                     </div>
-    //                     <br />
-    //                 `;
-    //         activityList.appendChild(activityCard);
-    //     });
-    // }
-
-    // // 切换到上一页
-    // function prevPage() {
-    //     if (currentActivityPage > 1) {
-    //         currentActivityPage--;
-    //         renderPage(currentActivityPage);
-    //     }
-    // }
-
-    // // 切换到下一页
-    // function nextPage() {
-    //     const totalPages = Math.ceil(allActivities.length / pageSize);
-    //     if (currentActivityPage < totalPages) {
-    //         currentActivityPage++;
-    //         renderPage(currentActivityPage);
-    //     }
-    // }
-
-    // function fetchActivities(page) {
-    //     fetch(`@Url.Action("searchPartial", "Search")?page=${page}`)
-    //         .then(response => {
-    //             if (!response.ok) {
-    //                 throw new Error('Network response was not ok');
-    //             }
-    //             return response.text();
-    //         })
-    //         .then(data => {
-    //             updateActivityList(data);
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching activities:', error);
-    //         });
-    // }
-
-    //     function updateActivityList(data) {
-    //         $('#activityList').empty();
-
-    //         data.forEach(activity => {
-    //             var activityCard = $('<div class="card mb-3"></div>');
-
-    //             var cardContent = `
-    //             <div class="row g-0">
-    //                 <div class="col-md-4">
-    //                     <img src="${activity.ImageSrc}" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2 w-75" />
-    //                 </div>
-    //                 <div class="col-md-8">
-    //                     <div class="card-body">
-    //                         <h3 class="card-title fs-3">活動名稱: ${activity.ActivityName}</h3>
-    //                         <p class="card-text">活動代碼: ${activity.ActivityId}</p>
-    //                         <p class="card-text">開始時間: ${activity.StartTime}</p>
-    //                         <p class="card-text">結束時間: ${activity.EndTime}</p>
-    //                         <p class="card-text">活動內容: ${activity.DescriptionN}</p>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //             <br />
-    //         `;
-
-    //             activityCard.append(cardContent);
-
-    //             $('#activityList').append(activityCard);
-    //         });
-    //     }
-    
-
+   
 </script>
+<!-- Load Facebook SDK for JavaScript -->
+<div id="fb-root"></div>
+<script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+@* LINE分享按鈕 *@
+<script type="text/javascript">LineIt.loadButton();</script>
