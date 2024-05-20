@@ -84,10 +84,12 @@
                         }
                         <!-- Facebook Share Button -->
                         <div class="fb-share-button"
-                             data-href="https://yourdomain.com/Collections/CollectionsIndex/@item.ActivityId"
+                             data-href="http://4.217.249.190/NotificationRecord/UsersView/@item.ActivityId"
                              data-layout="button_count">
                         </div>
-
+                        @* LINE分享按鈕 *@
+                        <div class="line-it-button" data-lang="zh_Hant" data-type="share-a" data-env="REAL" data-url="http://4.217.249.190/NotificationRecord/UsersView/@item.ActivityId" data-color="default" data-size="small" data-count="true" data-ver="3" style="display: none;"></div>
+                        <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
                     </div>
                 </div>
             </div>
@@ -144,4 +146,6 @@ else
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
     </script>
+    @* LINE分享按鈕 *@
+    <script type="text/javascript">LineIt.loadButton();</script>
 }
