@@ -8,6 +8,16 @@ using Seatly1.Areas.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Google 第三方登入
+var services = builder.Services;
+var configuration = builder.Configuration;
+
+services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = "546918205472-3p0reoblv7q9pcuqqftkl19ao5ufhd0h.apps.googleusercontent.com";
+    googleOptions.ClientSecret = "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";
+});
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
