@@ -72,6 +72,14 @@
     .table {
       --bs-table-striped-bg: rgba(231, 49, 64, 0.05);
     }
+
+    .edited {
+      box-shadow: 0 0 3px 3px pink;
+    }
+
+    .lacked {
+      box-shadow: 0 0 5px 5px red;
+    }
   </style>
 }
 
@@ -83,7 +91,7 @@
 <div id="PointsApp">
   <section>
     @* 轉場動畫 *@
-    <div id="animationTrans">
+    <div id="animationTrans" @@click="skipTrans($event)">
       <p v-for="i in Array.from({ length: 10 }, (_, j) => j * 10)" :key="i" class="animationP"
         :style="{ top: i + 'vh' }"></p>
     </div>
@@ -156,44 +164,49 @@
         <div class="col-12" id="pointsContentBody">
           <section v-if="isMg == true">
             <div class="d-flex justify-content-between mt-1">
-              <button class="btn btn-gradient mb-2 me-1" @@click="isAdding = !isAdding">新增商品</button>
-              <button class="btn btn-gradient mb-2 me-1" id="btnSaveEditPS">儲存修改</button>
-              <button v-if="isAdding" class="btn btn-gradient mb-2 me-1">
+              <button class="btn btn-gradient mb-2 me-1" @@click="isAdding = !isAdding;addPd($event)">新增商品</button>
+              <button class="btn btn-gradient mb-2 me-1" @@click="saveEditPds">儲存修改</button>
+              <button v-if="isAdding" class="btn btn-gradient mb-2 me-1" @@click="saveAddPd">
                 儲存新增
               </button>
-              <button class="btn btn-gradient mb-2 ms-auto" id="btnDeleteSelected">刪除勾選商品</button>
+              <button class="btn btn-gradient mb-2 ms-auto" @@click="deletePds">刪除勾選商品</button>
             </div>
             <div id="requiredContent"></div>
             <table class="table table-striped text-center">
               <thead>
                 <tr>
-                  <th v-for="dName in shopResults.dNames" :key="dName">
+                  <th v-for="dName in shopResults.dNames" :key="dName" @@click="changeSort(dName)">
                     {{ dName }}
                   </th>
                   <th style="width: 50px">刪除</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-if="isAdding" class="align-middle">
+                <tr v-if="isAdding" class="align-middle" id="newPd">
                   <td></td>
                   <td>
                     <img :src="noImgUrl" class="img-fluid rounded" style="width: 100px" alt="..." title=".." />
-                    <input class="form-control p-0 pimg" type="file" accept="image/*" />
+                    <input class="form-control p-0 pimg" type="file" accept="image/*" @@change="addPd($event)" />
                   </td>
-                  <td><input class="form-control p-0 text-center ms-auto me-auto" style="width: 120px" type="text" />
+                  <td><input class="form-control p-0 text-center ms-auto me-auto" style="width: 120px" type="text"
+                      @@blur="addPd($event,`ProductName`)" />
                   </td>
-                  <td><input class="form-control p-0 text-center ms-auto me-auto" style="width: 80px" type="number" />
+                  <td><input class="form-control p-0 text-center ms-auto me-auto" style="width: 80px" type="number"
+                      min="0" @@blur="addPd($event)" />
                   </td>
                   <td>
-                    <select class="form-control p-0 text-center ms-auto me-auto">
-                      <option disabled selected>請選擇</option>
+                    <select v-if="addCategory == false" class="form-control p-0 text-center ms-auto me-auto"
+                      @@blur="addPd($event,`Category`)">
+                      <option disabled selected value="">請選擇</option>
                       <option v-for="cate in shopResults.sList" :key="cate" :value="cate">{{ cate }}</option>
                     </select>
-                    <input class="form-control p-0 text-center ms-auto me-auto" style="width: 104px; display: none"
-                      placeholder="請輸入類別" />
-                    <p class="text-gradient" id="addCategory">新增類別?</p>
+                    <input v-else class="form-control p-0 text-center ms-auto me-auto" style="width: 104px;"
+                      placeholder="請輸入類別" @@blur="addPd($event,`Category`)" />
+                    <p class="text-gradient"
+                      @@click="addCategory = !addCategory;addPd($event);$event.target.textContent = addCategory ? '選擇類別?' :'新增類別?'">
+                      新增類別?</p>
                   </td>
-                  <td><textarea class="form-control p-0"></textarea></td>
+                  <td><textarea class="form-control p-0" @@blur="addPd($event,`ProductDescription`)"></textarea></td>
                   <td></td>
                 </tr>
                 <tr v-for="{
@@ -202,11 +215,11 @@
           category,
           productPrice,
           productDescription,
-          productImage
+          productImage,
         } in shopResults.shops" :key="productId" class="align-middle">
                   <td>{{productId}}</td>
                   <td>
-                    <img :src="productImage" class="img-fluid rounded" style="width: 100px" :alt="productImage"
+                    <img :src="productImage" class="img-fluid rounded" style="width: 100px" :alt="productName"
                       :title="productName" />
                     <input class="form-control p-0 pimg" type="file" accept="image/*"
                       @@change="editPds(productId,`productImage`,$event)" />
@@ -229,7 +242,9 @@
                     <textarea class="form-control p-0 ms-auto me-auto"
                       @@change="editPds(productId,`productDescription`,$event)">{{ productDescription }}</textarea>
                   </td>
-                  <td><input type="checkbox" class="form-check-input" /></td>
+                  <td><input type="checkbox" class="form-check-input"
+                      @@change="if (!($event.target.checked)) deleteList = deleteList.filter(id => id != productId); else deleteList.push(productId);" />
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -260,7 +275,7 @@
                     <span class="position-absolute end-0 me-2">{{ category }}</span>
                     <h5 class="card-title text-gradient fs-3">{{ productName }}</h5>
                     <p class="card-text">{{ productDescription }}</p>
-                    <p class="card-text text-gradient">兌換需要 {{ productPrice }} 點數</p>
+                    <p class="card-text text-gradient">{{ productPrice === 0 ? "免費!!" : `兌換需要 ${productPrice} 點數` }}</p>
                     <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1 btn-exchange"
                       data-bs-toggle="modal" data-bs-target="#exchangeModal" @@click="pdExchange(productId)"
                       :disabled="shopResults.userPoints < productPrice && shopResults.userPoints != null">
@@ -344,12 +359,15 @@
         var noImgUrl = ref('@Url.Content("~/images/NoImage.jpg")');
         var dropSmallInterval = ref(null);
         var dropLargeInterval = ref(null);
+        var removeTransTimeout = ref(null);
         //------------商城變數------------
         var firstPage = ref(true);
         var lastPage = ref(false);
         var isMg = ref(false);
         var isAdding = ref(false);
         var exchangeRes = ref('');
+        var addCategory = ref(false);
+        var deleteList = ref([]);
         const searchTerm = reactive({
           cate: null,
           pgNum: 1,
@@ -360,6 +378,14 @@
         });
         const shopResults = reactive({ totalPg: 0, shops: [], userPoints: null, sList: [], dNames: [] });
         const exchangePd = reactive({ id: 0, img: '', name: '', price: 0 });
+        const newPd = reactive({
+          ProductId: 0,
+          /*ProductName: '',
+          ProductPrice: 0,
+          Category: '',
+          ProductDescription: '',*/
+          ProductImage: "NoImage.jpg"
+        });
         //------------商城變數------------
 
         const showPointStore = () => {
@@ -415,6 +441,13 @@
           }, 700)
         };
 
+        const skipTrans = (e) => {
+          clearTimeout(removeTransTimeout.value);
+          clearInterval(dropSmallInterval.value);
+          clearInterval(dropLargeInterval.value);
+          e.target.parentElement.remove();
+        };
+
         //------------商城方法------------
         const showProducts = async () => {
           const APIUrl = window.location.origin + '/api/PointsAPI/pointsShop';
@@ -459,6 +492,50 @@
             searchTerm.pgNum++
             showProducts()
           }
+        };
+
+        const changeSort = (dName) => {
+          switch (dName) {
+            case `${shopResults.dNames[0]}`:
+              if (searchTerm.sortBy !== 'id') {
+                searchTerm.sortType = 'asc';
+              }
+              else if (searchTerm.sortType === 'asc') {
+                searchTerm.sortType = 'desc';
+              }
+              else {
+                searchTerm.sortType = 'asc';
+              }
+              searchTerm.sortBy = 'id';
+              break;
+            case `${shopResults.dNames[3]}`:
+              if (searchTerm.sortBy !== 'price') {
+                searchTerm.sortType = 'asc';
+              }
+              else if (searchTerm.sortType === 'asc') {
+                searchTerm.sortType = 'desc';
+              }
+              else {
+                searchTerm.sortType = 'asc';
+              }
+              searchTerm.sortBy = 'price';
+              break;
+            case `${shopResults.dNames[4]}`:
+              if (searchTerm.sortBy !== 'cate') {
+                searchTerm.sortType = 'asc';
+              }
+              else if (searchTerm.sortType === 'asc') {
+                searchTerm.sortType = 'desc';
+              }
+              else {
+                searchTerm.sortType = 'asc';
+              }
+              searchTerm.sortBy = 'cate';
+              break;
+            default:
+              break;
+          }
+          showProducts()
         };
 
         const pdExchange = (productId) => {
@@ -509,13 +586,17 @@
           const product = shopResults.shops.find(p => p.productId === id);
           //console.log(e);
           if (e.target.type === 'file' && e.target.files[0]) {
+            const file = e.target.files[0]
             const reader = new FileReader();
-            reader.readAsDataURL(e.target.files[0]);
+            reader.readAsDataURL(file);
             reader.onload = function (e) {
               product[prop] = e.target.result;
+              product.newImg = file.name;
+              product.file = file;
               product.edited = true;
             };
-            e.target.style.boxShadow = "0 0 3px 3px pink";
+            //e.target.style.boxShadow = "0 0 3px 3px pink";
+            e.target.classList.add('edited');
           }
           else if (e.target.type === 'number') {
             if (isNaN(e.target.value) || e.target.value == '' || e.target.value.indexOf('e') != -1) {
@@ -523,7 +604,8 @@
             }
             else {
               product.edited = true;
-              e.target.style.boxShadow = "0 0 3px 3px pink";
+              //e.target.style.boxShadow = "0 0 3px 3px pink";
+              e.target.classList.add('edited');
             }
             product[prop] = parseInt(e.target.value);
           }
@@ -535,35 +617,332 @@
             const thTitle = document.querySelectorAll("th")[index].textContent;
             const pId = e.target.closest("tr").querySelector("td").textContent;
             const required = document.querySelector("#requiredContent");
-            const notExist = Array.from(required.querySelectorAll(`p`)).find(p => p.textContent.includes(`商品編號:「${pId}」的「${thTitle}」`));
+            const lacked = Array.from(required.querySelectorAll(`p`)).find(p => p.textContent.includes(`商品編號:「${pId}」的「${thTitle}」`));
             if (e.target.value.trim() === '') {
-              e.target.style.boxShadow = "0 0 5px 5px red";
-              if (!notExist) {
+              //e.target.style.boxShadow = "0 0 5px 5px red";
+              e.target.classList.add('lacked');
+              e.target.classList.remove('edited');
+              if (!lacked) {
                 required.insertAdjacentHTML("beforeend", `<p class="text-danger">請填寫商品編號:「${pId}」的「${thTitle}」</p>`);
               }
-            } else {
-              if (notExist) {
-                required.removeChild(notExist);
+            }
+            else {
+              //e.target.style.boxShadow = "0 0 3px 3px pink";
+              e.target.classList.add('edited');
+              e.target.classList.remove('lacked');
+              if (lacked) {
+                required.removeChild(lacked);
               }
-              e.target.style.boxShadow = "0 0 3px 3px pink";
             }
           }
-          console.log(product);
+          //console.log(product);
+        };
+
+        const saveEditPds = async () => {
+          const required = document.querySelector("#requiredContent");
+          const lacked = Array.from(required.querySelectorAll(`p`)).find(p => p.textContent.includes(`商品編號`));
+          var toast = new bootstrap.Toast(document.querySelector("#liveToast"))
+          var toastHeader = document.querySelector("#liveToast>.toast-header");
+          var toastBody = document.querySelector("#liveToast>.toast-body");
+          //console.log(adding);
+          //required.removeChild(adding);
+          if (!lacked) {
+            isAdding.value = false;
+            var pShop = shopResults.shops.filter(p => p.edited == true && p.newImg !== undefined).map(p => ({
+              ...p,
+              productImage: p.newImg
+            }));
+            if (pShop.length > 0) {
+              await pShop.forEach(p => {
+                var formData = new FormData();
+                var file = p.file;
+                var fileName = p.newImg;
+
+                formData.append("image", file, fileName);
+
+                fetch(`@Url.Action("UploadImage", "Points")`, {
+                  method: "POST",
+                  body: formData
+                }).then(function (response) {
+                  delete p.newImg;
+                  delete p.file;
+                  delete p.edited;
+                }).catch(function (err) {
+                  alert(err);
+                });
+              });
+            }
+            await shopResults.shops.filter(p => p.edited && p.newImg === undefined)
+              .map(p => {
+                const { edited, ...rest } = p; // 使用解構賦值來排除 edited
+                return rest;
+              }).forEach(p => {
+                p.productImage = p.productImage.slice(p.productImage.lastIndexOf("/images/") + "/images/".length);
+                pShop.push(p);
+              });
+            //console.log(pShop);
+            if (pShop.length > 0) {
+              await fetch(`@Url.Action("EditPointsShop", "Points")`, {
+                method: "POST",
+                body: JSON.stringify(pShop),
+                headers: { 'Content-Type': 'application/json' }
+              }).then(function (response) {
+                var count = pShop.length;
+                //alert(`${count}筆資料已修改`);
+                toastHeader.innerHTML = `<strong class="me-auto">修改資料成功</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
+                toastBody.textContent = `${count}筆資料已新增`;
+                toast.show();
+                document.querySelectorAll(".edited").forEach(e => {
+                  e.classList.remove('edited');
+                });
+                showProducts();
+              }).catch(function (err) {
+                alert(err);
+              });
+            }
+          }
+          else {
+            toastHeader.innerHTML = `<strong class="me-auto">資料不完整</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
+            toastBody.textContent = `請填寫所有必填欄位`;
+            toast.show();
+          }
+        };
+
+        const addPd = (e, prop) => {
+          const required = document.querySelector("#requiredContent");
+          if (e.type === 'click') {
+            if (isAdding.value === false) {
+              var lacked = Array.from(required.querySelectorAll(`p`)).filter(p => p.textContent.includes(`新商品的`));
+              lacked.forEach(p => required.removeChild(p));
+            }
+            else if (e.target.tagName === 'P') {
+              var lacked = Array.from(required.querySelectorAll(`p`)).find(p => p.textContent.includes(`新商品的「${shopResults.dNames[4]}」`));
+              newPd['Category'] = '';
+              if (lacked) {
+                required.removeChild(lacked);
+              }
+            }
+          }
+          else {
+            const index = e.target.closest("td").cellIndex;
+            const thTitle = document.querySelectorAll("th")[index].textContent;
+            var lacked = Array.from(required.querySelectorAll(`p`)).find(p => p.textContent.includes(`新商品的「${thTitle}」`));
+            if (e.target.type === 'file' && e.target.files[0]) {
+              const newImg = e.target.previousElementSibling;
+              const file = e.target.files[0];
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onload = function (e) {
+                newImg.src = e.target.result;
+                newPd.ProductImage = file.name;
+                newPd.file = file;
+              };
+              e.target.classList.add('edited');
+              e.target.classList.remove('lacked');
+              //e.target.style.boxShadow = "0 0 3px 3px pink";
+            }
+            else if (e.target.type === 'number') {
+              if (isNaN(e.target.value) || e.target.value == '' || e.target.value.indexOf('e') != -1) {
+                e.target.value = 0;
+                e.target.classList.add('edited');
+                e.target.classList.remove('lacked');
+                //e.target.style.boxShadow = "0 0 3px 3px pink";
+                newPd['ProductPrice'] = 0;
+                if (lacked) {
+                  required.removeChild(lacked);
+                }
+              }
+              else {
+                e.target.classList.add('edited');
+                e.target.classList.remove('lacked');
+                //e.target.style.boxShadow = "0 0 3px 3px pink";
+                newPd['ProductPrice'] = e.target.value;
+                if (lacked) {
+                  required.removeChild(lacked);
+                }
+              }
+            }
+            else if (e.target.type === 'select-one') {
+              if (addCategory.value === false) {
+                if (e.target.value === '') {
+                  //e.target.style.boxShadow = "0 0 5px 5px red";
+                  e.target.classList.add('lacked');
+                  e.target.classList.remove('edited');
+                  if (!lacked) {
+                    required.insertAdjacentHTML("beforeend", `<p class="text-danger">請填寫新商品的「${thTitle}」</p>`);
+                  }
+                }
+                else {
+                  e.target.classList.add('edited');
+                  e.target.classList.remove('lacked');
+                  //e.target.style.boxShadow = "0 0 3px 3px pink";
+                  newPd[prop] = e.target.value;
+                  if (lacked) {
+                    required.removeChild(lacked);
+                  }
+                }
+              }
+            }
+            else {
+              if (e.target.value.trim() === '') {
+                //e.target.style.boxShadow = "0 0 5px 5px red";
+                e.target.classList.add('lacked');
+                e.target.classList.remove('edited');
+                newPd[prop] = '';
+                if (!lacked) {
+                  required.insertAdjacentHTML("beforeend", `<p class="text-danger">請填寫新商品的「${thTitle}」</p>`);
+                }
+              }
+              else {
+                e.target.classList.add('edited');
+                e.target.classList.remove('lacked');
+                //e.target.style.boxShadow = "0 0 3px 3px pink";
+                newPd[prop] = e.target.value;
+                if (lacked) {
+                  required.removeChild(lacked);
+                }
+              }
+            }
+          }
+        };
+
+        const saveAddPd = async () => {
+          const required = document.querySelector("#requiredContent");
+          const newPdTr = document.querySelector("#newPd");
+          var toast = new bootstrap.Toast(document.querySelector("#liveToast"))
+          var toastHeader = document.querySelector("#liveToast>.toast-header");
+          var toastBody = document.querySelector("#liveToast>.toast-body");
+          newPdTr.querySelectorAll("input:not([type='file']),select,textarea").forEach(input => {
+            const index = input.closest("td").cellIndex;
+            const thTitle = document.querySelectorAll("th")[index].textContent;
+            var lacked = Array.from(required.querySelectorAll(`p`)).find(p => p.textContent.includes(`新商品的「${thTitle}」`));
+            if (input.value.trim() === '') {
+              //input.style.boxShadow = "0 0 5px 5px red";
+              input.classList.add('lacked');
+              if (!lacked) {
+                required.insertAdjacentHTML("beforeend", `<p class="text-danger">請填寫新商品的「${thTitle}」</p>`);
+              }
+            }
+            else {
+              if (lacked) {
+                input.classList.remove('lacked');
+                input.classList.add('edited');
+                required.removeChild(lacked);
+              }
+            }
+          });
+          var lacked = Array.from(required.querySelectorAll(`p`)).find(p => p.textContent.includes(`新商品的`));
+          if (!lacked) {
+            var pShop = [];
+            if (newPd.file) {
+              var formData = new FormData();
+              var file = newPd.file;
+              var fileName = newPd.file.name;
+
+              formData.append("image", file, fileName);
+
+              await fetch(`@Url.Action("UploadImage", "Points")`, {
+                method: "POST",
+                body: formData
+              }).then(function (response) {
+                delete newPd.file;
+              }).catch(function (err) {
+                alert(err);
+              });
+            }
+            pShop.push(newPd);
+            await fetch(`@Url.Action("EditPointsShop", "Points")`, {
+              method: "POST",
+              body: JSON.stringify(pShop),
+              headers: { 'Content-Type': 'application/json' }
+            }).then(function (response) {
+              var count = pShop.length;
+              //alert(`${count}筆資料已新增`);
+              toastHeader.innerHTML = `<strong class="me-auto">新建資料成功</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
+              toastBody.textContent = `${count}筆資料已新增`;
+              toast.show();
+              isAdding.value = false;
+              delete newPd.ProductName;
+              delete newPd.ProductPrice;
+              delete newPd.Category;
+              delete newPd.ProductDescription;
+              newPd.ProductImage = "NoImage.jpg";
+              showProducts();
+            }).catch(function (err) {
+              alert(err);
+            });
+          }
+          else {
+            toastHeader.innerHTML = `<strong class="me-auto">資料不完整</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
+            toastBody.textContent = `請填寫所有必填欄位`;
+            toast.show();
+          }
+        };
+
+        const deletePds = async () => {
+          var toast = new bootstrap.Toast(document.querySelector("#liveToast"))
+          var toastHeader = document.querySelector("#liveToast>.toast-header");
+          var toastBody = document.querySelector("#liveToast>.toast-body");
+          //console.log(deleteList.value);
+          var ids = deleteList.value.sort();
+          var fileNames = await shopResults.shops.filter(p => ids.includes(p.productId)).map(p => (p.productImage.slice(p.productImage.lastIndexOf("/images/") + "/images/".length)));
+          var strIds = deleteList.value.join(", ");
+          if (deleteList.value.length > 0) {
+            /*console.log(strIds);
+            console.log(ids);
+            console.log(fileNames);*/
+            var result = confirm(`確定要刪除編號「${strIds}」的商品嗎?`);
+            // console.log(result);
+            if (result) {
+              fetch(`@Url.Action("DeleteImage", "Points")`, {
+                method: "DELETE",
+                body: JSON.stringify(fileNames),
+                headers: { 'Content-Type': 'application/json' }
+              }).then(function (response) {
+                // console.log(response);
+              }).catch(function (err) {
+                alert(err);
+              });
+
+              fetch(`@Url.Action("DeletePointsShop", "Points")`, {
+                method: "POST",
+                body: JSON.stringify(ids),
+                headers: { 'Content-Type': 'application/json' }
+              }).then(function (response) {
+                var count = ids.length;
+                toastHeader.innerHTML = `<strong class="me-auto">刪除資料成功</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
+                toastBody.textContent = `${count}筆資料已刪除`;
+                toast.show();
+                deleteList.value = [];
+                showProducts();
+              }).catch(function (err) {
+                alert(err);
+              });
+            }
+            else {
+            }
+          }
         };
         //------------商城方法------------
 
         onMounted: {
-          //console.log(strPoints)
-          dropSmallInterval.value = setInterval(dropSmallFunction, 50)
-          dropLargeInterval.value = setInterval(dropLargeFunction, 100)
+          //console.log(strPoints);
+          dropSmallInterval.value = setInterval(dropSmallFunction, 50);
+          dropLargeInterval.value = setInterval(dropLargeFunction, 100);
           setTimeout(() => {
-            dropXL()
-          }, 50)
-          setTimeout(() => {
-            removeTrans()
-          }, 1800)
+            dropXL();
+          }, 50);
+          removeTransTimeout.value = setTimeout(() => {
+            removeTrans();
+          }, 1800);
           //------------商城方法------------
-          showProducts()
+          if (isMG == 'true') {
+            searchTerm.sortBy = 'id';
+          }
+          else {
+            searchTerm.sortBy = 'cate';
+          }
+          showProducts();
           //------------商城方法------------
         }
 
@@ -592,6 +971,7 @@
           noImgUrl,
           dropSmallInterval,
           dropLargeInterval,
+          removeTransTimeout,
           showPointStore,
           showCoupon,
           showHistory,
@@ -599,21 +979,30 @@
           dropLargeFunction,
           dropXL,
           removeTrans,
+          skipTrans,
           //------------商城------------
           firstPage,
           lastPage,
           isMg,
           isAdding,
           exchangeRes,
+          addCategory,
+          deleteList,
           shopResults,
           exchangePd,
           searchTerm,
+          newPd,
           showProducts,
           pP,
           nP,
+          changeSort,
           pdExchange,
           confirmExchange,
-          editPds
+          editPds,
+          saveEditPds,
+          addPd,
+          saveAddPd,
+          deletePds,
           //------------商城------------
         }
       }
