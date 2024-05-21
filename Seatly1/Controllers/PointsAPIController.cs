@@ -116,5 +116,104 @@ namespace Seatly1.Controllers
             
             return pointsPaging;
         }
+
+        //點數商城VUE
+        [HttpPost("coupon")]
+        public async Task<ActionResult<PointsPagingDTO>> couponVue([FromBody] PointsSearchDTO search)
+        {
+            var isMg = HttpContext.Session.GetString("isMg"); //管理員登入判定
+
+            //var trans = !string.IsNullOrEmpty(search.Keyword) ? (search.SearchBy == "id" ? _context.PointTransactions.Where(s => s.Id == int.Parse(search.Keyword)) : _context.PointTransactions.Where(s => s.MemberId.Contains(search.Keyword))) : _context.PointTransactions;
+
+            //switch (search.SortBy)
+            //{
+            //    case "id":
+            //        trans = search.SortType == "asc" ? trans.OrderBy(s => s.Id) : trans.OrderByDescending(s => s.Id);
+            //        break;
+            //    case "mid":
+            //        trans = search.SortType == "asc" ? trans.OrderBy(s => s.MemberId) : trans.OrderByDescending(s => s.MemberId);
+            //        break;
+            //    case "date":
+            //        trans = search.SortType == "asc" ? trans.OrderBy(s => s.TransactionDate) : trans.OrderByDescending(s => s.TransactionDate);
+            //        break;
+            //    default:
+            //        trans = search.SortType == "asc" ? trans.OrderBy(s => s.Id) : trans.OrderByDescending(s => s.Id);
+            //        break;
+            //}
+
+            //if (User.Identity.IsAuthenticated && isMg != "true")
+            //{
+            //    // 使用者已登入
+            //    // 在這裡進行相關處理
+            //    var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            //    var aspUser = await _context.AspNetUsers.FindAsync(user.Id);
+            //    if (aspUser != null)
+            //    {
+            //        trans = trans.Where(s => s.MemberId == aspUser.Id);
+            //    }
+            //}
+
+            var trans = await _context.PointTransactions.ToListAsync();
+            //分頁
+            int totalCount = trans.Count();
+            int pageNum = search.PgNum ?? 1;
+            int pageSize = search.PgSize ?? 10;
+            int totalPages = (int)Math.Ceiling((decimal)totalCount / pageSize);
+            int skipCount = (pageNum - 1) * pageSize;
+
+            //trans = trans.Skip(skipCount).Take(pageSize);
+            var products = await _context.PointStores.ToListAsync();
+
+            PointsPagingDTO pointsPaging = new PointsPagingDTO();
+            pointsPaging.TotalPages = totalPages;
+            pointsPaging.Trans = trans;
+            pointsPaging.Shops = products;
+
+            pointsPaging.SList1 = await _context.AspNetUsers.Select(s => s.Id).ToListAsync();
+            pointsPaging.IList1 = await _context.PointStores.Select(s => s.ProductId).ToListAsync();
+
+            if (User.Identity.IsAuthenticated && isMg != "true")
+            {
+                // 使用者已登入
+                // 在這裡進行相關處理
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                var aspUser = await _context.AspNetUsers.FindAsync(user.Id);
+                if (aspUser != null)
+                {
+                    pointsPaging.UserId = aspUser.Id;
+                }
+            }
+
+            if (isMg == "true")
+            {
+                List<string> DNames = new List<string>();
+                // 取得 PointStore 類別
+                Type pointTrans = typeof(PointTransaction);
+
+                // 取得 PointStore 類別的所有屬性
+                PropertyInfo[] propertyInfos = pointTrans.GetProperties();
+
+                // 遍歷所有屬性
+                foreach (PropertyInfo propertyInfo in propertyInfos)
+                {
+                    // 取得屬性的 Display 屬性
+                    DisplayNameAttribute displayNameAttribute = propertyInfo.GetCustomAttribute<DisplayNameAttribute>();
+
+                    // 如果屬性有 Display 屬性
+                    if (displayNameAttribute != null)
+                    {
+                        // 取得屬性名稱和顯示名稱
+                        string propertyName = propertyInfo.Name;
+                        string displayName = displayNameAttribute.DisplayName;
+
+                        DNames.Add(displayName);
+                    }
+                }
+                pointsPaging.DNames = DNames;
+                pointsPaging.isMg = true;
+            }
+
+            return pointsPaging;
+        }
     }
 }

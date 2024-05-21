@@ -108,37 +108,39 @@
     <div class="col-12 col-md-2 p-3">
       <ul class="list-group">
         <li class="list-group-item bg-white">
-          <a class="dropdown-item text-gradient" @@click.prevent="showPointStore">點數商城</a>
+          <a class="dropdown-item text-gradient" @@click.prevent="pointStore">點數商城</a>
         </li>
         <li class="list-group-item bg-white">
-          <a class="dropdown-item text-gradient" @@click.prevent="showCoupon">持有優惠券</a>
+          <a class="dropdown-item text-gradient" @@click.prevent="coupon">持有優惠券</a>
         </li>
         <li class="list-group-item bg-white">
-          <a class="dropdown-item text-gradient" @@click.prevent="showHistory">點數交易紀錄</a>
+          <a class="dropdown-item text-gradient" @@click.prevent="history">點數交易紀錄</a>
         </li>
       </ul>
     </div>
     <div class="col-12 col-md-10 p-3">
+      <!-- ------------shop------------ -->
       <section v-if="strPoint == 'pointsShop'">
         <div>
           <button class="btn btn-gradient mb-2 me-1 btn-cate"
-            @@click="searchTerm.cate = null;searchTerm.keyword = '';this.$refs.pdSearch.value = '';showProducts()">全部</button>
+            @@click="searchTerm.cate = null;searchTerm.keyword = null;this.$refs.pdSearch.value = '';showProducts()">全部</button>
           @* <button
-          v-for="cate in shopResults.shops.map(shop => shop.category).filter((value, index, self) => self.indexOf(value)
+          v-for="cate in results.shops.map(shop => shop.category).filter((value, index, self) => self.indexOf(value)
           === index)"
           :key="cate" class="btn btn-gradient mb-2 me-1 btn-cate"
           @@click="searchTerm.cate = cate; showProducts()">{{cate}}</button> *@
-          <button v-for="cate in shopResults.sList" :key="cate" class="btn btn-gradient mb-2 me-1 btn-cate"
-            @@click="searchTerm.cate = cate;searchTerm.keyword = '';this.$refs.pdSearch.value = '';showProducts()">{{cate}}</button>
+          <button v-for="cate in results.sList" :key="cate" class="btn btn-gradient mb-2 me-1 btn-cate"
+            @@click="searchTerm.cate = cate;searchTerm.keyword = null;this.$refs.pdSearch.value = '';showProducts()">{{cate}}</button>
         </div>
 
         <div class="d-flex align-items-center">
           <label for="pdSearch" class="text-gradient form-label m-0">關鍵字:</label>
-          <input id="pdSearch" ref="pdSearch" class="form-control ms-2 me-2 w-25" autocomplete="off" />
+          <input id="pdSearch" ref="pdSearch" class="form-control ms-2 me-2 w-25" autocomplete="off"
+            @@change="this.$refs.pdSearch.value = this.$refs.pdSearch.value.trim()" />
           <button class="btn btn-gradient me-1"
-            @@click="searchTerm.keyword = this.$refs.pdSearch.value;showProducts()">搜尋</button>
+            @@click="searchTerm.keyword = this.$refs.pdSearch.value.trim();showProducts()">搜尋</button>
           <button class="btn btn-gradient"
-            @@click="searchTerm.keyword = '';this.$refs.pdSearch.value = '';showProducts()">清除搜尋</button>
+            @@click="searchTerm.keyword = null;this.$refs.pdSearch.value = '';showProducts()">清除搜尋</button>
         </div>
         <div class="d-flex justify-content-end align-items-center">
           <span class="me-2">每頁顯示<select v-model="searchTerm.pgSize" @@change="showProducts()">
@@ -154,7 +156,7 @@
           第
           <input class="me-1 p-0" v-model="searchTerm.pgNum" @@change="showProducts()"
             style="width: 30px; height: 30px; text-align: center" min="1" />
-          頁，共<span>{{ shopResults.totalPg }}</span>頁
+          頁，共<span>{{ results.totalPg }}</span>頁
           <button class="btn btn-gradient me-1 p-0" @@click="nP" style="width: 30px; height: 30px; text-align: center"
             :disabled="lastPage">
             下
@@ -162,6 +164,7 @@
         </div>
 
         <div class="col-12" id="pointsContentBody">
+          <!-- ------------MG------------ -->
           <section v-if="isMg == true">
             <div class="d-flex justify-content-between mt-1">
               <button class="btn btn-gradient mb-2 me-1" @@click="isAdding = !isAdding;addPd($event)">新增商品</button>
@@ -175,7 +178,7 @@
             <table class="table table-striped text-center">
               <thead>
                 <tr>
-                  <th v-for="dName in shopResults.dNames" :key="dName" @@click="changeSort(dName)">
+                  <th v-for="dName in results.dNames" :key="dName" @@click="changeSort(dName)">
                     {{ dName }}
                   </th>
                   <th style="width: 50px">刪除</th>
@@ -198,7 +201,7 @@
                     <select v-if="addCategory == false" class="form-control p-0 text-center ms-auto me-auto"
                       @@blur="addPd($event,`Category`)">
                       <option disabled selected value="">請選擇</option>
-                      <option v-for="cate in shopResults.sList" :key="cate" :value="cate">{{ cate }}</option>
+                      <option v-for="cate in results.sList" :key="cate" :value="cate">{{ cate }}</option>
                     </select>
                     <input v-else class="form-control p-0 text-center ms-auto me-auto" style="width: 104px;"
                       placeholder="請輸入類別" @@blur="addPd($event,`Category`)" />
@@ -216,7 +219,7 @@
           productPrice,
           productDescription,
           productImage,
-        } in shopResults.shops" :key="productId" class="align-middle">
+        } in results.shops" :key="productId" class="align-middle">
                   <td>{{productId}}</td>
                   <td>
                     <img :src="productImage" class="img-fluid rounded" style="width: 100px" :alt="productName"
@@ -235,7 +238,7 @@
                   <td>
                     <select class="form-control p-0 text-center ms-auto me-auto" :value="category"
                       @@change="editPds(productId,`category`,$event)">
-                      <option v-for="cate in shopResults.sList" :key="cate" :value="cate">{{ cate }}</option>
+                      <option v-for="cate in results.sList" :key="cate" :value="cate">{{ cate }}</option>
                     </select>
                   </td>
                   <td>
@@ -249,11 +252,12 @@
               </tbody>
             </table>
           </section>
-          <section v-else-if="shopResults.totalPg >= 1">
-            <div v-if="shopResults.userPoints != null">
+          <!-- ------------MG------------ -->
+          <section v-else-if="results.totalPg >= 1">
+            <div v-if="results.userPoints != null">
               <div class="text-gradient d-inline">您目前持有:</div>
               <div class="d-inline ms-2 me-2">
-                {{ shopResults.userPoints }}
+                {{ results.userPoints }}
               </div>
               <div class="text-gradient d-inline">點數</div>
             </div>
@@ -264,7 +268,7 @@
       productPrice,
       productDescription,
       productImage
-    } in shopResults.shops" :key="productId" class="card mb-3">
+    } in results.shops" :key="productId" class="card mb-3">
               <div class="row g-0">
                 <div class="col-md-4">
                   <img :src="productImage" class="img-fluid rounded-start" style="width: 300px" :alt="productName"
@@ -278,7 +282,7 @@
                     <p class="card-text text-gradient">{{ productPrice === 0 ? "免費!!" : `兌換需要 ${productPrice} 點數` }}</p>
                     <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1 btn-exchange"
                       data-bs-toggle="modal" data-bs-target="#exchangeModal" @@click="pdExchange(productId)"
-                      :disabled="shopResults.userPoints < productPrice && shopResults.userPoints != null">
+                      :disabled="results.userPoints < productPrice && results.userPoints != null">
                       兌換
                     </button>
                   </div>
@@ -340,10 +344,98 @@
         </div>
         <!-- Modal -->
       </section>
+      <!-- ------------shop------------ -->
 
-      <section v-else-if="strPoint == 'coupon'"></section>
+      <!-- ------------coupon------------ -->
+      <section v-else-if="strPoint == 'coupon'">
+        <div class="d-flex justify-content-end align-items-center">
+          <span class="me-2">每頁顯示<select v-model="searchTerm.pgSize" @@change="showCoupons()">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>筆資料。</span>
+          <button class="btn btn-gradient me-1 p-0" @@click="pP" style="width: 30px; height: 30px; text-align: center"
+            :disabled="firstPage">
+            上
+          </button>
+          第
+          <input class="me-1 p-0" v-model="searchTerm.pgNum" @@change="showCoupons()"
+            style="width: 30px; height: 30px; text-align: center" min="1" />
+          頁，共<span>{{ results.totalPg }}</span>頁
+          <button class="btn btn-gradient me-1 p-0" @@click="nP" style="width: 30px; height: 30px; text-align: center"
+            :disabled="lastPage">
+            下
+          </button>
+        </div>
 
+        <div class="col-12" id="couponContentBody">
+          <div v-for="{id,memberId,productId,transactionDate,active,pd} in results.trans" :key="id" class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img :src="pd.productImage" class="img-fluid rounded-start" style="width:300px" :alt="pd.productName"
+                  :title="pd.productName">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <span class="position-absolute end-0 me-2">{{pd.category}}</span>
+                  <h5 class="card-title text-gradient fs-3">{{pd.productName}}</h5>
+                  <p class="card-text">{{pd.productDescription}}</p>
+                  <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1 btn-coupon"
+                    data-bs-toggle="modal" data-bs-target="#couponModal" @@click="useCoupon(pd, id)">使用</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="couponModalLabel">{{couponRes == '' ? '您確定要使用嗎?' : '使用成功!'}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <section v-if="couponRes == ''">
+                <div class="modal-body" id="couponModalBody">
+                  <div class="row g-0">
+                    <div class="col-12 d-flex justify-content-center">
+                      <img :src="exchangePd.img" class="img-fluid rounded-start" style="width:150px"
+                        :alt="exchangePd.name" title="exchangePd.name">
+                    </div>
+                    <div class="col-12">
+                      <div>
+                        <div class="text-gradient d-inline">商品名稱:</div>
+                        <div class="d-inline ms-2 coupon">
+                          {{exchangePd.name}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section v-else>
+                <h5 class="text-center" style="color:red;">此優惠碼關閉後即失效，請謹慎保存或截圖留存</h5>
+                <img :src="couponRes" alt="QR Code" class="col-12 text-gradient text-center">
+              </section>
+              <div class="modal-footer">
+                <button v-if="couponRes == ''" class="btn btn-gradient p-0 text-align-center"
+                  style="width:100px;height:45px" @@click="confirmUseCoupon()">確認使用</button>
+                <button class="btn btn-secondary p-0 text-align-center" style="width:100px;height:45px"
+                  data-bs-dismiss="modal" @@click="couponRes = '';showCoupons()">{{couponRes == '' ? '取消' :
+                  '關閉'}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal -->
+      </section>
+      <!-- ------------coupon------------ -->
+
+
+      <!-- ------------history------------ -->
       <section v-else-if="strPoint == 'pointsHistory'"></section>
+      <!-- ------------history------------ -->
     </div>
   </div>
 </div>
@@ -354,6 +446,7 @@
 
     const app = createApp({
       setup() {
+        //------------變數------------
         var strPoint = ref(strPoints);
         var logoSrc = ref('@Url.Content("~/images/queuely.png")');
         var noImgUrl = ref('@Url.Content("~/images/NoImage.jpg")');
@@ -374,9 +467,10 @@
           pgSize: 10,
           sortBy: null,
           sortType: 'asc',
-          keyword: null
+          keyword: null,
+          searchBy: null
         });
-        const shopResults = reactive({ totalPg: 0, shops: [], userPoints: null, sList: [], dNames: [] });
+        const results = reactive({ totalPg: 0, shops: [], trans: [], userPoints: null, userId: '', sList: [], iList: [], dNames: [] });
         const exchangePd = reactive({ id: 0, img: '', name: '', price: 0 });
         const newPd = reactive({
           ProductId: 0,
@@ -388,57 +482,89 @@
         });
         //------------商城變數------------
 
-        const showPointStore = () => {
-          strPoint.value = 'pointsShop'
-          sessionStorage.setItem('strPoints', 'pointsShop')
+        //------------優惠券變數------------
+        var couponRes = ref('');
+        //------------優惠券變數------------
+
+        //------------方法------------
+        const pointStore = () => {
+          searchTerm.cate = null;
+          searchTerm.pgNum = 1;
+          searchTerm.pgSize = 10;
+          searchTerm.sortBy = null;
+          searchTerm.sortType = 'asc';
+          searchTerm.keyword = null;
+          searchTerm.searchBy = null;
+          strPoint.value = 'pointsShop';
+          sessionStorage.setItem('strPoints', 'pointsShop');
+          showProducts();
         };
-        const showCoupon = () => {
-          strPoint.value = 'coupon'
-          sessionStorage.setItem('strPoints', 'coupon')
+        const coupon = () => {
+          searchTerm.cate = null;
+          searchTerm.pgNum = 1;
+          searchTerm.pgSize = 10;
+          searchTerm.sortBy = null;
+          searchTerm.sortType = 'asc';
+          searchTerm.keyword = null;
+          searchTerm.searchBy = 'id';
+          if (sessionStorage.getItem('isMG') == 'true') {
+            strPoint.value = 'pointsHistory';
+            sessionStorage.setItem('strPoints', 'pointsHistory');
+          }
+          strPoint.value = 'coupon';
+          sessionStorage.setItem('strPoints', 'coupon');
+          showCoupons();
         };
-        const showHistory = () => {
-          strPoint.value = 'pointsHistory'
-          sessionStorage.setItem('strPoints', 'pointsHistory')
+        const history = () => {
+          searchTerm.cate = null;
+          searchTerm.pgNum = 1;
+          searchTerm.pgSize = 10;
+          searchTerm.sortBy = null;
+          searchTerm.sortType = 'asc';
+          searchTerm.keyword = null;
+          searchTerm.searchBy = 'id';
+          strPoint.value = 'pointsHistory';
+          sessionStorage.setItem('strPoints', 'pointsHistory');
         };
 
         const dropSmallFunction = () => {
-          var strRanLeft = Math.random() * 100 + 'vw;'
-          var animationTrans = document.querySelector('#animationTrans')
+          var strRanLeft = Math.random() * 100 + 'vw;';
+          var animationTrans = document.querySelector('#animationTrans');
           animationTrans.insertAdjacentHTML(
             'beforeend',
             `<img class="ball" style="left:${strRanLeft};animation-duration: 0.5s;" src="${logoSrc.value}" />`
-          )
+          );
         };
 
         const dropLargeFunction = () => {
-          var strRanLeft = Math.random() * 100 + 'vw;'
-          var animationTrans = document.querySelector('#animationTrans')
+          var strRanLeft = Math.random() * 100 + 'vw;';
+          var animationTrans = document.querySelector('#animationTrans');
           animationTrans.insertAdjacentHTML(
             'beforeend',
             `<img class="ball" style="left:${strRanLeft}; width:150px; height:150px;animation-duration: 1.0s;" src="${logoSrc.value}" />`
-          )
+          );
         };
 
         const dropXL = () => {
-          var animationTrans = document.querySelector('#animationTrans')
+          var animationTrans = document.querySelector('#animationTrans');
           animationTrans.insertAdjacentHTML(
             'beforeend',
             `<img class="ball" style="left:50vw; width:100vh; height:100vh;animation-duration: 1.75s;" src="${logoSrc.value}" />`
-          )
+          );
         };
 
         const removeTrans = () => {
-          var animationTrans = document.querySelector('#animationTrans')
-          animationTrans.style.setProperty('animation-name', 'earthquake')
+          var animationTrans = document.querySelector('#animationTrans');
+          animationTrans.style.setProperty('animation-name', 'earthquake');
           setTimeout(() => {
             clearInterval(dropSmallInterval.value)
             clearInterval(dropLargeInterval.value)
             animationTrans.animate({ top: '200vh' }, 1000)
-          }, 200)
+          }, 200);
 
           setTimeout(() => {
             animationTrans.parentElement.remove()
-          }, 700)
+          }, 700);
         };
 
         const skipTrans = (e) => {
@@ -448,8 +574,39 @@
           e.target.parentElement.remove();
         };
 
+        const pP = () => {
+          if (searchTerm.pgNum > 1) {
+            searchTerm.pgNum--;
+            if (strPoint.value == 'pointsShop') {
+              showProducts();
+            }
+            else if (strPoint.value == 'pointsHistory' || isMG == 'true') {
+
+            }
+            else {
+              showCoupons();
+            }
+          }
+        };
+
+        const nP = () => {
+          if (searchTerm.pgNum < results.totalPg) {
+            searchTerm.pgNum++
+            if (strPoint.value == 'pointsShop') {
+              showProducts();
+            }
+            else if (strPoint.value == 'pointsHistory' || isMG == 'true') {
+
+            }
+            else {
+              showCoupons();
+            }
+          }
+        };
+
         //------------商城方法------------
         const showProducts = async () => {
+          isMg.value = sessionStorage.getItem("isManager") == 'true' ? true : false;
           const APIUrl = window.location.origin + '/api/PointsAPI/pointsShop';
           const response = await fetch(APIUrl, {
             method: 'POST',
@@ -458,45 +615,31 @@
             headers: {
               'Content-Type': 'application/json'
             }
-          })
-          const datas = await response.json()
-          //console.log(datas)
-          shopResults.totalPg = datas.totalPages
-          shopResults.shops = datas.shops
-          shopResults.userPoints = datas.userPoints
-          shopResults.sList = datas.sList1
-          shopResults.dNames = datas.dNames
-          shopResults.shops.forEach((shop) => {
+          });
+          const datas = await response.json();
+          //console.log(datas);
+          results.totalPg = datas.totalPages;
+          results.shops = datas.shops;
+          results.userPoints = datas.userPoints;
+          results.sList = datas.sList1;
+          results.dNames = datas.dNames;
+          results.shops.forEach((shop) => {
             shop.productImage = @Url.Content("~/images/") + shop.productImage
-          })
-          isMg.value = datas.isMg
-          //console.log(shopResults)
+          });
+          //isMg.value = datas.isMg;
+          //console.log(results);
 
-          if (shopResults.totalPg <= 1) {
-            firstPage.value = true
-            lastPage.value = true
-          } else if (searchTerm.pgNum < shopResults.totalPg) {
-            lastPage.value = false
-          }
-        };
-
-        const pP = () => {
-          if (searchTerm.pgNum > 1) {
-            searchTerm.pgNum--
-            showProducts()
-          }
-        };
-
-        const nP = () => {
-          if (searchTerm.pgNum < shopResults.totalPg) {
-            searchTerm.pgNum++
-            showProducts()
+          if (results.totalPg <= 1) {
+            firstPage.value = true;
+            lastPage.value = true;
+          } else if (searchTerm.pgNum < results.totalPg) {
+            lastPage.value = false;
           }
         };
 
         const changeSort = (dName) => {
           switch (dName) {
-            case `${shopResults.dNames[0]}`:
+            case `${results.dNames[0]}`:
               if (searchTerm.sortBy !== 'id') {
                 searchTerm.sortType = 'asc';
               }
@@ -508,7 +651,7 @@
               }
               searchTerm.sortBy = 'id';
               break;
-            case `${shopResults.dNames[3]}`:
+            case `${results.dNames[3]}`:
               if (searchTerm.sortBy !== 'price') {
                 searchTerm.sortType = 'asc';
               }
@@ -520,7 +663,7 @@
               }
               searchTerm.sortBy = 'price';
               break;
-            case `${shopResults.dNames[4]}`:
+            case `${results.dNames[4]}`:
               if (searchTerm.sortBy !== 'cate') {
                 searchTerm.sortType = 'asc';
               }
@@ -540,7 +683,7 @@
 
         const pdExchange = (productId) => {
           if (isUser) {
-            const product = shopResults.shops.find(p => p.productId === productId)
+            const product = results.shops.find(p => p.productId === productId)
             exchangePd.id = product.productId
             exchangePd.img = product.productImage
             exchangePd.name = product.productName
@@ -554,7 +697,7 @@
         const confirmExchange = () => {
           if (isUser) {
             var p = {
-              Points: shopResults.userPoints - exchangePd.price,
+              Points: results.userPoints - exchangePd.price,
               ProductId: exchangePd.id,
             };
             fetch(`@Url.Action("pointsShopContentBody", "Points")`, {
@@ -565,6 +708,7 @@
               return response.text();
             }).then(data => {
               exchangeRes.value = data;
+              sessionStorage.setItem('transEdited', 'true');
               setTimeout(function () {
                 document.querySelector('#exchangeModal').classList.remove('show');
                 document.querySelector('.modal-backdrop').classList.remove('show');
@@ -583,7 +727,7 @@
         };
 
         const editPds = (id, prop, e) => {
-          const product = shopResults.shops.find(p => p.productId === id);
+          const product = results.shops.find(p => p.productId === id);
           //console.log(e);
           if (e.target.type === 'file' && e.target.files[0]) {
             const file = e.target.files[0]
@@ -648,7 +792,7 @@
           //required.removeChild(adding);
           if (!lacked) {
             isAdding.value = false;
-            var pShop = shopResults.shops.filter(p => p.edited == true && p.newImg !== undefined).map(p => ({
+            var pShop = results.shops.filter(p => p.edited == true && p.newImg !== undefined).map(p => ({
               ...p,
               productImage: p.newImg
             }));
@@ -672,7 +816,7 @@
                 });
               });
             }
-            await shopResults.shops.filter(p => p.edited && p.newImg === undefined)
+            await results.shops.filter(p => p.edited && p.newImg === undefined)
               .map(p => {
                 const { edited, ...rest } = p; // 使用解構賦值來排除 edited
                 return rest;
@@ -716,7 +860,7 @@
               lacked.forEach(p => required.removeChild(p));
             }
             else if (e.target.tagName === 'P') {
-              var lacked = Array.from(required.querySelectorAll(`p`)).find(p => p.textContent.includes(`新商品的「${shopResults.dNames[4]}」`));
+              var lacked = Array.from(required.querySelectorAll(`p`)).find(p => p.textContent.includes(`新商品的「${results.dNames[4]}」`));
               newPd['Category'] = '';
               if (lacked) {
                 required.removeChild(lacked);
@@ -885,7 +1029,7 @@
           var toastBody = document.querySelector("#liveToast>.toast-body");
           //console.log(deleteList.value);
           var ids = deleteList.value.sort();
-          var fileNames = await shopResults.shops.filter(p => ids.includes(p.productId)).map(p => (p.productImage.slice(p.productImage.lastIndexOf("/images/") + "/images/".length)));
+          var fileNames = await results.shops.filter(p => ids.includes(p.productId)).map(p => (p.productImage.slice(p.productImage.lastIndexOf("/images/") + "/images/".length)));
           var strIds = deleteList.value.join(", ");
           if (deleteList.value.length > 0) {
             /*console.log(strIds);
@@ -923,7 +1067,131 @@
             }
           }
         };
+
         //------------商城方法------------
+
+        //------------優惠券方法------------
+
+        const showCoupons = async () => {
+          isMg.value = sessionStorage.getItem("isManager") == 'true' ? true : false;
+          if (isUser == 'true' || isMg.value == true) {
+            if (sessionStorage.getItem('trans') == null || sessionStorage.getItem('transEdited') != null) {
+              const APIUrl = window.location.origin + '/api/PointsAPI/coupon';
+              const response = await fetch(APIUrl, {
+                method: 'POST',
+                body: JSON.stringify(searchTerm),
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+              const datas = await response.json();
+              //console.log(datas)
+              results.totalPg = datas.totalPages;
+              results.trans = datas.trans;
+              results.sList = datas.sList1;
+              results.iList = datas.iList1;
+              results.dNames = datas.dNames;
+              results.userId = datas.userId;
+              results.shops = datas.shops;
+              results.shops.forEach((shop) => {
+                shop.productImage = @Url.Content("~/images/") + shop.productImage
+              });
+              results.trans.forEach((tran) => {
+                tran.pd = results.shops.find(p => p.productId === tran.productId)
+              })
+              //isMg.value = datas.isMg;
+              //console.log(results)
+
+              await sessionStorage.setItem('trans', JSON.stringify(datas));
+              /*sessionStorage.setItem('transSList', JSON.stringify(results.sList));
+              sessionStorage.setItem('transIList', JSON.stringify(results.iList));
+              sessionStorage.setItem('transDNames', results.dNames);
+              await sessionStorage.setItem('transShops', JSON.stringify(results.shops));*/
+
+              if (strPoint.value == 'coupon' && isMg.value == false) {
+                results.trans = results.trans.filter(t => t.memberId == results.userId && t.active == true);
+              }
+              sessionStorage.removeItem('transEdited');
+            }
+            else {
+              const datas = await JSON.parse(sessionStorage.getItem('trans'));
+
+              if (strPoint.value == 'coupon' && isMg.value == false) {
+                results.trans = datas.trans.filter(t => t.memberId == datas.userId && t.active == true);
+              }
+              else if (searchTerm.keyword != null) {
+                if (searchTerm.searchBy == 'id') {
+                  results.trans = datas.trans.filter(t => t.id == searchTerm.keyword);
+                }
+                else {
+                  results.trans = datas.trans.filter(t => t.memberId.toLowerCase().includes(searchTerm.keyword.toLowerCase()));
+                }
+              }
+              else {
+                results.trans = datas.trans;
+              }
+              var totalCount = results.trans.length;
+              var pageNum = searchTerm.pgNum;
+              var pageSize = searchTerm.pgSize;
+              var totalPages = Math.ceil(totalCount / pageSize);
+              var skipCount = (pageNum - 1) * pageSize;
+              results.totalPg = totalPages;
+              results.trans = results.trans.slice(skipCount, skipCount + pageSize);
+              results.sList = datas.sList1;
+              results.iList = datas.iList1;
+              results.dNames = datas.dNames;
+              results.userId = datas.userId;
+              results.shops = datas.shops;
+              /*results.shops.forEach((shop) => {
+                shop.productImage = @Url.Content("~/images/") + shop.productImage
+              });*/
+            }
+
+            if (results.totalPg <= 1) {
+              firstPage.value = true;
+              lastPage.value = true;
+            } else if (searchTerm.pgNum < results.totalPg) {
+              lastPage.value = false;
+            }
+          }
+          else {
+            window.location.href = "/Identity/Account/Login";
+          }
+        };
+
+        const useCoupon = (product, id) => {
+          if (isUser) {
+            exchangePd.id = product.productId
+            exchangePd.img = product.productImage
+            exchangePd.name = product.productName
+            exchangePd.price = product.productPrice
+            exchangePd.transId = `${id}`
+          }
+          else {
+            window.location.href = "/Identity/Account/Login";
+          }
+        };
+
+        const confirmUseCoupon = async () => {
+          var p = {
+            Id: exchangePd.transId,
+            Active: false
+          };
+          await fetch(`@Url.Action("couponUse", "Points")`, {
+            method: "POST",
+            body: JSON.stringify(p),
+            headers: { 'Content-Type': 'application/json' }
+          }).then(response => {
+            return response.blob();
+          }).then(blob => {
+            couponRes.value = URL.createObjectURL(blob);
+            sessionStorage.setItem('transEdited', 'true');
+          }).catch(err => {
+            alert(err);
+          });
+        }
+        //------------優惠券方法------------
 
         onMounted: {
           //console.log(strPoints);
@@ -942,26 +1210,43 @@
           else {
             searchTerm.sortBy = 'cate';
           }
-          showProducts();
           //------------商城方法------------
+
+          if (strPoint.value == 'pointsShop') {
+            showProducts();
+          }
+          else if (strPoint.value == 'pointsHistory' || isMG == 'true') {
+            strPoint.value = 'pointsHistory'
+            sessionStorage.setItem('strPoints', 'pointsHistory');
+            showCoupons();
+          }
+          else {
+            showCoupons();
+          }
         }
 
         watch(searchTerm, () => {
           if (isNaN(searchTerm.pgNum) || searchTerm.pgNum < 1) {
             searchTerm.pgNum = 1
           }
-          if (searchTerm.pgNum > shopResults.totalPg && shopResults.totalPg > 0) {
-            searchTerm.pgNum = shopResults.totalPg
+          if (searchTerm.pgNum > results.totalPg && results.totalPg > 0) {
+            searchTerm.pgNum = results.totalPg
           }
           if (searchTerm.pgNum === 1) {
             firstPage.value = true
           } else {
             firstPage.value = false
           }
-          if (searchTerm.pgNum === shopResults.totalPg) {
+          if (searchTerm.pgNum === results.totalPg) {
             lastPage.value = true
           } else {
             lastPage.value = false
+          }
+
+          if (searchTerm.searchBy == 'id' && searchTerm.keyword != null) {
+            if (isNaN(searchTerm.keyword) || searchTerm.keyword == '' || searchTerm.keyword.indexOf('e') != -1) {
+              searchTerm.keyword = 0;
+            }
           }
         })
 
@@ -972,14 +1257,16 @@
           dropSmallInterval,
           dropLargeInterval,
           removeTransTimeout,
-          showPointStore,
-          showCoupon,
-          showHistory,
+          pointStore,
+          coupon,
+          history,
           dropSmallFunction,
           dropLargeFunction,
           dropXL,
           removeTrans,
           skipTrans,
+          pP,
+          nP,
           //------------商城------------
           firstPage,
           lastPage,
@@ -988,13 +1275,11 @@
           exchangeRes,
           addCategory,
           deleteList,
-          shopResults,
+          results,
           exchangePd,
           searchTerm,
           newPd,
           showProducts,
-          pP,
-          nP,
           changeSort,
           pdExchange,
           confirmExchange,
@@ -1004,6 +1289,12 @@
           saveAddPd,
           deletePds,
           //------------商城------------
+          //------------優惠券------------
+          couponRes,
+          showCoupons,
+          useCoupon,
+          confirmUseCoupon,
+          //------------優惠券------------
         }
       }
     });
