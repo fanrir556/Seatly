@@ -17,7 +17,9 @@ P@ssw0rd-iii
 queuely139@outlook.com
 P@ssw0rd139
 
-
+azure:
+queuely
+P@ssw0rd-iii
 
 "ConnectionStrings": {
   "DefaultConnection": "Server=(localdb)\\ProjectModels;Database=Seatly;Trusted_Connection=True;MultipleActiveResultSets=true",

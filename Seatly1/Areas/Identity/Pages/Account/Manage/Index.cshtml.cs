@@ -68,25 +68,29 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
             [Display(Name = "生日")]
             [DataType(DataType.Date)]
             public DateTime? Birthday { get; set; } = DateTime.MinValue;
+
+            [Display(Name ="真實姓名")]
+            public string MemberRealName { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            var realname = user.MemberRealName;
+            var realName = user.MemberRealName;
             var sex = user.Sex;  // 加入性別
             var birthday = user.Birthday; // 加入生日
             //var dateTime = new DateTime(1980,01,01);
             var birthdayPlease = "===請選擇===";
 
             Username = userName;
-            MemberRealName = realname;
+            MemberRealName = realName;
 
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
                 Sex = sex,
+                MemberRealName=realName,
                 //Birthday = birthday== dateTime ? birthday.Value : dateTime, // 检查生日是否有值，有值则赋值，否则赋默认值
                 Birthday = birthday.HasValue ? birthday.Value : null, // 检查生日是否有值，有值则赋值，否则赋默认值
 
@@ -119,6 +123,7 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+            // 加入電話
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -129,6 +134,20 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            // 加入姓名
+            if (Input.MemberRealName != user.MemberRealName)
+            {
+                user.MemberRealName = Input.MemberRealName;
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    StatusMessage = "更新失敗";
+                    return RedirectToPage();
+                }
+            }
+
+
 
             // 加入性別
             if (Input.Sex != user.Sex)

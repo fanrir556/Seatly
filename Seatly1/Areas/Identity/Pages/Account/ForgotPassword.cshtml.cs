@@ -73,8 +73,8 @@ namespace Seatly1.Areas.Identity.Pages.Account
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "重置密碼",
+                    $"請<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>點擊此處</a>重設您的密碼。");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
