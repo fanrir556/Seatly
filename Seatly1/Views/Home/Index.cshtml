@@ -50,7 +50,7 @@
                 <div class="col-md-5 col-lg-6 order-0 order-md-1 mt-8 mt-md-0"><a class="img-landing-banner" asp-area="" asp-controller="Roulette" asp-action="RouletteIndex"><img class="img-fluid" src="~/img/gallery/hero-header.png" alt="毫無想法？不如試試拉麵輪盤？" /></a></div>
                 <div class="col-md-7 col-lg-6 py-8 text-md-start text-center">
                     <h1 class="display-1 fs-md-5 fs-lg-6 fs-xl-8 text-light kalam-font">Queuely</h1>
-                    <h1 class="text-800 mb-5 fs-4 cute-font">美食、娛樂 輕鬆排！@* <br class="d-none d-xxl-block cute-font" />Or try Raman Roulette! <i class="fa-solid fa-arrow-right fa-bounce"></i> *@</h1>
+                    <h1 class="text-800 mb-5 fs-4 cute-font">美食、娛樂、生活 輕鬆排！@* <br class="d-none d-xxl-block cute-font" />Or try Raman Roulette! <i class="fa-solid fa-arrow-right fa-bounce"></i> *@</h1>
                     <div class="card w-xxl-75">
                         <div class="card-body">
                             <nav>
@@ -740,9 +740,21 @@
         }
         Vue.createApp(vueApp).mount("#hotItems");
 
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     FB.XFBML.parse();
-        // });
+        document.getElementById("customSearchButton").addEventListener("click", function (event) {
+            var input = document.getElementById("inputDelivery").value;
+            if (!input) {
+                event.preventDefault();
+                // alert("請輸入關鍵字");
+            }
+        });
+
+        document.getElementById("customSearchButtonDate").addEventListener("click", function (event) {
+            var input = document.getElementById("inputPickup").value;
+            if (!input) {
+                event.preventDefault();
+                // alert("請選擇日期");
+            }
+        });
     </script>
 
         @* 分享按鈕 *@

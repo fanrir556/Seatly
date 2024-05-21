@@ -23,7 +23,7 @@
             background-color: #ccc;
         }
         .red{
-            background-color: tomato;
+            background-color: lightcoral;
         }
 
         .love-icon {
@@ -82,18 +82,20 @@
     <hr />
 
 
-
-    <div class="time-selector">
+    <div>
+    <span class="time-selector">
         <label for="startTime">開始時間:</label>
-        <input  type="datetime-local" id="startTime">
-    </div>
-    <div class="time-selector">
+        <input class="m-2" type="datetime-local" id="startTime">
+    </span>
+    <span class="time-selector">
         <label for="endTime">結束時間:</label>
-        <input type="datetime-local" id="endTime">
-    </div>
+        <input class="m-2" type="datetime-local" id="endTime">
+    </span>
+    <span>
     <button id="applyFilter" class="btn btn-primary m-2" @@click="applyTimeFilter">套用時間</button>
     <button id="clearFilter" class="btn btn-primary m-2" @@click="clearTimeFilter">清除時間篩選</button>
-
+        </span>
+    </div>
     <!-- 排序按钮 -->
     <div class="btn-group" role="group" aria-label="Sort Activities">
         <button type="button" class="btn btn-secondary" v-on:click="toggleSortOrder">目前排序: {{ sortBy === 'asc' ? '由舊到新' : '由新到舊' }}</button>

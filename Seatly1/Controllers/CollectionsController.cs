@@ -93,12 +93,12 @@ namespace Seatly1.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return Unauthorized(); // 用户未登录
+                return Unauthorized(); // 用户未登錄
             }
 
             var userId = user.Id;
 
-            // 检查是否已经存在该收藏项
+            // 檢查是否已收藏過
             var existingItem = await _context.CollectionItems
                 .FirstOrDefaultAsync(c => c.ActivityId == activityId && c.UserId == userId);
 

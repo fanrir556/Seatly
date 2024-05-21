@@ -53,7 +53,7 @@
                                 <p class="card-text">活動代碼: @activity.ActivityId</p>
                                 <p class="card-text">開始時間: @activity.StartTime</p>
                                 <p class="card-text">結束時間: @activity.EndTime</p>
-                                @* <p class="card-text">活動內容: @activity.DescriptionN</p> *@
+                                
                                 <p class="card-text ">活動地點: <span class="location"> @activity.Location</span></p>
                                 <p class="card-text">
                                     @for (int i = 1; i <= 5; i++)
@@ -67,15 +67,8 @@
                                     }
                                 </p>
                                 <div class="share-buttons">
-                                <a class="text-danger love-icon" @@click="addToCollection(@activity.ActivityId)">❤加入收藏</a>
-                                @* <!-- LINE分享按鈕 -->
-                                <div class="line-it-button" data-lang="zh_Hant" data-type="share-a" data-env="REAL" data-url="http://4.217.249.190/NotificationRecord/UsersView/@activity.ActivityId" data-color="default" data-size="small" data-count="true" data-ver="3" style="display: none;"></div>
-                                <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
-                                <!-- Facebook Share Button -->
-                                <div class="fb-share-button"
-                                data-href="http://4.217.249.190/NotificationRecord/UsersView/@activity.ActivityId"
-                                data-layout="button_count">
-                                </div> *@
+                                <a class="text-danger love-icon" @@click.stop="addToCollection(@activity.ActivityId)">❤加入收藏</a>
+                              
                                 </div>
 
                                 <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
@@ -141,18 +134,16 @@ else
     });
 
     // @* 加入收藏 *@
+
     var vueApp = {
         data() {
             return {}
         },
         methods: {
-            // @* 加入收藏 *@
             async addToCollection(activityId) {
-                // @* 从 sessionStorage 中取得 userLogin 的值 *@
                 const userLogin = sessionStorage.getItem('userLogin');
                 const userId = sessionStorage.getItem('userId');
 
-                // @* // 判斷用戶是否已登錄 *@
                 if (userLogin !== 'true') {
 
                     alert('請先登錄會員！');
@@ -186,16 +177,3 @@ else
     
    
 </script>
-@* <!-- Load Facebook SDK for JavaScript -->
-<div id="fb-root"></div>
-<script>
-    (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-</script>
-@* LINE分享按鈕 *@
-@* <script type="text/javascript">LineIt.loadButton();</script>  *@

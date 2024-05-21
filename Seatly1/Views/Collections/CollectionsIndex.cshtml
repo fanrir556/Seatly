@@ -40,11 +40,12 @@
     </style>
 }
 
-<h2>收藏清單</h2>
 
+<div class="container">
+    <h2 class="cute-font">收藏清單</h2>
 @if (Model.Any())
 {
-    <div class="row">
+    <div class="row ">
         @foreach (var item in Model)
         {
             
@@ -121,7 +122,7 @@ else
 {
     <p>沒有收藏項目。</p>
 }
-
+</div>
 @section Scripts{
     @Html.AntiForgeryToken()
 <script>

@@ -63,7 +63,7 @@
     }
     @*簽到判定*@
 
-    <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-light justify-content-center cute-font" data-navbar-on-scroll="data-navbar-on-scroll">
+    <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-light justify-content-center cute-font mb-5" data-navbar-on-scroll="data-navbar-on-scroll">
         <div class="container-fluid m-0" style="min-width: 98vw;">
             <a class="navbar-brand d-inline-flex" asp-area="" asp-controller="Home" asp-action="Index" id="home" data-uri="@Url.Action("Index", "Home")">
                 <img class="d-inline-block" src="@Url.Content("~/images/logo.svg")" alt="logo" id="logo" data-url="@Url.Action("isMG", "Home")" style="width: 40px; height: 40px;" />
@@ -78,7 +78,7 @@
             @* 搜尋框 *@
             <div id="" class="collapse navbar-collapse border-top border-lg-0 justify-content-end">
                 <input id="layoutSearch" class="input-box form-foodwagon-control" type="text" v-model="searchKeyword" placeholder="🔎輸入關鍵字...">
-                <a id="layoutSearchBtn" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger">搜尋</button></a>
+                <a id="layoutSearchBtn" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger m-2">搜尋</button></a>
             </div>
 
             @* 收藏清單 *@
@@ -265,9 +265,14 @@
         sessionStorage.removeItem("searchDate")
         sessionStorage.removeItem("searchString")
         var searchKeyword = $("#layoutSearch").val()
-        console.log(searchKeyword)
-        sessionStorage.setItem("searchString", searchKeyword)
-        sessionStorage.setItem("isSearching", "true")
+        if (searchKeyword !== null && searchKeyword.trim() !== "") {
+            console.log(searchKeyword);
+            sessionStorage.setItem("searchString", searchKeyword);
+            sessionStorage.setItem("isSearching", "true");
+        } else {
+            e.preventDefault();
+            // alert("請輸入關鍵字");
+        }
     });
 </script>
 </html>

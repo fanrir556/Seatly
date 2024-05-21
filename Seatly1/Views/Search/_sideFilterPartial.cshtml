@@ -1,7 +1,7 @@
 ﻿@model Seatly1.Models.NotificationRecord
 
 
-<h3>結果篩選</h3>
+@* <h3>結果篩選</h3> *@
 <fieldset class="search-filter-group">
     <legend class="search-filter-group_header">分類</legend>
     <div class="search-filter search-checkbox-filter">
@@ -12,17 +12,7 @@
         </label>
     </div>
 
-    @*  @foreach (var tag in Model)
-    {
-    <div class="search-filter search-checkbox-filter">
-    <label class="search-checkbox">
-    <div class="search-checkbox_box">
-    <input type="checkbox" name="" value="@tag" data-category="@tag"><span class="search-checkbox_label">@tag</span>
-    </div>
-    </label>
-    </div>
-    } *@
-
+   
 
 
     @foreach (var tag in ViewBag.AllTags)
