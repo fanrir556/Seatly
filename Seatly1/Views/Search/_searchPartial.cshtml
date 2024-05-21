@@ -5,18 +5,7 @@
 } *@
 
 <style>
-.card-body {
-    position: relative;
-}
 
-.share-buttons {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
 
 .love-icon {
     cursor: pointer;
@@ -54,7 +43,7 @@
                                 <p class="card-text">開始時間: @activity.StartTime</p>
                                 <p class="card-text">結束時間: @activity.EndTime</p>
                                 
-                                <p class="card-text ">活動地點: <span class="location"> @activity.Location</span></p>
+                                <p class="card-text ">活動地點: <span class="location">@activity.Location</span></p>
                                 <p class="card-text">
                                     @for (int i = 1; i <= 5; i++)
                                     {
@@ -62,14 +51,14 @@
                                         var tagValue = activity.GetType().GetProperty(tagName)?.GetValue(activity, null)?.ToString();
                                         if (!string.IsNullOrEmpty(tagValue))
                                         {
-                                            <span>#<span class="hash-tag"> @tagValue</span></span>
+                                            <span>#<span class="hash-tag">@tagValue</span></span>
                                         }
                                     }
                                 </p>
-                                <div class="share-buttons">
-                                <a class="text-danger love-icon" @@click.stop="addToCollection(@activity.ActivityId)">❤加入收藏</a>
+
+                                <span class="position-absolute top-0 end-0 m-3"><a class="text-danger love-icon" @@click="addToCollection(@activity.ActivityId)">❤加入收藏</a></span>
                               
-                                </div>
+                                
 
                                 <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
                                     <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看活動</button>
