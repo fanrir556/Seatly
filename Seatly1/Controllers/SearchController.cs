@@ -31,46 +31,7 @@ namespace Seatly1.Controllers
             return View();
         }
 
-        ////顯示右半部search partial，加分頁
-        //public async Task<IActionResult> searchPartial(string? searchString, DateTime? searchDate, int? page)
-        //{
-        //    Debug.WriteLine($"Received searchString: {searchString}, searchDate: {searchDate}, page: {page}");
-
-
-        //    IQueryable<NotificationRecord> query = _context.NotificationRecords;
-
-        //    if (searchString != null)
-        //    {
-        //        query = query.Where(p => p.ActivityName.Contains(searchString));
-        //        // 每頁顯示的數據量
-        //        int pageSize = 5;
-        //        // 計算當前頁數
-        //        int pageNumber = (page ?? 1);
-
-        //        // 將查詢結果分頁化
-        //        var pagedData = await query.OrderByDescending(p => p.ActivityId)
-        //                                   .ToPagedListAsync(pageNumber, pageSize);
-
-        //        return PartialView("_searchPartial", pagedData);
-        //    }
-        //    else if (searchDate != null)
-        //    {
-        //        query = query.Where(p => p.StartTime.HasValue && p.EndTime.HasValue &&
-        //  p.StartTime.Value.Date <= searchDate.Value.Date && p.EndTime.Value.Date >= searchDate.Value.Date);
-        //        // 每頁顯示的數據量
-        //        int pageSize = 5;
-        //        // 計算當前頁數
-        //        int pageNumber = (page ?? 1);
-
-        //        // 將查詢結果分頁化
-        //        var pagedData = await query.OrderByDescending(p => p.ActivityId)
-        //                                   .ToPagedListAsync(pageNumber, pageSize);
-
-        //        return PartialView("_searchPartial", pagedData);
-        //    }
-        //    // 如果沒有符合的條件，返回 NotFound 或其他適當的值
-        //    return NotFound();
-        //}
+        
 
 
 
@@ -171,13 +132,18 @@ namespace Seatly1.Controllers
                     hashtags.Add(category);
                 }
             }
-                var query = _context.NotificationRecords.AsQueryable();
-                var now = DateTime.UtcNow;
+            //var query = _context.NotificationRecords.AsNoTracking().AsQueryable();
+            var now = DateTime.UtcNow;
+            var query = _context.NotificationRecords
+                        .Where(p => p.IsActivity == true && p.EndTime > now).AsNoTracking().AsQueryable();
+
+            //var query = _context.NotificationRecords.AsQueryable();
+            
             if (searchString != null) // 從首頁輸入關鍵字進來
                 {
 
                 // 添加檢查 isActivity 的條件
-                query = query.Where(p => p.IsActivity == true && p.EndTime > now);
+                //query = query.Where(p => p.IsActivity == true && p.EndTime > now);
 
                 if (hashtags.Count > 0 && locations.Count == 0 && startDate != null && endDate != null)
                     {
