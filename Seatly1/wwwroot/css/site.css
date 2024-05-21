@@ -1,7 +1,36 @@
-﻿body {
+﻿
+
+@font-face {
+    font-family: 'cjkfonts_allseto_v1.11';
+    src: url('../fonts/cjkfonts_allseto_v1.11.ttf') format('truetype');
+    font-weight: bold;
+    font-style: 1.2em;
+}
+
+body {
     background-image: url('../images/paper.jpg');
     background-repeat: repeat;
+    /*font-family: 'Kalam', sans-serif;
+    font-family: 'inthehouse', sans-serif;*/
 }
+.kalam-font {
+    font-family: 'Kalam', sans-serif;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.cute-font {
+    font-family: 'cjkfonts_allseto_v1.11';
+    src: url('../fonts/cjkfonts_allseto_v1.11.ttf') format('truetype');
+    font-weight: bold;
+    font-style: 1.2em;
+}
+     /*针对中文字体设置*/ 
+    /*body:lang(zh), body:lang(zh-CN), body:lang(zh-TW), body:lang(zh-HK) {
+        font-family: 'cjkfonts_allseto_v1.11', sans-serif;
+        font-weight: bold;  
+        font-size: 1.3em;   
+    }*/
 
 #logo {
     animation-iteration-count: infinite;

@@ -44,13 +44,13 @@
     <!-- ===============================================-->
     <!--    section Content  表頭橘色部分-->
     <!-- ===============================================-->
-    <section class="py-5 overflow-hidden bg-primary" id="home">
+    <section class="py-5 overflow-hidden" id="home" style="background-color:lightcoral">
         <div class="container">
             <div class="row flex-center">
                 <div class="col-md-5 col-lg-6 order-0 order-md-1 mt-8 mt-md-0"><a class="img-landing-banner" asp-area="" asp-controller="Roulette" asp-action="RouletteIndex"><img class="img-fluid" src="~/img/gallery/hero-header.png" alt="毫無想法？不如試試拉麵輪盤？" /></a></div>
                 <div class="col-md-7 col-lg-6 py-8 text-md-start text-center">
-                    <h1 class="display-1 fs-md-5 fs-lg-6 fs-xl-8 text-light">位子在哪裡？</h1>
-                    <h1 class="text-800 mb-5 fs-4">Where is SEATLY?<br class="d-none d-xxl-block" />Or try Raman Roulette! <i class="fa-solid fa-arrow-right fa-bounce"></i></h1>
+                    <h1 class="display-1 fs-md-5 fs-lg-6 fs-xl-8 text-light kalam-font">Queuely</h1>
+                    <h1 class="text-800 mb-5 fs-4 cute-font">美食、娛樂 輕鬆排！@* <br class="d-none d-xxl-block cute-font" />Or try Raman Roulette! <i class="fa-solid fa-arrow-right fa-bounce"></i> *@</h1>
                     <div class="card w-xxl-75">
                         <div class="card-body">
                             <nav>
@@ -67,10 +67,10 @@
                                             <label class="visually-hidden" for="inputDelivery">Keyword</label>
                                             <input class="form-control input-box form-foodwagon-control" name="searchString" id="inputDelivery" type="text" placeholder="請輸入關鍵字" />
                                         </div>
-                                        <a class="d-grid gap-3 col-sm-auto" id="customSearchButton" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger">搜尋活動關鍵字</button></a>
+                                        <a class="d-grid gap-3 col-sm-auto" id="customSearchButton" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger mt-3">搜尋活動關鍵字</button></a>
                                     </div>
                                     
-                                    <form asp-action="Search" method="get" class="row gx-2 gy-2 align-items-center">
+                                    <form asp-action="Search" method="get" class="row gx-2 gy-2 align-items-center mt-1">
                                     </form>
                                 </div>
                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
@@ -80,10 +80,10 @@
                                             <label class="visually-hidden" for="inputPickup">Date</label>
                                             <input class="form-control input-box form-foodwagon-control" name="searchDate" id="inputPickup" type="date" placeholder="請選擇日期" />
                                         </div>
-                                        <a class="d-grid gap-3 col-sm-auto" id="customSearchButtonDate" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger">依日期搜尋</button></a>
+                                        <a class="d-grid gap-3 col-sm-auto" id="customSearchButtonDate" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger mt-3">依日期搜尋</button></a>
                                     </div>
                                    
-                                    <form asp-action="Search" method="get" class="row gx-2 gy-2 align-items-center">
+                                    <form asp-action="Search" method="get" class="row gx-2 gy-2 align-items-center mt-1">
                                     </form>
                                 </div>
                             </div>
