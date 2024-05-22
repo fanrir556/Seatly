@@ -121,17 +121,31 @@
 
             $("#animationTrans").append(`<img class="ball" style="left:50vw; width:100vh; height:100vh;animation-duration: 1.8s;" src="@Url.Content("~/images/queuely.png")"></img>`);
 
-            setTimeout(function () {
+            var removeTrans = setTimeout(function () {
                 $("#animationTrans").css("animation-name", "earthquake")
-            }, 1800);
-
-            setTimeout(function () {
+                setTimeout(function () {
                 $("#animationTrans").animate({ "top": "100vh" }, 500, function () {
                     clearInterval(dropSmall);
                     clearInterval(dropLarge);
                     $("#animationTrans").remove();
-                });
-            }, 2000);
+                    });
+                }, 200);
+            }, 1800);
+
+            $("#animationTrans").on("click", function () { 
+                clearTimeout(removeTrans);
+                clearInterval(dropSmall);
+                clearInterval(dropLarge);
+                $(this).remove();
+            });
+
+            // setTimeout(function () {
+            //     $("#animationTrans").animate({ "top": "100vh" }, 500, function () {
+            //         clearInterval(dropSmall);
+            //         clearInterval(dropLarge);
+            //         $("#animationTrans").remove();
+            //     });
+            // }, 2000);
             /*轉場動畫*/
 
             $("#pointsShopSide").on("click", function (e) {

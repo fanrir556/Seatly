@@ -70,7 +70,7 @@ $(function () {
     // Managermodal
 
     /* 管理員登入 */
-    $("#home").on("mousedown", function () {
+    $("#home").on("mousedown", function (e) {
         setTimeout(function () {
             $("#logo").css("animation-name", "logoSpin")
         }, 1000);
@@ -107,7 +107,7 @@ $(function () {
             }
         }, 3000);
     });
-    $("#home").on("mousedup", function () {
+    $("#home").on("mouseup", function () {
         $("#logo").css("animation-name", "")
         clearTimeout(timer);
     });
@@ -134,6 +134,7 @@ $(function () {
                 fetch(homeUri, {
                     method: "GET",
                 }).then(response => {
+                    sessionStorage.setItem('userPointsEdited', 'true');
                 }).catch(err => {
                     alert(err);
                 });
@@ -183,6 +184,7 @@ $(function () {
                         fetch(homeUri, {
                             method: "GET",
                         }).then(response => {
+                            sessionStorage.setItem('userPointsEdited', 'true');
                         }).catch(err => {
                             alert(err);
                         });

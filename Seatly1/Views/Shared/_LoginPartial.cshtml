@@ -14,7 +14,9 @@
         
         <li class="nav-item text-gradient" style="justify-content">
             <form class="form-inline"  asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                <button type="submit" class="nav-link btn btn-link text-dark" onclick="sessionStorage.removeItem('trans');sessionStorage.setItem('userPointsEdited', 'true');">
+                    Logout
+                </button>
         </form>
         </li>
     </div>

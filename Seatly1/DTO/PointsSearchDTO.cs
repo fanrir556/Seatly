@@ -10,5 +10,6 @@ namespace Seatly1.DTO
         public string? SortBy { get; set; }
         public string? SortType { get; set; } = "asc";
         public string? Keyword { get; set; }
+        public string? SearchBy { get; set; } = "id";
     }
 }
