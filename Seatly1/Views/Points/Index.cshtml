@@ -68,6 +68,12 @@
 @{
     ViewData["Title"] = "點數專區";
 }
+
+@*管理員登入判定*@
+@{
+    var isMg = HttpContextAccessor.HttpContext.Session.GetString("isMg");
+}
+
 @* 轉場動畫 *@
 <div id="animationTrans">
     @for (var i = 0; i < 100; i += 10)
@@ -89,9 +95,11 @@
             <li class="list-group-item bg-white">
                 <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsShopSide">點數商城</a>
             </li>
-            <li class="list-group-item bg-white">
+            @if (isMg != "true"){
+                <li class="list-group-item bg-white">
                 <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="couponSide">持有優惠券</a>
-            </li>
+                </li>
+            }
             <li class="list-group-item bg-white">
                 <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsHistorySide">點數交易紀錄</a>
             </li>
