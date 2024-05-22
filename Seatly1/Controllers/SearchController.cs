@@ -40,17 +40,18 @@ namespace Seatly1.Controllers
         // 顯示右半部search partial
         public async Task<IActionResult> searchPartial(string? searchString, DateTime? searchDate)
         {
-            var query = _context.NotificationRecords.AsQueryable();
             var now = DateTime.UtcNow;
+            var query = _context.NotificationRecords.Where(p => p.IsActivity == true && p.EndTime > now).AsQueryable();
+            
 
             // 添加檢查 isActivity 的條件
-            query = query.Where(p => p.IsActivity==true && p.EndTime> now);
+            //query = query.Where(p => p.IsActivity==true && p.EndTime> now);
 
 
             if (searchString != null)
             {
                 var act = await query
-                    .Where(p => p.ActivityName.Contains(searchString))
+                    .Where(p => p.ActivityName.Contains(searchString) || p.Location.Contains(searchString))
                     .ToListAsync();
 
                 if (act != null)
@@ -83,7 +84,7 @@ namespace Seatly1.Controllers
             return NotFound();
         }
 
-        // 顯示左半部篩選partial
+        // 顯示左半部篩選partial標籤
         [HttpPost]
         public IActionResult sideFilterPartial([FromBody] FilterData filterData)
         {
@@ -142,14 +143,13 @@ namespace Seatly1.Controllers
             if (searchString != null) // 從首頁輸入關鍵字進來
                 {
 
-                // 添加檢查 isActivity 的條件
-                //query = query.Where(p => p.IsActivity == true && p.EndTime > now);
+                
 
                 if (hashtags.Count > 0 && locations.Count == 0 && startDate != null && endDate != null)
                     {
                         // 分類+區間都有選
                         var filteredActivities = await query
-                        .Where(p => p.ActivityName.Contains(searchString) &&
+                        .Where(p => (p.ActivityName.Contains(searchString) || p.Location.Contains(searchString)) &&
                                     p.StartTime.HasValue && p.EndTime.HasValue &&
                                     p.StartTime.Value.Date <= startDate.Value.Date &&
                                     p.EndTime.Value.Date >= endDate.Value.Date && p.EndTime.Value.Date >= startDate.Value.Date &&
@@ -168,7 +168,7 @@ namespace Seatly1.Controllers
                     {
                         // 只選了分類
                         var filteredActivities = await query
-                            .Where(a => a.ActivityName.Contains(searchString) &&
+                            .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) &&
                                         hashtags.Any(c =>
                                             a.HashTag1.Contains(c) ||
                                             a.HashTag2.Contains(c) ||
@@ -183,7 +183,7 @@ namespace Seatly1.Controllers
                     {
                         // 只選了區間
                         var filteredActivities = await query
-                               .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue
+                               .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) && a.StartTime.HasValue && a.EndTime.HasValue
                                    && a.StartTime.Value.Date <= startDate.Value.Date &&
                                         a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date)
                                .ToListAsync();
@@ -194,7 +194,7 @@ namespace Seatly1.Controllers
                 {
                     // 只選了地點
                     var filteredActivities = await query
-                        .Where(a => a.ActivityName.Contains(searchString) && a.Location != null && a.Location != "" && locations.Any(l =>
+                        .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) && a.Location != null && a.Location != "" && locations.Any(l =>
                                 a.Location.Contains(l)))
                         .ToListAsync();
 
@@ -204,7 +204,7 @@ namespace Seatly1.Controllers
                 {
                     // 地點+區間
                     var filteredActivities = await query
-                        .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue &&
+                        .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) && a.StartTime.HasValue && a.EndTime.HasValue &&
                                 a.StartTime.Value.Date <= startDate.Value.Date &&
                                 a.EndTime.Value.Date >= endDate.Value.Date &&
                                 a.EndTime.Value.Date >= startDate.Value.Date &&
@@ -219,7 +219,7 @@ namespace Seatly1.Controllers
                 {
                     // 分類+地點
                     var filteredActivities = await query
-                        .Where(a => a.ActivityName.Contains(searchString) && hashtags.Any(c =>
+                        .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) && hashtags.Any(c =>
                                 a.HashTag1.Contains(c) ||
                                 a.HashTag2.Contains(c) ||
                                 a.HashTag3.Contains(c) ||
@@ -236,7 +236,7 @@ namespace Seatly1.Controllers
                 {
                     // 分類+地區+區間
                     var filteredActivities = await query
-                        .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue &&
+                        .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) && a.StartTime.HasValue && a.EndTime.HasValue &&
                                 a.StartTime.Value.Date <= startDate.Value.Date &&
                                 a.EndTime.Value.Date >= endDate.Value.Date &&
                                 a.EndTime.Value.Date >= startDate.Value.Date &&
@@ -257,7 +257,7 @@ namespace Seatly1.Controllers
                     {
                         // 原始搜尋結果
                         var act = await query   
-                            .Where(p => p.ActivityName.Contains(searchString))
+                            .Where(p => p.ActivityName.Contains(searchString) || p.Location.Contains(searchString))
                             .ToListAsync();
 
                         return PartialView("_searchPartial", act);

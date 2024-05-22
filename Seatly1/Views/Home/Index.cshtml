@@ -55,8 +55,8 @@
                         <div class="card-body">
                             <nav>
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <button class="nav-link active mb-3" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true"><i class="fas fa-motorcycle me-2"></i>找活動</button>
-                                    <button class="nav-link mb-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false"><i class="fas fa-shopping-bag me-2"></i>找日期</button>
+                                    <button class="nav-link active mb-3" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">✨找活動</button>
+                                    <button class="nav-link mb-3" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">📅找日期</button>
                                 </div>
                             </nav>
                             <div class="tab-content mt-3" id="nav-tabContent">
@@ -65,9 +65,9 @@
                                         <div class="input-group-icon">
                                             <i class="fas fa-map-marker-alt text-danger input-box-icon"></i>
                                             <label class="visually-hidden" for="inputDelivery">Keyword</label>
-                                            <input class="form-control input-box form-foodwagon-control" name="searchString" id="inputDelivery" type="text" placeholder="請輸入關鍵字" />
+                                            <input class="form-control input-box form-foodwagon-control" name="searchString" id="inputDelivery" type="text" placeholder="請輸入活動、地點關鍵字" />
                                         </div>
-                                        <a class="d-grid gap-3 col-sm-auto" id="customSearchButton" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger mt-3">搜尋活動關鍵字</button></a>
+                                        <a class="d-grid gap-3 col-sm-auto" id="customSearchButton" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger mt-3">搜尋活動</button></a>
                                     </div>
                                     
                                     <form asp-action="Search" method="get" class="row gx-2 gy-2 align-items-center mt-1">
@@ -80,7 +80,7 @@
                                             <label class="visually-hidden" for="inputPickup">Date</label>
                                             <input class="form-control input-box form-foodwagon-control" name="searchDate" id="inputPickup" type="date" placeholder="請選擇日期" />
                                         </div>
-                                        <a class="d-grid gap-3 col-sm-auto" id="customSearchButtonDate" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger mt-3">依日期搜尋</button></a>
+                                        <a class="d-grid gap-3 col-sm-auto" id="customSearchButtonDate" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger mt-3">搜尋日期</button></a>
                                     </div>
                                    
                                     <form asp-action="Search" method="get" class="row gx-2 gy-2 align-items-center mt-1">
@@ -101,7 +101,7 @@
         <div id="hotItems" class="container">
             <div class="row h-100">
                 <div class="col-lg-7 mx-auto text-center mt-7 mb-5">
-                    <h5 class="fw-bold fs-3 fs-lg-5 lh-sm">熱門活動</h5>
+                    <h2 class="fw-bold fs-3 fs-lg-5 lh-sm cute-font">熱門活動</h2>
                 </div>
                 <div class="col-12">
                     @if (Model != null && Model.Any())
@@ -170,7 +170,7 @@
                                                         </div>
                                                     </div>
                                                     <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@item.ActivityId">
-                                                        <div class="d-grid gap-2"><button class="btn btn-lg btn-danger" href="#!" role="button">查看活動</button></div>
+                                                        <div class="d-grid gap-2"><button class="btn btn-lg btn-danger mb-2" href="#!" role="button">查看活動</button></div>
                                                     </form>
                                                 </div>
                                             }
@@ -207,7 +207,7 @@
         <div class="container">
             <div class="row flex-center mb-5">
                 <div class="col-lg-7">
-                    <h5 class="fw-bold fs-3 fs-lg-5 lh-sm text-center text-lg-start">美食與生活娛樂</h5>
+                    <h2 class="fw-bold fs-3 fs-lg-5 lh-sm text-center text-lg-start cute-font">美食與生活娛樂</h2>
                 </div>
                 <div class="col-lg-4 text-lg-end text-center"></div>
                 <div class="col-lg-auto position-relative">
@@ -394,7 +394,7 @@
         <div class="container">
             <div class="row flex-center mb-5">
                 <div class="col-lg-7">
-                    <h5 class="fw-bold fs-3 fs-lg-5 lh-sm text-center text-lg-start">學習與事業發展</h5>
+                    <h2 class="fw-bold fs-3 fs-lg-5 lh-sm text-center text-lg-start cute-font">學習與事業發展</h2>
                 </div>
                 <div class="col-lg-4 text-lg-end text-center"></div>
                 <div class="col-lg-auto position-relative">

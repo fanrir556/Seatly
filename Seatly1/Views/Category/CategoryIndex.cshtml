@@ -72,14 +72,15 @@
     </style>
 }
 
-<div id="app" class="container">
+<div id="app" class="container position-relative vh-100">
+    <div class="position-absolute top-50 start-50 translate-middle">
     <h2>{{selectedType}}</h2>
       
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('taipei')">台北</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('taichung')">台中</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('tainan')">台南</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('kaohsiung')">高雄</button>
-    <hr />
+    
 
 
     <div>
@@ -113,7 +114,6 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         
                         <p class="card-text">
                             <span  v-for="i in 5">
@@ -125,7 +125,6 @@
                             <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
                         </p>
                         <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
-                        @* <a href="#" class="btn btn-primary">查看詳情</a> *@
                         
                        
 
@@ -145,7 +144,6 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                             <span v-for="i in 5">
@@ -173,7 +171,6 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                         <p class="card-text">
@@ -202,7 +199,6 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                         <p class="card-text">
@@ -224,7 +220,7 @@
         <p>查無此活動</p>
     </template>
 </div>
-
+</div>
 
 @section Scripts{
     <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>

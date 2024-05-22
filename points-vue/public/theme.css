@@ -631,8 +631,8 @@ progress {
 .container-xl,
 .container-xxl {
   width: 100%;
-  padding-right: var(--bs-gutter-x, 1rem);
-  padding-left: var(--bs-gutter-x, 1rem);
+ /* padding-right: var(--bs-gutter-x, 1rem);
+  padding-left: var(--bs-gutter-x, 1rem);*/
   margin-right: auto;
   margin-left: auto;
 }
