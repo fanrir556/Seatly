@@ -607,27 +607,103 @@
         //------------商城方法------------
         const showProducts = async () => {
           isMg.value = sessionStorage.getItem("isManager") == 'true' ? true : false;
-          const APIUrl = window.location.origin + '/api/PointsAPI/pointsShop';
-          const response = await fetch(APIUrl, {
-            method: 'POST',
-            body: JSON.stringify(searchTerm),
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json'
+
+          var pageNum = searchTerm.pgNum;
+          var pageSize = searchTerm.pgSize;
+          var skipCount = (pageNum - 1) * pageSize;
+
+          if (sessionStorage.getItem('pShop') == null || sessionStorage.getItem('pShopEdited') == 'true') {
+            const APIUrl = window.location.origin + '/api/PointsAPI/pointsShop';
+            const response = await fetch(APIUrl, {
+              method: 'POST',
+              body: JSON.stringify(searchTerm),
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+            const datas = await response.json();
+            //console.log(datas);
+            results.totalPg = datas.totalPages;
+            results.shops = datas.shops;
+            results.userPoints = datas.userPoints;
+            results.sList = datas.sList1;
+            results.dNames = datas.dNames;
+            results.shops.forEach((shop) => {
+              shop.productImage = @Url.Content("~/images/") + shop.productImage
+            });
+            await sessionStorage.setItem('pShop', JSON.stringify(datas));
+
+            results.shops = searchTerm.keyword
+              ? results.shops.filter((shop) => shop.productName.toLowerCase().includes(searchTerm.keyword.toLowerCase()))
+              : results.shops;
+
+            results.shops = searchTerm.cate != null ? results.shops.filter((shop) => shop.category == searchTerm.cate) : results.shops;
+
+            results.shops.sort((a, b) => {
+              switch (searchTerm.sortBy) {
+                case "id":
+                  return searchTerm.sortType === "asc" ? a.productId - b.productId : b.productId - a.productId;
+                case "price":
+                  return searchTerm.sortType === "asc" ? a.productPrice - b.productPrice : b.productPrice - a.productPrice;
+                case "cate":
+                  return searchTerm.sortType === "asc" ? a.category.localeCompare(b.category) || a.productPrice - b.productPrice : b.category.localeCompare(a.category) || a.productPrice - b.productPrice;
+                default:
+                  return searchTerm.sortType === "asc" ? a.category.localeCompare(b.category) || a.productPrice - b.productPrice : b.category.localeCompare(a.category) || a.productPrice - b.productPrice;
+              }
+            });
+
+            sessionStorage.removeItem('pShopEdited');
+          }
+          else {
+            const datas = await JSON.parse(sessionStorage.getItem('pShop'));
+
+            results.shops = searchTerm.keyword
+              ? datas.shops.filter((shop) => shop.productName.toLowerCase().includes(searchTerm.keyword.toLowerCase()))
+              : datas.shops;
+
+            results.shops = searchTerm.cate != null ? results.shops.filter((shop) => shop.category == searchTerm.cate) : results.shops;
+
+            results.shops.sort((a, b) => {
+              switch (searchTerm.sortBy) {
+                case "id":
+                  return searchTerm.sortType === "asc" ? a.productId - b.productId : b.productId - a.productId;
+                case "price":
+                  return searchTerm.sortType === "asc" ? a.productPrice - b.productPrice : b.productPrice - a.productPrice;
+                case "cate":
+                  return searchTerm.sortType === "asc" ? a.category.localeCompare(b.category) || a.productPrice - b.productPrice : b.category.localeCompare(a.category) || a.productPrice - b.productPrice;
+                default:
+                  return searchTerm.sortType === "asc" ? a.category.localeCompare(b.category) || a.productPrice - b.productPrice : b.category.localeCompare(a.category) || a.productPrice - b.productPrice;
+              }
+            });
+
+            var totalCount = results.shops.length;
+            var totalPages = Math.ceil(totalCount / pageSize);
+            results.totalPg = totalPages;
+            results.userPoints = datas.userPoints;
+            results.sList = datas.sList1;
+            results.dNames = datas.dNames;
+          }
+
+          results.shops = results.shops.slice(skipCount, skipCount + pageSize);
+
+          if (sessionStorage.getItem('userPointsEdited') == 'true') {
+            const APIUrl = window.location.origin + '/api/PointsAPI/userPoints';
+            const response = await fetch(APIUrl, {
+              method: 'GET'
+            });
+            const userPoints = await response.json();
+            const datas = await JSON.parse(sessionStorage.getItem('pShop'));
+            if (userPoints != -1) {
+              datas.userPoints = results.userPoints = userPoints;
             }
-          });
-          const datas = await response.json();
-          //console.log(datas);
-          results.totalPg = datas.totalPages;
-          results.shops = datas.shops;
-          results.userPoints = datas.userPoints;
-          results.sList = datas.sList1;
-          results.dNames = datas.dNames;
-          results.shops.forEach((shop) => {
-            shop.productImage = @Url.Content("~/images/") + shop.productImage
-          });
-          //isMg.value = datas.isMg;
-          //console.log(results);
+            else {
+              datas.userPoints = results.userPoints = null;
+            }
+
+            await sessionStorage.setItem('pShop', JSON.stringify(datas));
+            sessionStorage.removeItem('userPointsEdited');
+          }
 
           if (results.totalPg <= 1) {
             firstPage.value = true;
@@ -709,6 +785,7 @@
             }).then(data => {
               exchangeRes.value = data;
               sessionStorage.setItem('transEdited', 'true');
+              sessionStorage.setItem('userPointsEdited', 'true');
               setTimeout(function () {
                 document.querySelector('#exchangeModal').classList.remove('show');
                 document.querySelector('.modal-backdrop').classList.remove('show');
@@ -839,6 +916,7 @@
                 document.querySelectorAll(".edited").forEach(e => {
                   e.classList.remove('edited');
                 });
+                sessionStorage.setItem('pShopEdited', 'true');
                 showProducts();
               }).catch(function (err) {
                 alert(err);
@@ -1011,6 +1089,7 @@
               delete newPd.Category;
               delete newPd.ProductDescription;
               newPd.ProductImage = "NoImage.jpg";
+              sessionStorage.setItem('pShopEdited', 'true');
               showProducts();
             }).catch(function (err) {
               alert(err);
@@ -1024,7 +1103,7 @@
         };
 
         const deletePds = async () => {
-          var toast = new bootstrap.Toast(document.querySelector("#liveToast"))
+          var toast = new bootstrap.Toast(document.querySelector("#liveToast"));
           var toastHeader = document.querySelector("#liveToast>.toast-header");
           var toastBody = document.querySelector("#liveToast>.toast-body");
           //console.log(deleteList.value);
@@ -1058,6 +1137,7 @@
                 toastBody.textContent = `${count}筆資料已刪除`;
                 toast.show();
                 deleteList.value = [];
+                sessionStorage.setItem('pShopEdited', 'true');
                 showProducts();
               }).catch(function (err) {
                 alert(err);
@@ -1075,7 +1155,11 @@
         const showCoupons = async () => {
           isMg.value = sessionStorage.getItem("isManager") == 'true' ? true : false;
           if (isUser == 'true' || isMg.value == true) {
-            if (sessionStorage.getItem('trans') == null || sessionStorage.getItem('transEdited') != null) {
+            var pageNum = searchTerm.pgNum;
+            var pageSize = searchTerm.pgSize;
+            var skipCount = (pageNum - 1) * pageSize;
+
+            if (sessionStorage.getItem('trans') == null || sessionStorage.getItem('transEdited') == 'true') {
               const APIUrl = window.location.origin + '/api/PointsAPI/coupon';
               const response = await fetch(APIUrl, {
                 method: 'POST',
@@ -1100,18 +1184,24 @@
               results.trans.forEach((tran) => {
                 tran.pd = results.shops.find(p => p.productId === tran.productId)
               })
-              //isMg.value = datas.isMg;
-              //console.log(results)
 
               await sessionStorage.setItem('trans', JSON.stringify(datas));
-              /*sessionStorage.setItem('transSList', JSON.stringify(results.sList));
-              sessionStorage.setItem('transIList', JSON.stringify(results.iList));
-              sessionStorage.setItem('transDNames', results.dNames);
-              await sessionStorage.setItem('transShops', JSON.stringify(results.shops));*/
 
               if (strPoint.value == 'coupon' && isMg.value == false) {
                 results.trans = results.trans.filter(t => t.memberId == results.userId && t.active == true);
               }
+              else if (searchTerm.keyword != null) {
+                if (searchTerm.searchBy == 'id') {
+                  results.trans = results.trans.filter(t => t.id == searchTerm.keyword);
+                }
+                else {
+                  results.trans = results.trans.filter(t => t.memberId.toLowerCase().includes(searchTerm.keyword.toLowerCase()));
+                }
+              }
+              else {
+                results.trans = results.trans;
+              }
+
               sessionStorage.removeItem('transEdited');
             }
             else {
@@ -1132,12 +1222,8 @@
                 results.trans = datas.trans;
               }
               var totalCount = results.trans.length;
-              var pageNum = searchTerm.pgNum;
-              var pageSize = searchTerm.pgSize;
               var totalPages = Math.ceil(totalCount / pageSize);
-              var skipCount = (pageNum - 1) * pageSize;
               results.totalPg = totalPages;
-              results.trans = results.trans.slice(skipCount, skipCount + pageSize);
               results.sList = datas.sList1;
               results.iList = datas.iList1;
               results.dNames = datas.dNames;
@@ -1147,6 +1233,8 @@
                 shop.productImage = @Url.Content("~/images/") + shop.productImage
               });*/
             }
+
+            results.trans = results.trans.slice(skipCount, skipCount + pageSize);
 
             if (results.totalPg <= 1) {
               firstPage.value = true;

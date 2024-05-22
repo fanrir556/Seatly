@@ -134,6 +134,7 @@ $(function () {
                 fetch(homeUri, {
                     method: "GET",
                 }).then(response => {
+                    sessionStorage.setItem('userPointsEdited', 'true');
                 }).catch(err => {
                     alert(err);
                 });
@@ -183,6 +184,7 @@ $(function () {
                         fetch(homeUri, {
                             method: "GET",
                         }).then(response => {
+                            sessionStorage.setItem('userPointsEdited', 'true');
                         }).catch(err => {
                             alert(err);
                         });

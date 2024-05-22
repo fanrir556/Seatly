@@ -34,7 +34,7 @@ namespace Seatly1.Controllers
         {
             var isMg = HttpContext.Session.GetString("isMg"); //管理員登入判定
 
-            var products = !string.IsNullOrEmpty(search.Keyword) ? _context.PointStores.Where(s => s.ProductName.Contains(search.Keyword)) : _context.PointStores;
+            /*var products = !string.IsNullOrEmpty(search.Keyword) ? _context.PointStores.Where(s => s.ProductName.Contains(search.Keyword)) : _context.PointStores;
 
             products = search.Cate != null ? products.Where(s => s.Category == search.Cate) : products;
 
@@ -52,7 +52,12 @@ namespace Seatly1.Controllers
                 default:
                     products = search.SortType == "asc" ? products.OrderBy(s => s.Category).ThenBy(s => s.ProductPrice) : products.OrderByDescending(s => s.Category).ThenBy(s => s.ProductPrice);
                     break;
-            }
+            }*/
+
+
+            //products = products.Skip(skipCount).Take(pageSize);
+
+            var products = _context.PointStores;
 
             //分頁
             int totalCount = products.Count();
@@ -60,8 +65,6 @@ namespace Seatly1.Controllers
             int pageSize = search.PgSize ?? 10;
             int totalPages = (int)Math.Ceiling((decimal)totalCount / pageSize);
             int skipCount = (pageNum - 1) * pageSize;
-
-            products = products.Skip(skipCount).Take(pageSize);
 
             PointsPagingDTO pointsPaging = new PointsPagingDTO();
             pointsPaging.TotalPages = totalPages;
@@ -215,5 +218,28 @@ namespace Seatly1.Controllers
 
             return pointsPaging;
         }
+
+        //點數商城VUE
+        [HttpGet("userPoints")]
+        public async Task<int> userPointsVue()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                // 使用者已登入
+                // 在這裡進行相關處理
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                var aspUser = await _context.AspNetUsers.FindAsync(user.Id);
+                if (aspUser.Points == null)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return (int)aspUser.Points;
+                }
+            }
+            return -1;
+        }
+
     }
 }
