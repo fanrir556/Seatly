@@ -49,7 +49,7 @@ namespace Seatly1.Areas.Identity.Pages.Account
             var result = await _userManager.ChangeEmailAsync(user, email, code);
             if (!result.Succeeded)
             {
-                StatusMessage = "Error changing email.";
+                StatusMessage = "更改電子郵件時發生錯誤";
                 return Page();
             }
 
@@ -58,12 +58,12 @@ namespace Seatly1.Areas.Identity.Pages.Account
             var setUserNameResult = await _userManager.SetUserNameAsync(user, email);
             if (!setUserNameResult.Succeeded)
             {
-                StatusMessage = "Error changing user name.";
+                StatusMessage = "更改使用者名稱時出錯";
                 return Page();
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Thank you for confirming your email change.";
+            StatusMessage = "感謝您確認您的電子郵件變更";
             return Page();
         }
     }

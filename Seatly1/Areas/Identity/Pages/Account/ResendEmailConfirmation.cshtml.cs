@@ -65,7 +65,7 @@ namespace Seatly1.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+                ModelState.AddModelError(string.Empty, "驗證電子郵件已傳送。請查看你的信箱。");
                 return Page();
             }
 
@@ -79,10 +79,10 @@ namespace Seatly1.Areas.Identity.Pages.Account
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
                 Input.Email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                "歡迎加入Queuely！請確認您的email",
+                $"請<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>點擊此處</a>確認您的帳戶。");
 
-            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+            ModelState.AddModelError(string.Empty, "驗證電子郵件已傳送。請查看你的信箱。");
             return Page();
         }
     }

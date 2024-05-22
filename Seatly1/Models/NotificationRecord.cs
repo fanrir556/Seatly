@@ -31,7 +31,7 @@ public partial class NotificationRecord
 
     public string? LocationDescription { get; set; }
 
-    public bool? IsActivity { get; set; }
+    public string? LocationDescription { get; set; }
 
     public string? HashTag1 { get; set; }
 

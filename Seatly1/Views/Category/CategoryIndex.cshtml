@@ -5,6 +5,11 @@
 }
 @section Styles{
     <style>
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
         #filiter span{
             padding: 3px;
             margin: 3px;
@@ -18,7 +23,7 @@
             background-color: #ccc;
         }
         .red{
-            background-color: tomato;
+            background-color: lightcoral;
         }
 
         .love-icon {
@@ -27,34 +32,71 @@
             transition: transform 0.2s;
         }
 
-            .love-icon:hover {
-                transform: scale(1.2);
-            }
+        .love-icon:hover {
+            transform: scale(1.2);
+        }
+
+        .card {
+            width: 18rem; /* Set the width of the card */
+            height: 22rem; /* Set the height of the card */
+            margin: 10px; /* Margin between cards */
+        }
+
+           .card img {
+            height: 100px; /* Adjust the image height */
+            object-fit: cover; /* Ensure the image covers the entire area */
+            transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for transform and box-shadow */
+        }
+
+        .card img:hover {
+            transform: scale(1.1); /* Scale the image */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+        }
+
+        .card-body {
+            padding: 10px; /* Reduce the padding inside the card */
+        }
+
+        .card-title {
+            font-size: 1rem; /* Adjust the font size of the title */
+        }
+
+        .card-text {
+            font-size: 0.875rem; /* Adjust the font size of the text */
+        }
+
+        .card-body .btn {
+            font-size: 0.875rem; /* Adjust the font size of the button */
+            padding: 5px 10px; /* Adjust the padding of the button */
+        }
     </style>
 }
 
-<div id="app">
+<div id="app" class="container position-relative vh-100">
+    <div class="position-absolute top-50 start-50 translate-middle">
     <h2>{{selectedType}}</h2>
       
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('taipei')">台北</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('taichung')">台中</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('tainan')">台南</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('kaohsiung')">高雄</button>
-    <hr />
+    
 
 
-
-    <div class="time-selector">
+    <div>
+    <span class="time-selector">
         <label for="startTime">開始時間:</label>
-        <input type="datetime-local" id="startTime">
-    </div>
-    <div class="time-selector">
+        <input class="m-2" type="datetime-local" id="startTime">
+    </span>
+    <span class="time-selector">
         <label for="endTime">結束時間:</label>
-        <input type="datetime-local" id="endTime">
-    </div>
+        <input class="m-2" type="datetime-local" id="endTime">
+    </span>
+    <span>
     <button id="applyFilter" class="btn btn-primary m-2" @@click="applyTimeFilter">套用時間</button>
     <button id="clearFilter" class="btn btn-primary m-2" @@click="clearTimeFilter">清除時間篩選</button>
-
+        </span>
+    </div>
     <!-- 排序按钮 -->
     <div class="btn-group" role="group" aria-label="Sort Activities">
         <button type="button" class="btn btn-secondary" v-on:click="toggleSortOrder">目前排序: {{ sortBy === 'asc' ? '由舊到新' : '由新到舊' }}</button>
@@ -67,12 +109,11 @@
         <div class="row">
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
-                    <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
+                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
                     <div class="card-body ">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
                         
                         <p class="card-text">
                             <span  v-for="i in 5">
@@ -84,7 +125,6 @@
                             <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
                         </p>
                         <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
-                        @* <a href="#" class="btn btn-primary">查看詳情</a> *@
                         
                        
 
@@ -99,12 +139,11 @@
         <div class="row">
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
-                    <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
+                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                             <span v-for="i in 5">
@@ -127,12 +166,11 @@
         <div class="row">
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
-                    <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
+                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                         <p class="card-text">
@@ -156,12 +194,11 @@
         <div class="row">
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
-                    <img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo">
+                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
-                        <p class="card-text">活動內容: {{ activity.descriptionN }}</p>
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                         <p class="card-text">
@@ -183,7 +220,7 @@
         <p>查無此活動</p>
     </template>
 </div>
-
+</div>
 
 @section Scripts{
     <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
@@ -322,7 +359,8 @@
                         });
                         const data = await response.json();
                         // 处理收藏成功的情况
-                        alert('收藏成功！');
+                        // alert('收藏成功！');
+                        alert(data.message)
                     } catch (error) {
                         // 处理错误情况
                         console.error('Error:', error);

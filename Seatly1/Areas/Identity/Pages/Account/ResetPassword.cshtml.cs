@@ -50,7 +50,7 @@ namespace Seatly1.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0} 的長度必須至少為 {2} 個字符，最多為 {1} 個字元。", MinimumLength = 6)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -59,8 +59,8 @@ namespace Seatly1.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "確認密碼")]
+            [Compare("Password", ErrorMessage = "兩次密碼不相符")]
             public string ConfirmPassword { get; set; }
 
             /// <summary>
@@ -76,7 +76,7 @@ namespace Seatly1.Areas.Identity.Pages.Account
         {
             if (code == null)
             {
-                return BadRequest("A code must be supplied for password reset.");
+                return BadRequest("必須提供密碼才能重設密碼。.");
             }
             else
             {

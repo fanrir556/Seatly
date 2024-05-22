@@ -63,7 +63,7 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0}須至少{2}位數且長度最多{1}", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "新密碼")]
             public string NewPassword { get; set; }
@@ -74,7 +74,7 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "密碼確認")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            [Compare("NewPassword", ErrorMessage = "新密碼與確認密碼不相符")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -120,7 +120,7 @@ namespace Seatly1.Areas.Identity.Pages.Account.Manage
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            StatusMessage = "密碼變更成功！";
 
             return RedirectToPage();
         }

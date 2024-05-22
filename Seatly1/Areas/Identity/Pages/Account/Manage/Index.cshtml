@@ -33,8 +33,8 @@
                 <label asp-for="Username" class="form-label"></label>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="MemberRealName" class="form-control" placeholder="真實姓名" disabled />
-                <label asp-for="MemberRealName" class="form-label"></label>
+                <input asp-for="Input.MemberRealName" class="form-control" placeholder="真實姓名"  />
+                <label asp-for="Input.MemberRealName" class="form-label">@Html.DisplayNameFor(a => a.Input.MemberRealName)</label>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.PhoneNumber" class="form-control" placeholder="連絡電話"/>
@@ -60,7 +60,7 @@
                 <span asp-validation-for="Input.Birthday" class="text-danger"></span>
             </div>
 
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">儲存</button>
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary mt-5">儲存</button>
         </form>
     </div>
 </div>

@@ -2,15 +2,15 @@
     Layout = null;
 }
 <!DOCTYPE html>
-<html lang="tw">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Queuely</title>
+    <title>@ViewData["Title"]</title>
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
-    <title>Foodwagon | Responsive, Ecommerce &amp; Business Templatee</title>
+    @* <title>Foodwagon | Responsive, Ecommerce &amp; Business Templatee</title> *@
 
 
     <!-- ===============================================-->
@@ -46,6 +46,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Lilita+One&display=swap" rel="stylesheet">
     @RenderSection("Styles", required: false) <!-- 如果提供了 Styles 部分，则渲染 Styles 部分 -->
    
 </head>
@@ -63,11 +66,11 @@
     }
     @*簽到判定*@
 
-    <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-light justify-content-center" data-navbar-on-scroll="data-navbar-on-scroll">
-        <div class="container-fluid m-0" style="min-width: 98vw;">
+    <nav class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-light justify-content-center cute-font mb-5" data-navbar-on-scroll="data-navbar-on-scroll">
+        <div class="container-fluid m-0" style="min-width: 98vw; padding:0px">
             <a class="navbar-brand d-inline-flex" asp-area="" asp-controller="Home" asp-action="Index" id="home" data-uri="@Url.Action("Index", "Home")">
                 <img class="d-inline-block" src="@Url.Content("~/images/logo.svg")" alt="logo" id="logo" data-url="@Url.Action("isMG", "Home")" style="width: 40px; height: 40px;" />
-                <span class="text-1000 fs-3 fw-bold ms-2 text-gradient">Queuely</span>
+                <span class="text-1000 fs-3 fw-bold ms-2 text-gradient cute-font">Queuely</span>
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
@@ -78,9 +81,10 @@
             @* 搜尋框 *@
             <div id="" class="collapse navbar-collapse border-top border-lg-0 justify-content-end">
                 <input id="layoutSearch" class="input-box form-foodwagon-control" type="text" v-model="searchKeyword" placeholder="🔎輸入關鍵字...">
-                <a id="layoutSearchBtn" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger">搜尋</button></a>
+                <a id="layoutSearchBtn" asp-area="" asp-controller="Search" asp-action="searchIndex"><button class="btn btn-danger m-2">搜尋</button></a>
             </div>
 
+            @* 收藏清單 *@
             <div class="collapse navbar-collapse border-top border-lg-0 justify-content-end" id="navbarSupportedContent">
 
                 <!--試連結集中區-->
@@ -224,9 +228,9 @@
     </div>
     @*toast*@
 
-    <footer class="border-top footer text-muted position-fixed bottom-0">
+    <footer class="border-top footer text-muted position-fixed bottom-0 cute-font">
         <div class="container-fluid">
-            &copy; 2024 - Seatly1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - Queuely - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
@@ -279,9 +283,14 @@
         sessionStorage.removeItem("searchDate")
         sessionStorage.removeItem("searchString")
         var searchKeyword = $("#layoutSearch").val()
-        console.log(searchKeyword)
-        sessionStorage.setItem("searchString", searchKeyword)
-        sessionStorage.setItem("isSearching", "true")
+        if (searchKeyword !== null && searchKeyword.trim() !== "") {
+            console.log(searchKeyword);
+            sessionStorage.setItem("searchString", searchKeyword);
+            sessionStorage.setItem("isSearching", "true");
+        } else {
+            e.preventDefault();
+            // alert("請輸入關鍵字");
+        }
     });
 </script>
 </html>

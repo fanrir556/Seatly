@@ -24,14 +24,28 @@
     font-size: 1.5rem;
     text-align: center;
     }
+
+        .share-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+            .share-buttons > * {
+                margin: 0;
+            }
     </style>
 }
 
-<h2>收藏清單</h2>
 
+<div class="container">
+    <h2 class="cute-font">收藏清單</h2>
 @if (Model.Any())
 {
-    <div class="row">
+    <div class="row ">
         @foreach (var item in Model)
         {
             
@@ -83,11 +97,20 @@
                             <a href="@Url.Action("UsersView", "NotificationRecord", new { id = item.ActivityId })" class="btn btn-primary">查看詳情</a>
                             <button class="btn btn-danger" onclick="removeFromCollection(@item.ActivityId)">移除收藏</button>
                         }
-                        <!-- Facebook Share Button -->
-                        <div class="fb-share-button"
-                             data-href="https://yourdomain.com/Collections/CollectionsIndex/@item.ActivityId"
-                             data-layout="button_count">
+                        <!-- Share buttons container -->
+                        <div class="share-buttons">
+                            <!-- LINE分享按鈕 -->
+
+                            <div class="line-it-button" data-lang="zh_Hant" data-type="share-a" data-env="REAL" data-url="http://4.217.249.190/NotificationRecord/UsersView/@item.ActivityId" data-color="default" data-size="small" data-count="true" data-ver="3" style="display: none;"></div>
+                            <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+
+                            <!-- Facebook Share Button -->
+                            <div class="fb-share-button"
+                                 data-href="http://4.217.249.190/NotificationRecord/UsersView/@item.ActivityId"
+                                 data-layout="button_count">
+                            </div>
                         </div>
+
 
                     </div>
                 </div>
@@ -99,7 +122,7 @@ else
 {
     <p>沒有收藏項目。</p>
 }
-
+</div>
 @section Scripts{
     @Html.AntiForgeryToken()
 <script>
@@ -151,4 +174,6 @@ else
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
     </script>
+    @* LINE分享按鈕 *@
+    <script type="text/javascript">LineIt.loadButton();</script>
 }

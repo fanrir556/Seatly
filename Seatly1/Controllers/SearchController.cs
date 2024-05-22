@@ -31,46 +31,7 @@ namespace Seatly1.Controllers
             return View();
         }
 
-        ////顯示右半部search partial，加分頁
-        //public async Task<IActionResult> searchPartial(string? searchString, DateTime? searchDate, int? page)
-        //{
-        //    Debug.WriteLine($"Received searchString: {searchString}, searchDate: {searchDate}, page: {page}");
-
-
-        //    IQueryable<NotificationRecord> query = _context.NotificationRecords;
-
-        //    if (searchString != null)
-        //    {
-        //        query = query.Where(p => p.ActivityName.Contains(searchString));
-        //        // 每頁顯示的數據量
-        //        int pageSize = 5;
-        //        // 計算當前頁數
-        //        int pageNumber = (page ?? 1);
-
-        //        // 將查詢結果分頁化
-        //        var pagedData = await query.OrderByDescending(p => p.ActivityId)
-        //                                   .ToPagedListAsync(pageNumber, pageSize);
-
-        //        return PartialView("_searchPartial", pagedData);
-        //    }
-        //    else if (searchDate != null)
-        //    {
-        //        query = query.Where(p => p.StartTime.HasValue && p.EndTime.HasValue &&
-        //  p.StartTime.Value.Date <= searchDate.Value.Date && p.EndTime.Value.Date >= searchDate.Value.Date);
-        //        // 每頁顯示的數據量
-        //        int pageSize = 5;
-        //        // 計算當前頁數
-        //        int pageNumber = (page ?? 1);
-
-        //        // 將查詢結果分頁化
-        //        var pagedData = await query.OrderByDescending(p => p.ActivityId)
-        //                                   .ToPagedListAsync(pageNumber, pageSize);
-
-        //        return PartialView("_searchPartial", pagedData);
-        //    }
-        //    // 如果沒有符合的條件，返回 NotFound 或其他適當的值
-        //    return NotFound();
-        //}
+        
 
 
 
@@ -79,17 +40,18 @@ namespace Seatly1.Controllers
         // 顯示右半部search partial
         public async Task<IActionResult> searchPartial(string? searchString, DateTime? searchDate)
         {
-            var query = _context.NotificationRecords.AsQueryable();
             var now = DateTime.UtcNow;
+            var query = _context.NotificationRecords.Where(p => p.IsActivity == true && p.EndTime > now).AsQueryable();
+            
 
             // 添加檢查 isActivity 的條件
-            query = query.Where(p => p.IsActivity==true && p.EndTime> now);
+            //query = query.Where(p => p.IsActivity==true && p.EndTime> now);
 
 
             if (searchString != null)
             {
                 var act = await query
-                    .Where(p => p.ActivityName.Contains(searchString))
+                    .Where(p => p.ActivityName.Contains(searchString) || p.Location.Contains(searchString))
                     .ToListAsync();
 
                 if (act != null)
@@ -122,7 +84,7 @@ namespace Seatly1.Controllers
             return NotFound();
         }
 
-        // 顯示左半部篩選partial
+        // 顯示左半部篩選partial標籤
         [HttpPost]
         public IActionResult sideFilterPartial([FromBody] FilterData filterData)
         {
@@ -171,19 +133,23 @@ namespace Seatly1.Controllers
                     hashtags.Add(category);
                 }
             }
-                var query = _context.NotificationRecords.AsQueryable();
-                var now = DateTime.UtcNow;
+            //var query = _context.NotificationRecords.AsNoTracking().AsQueryable();
+            var now = DateTime.UtcNow;
+            var query = _context.NotificationRecords
+                        .Where(p => p.IsActivity == true && p.EndTime > now).AsNoTracking().AsQueryable();
+
+            //var query = _context.NotificationRecords.AsQueryable();
+            
             if (searchString != null) // 從首頁輸入關鍵字進來
                 {
 
-                // 添加檢查 isActivity 的條件
-                query = query.Where(p => p.IsActivity == true && p.EndTime > now);
+                
 
                 if (hashtags.Count > 0 && locations.Count == 0 && startDate != null && endDate != null)
                     {
                         // 分類+區間都有選
                         var filteredActivities = await query
-                        .Where(p => p.ActivityName.Contains(searchString) &&
+                        .Where(p => (p.ActivityName.Contains(searchString) || p.Location.Contains(searchString)) &&
                                     p.StartTime.HasValue && p.EndTime.HasValue &&
                                     p.StartTime.Value.Date <= startDate.Value.Date &&
                                     p.EndTime.Value.Date >= endDate.Value.Date && p.EndTime.Value.Date >= startDate.Value.Date &&
@@ -202,7 +168,7 @@ namespace Seatly1.Controllers
                     {
                         // 只選了分類
                         var filteredActivities = await query
-                            .Where(a => a.ActivityName.Contains(searchString) &&
+                            .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) &&
                                         hashtags.Any(c =>
                                             a.HashTag1.Contains(c) ||
                                             a.HashTag2.Contains(c) ||
@@ -217,7 +183,7 @@ namespace Seatly1.Controllers
                     {
                         // 只選了區間
                         var filteredActivities = await query
-                               .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue
+                               .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) && a.StartTime.HasValue && a.EndTime.HasValue
                                    && a.StartTime.Value.Date <= startDate.Value.Date &&
                                         a.EndTime.Value.Date >= endDate.Value.Date && a.EndTime.Value.Date >= startDate.Value.Date)
                                .ToListAsync();
@@ -228,7 +194,7 @@ namespace Seatly1.Controllers
                 {
                     // 只選了地點
                     var filteredActivities = await query
-                        .Where(a => a.ActivityName.Contains(searchString) && a.Location != null && a.Location != "" && locations.Any(l =>
+                        .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) && a.Location != null && a.Location != "" && locations.Any(l =>
                                 a.Location.Contains(l)))
                         .ToListAsync();
 
@@ -238,7 +204,7 @@ namespace Seatly1.Controllers
                 {
                     // 地點+區間
                     var filteredActivities = await query
-                        .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue &&
+                        .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) && a.StartTime.HasValue && a.EndTime.HasValue &&
                                 a.StartTime.Value.Date <= startDate.Value.Date &&
                                 a.EndTime.Value.Date >= endDate.Value.Date &&
                                 a.EndTime.Value.Date >= startDate.Value.Date &&
@@ -253,7 +219,7 @@ namespace Seatly1.Controllers
                 {
                     // 分類+地點
                     var filteredActivities = await query
-                        .Where(a => a.ActivityName.Contains(searchString) && hashtags.Any(c =>
+                        .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) && hashtags.Any(c =>
                                 a.HashTag1.Contains(c) ||
                                 a.HashTag2.Contains(c) ||
                                 a.HashTag3.Contains(c) ||
@@ -270,7 +236,7 @@ namespace Seatly1.Controllers
                 {
                     // 分類+地區+區間
                     var filteredActivities = await query
-                        .Where(a => a.ActivityName.Contains(searchString) && a.StartTime.HasValue && a.EndTime.HasValue &&
+                        .Where(a => (a.ActivityName.Contains(searchString) || a.Location.Contains(searchString)) && a.StartTime.HasValue && a.EndTime.HasValue &&
                                 a.StartTime.Value.Date <= startDate.Value.Date &&
                                 a.EndTime.Value.Date >= endDate.Value.Date &&
                                 a.EndTime.Value.Date >= startDate.Value.Date &&
@@ -291,7 +257,7 @@ namespace Seatly1.Controllers
                     {
                         // 原始搜尋結果
                         var act = await query   
-                            .Where(p => p.ActivityName.Contains(searchString))
+                            .Where(p => p.ActivityName.Contains(searchString) || p.Location.Contains(searchString))
                             .ToListAsync();
 
                         return PartialView("_searchPartial", act);
@@ -449,79 +415,7 @@ namespace Seatly1.Controllers
         }
 
 
-        //[HttpPost]
-        //public IActionResult GetActivitiesByCategories(List<string>? categories, string? searchString, DateTime? searchDate)
-        //{
-        //    if (searchString != null)
-        //    {
-        //        if (categories == null)
-        //        {
-        //            var act = _context.NotificationRecords
-        //               .Where(p => p.ActivityName.Contains(searchString))
-        //               .ToListAsync();
-
-        //            return PartialView("_searchPartial", act);
-        //        }
-        //        else
-        //        {
-        //            var filteredActivities = _context.NotificationRecords
-        //               .Where(a => a.ActivityName.Contains(searchString) &&
-        //                           categories.Any(c =>
-        //                               a.HashTag1.Contains(c) ||
-        //                               a.HashTag2.Contains(c) ||
-        //                               a.HashTag3.Contains(c) ||
-        //                               a.HashTag4.Contains(c) ||
-        //                               a.HashTag5.Contains(c)));
-
-        //            return PartialView("_searchPartial", filteredActivities);
-
-        //        }
-        //    }
-        //    else if (searchDate != null)
-        //    {
-        //        if (categories == null)
-        //        {
-        //            var act = _context.NotificationRecords
-        //               .Where(p => p.StartTime.HasValue && p.EndTime.HasValue && p.StartTime.Value.Date <= searchDate.Value.Date && p.EndTime.Value.Date >= searchDate.Value.Date)
-        //               .ToListAsync();
-
-        //            return PartialView("_searchPartial", act);
-        //        }
-        //        else
-        //        {
-        //            var filteredActivities = _context.NotificationRecords
-        //               .Where(a => a.StartTime.HasValue && a.EndTime.HasValue && a.StartTime.Value.Date <= searchDate.Value.Date && a.EndTime.Value.Date >= searchDate.Value.Date &&
-        //                           categories.Any(c =>
-        //                               a.HashTag1.Contains(c) ||
-        //                               a.HashTag2.Contains(c) ||
-        //                               a.HashTag3.Contains(c) ||
-        //                               a.HashTag4.Contains(c) ||
-        //                               a.HashTag5.Contains(c)));
-
-        //            return PartialView("_searchPartial", filteredActivities);
-
-        //        }
-        //    }
-        //    return NotFound();
-        //}
-
-
-
-
-        //[HttpPost]
-        //public IActionResult SearchByDate(string searchDate)
-        //{
-        //    if (DateTime.TryParseExact(searchDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
-        //    {
-        //        var activities = _context.NotificationRecords.Where(a => a.StartTime == parsedDate).ToList();
-        //        return PartialView("_searchPartial", activities);
-        //    }
-        //    else
-        //    {
-        //        // 處理日期格式無效的情況
-        //        return BadRequest("Invalid date format");
-        //    }
-        //}
+      
 
     }
 }

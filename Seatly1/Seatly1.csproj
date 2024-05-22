@@ -8,22 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\NewFolder\**" />
+    <Compile Remove="Views\Friends\**" />
     <Compile Remove="wwwroot\gulp\**" />
     <Compile Remove="wwwroot\public\**" />
     <Compile Remove="wwwroot\src\**" />
     <Compile Remove="wwwroot\video\**" />
-    <Content Remove="Models\NewFolder\**" />
+    <Content Remove="Views\Friends\**" />
     <Content Remove="wwwroot\gulp\**" />
     <Content Remove="wwwroot\public\**" />
     <Content Remove="wwwroot\src\**" />
     <Content Remove="wwwroot\video\**" />
-    <EmbeddedResource Remove="Models\NewFolder\**" />
+    <EmbeddedResource Remove="Views\Friends\**" />
     <EmbeddedResource Remove="wwwroot\gulp\**" />
     <EmbeddedResource Remove="wwwroot\public\**" />
     <EmbeddedResource Remove="wwwroot\src\**" />
     <EmbeddedResource Remove="wwwroot\video\**" />
-    <None Remove="Models\NewFolder\**" />
+    <None Remove="Views\Friends\**" />
     <None Remove="wwwroot\gulp\**" />
     <None Remove="wwwroot\public\**" />
     <None Remove="wwwroot\src\**" />
@@ -37,6 +37,7 @@
   <ItemGroup>
     <PackageReference Include="Bootstrap.v3.Datetimepicker" Version="4.17.49" />
     <PackageReference Include="Bootstrap.v3.Datetimepicker.CSS" Version="4.17.49" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3" />
@@ -61,6 +62,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="wwwroot\src\router\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
