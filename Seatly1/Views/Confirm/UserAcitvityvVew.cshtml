@@ -1,0 +1,226 @@
+﻿<!--UserAcitvityvVew-->
+
+<!--
+    使用者查看活動及活動資訊
+    還有歷史活動及資訊
+-->
+<style>
+    .now-box{
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(0,0,0,0.5);
+        border-radius: 10px;
+    }
+
+    .Info{
+        background-color: #ffffff;
+        border: 1px solid #222222;
+    }
+
+</style>
+
+
+<div class="container" id ="app">
+
+    <h1 class="mt-3">
+        我的活動
+    </h1>
+    <button class="m-3 btn btn-primary" @@click="fetchList">現在參加</button>
+    <button class="m-3 btn btn-success" @@click="history">歷史記錄</button>
+    <h3 class="mt-3">{{title}}</h3>
+    <!--現在參加-->
+    <div class="row now-box">
+        <div style="m-3">
+            <div style ="height: 100%; overflow-y: auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>活動編號</th>
+                            <th>活動封面</th>
+                            <th>活動名稱</th>
+                            <th>開始時間</th>
+                            <th>結束時間</th>
+                            <th>排隊號碼</th>
+                            <th v-if="!isHistory">
+                            </th>
+                            <th v-else>
+                                簽到狀況
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="a in list" :key="a.activityId">
+                            <td>{{a.activityId}}</td>
+                            <td>
+                                <img :src="a.Photo" :alt="a.activityName" class="coverPhoto" v-if="a.Photo" style="width:160px;height:80px" />
+                            </td>
+                            <td>{{a.activityName}}</td>
+                            <td>{{a.stratTime}}</td>
+                            <td>{{a.endTime}}</td>
+                            <td>{{a.waitingNumber}}</td>
+                            <td v-if="!isHistory">
+                                <button class="btn btn-primary btn-sm" :btn-id="a.activityId" @@click="Info">查看資訊</button>
+                            </td>
+                            <td v-else>
+                                <a :class="{'text-secondary': a.checked, 'text-danger': !a.checked}">{{ a.checked ? '已簽到' : '未簽到' }}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+           
+        </div>
+    </div>
+
+
+    <hr />
+
+
+
+@*     <!--歷史紀錄-->
+    <div class="row now-box">
+        <div style="m-3">
+            <h5 class="title m-3">歷史紀錄</h5>
+            <div style="height: 100%; max-height: 30vh; overflow-y: auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>活動編號</th>
+                            <th>活動封面</th>
+                            <th>活動名稱</th>
+                            <th>開始時間</th>
+                            <th>結束時間</th>
+                            <th>簽到狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                簽到狀態
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+ *@
+
+    @section Scripts
+{
+    <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!--時間格式套件-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+
+<script>
+
+        var base = "https://localhost:7271"
+
+        const vueApp = {
+            data() {
+                return {
+                    list: null,
+                    title:"",
+                    isHistory: false,
+                };
+            },
+            methods: {
+                fetchList() { // 更改方法名以避免命名衝突
+                    // alert("11")
+                    this.title = "現在參加";
+                    this.isHistory = false; // 標記為現在參加
+                    this.list = []
+                    axios.get(`${base}/Confirm/JoinList`)
+                        .then(res => {
+                          
+                            let aa = []
+
+                            for (let a of res.data) 
+                            {
+                                aa.push({
+                                    activityId: a.activityId,
+                                    activityName: a.activityName,
+                                    waitingNumber: a.waitingNumber,
+                                    Photo : `data:image/jpeg;base64,${a.activityPhoto}`,
+                                    stratTime: moment(a.startTime).format('YYYY-MM-DD'),
+                                    endTime: moment(a.endTime).format('YYYY-MM-DD'),
+                                })
+                            }
+                            this.list = aa
+                            console.log(this.list);
+                        })
+                        .catch(err => {
+                            alert(err);
+                        });
+                },
+                history() {
+                // alert("ee")
+                 this.title = "歷史紀錄";
+                 this.list = []
+                 this.isHistory = true; // 標記為現在參加
+                  // /Confirm/historyList
+                        axios.get(`${base}/Confirm/historyList`)
+                            .then(res => {
+                                let aa = []
+                                for (let a of res.data) {
+                                    aa.push({
+                                        activityId: a.activityId,
+                                        activityName: a.activityName,
+                                        waitingNumber: a.waitingNumber,
+                                        Photo: `data:image/jpeg;base64,${a.activityPhoto}`,
+                                        stratTime: moment(a.startTime).format('YYYY-MM-DD'),
+                                        endTime: moment(a.endTime).format('YYYY-MM-DD'),
+                                        checked:a.checked,
+                                    })
+                                }
+                                this.list = aa
+                                console.log(this.list);
+                            })
+                            .catch(err => {
+                                alert(err);
+                            });
+                },
+                //詳細資訊按鈕
+                Info: function () {
+
+                    // 從事件對象(event object)中取得觸發事件的按鈕元素
+                    const btn = event.target;
+                    // 從按鈕元素中取得自定義屬性"btn-id"
+                    const Aid = btn.getAttribute("btn-id");
+                        sessionStorage.setItem("ActID", Aid);
+
+
+                    ///Confirm/BookOK
+                    axios.get(`${base}/Confirm/BookOK`)
+                        .then(res => {
+                            // alert(res.data)
+                            window.location.href = `${base}/Confirm/BookOK`;
+                        })
+                        .catch(err => { 
+                        alert(err)
+                        })
+
+                },
+            },
+            mounted() {
+                this.fetchList(); // 直接調用方法，不需要使用 _this
+            }
+        };
+
+
+
+
+    Vue.createApp(vueApp).mount("#app");
+
+</script>
+}

@@ -43,6 +43,8 @@
     @* <link href="~/css/theme-rtl.min.css" rel="stylesheet" asp-append-version="true" /> *@
     @* <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" /> *@
     @* <link href="~/css/theme-rtl.css" rel="stylesheet" /> *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 
     @RenderSection("Styles", required: false) <!-- 如果提供了 Styles 部分，则渲染 Styles 部分 -->
    
@@ -80,9 +82,24 @@
             </div>
 
             <div class="collapse navbar-collapse border-top border-lg-0 justify-content-end" id="navbarSupportedContent">
-                <a class="text-gradient me-1" id="userCollections" asp-area="" asp-controller="Collections" asp-action="CollectionsIndex">❤收藏清單</a>
 
-                <a class="text-gradient" asp-area="" asp-controller="Admin" asp-action="Index">管理員連接測試</a>
+                <!--試連結集中區-->
+                <li class="nav-item dropdown text-gradient list-group">
+                    <a class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 測試連結集中區 </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item text-gradient me-1" id="userCollections" asp-area="" asp-controller="Collections" asp-action="CollectionsIndex">❤收藏清單</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-gradient " asp-area="" asp-controller="Admin" asp-action="Index">管理員連接測試</a>
+                        </li>
+                        
+                        <li>
+                            <a class="dropdown-item text-gradient " asp-area="" asp-controller="Confirm" asp-action="UserAcitvityvVew">歷史紀錄</a>
+                        </li>
+                    </ul>
+                </li>
+                <!--試連結集中區-->
 
                 @* 點數專區開始 *@
                 <li class="nav-item dropdown text-gradient list-group">

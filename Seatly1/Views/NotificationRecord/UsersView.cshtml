@@ -3,31 +3,187 @@
     檢視活動
     加入活動
 -->
+
 <style>
     .B {
-        width: 80%;
+        width: 1080px;
         margin: 0 auto;
         background-color: #ffffff;
         border: 2px solid #ffffff; /* 設定框線，寬度為2px，顏色為黑色 */
         border-radius: 0 0 10px 10px; /* 僅下半部有圓角 */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 設定四周陰影效果 */
+    }
+
+    .coverPhoto {
+        max-width: 1080px;
+        max-height:540px;
+        display: block;
+        margin: 0 auto;
+
+    }
+
+    .btn-xxs {
+        padding: .2rem .3rem;
+        font-size: .75rem;
+        line-height: 1.2;
+        border-radius: .15rem;
+    }
+
+    .InfoBlock{
+        border: 3px solid pink;
+        padding: 2%;
+        border-radius: 7px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 設定四周陰影效果 */
     }
+
+    .joinBlock{
+        border: 3px solid pink;
+        padding: 2%;
+        border-radius: 5%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 設定四周陰影效果 */
+    }
+
+
+    .disBlock{
+        margin-top:5%;
+    }
+
+    .waitingnumber {
+        color:#ffffff; 
+        padding:3px;
+        border-top-left-radius:5px;
+        border-top-right-radius:5px;
+    }
+
+
 </style>
 
 <div>
     <div class="container" id="app">
-        <div class="B">
-            <div style="background-color: #FF2E3C; text-align: center;color:#ffffff;">
-                <p>活動資訊</p>
+
+        <div class="B" v-if="Activity">
+            <img :src="ActivityPhotoSrc" alt="封面照片" class="coverPhoto" v-if="ActivityPhotoSrc" />
+            <img src="@Url.Content("~/images/NoImage.jpg")" title="NoImage" class="coverPhoto" v-else />
+            <!--
+
+               <div style="background-color: #FF2E3C; text-align: center; color: #ffffff;">
+                    <p>活動資訊</p>
+                </div>
+ 
+            -->
+            <div style="padding:2%">
+                <div class="row mt-3">
+
+                    <div class="col-9">
+
+                        <!--活動資訊框框-->
+                        <div class="InfoBlock">
+
+                            <!--hashTag們-->
+                            <div>
+                                <button class="btn btn-xxs btn-primary m-1" v-for="tag in ActivityHashTags">{{tag}}</button>
+                            </div>
+
+                            <!--活動名稱與編號-->
+                            <h2 style="margin:0;margin-top:10px;">{{ Activity.activityName }}</h2>
+                            <span style="color:#777777;">活動編號 : {{ Activity.activityId }}</span>
+                            <br />
+
+                            <!--時間框框-->
+                            <div style="margin-top:30px">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>活動開始 : </span>
+                                <span>{{startTime }} </span>
+                                <span> 到 </span>
+                                <span>{{endTime }} 結束</span>
+                            </div>
+                            <br />
+
+                            <!--地區框框-->
+                            <div style="">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>{{Activity.location}}</span>
+                                <br />
+                                <span>{{Activity.locationDescription}}</span>
+                            </div>
+
+@*                             <!-- LINE分享按鈕 -->
+                            <div class="line-it-button"
+                                 data-lang="zh_Hant"
+                                 data-type="share-a"
+                                 data-env="REAL"
+                                 :data-url="'http://4.217.249.190/NotificationRecord/UsersView/' + Actid"
+                                 data-color="default"
+                                 data-size="small"
+                                 data-count="true"
+                                 data-ver="3"
+                                 style="display: none;">
+                            </div> *@
+
+
+                            <!-- Facebook Share Button -->
+                            <div class="fb-share-button"
+                                 data-href=`http://4.217.249.190/NotificationRecord/UsersView/${{Actid}}`
+                                 data-layout="button_count">
+                            </div>
+
+                        </div>
+
+                        <div class="disBlock">
+                            <h5>活動簡介</h5>
+
+                            <hr />
+                            <p v-html="Activity.descriptionN"></p>
+
+                        </div>
+
+
+
+                    </div>
+
+                    <!--按鈕框框-->
+                    <!--判斷是不是公告-->
+                    <!--不是公告就排隊-->
+                    <div v-if="Activity.activityMethod !== '公告'" class="col-3">
+                        <div class="joinBlock text-center">
+                            <div style="border:3px solid pink; border-radius:8px; padding:0;">
+                                <p class="m-0 bg-primary waitingnumber">
+                                    活動人數
+                                </p>
+                                <p style="padding:10px 5px 5px; margin-bottom:5px;">
+                                    {{ book.waitingNumber }}/{{ Activity.capacity }}
+                                </p>
+                            </div>
+                            <button class="btn btn-sm btn-primary w-100 mt-2" v-if="canJoinActivity" @@click="joinclick">加入活動</button>
+                            <p v-else class="text-danger mt-2">活動已滿，無法加入</p>
+                        </div>
+                    </div>
+
+                    <!--是公告就寫廢話-->
+                    <div v-else class="col-3">
+
+                    </div>
+
+
+
+                </div>
             </div>
-            <img v-if="ActivityPhotoSrc" :src="ActivityPhotoSrc" alt="Activity Photo" />
-            <div class="m-3"></div>
         </div>
+
+
+        <div v-else>
+            <p>正在載入活動資訊...</p>
+        </div>
+
     </div>
+
+
 </div>
 
 @section Scripts
 {
+    <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+
     <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
@@ -39,38 +195,148 @@
         const vueApp = {
             data() {
                 return {
+                    //活動資料
                     Activity: null,
                     ActivityPhotoSrc: null,
+                    ActivityHashTags: [],
+                    startTime:"",
+                    endTime:"",
+                    Actid:null,
+                    //排隊資料
+                    book:[],
                 };
             },
             methods: {
+                //拿到活動資訊
                 list: function () {
                     let _this = this;
                     const Aid = sessionStorage.getItem("ActID");
-                    alert(Aid);
-                    if (Aid) {
-                        axios.get(`${vuebase}/NotificationRecord/UserList?id=${Aid}`)
-                            .then(res => {
-                                _this.Activity = res.data;
+                    // alert(Aid);
+                    _this.Actid = Aid;
+                    // alert(_this.Actid);
 
-                                 // 使用轉換函數
-                                _this.ActivityPhotoSrc = `data:image/jpeg;base64,${_this.Activity.activityPhoto}`;
-                                
-                            })
-                            .catch(err => {
-                                console.error('Error fetching activity data:', err);
-                                alert('Error fetching activity data');
-                            });
-                    } else {
-                        alert('ActID not found in sessionStorage');
-                    }
-                }
+                    //呼叫資料
+                    axios.get(`${vuebase}/NotificationRecord/UserList?id=${Aid}`)
+                    .then(res => {
+                        _this.Activity = res.data;
+                        console.log("活動資料")
+                        console.log(_this.Activity)
+
+                        //處理HashTag們
+                        // 將 HashTag1 到 HashTag5 放入 ActivityHashTags 陣列中
+                        for (let i = 1; i <= 5; i++) {
+                            const tag = _this.Activity[`hashTag${i}`];
+                            if (tag) {
+                                _this.ActivityHashTags.push(tag);
+                            }
+                        }
+                        console.log("標籤")
+                        console.log(_this.ActivityHashTags)
+
+                        //處裡圖片
+                        // 轉換資料成圖片
+                        _this.ActivityPhotoSrc = `data:image/jpeg;base64,${_this.Activity.activityPhoto}`;
+
+                        //處裡時間格式
+                        //'YYYY-MM-DD HH:mm'
+                        _this.startTime = moment(_this.Activity.startTime).format('YYYY-MM-DD')
+                        _this.endTime = moment(_this.Activity.endTime).format('MM-DD')
+
+                    })
+
+                    .catch(err => {
+                        alert('Error fetching activity data');
+                    });
+                },
+
+                // 拿到排隊資料
+                bookInfo: function () {
+                    let _this = this;
+                    const Aid = sessionStorage.getItem("ActID");
+
+                    axios.get(`${vuebase}/NotificationRecord/BookNumber?id=${Aid}`)
+                        .then(res => {
+                            _this.book = res.data;
+                            console.log("排隊資料");
+                            console.log(_this.book);
+                        })
+                        .catch(err => {
+                            // 設定 _this.book 為物件而不是陣列
+                            _this.book = {
+                                waitingNumber: 0
+                            };
+                            //alert(_this.book.waitingNumber);  
+                            //確認 waitingNumber 的值
+                        });
+                },
+
+                // 加入按鈕
+                joinclick: function () {
+                    let _this = this;
+                    const Aid = sessionStorage.getItem("ActID");
+
+                    // get/Confirm/Index
+                    axios.get(`${vuebase}/Confirm/Index?Nid=${Aid}`)
+                        .then(res => {
+                            // 根據回應的狀態進行不同處理
+                            switch (res.data.status) {
+                                case 'UserAlreadyBooked':
+                                    alert(res.data.message);
+                                    window.location.href = res.data.url;
+                                    break;
+
+                                case 'ActivityFull':
+                                    alert(res.data.message);
+                                    window.location.href = res.data.url;
+                                    break;
+
+                                case 'Success':
+                                    window.location.href = res.data.url;
+                                    break;
+
+                                case 'NotAuthenticated':
+                                    alert(res.data.message);
+                                    window.location.href = res.data.url;
+                                    break;
+
+                                default:
+                                    alert("發生未知錯誤，請稍後再試");
+                                    break;
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Error during joinclick:", err);
+                            alert("發生錯誤，請稍後再試");
+                        });
+                },
+
             },
             mounted: function () {
-                this.list();
-            }
+                _this = this
+                _this.list();
+                _this.bookInfo();
+            },
+            computed: {
+                canJoinActivity() {
+                    return this.Activity && this.book && this.book.waitingNumber < this.Activity.capacity;
+                }
+            },
         };
 
         Vue.createApp(vueApp).mount("#app");
+
     </script>
+
+    <!-- Load Facebook SDK for JavaScript -->
+    <div id="fb-root"></div>
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
 }

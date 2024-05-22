@@ -67,32 +67,9 @@ namespace Seatly1.Controllers
         }
 
         // GET: NotificationRecord/UsersView/
-        public async Task<IActionResult> UsersView(int? id)
+        public async Task<IActionResult> UsersView()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var viewModel = new NotificationBookReader();
-
-            var notificationRecord = await _context.NotificationRecords
-                .FirstOrDefaultAsync(m => m.ActivityId == id);
-
-            var Book = _context.BookingOrders
-                .Where(b => b.ActivityId == id)
-                .OrderBy(c => c.WaitingNumber)
-                .LastOrDefault();
-
-            viewModel.NotificationRecord = notificationRecord;
-            viewModel.BookingOrder = Book;
-
-            if (notificationRecord == null)
-            {
-                return NotFound();
-            }
-
-            return View(viewModel);
+            return View();
         }
 
 
@@ -113,8 +90,7 @@ namespace Seatly1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ActivityId,OrganizerId,ActivityPhoto,StartTime,EndTime,Capacity,ActivityName,DescriptionN,IsRecurring,RecurringTime,ActivityMethod,IsActivity,HashTag1,HashTag2,HashTag3,HashTag4,HashTag5")]
-        NotificationRecord notificationRecord)
+        public async Task<IActionResult> Create([Bind("ActivityId,OrganizerId,ActivityPhoto,StartTime,EndTime,Capacity,ActivityName,DescriptionN,IsRecurring,RecurringTime,ActivityMethod,Location,LocationDescription,IsActivity,HashTag1,HashTag2,HashTag3,HashTag4,HashTag5")] NotificationRecord notificationRecord)
         {
             if (ModelState.IsValid)
             {
@@ -125,8 +101,6 @@ namespace Seatly1.Controllers
                 if (notificationRecord.IsActivity == null) {
                     notificationRecord.IsActivity = true;
                 }
-
-
 
                 _context.Add(notificationRecord);
                 await _context.SaveChangesAsync();
@@ -159,7 +133,8 @@ namespace Seatly1.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Edit([Bind("ActivityId,OrganizerId,ActivityPhoto,StartTime,EndTime,Capacity,ActivityName,DescriptionN,IsRecurring,RecurringTime,ActivityMethod,Location,IsActivity,HashTag1,HashTag2,HashTag3,HashTag4,HashTag5")] NotificationRecord notificationRecord)
+        public async Task<IActionResult> Edit([Bind("ActivityId,OrganizerId,ActivityPhoto,StartTime,EndTime,Capacity,ActivityName,DescriptionN,IsRecurring,RecurringTime,ActivityMethod,Location,LocationDescription,IsActivity,HashTag1,HashTag2,HashTag3,HashTag4,HashTag5")] NotificationRecord notificationRecord)
+
 
         {
             NotificationRecord nr = await _context.NotificationRecords.FindAsync(notificationRecord.ActivityId);
@@ -258,7 +233,7 @@ namespace Seatly1.Controllers
         }
 
 
-        // UserView 呼叫列表用
+        // UserView 呼叫活動列表用
         // GET: NotificationRecord/UserList
         [HttpGet]
         public async Task<IActionResult> UserList(int id)
@@ -277,6 +252,28 @@ namespace Seatly1.Controllers
             // 返回 JSON 格式的數據
             return Ok(record);
         }
+
+
+        //UserView 呼叫排隊列表用
+        //GET: NotificationRecord/UserList
+        [HttpGet]
+        public async Task<ActionResult<BookingOrder>> BookNumber(int id)
+        {
+            var bookingOrder = await _context.BookingOrders
+                .Where(b => b.ActivityId == id)
+                .OrderByDescending(b => b.WaitingNumber)
+                .FirstOrDefaultAsync();
+
+            if (bookingOrder == null)
+            {
+                return NotFound();
+            }
+
+            return bookingOrder;
+        }
+
+
+
 
         private bool NotificationRecordExists(int id)
         {
