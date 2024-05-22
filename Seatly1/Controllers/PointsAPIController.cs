@@ -88,32 +88,33 @@ namespace Seatly1.Controllers
                 }
             }
 
+            List<string> DNames = new List<string>();
+            // 取得 PointStore 類別
+            Type pointStoreType = typeof(PointStore);
+
+            // 取得 PointStore 類別的所有屬性
+            PropertyInfo[] propertyInfos = pointStoreType.GetProperties();
+
+            // 遍歷所有屬性
+            foreach (PropertyInfo propertyInfo in propertyInfos)
+            {
+                // 取得屬性的 Display 屬性
+                DisplayNameAttribute displayNameAttribute = propertyInfo.GetCustomAttribute<DisplayNameAttribute>();
+
+                // 如果屬性有 Display 屬性
+                if (displayNameAttribute != null)
+                {
+                    // 取得屬性名稱和顯示名稱
+                    string propertyName = propertyInfo.Name;
+                    string displayName = displayNameAttribute.DisplayName;
+
+                    DNames.Add(displayName);
+                }
+            }
+            pointsPaging.DNames = DNames;
+
             if (isMg == "true")
             {
-                List<string> DNames = new List<string>();
-                // 取得 PointStore 類別
-                Type pointStoreType = typeof(PointStore);
-
-                // 取得 PointStore 類別的所有屬性
-                PropertyInfo[] propertyInfos = pointStoreType.GetProperties();
-
-                // 遍歷所有屬性
-                foreach (PropertyInfo propertyInfo in propertyInfos)
-                {
-                    // 取得屬性的 Display 屬性
-                    DisplayNameAttribute displayNameAttribute = propertyInfo.GetCustomAttribute<DisplayNameAttribute>();
-
-                    // 如果屬性有 Display 屬性
-                    if (displayNameAttribute != null)
-                    {
-                        // 取得屬性名稱和顯示名稱
-                        string propertyName = propertyInfo.Name;
-                        string displayName = displayNameAttribute.DisplayName;
-
-                        DNames.Add(displayName);
-                    }
-                }
-                pointsPaging.DNames = DNames;
                 pointsPaging.isMg = true;
             }
             
@@ -187,32 +188,33 @@ namespace Seatly1.Controllers
                 }
             }
 
+            List<string> DNames = new List<string>();
+            // 取得 PointStore 類別
+            Type pointTrans = typeof(PointTransaction);
+
+            // 取得 PointStore 類別的所有屬性
+            PropertyInfo[] propertyInfos = pointTrans.GetProperties();
+
+            // 遍歷所有屬性
+            foreach (PropertyInfo propertyInfo in propertyInfos)
+            {
+                // 取得屬性的 Display 屬性
+                DisplayNameAttribute displayNameAttribute = propertyInfo.GetCustomAttribute<DisplayNameAttribute>();
+
+                // 如果屬性有 Display 屬性
+                if (displayNameAttribute != null)
+                {
+                    // 取得屬性名稱和顯示名稱
+                    string propertyName = propertyInfo.Name;
+                    string displayName = displayNameAttribute.DisplayName;
+
+                    DNames.Add(displayName);
+                }
+            }
+            pointsPaging.DNames = DNames;
+
             if (isMg == "true")
             {
-                List<string> DNames = new List<string>();
-                // 取得 PointStore 類別
-                Type pointTrans = typeof(PointTransaction);
-
-                // 取得 PointStore 類別的所有屬性
-                PropertyInfo[] propertyInfos = pointTrans.GetProperties();
-
-                // 遍歷所有屬性
-                foreach (PropertyInfo propertyInfo in propertyInfos)
-                {
-                    // 取得屬性的 Display 屬性
-                    DisplayNameAttribute displayNameAttribute = propertyInfo.GetCustomAttribute<DisplayNameAttribute>();
-
-                    // 如果屬性有 Display 屬性
-                    if (displayNameAttribute != null)
-                    {
-                        // 取得屬性名稱和顯示名稱
-                        string propertyName = propertyInfo.Name;
-                        string displayName = displayNameAttribute.DisplayName;
-
-                        DNames.Add(displayName);
-                    }
-                }
-                pointsPaging.DNames = DNames;
                 pointsPaging.isMg = true;
             }
 

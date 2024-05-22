@@ -99,9 +99,9 @@
   </section>
 
   <div class="row m-4 mb-2">
-    <h2 v-if="strPoint == 'pointsShop'" class="text-gradient">點數商城</h2>
+    <h2 v-if="strPoint == 'pointsShop'" class="text-gradient">{{isMg ? '點數商城(管理者模式)' : '點數商城'}}</h2>
     <h2 v-else-if="strPoint == 'coupon'" class="text-gradient">持有優惠券</h2>
-    <h2 v-else-if="strPoint == 'pointsHistory'" class="text-gradient">點數交易紀錄</h2>
+    <h2 v-else-if="strPoint == 'pointsHistory'" class="text-gradient">{{isMg ? '點數交易紀錄(管理者模式)' : '點數交易紀錄'}}</h2>
   </div>
 
   <div class="row ps-5 pe-5 m-0">
@@ -166,53 +166,54 @@
         <div class="col-12" id="pointsContentBody">
           <!-- ------------MG------------ -->
           <section v-if="isMg == true">
-            <div class="d-flex justify-content-between mt-1">
-              <button class="btn btn-gradient mb-2 me-1" @@click="isAdding = !isAdding;addPd($event)">新增商品</button>
-              <button class="btn btn-gradient mb-2 me-1" @@click="saveEditPds">儲存修改</button>
-              <button v-if="isAdding" class="btn btn-gradient mb-2 me-1" @@click="saveAddPd">
-                儲存新增
-              </button>
-              <button class="btn btn-gradient mb-2 ms-auto" @@click="deletePds">刪除勾選商品</button>
-            </div>
-            <div id="requiredContent"></div>
-            <table class="table table-striped text-center">
-              <thead>
-                <tr>
-                  <th v-for="dName in results.dNames" :key="dName" @@click="changeSort(dName)">
-                    {{ dName }}
-                  </th>
-                  <th style="width: 50px">刪除</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-if="isAdding" class="align-middle" id="newPd">
-                  <td></td>
-                  <td>
-                    <img :src="noImgUrl" class="img-fluid rounded" style="width: 100px" alt="..." title=".." />
-                    <input class="form-control p-0 pimg" type="file" accept="image/*" @@change="addPd($event)" />
-                  </td>
-                  <td><input class="form-control p-0 text-center ms-auto me-auto" style="width: 120px" type="text"
-                      @@blur="addPd($event,`ProductName`)" />
-                  </td>
-                  <td><input class="form-control p-0 text-center ms-auto me-auto" style="width: 80px" type="number"
-                      min="0" @@blur="addPd($event)" />
-                  </td>
-                  <td>
-                    <select v-if="addCategory == false" class="form-control p-0 text-center ms-auto me-auto"
-                      @@blur="addPd($event,`Category`)">
-                      <option disabled selected value="">請選擇</option>
-                      <option v-for="cate in results.sList" :key="cate" :value="cate">{{ cate }}</option>
-                    </select>
-                    <input v-else class="form-control p-0 text-center ms-auto me-auto" style="width: 104px;"
-                      placeholder="請輸入類別" @@blur="addPd($event,`Category`)" />
-                    <p class="text-gradient"
-                      @@click="addCategory = !addCategory;addPd($event);$event.target.textContent = addCategory ? '選擇類別?' :'新增類別?'">
-                      新增類別?</p>
-                  </td>
-                  <td><textarea class="form-control p-0" @@blur="addPd($event,`ProductDescription`)"></textarea></td>
-                  <td></td>
-                </tr>
-                <tr v-for="{
+            <section v-if="results.totalPg >= 1">
+              <div class="d-flex justify-content-between mt-1">
+                <button class="btn btn-gradient mb-2 me-1" @@click="isAdding = !isAdding;addPd($event)">新增商品</button>
+                <button class="btn btn-gradient mb-2 me-1" @@click="saveEditPds">儲存修改</button>
+                <button v-if="isAdding" class="btn btn-gradient mb-2 me-1" @@click="saveAddPd">
+                  儲存新增
+                </button>
+                <button class="btn btn-gradient mb-2 ms-auto" @@click="deletePds">刪除勾選商品</button>
+              </div>
+              <div id="requiredContent"></div>
+              <table class="table table-striped text-center">
+                <thead>
+                  <tr>
+                    <th v-for="dName in results.dNames" :key="dName" @@click="changeSort(dName)">
+                      {{ dName }}
+                    </th>
+                    <th style="width: 50px">刪除</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-if="isAdding" class="align-middle" id="newPd">
+                    <td></td>
+                    <td>
+                      <img :src="noImgUrl" class="img-fluid rounded" style="width: 100px" alt="..." title=".." />
+                      <input class="form-control p-0 pimg" type="file" accept="image/*" @@change="addPd($event)" />
+                    </td>
+                    <td><input class="form-control p-0 text-center ms-auto me-auto" style="width: 120px" type="text"
+                        @@blur="addPd($event,`ProductName`)" />
+                    </td>
+                    <td><input class="form-control p-0 text-center ms-auto me-auto" style="width: 80px" type="number"
+                        min="0" @@blur="addPd($event)" />
+                    </td>
+                    <td>
+                      <select v-if="addCategory == false" class="form-control p-0 text-center ms-auto me-auto"
+                        @@blur="addPd($event,`Category`)">
+                        <option disabled selected value="">請選擇</option>
+                        <option v-for="cate in results.sList" :key="cate" :value="cate">{{ cate }}</option>
+                      </select>
+                      <input v-else class="form-control p-0 text-center ms-auto me-auto" style="width: 104px;"
+                        placeholder="請輸入類別" @@blur="addPd($event,`Category`)" />
+                      <p class="text-gradient"
+                        @@click="addCategory = !addCategory;addPd($event);$event.target.textContent = addCategory ? '選擇類別?' :'新增類別?'">
+                        新增類別?</p>
+                    </td>
+                    <td><textarea class="form-control p-0" @@blur="addPd($event,`ProductDescription`)"></textarea></td>
+                    <td></td>
+                  </tr>
+                  <tr v-for="{
           productId,
           productName,
           category,
@@ -220,37 +221,41 @@
           productDescription,
           productImage,
         } in results.shops" :key="productId" class="align-middle">
-                  <td>{{productId}}</td>
-                  <td>
-                    <img :src="productImage" class="img-fluid rounded" style="width: 100px" :alt="productName"
-                      :title="productName" />
-                    <input class="form-control p-0 pimg" type="file" accept="image/*"
-                      @@change="editPds(productId,`productImage`,$event)" />
-                  </td>
-                  <td>
-                    <input class="form-control p-0 text-center ms-auto me-auto" style="width: 120px" type="text"
-                      :value="productName" @@change="editPds(productId,`productName`,$event)" />
-                  </td>
-                  <td>
-                    <input class="form-control p-0 text-center ms-auto me-auto" style="width: 80px" type="number"
-                      :value="productPrice" @@change="editPds(productId,`productPrice`,$event)" />
-                  </td>
-                  <td>
-                    <select class="form-control p-0 text-center ms-auto me-auto" :value="category"
-                      @@change="editPds(productId,`category`,$event)">
-                      <option v-for="cate in results.sList" :key="cate" :value="cate">{{ cate }}</option>
-                    </select>
-                  </td>
-                  <td>
-                    <textarea class="form-control p-0 ms-auto me-auto"
-                      @@change="editPds(productId,`productDescription`,$event)">{{ productDescription }}</textarea>
-                  </td>
-                  <td><input type="checkbox" class="form-check-input"
-                      @@change="if (!($event.target.checked)) deleteList = deleteList.filter(id => id != productId); else deleteList.push(productId);" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                    <td>{{productId}}</td>
+                    <td>
+                      <img :src="productImage" class="img-fluid rounded" style="width: 100px" :alt="productName"
+                        :title="productName" />
+                      <input class="form-control p-0 pimg" type="file" accept="image/*"
+                        @@change="editPds(productId,`productImage`,$event)" />
+                    </td>
+                    <td>
+                      <input class="form-control p-0 text-center ms-auto me-auto" style="width: 120px" type="text"
+                        :value="productName" @@change="editPds(productId,`productName`,$event)" />
+                    </td>
+                    <td>
+                      <input class="form-control p-0 text-center ms-auto me-auto" style="width: 80px" type="number"
+                        :value="productPrice" @@change="editPds(productId,`productPrice`,$event)" />
+                    </td>
+                    <td>
+                      <select class="form-control p-0 text-center ms-auto me-auto" :value="category"
+                        @@change="editPds(productId,`category`,$event)">
+                        <option v-for="cate in results.sList" :key="cate" :value="cate">{{ cate }}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <textarea class="form-control p-0 ms-auto me-auto"
+                        @@change="editPds(productId,`productDescription`,$event)">{{ productDescription }}</textarea>
+                    </td>
+                    <td><input type="checkbox" class="form-check-input"
+                        @@change="if (!($event.target.checked)) deleteList = deleteList.filter(id => id != productId); else deleteList.push(productId);" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+            <section v-else>
+              <h3 class="text-gradient">查無商品!!</h3>
+            </section>
           </section>
           <!-- ------------MG------------ -->
           <section v-else-if="results.totalPg >= 1">
@@ -434,7 +439,153 @@
 
 
       <!-- ------------history------------ -->
-      <section v-else-if="strPoint == 'pointsHistory'"></section>
+      <section v-else-if="strPoint == 'pointsHistory'">
+        <section v-if="isMg == true">
+          <div class="d-flex align-items-center">
+            <label for="pdSearch" class="text-gradient form-label m-0">關鍵字:</label>
+            <input id="pdSearch" ref="pdSearch" class="form-control ms-2 me-2 w-25" autocomplete="off"
+              @@change="this.$refs.pdSearch.value = this.$refs.pdSearch.value.trim()" />
+            <span id="schCate" class="d-flex align-items-center">
+              <input type="radio" id="Id" name="schCate" value="id" v-model="searchTerm.searchBy"
+                class="m-0 me-1 form-check-input" checked />
+              <label for="Id" class="me-1 mb-0">交易編號</label>
+              <input type="radio" id="mId" name="schCate" value="mId" v-model="searchTerm.searchBy"
+                class="m-0 me-1 form-check-input" />
+              <label for="mId" class="me-1 mb-0">會員編號</label>
+            </span>
+            <button class="btn btn-gradient me-1"
+              @@click="searchTerm.keyword = this.$refs.pdSearch.value.trim();showCoupons()">搜尋</button>
+            <button class="btn btn-gradient"
+              @@click="searchTerm.keyword = null;this.$refs.pdSearch.value = '';showCoupons()">清除搜尋</button>
+          </div>
+        </section>
+        <div class="d-flex justify-content-end align-items-center">
+          <span class="me-2">每頁顯示<select v-model="searchTerm.pgSize" @@change="showCoupons()">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>筆資料。</span>
+          <button class="btn btn-gradient me-1 p-0" @@click="pP" style="width: 30px; height: 30px; text-align: center"
+            :disabled="firstPage">
+            上
+          </button>
+          第
+          <input class="me-1 p-0" v-model="searchTerm.pgNum" @@change="showCoupons()"
+            style="width: 30px; height: 30px; text-align: center" min="1" />
+          頁，共<span>{{ results.totalPg }}</span>頁
+          <button class="btn btn-gradient me-1 p-0" @@click="nP" style="width: 30px; height: 30px; text-align: center"
+            :disabled="lastPage">
+            下
+          </button>
+        </div>
+
+        <div class="col-12" id="pointsHistoryContentBody">
+          <!-- ------------MG------------ -->
+          <section v-if="isMg == true">
+            <section v-if="results.totalPg >= 1">
+              <div class="d-flex justify-content-between mt-1">
+                <button class="btn btn-gradient mb-2 me-1" @@click="isAdding = !isAdding;">新增紀錄</button>
+                <button class="btn btn-gradient mb-2 me-1">儲存修改</button>
+                <button v-if="isAdding" class="btn btn-gradient mb-2 me-1">儲存新增</button>
+                <button class="btn btn-gradient mb-2 ms-auto">刪除勾選紀錄</button>
+              </div>
+              <div id="requiredContent"></div>
+              <table class="table table-striped text-center">
+                <thead>
+                  <tr>
+                    <th v-for="dName in results.dNames" :key="dName" @@click="changeSort(dName)">
+                      {{ dName }}
+                    </th>
+                    <th style="width:50px;">刪除</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-if="isAdding" class="align-middle" id="newTran">
+                    <td></td>
+                    <td>
+                      <select class="form-control p-0 text-center" v-model="newTran.ProductId">
+                        <option disabled value="0">請選擇</option>
+                        <option v-for="pid in results.iList" :key="pid" :value="pid">{{ pid }}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select class="form-control p-0 text-center" v-model="newTran.MemberId">
+                        <option disabled value="">請選擇</option>
+                        <option v-for="mid in results.sList" :key="mid" :value="mid">{{ mid }}</option>
+                      </select>
+                    </td>
+                    <td><input type="date" v-model="newTran.TransactionDate"></td>
+                    <td>
+                      <select class="form-control p-0 text-center cAct"
+                        :class="{'text-success': newTran.Active, 'text-danger': !newTran.Active}"
+                        v-model="newTran.Active">
+                        <option :value="true" class="text-success">未使用</option>
+                        <option :value="false" class="text-danger">已使用</option>
+                      </select>
+                    </td>
+                    <td></td>
+                  </tr>
+                  <tr v-for="{id,productId,memberId,transactionDate,active} in results.trans" :key="id"
+                    class="align-middle">
+                    <td>{{id}}</td>
+                    <td>{{productId}}</td>
+                    <td>{{memberId}}</td>
+                    <td>{{new Intl.DateTimeFormat('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', hour:
+                      '2-digit', minute: '2-digit', second: '2-digit' }).format(new Date(transactionDate))}}</td>
+                    <td>
+                      <select class="form-control p-0 text-center cAct"
+                        :class="{'text-success': active, 'text-danger': !active}" :value="active"
+                        @@change="results.trans.find(t => t.id == id).active = $event.target.value == 'true' ? true : false;console.log(results.trans)">
+                        <option value="true" class="text-success">未使用</option>
+                        <option value="false" class="text-danger">已使用</option>
+                      </select>
+                    </td>
+                    <td><input type="checkbox" class="form-check-input" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+            <section v-else>
+              <h3 class="text-gradient">查無交易紀錄!!</h3>
+            </section>
+          </section>
+          <!-- ------------MG------------ -->
+          <section v-else-if="results.totalPg >= 1">
+            <table class="table table-striped text-center">
+              <thead>
+                <tr>
+                  <th>{{results.dNames[0]}}</th>
+                  <th>商品圖片</th>
+                  <th>商品名稱</th>
+                  <th>商品價格</th>
+                  <th>{{results.dNames[3]}}</th>
+                  <th>{{results.dNames[4]}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="{id,productId,memberId,transactionDate,active,pd} in results.trans" :key="id"
+                  class="align-middle">
+                  <td>{{id}}</td>
+                  <td><img :src="pd.productImage" class="img-fluid rounded-start" style="width:100px"
+                      :alt="pd.productName" :title="pd.productName">
+                  </td>
+                  <td>{{pd.productName}}
+                  </td>
+                  <td>{{pd.productPrice}}
+                  </td>
+                  <td>{{new Intl.DateTimeFormat('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', hour:
+                    '2-digit', minute: '2-digit', second: '2-digit' }).format(new Date(transactionDate))}}</td>
+                  <td :class="{'text-success': active, 'text-danger': !active}">{{active ? '未使用' : '已使用'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section v-else>
+            <h3 class="text-gradient">查無交易紀錄!!</h3>
+          </section>
+        </div>
+      </section>
       <!-- ------------history------------ -->
     </div>
   </div>
@@ -486,6 +637,16 @@
         var couponRes = ref('');
         //------------優惠券變數------------
 
+        //------------交易紀錄變數------------
+        const newTran = reactive({
+          Id: 0,
+          ProductId: 0,
+          MemberId: '',
+          TransactionDate: '',
+          Active: true
+        });
+        //------------交易紀錄變數------------
+
         //------------方法------------
         const pointStore = () => {
           searchTerm.cate = null;
@@ -496,6 +657,7 @@
           searchTerm.keyword = null;
           searchTerm.searchBy = null;
           strPoint.value = 'pointsShop';
+          isAdding.value = false;
           sessionStorage.setItem('strPoints', 'pointsShop');
           showProducts();
         };
@@ -507,12 +669,15 @@
           searchTerm.sortType = 'asc';
           searchTerm.keyword = null;
           searchTerm.searchBy = 'id';
-          if (sessionStorage.getItem('isMG') == 'true') {
+          if (sessionStorage.getItem('isManager') == 'true') {
             strPoint.value = 'pointsHistory';
+            isAdding.value = false;
             sessionStorage.setItem('strPoints', 'pointsHistory');
           }
-          strPoint.value = 'coupon';
-          sessionStorage.setItem('strPoints', 'coupon');
+          else {
+            strPoint.value = 'coupon';
+            sessionStorage.setItem('strPoints', 'coupon');
+          }
           showCoupons();
         };
         const history = () => {
@@ -524,7 +689,9 @@
           searchTerm.keyword = null;
           searchTerm.searchBy = 'id';
           strPoint.value = 'pointsHistory';
+          isAdding.value = false;
           sessionStorage.setItem('strPoints', 'pointsHistory');
+          showCoupons();
         };
 
         const dropSmallFunction = () => {
@@ -604,6 +771,97 @@
           }
         };
 
+        const changeSort = (dName) => {
+          switch (dName) {
+            case `${results.dNames[0]}`:
+              if (searchTerm.sortBy !== 'id') {
+                searchTerm.sortType = 'asc';
+              }
+              else if (searchTerm.sortType === 'asc') {
+                searchTerm.sortType = 'desc';
+              }
+              else {
+                searchTerm.sortType = 'asc';
+              }
+              searchTerm.sortBy = 'id';
+              break;
+            case `${results.dNames[2]}`:
+              if (strPoint.value == 'pointsHistory') {
+                if (searchTerm.sortBy !== 'mid') {
+                  searchTerm.sortType = 'asc';
+                }
+                else if (searchTerm.sortType === 'asc') {
+                  searchTerm.sortType = 'desc';
+                }
+                else {
+                  searchTerm.sortType = 'asc';
+                }
+                searchTerm.sortBy = 'mid';
+              }
+              break;
+            case `${results.dNames[3]}`:
+              if (strPoint.value == 'pointsHistory') {
+                if (searchTerm.sortBy !== 'tDate') {
+                  searchTerm.sortType = 'asc';
+                }
+                else if (searchTerm.sortType === 'asc') {
+                  searchTerm.sortType = 'desc';
+                }
+                else {
+                  searchTerm.sortType = 'asc';
+                }
+                searchTerm.sortBy = 'tDate';
+              }
+              else {
+                if (searchTerm.sortBy !== 'price') {
+                  searchTerm.sortType = 'asc';
+                }
+                else if (searchTerm.sortType === 'asc') {
+                  searchTerm.sortType = 'desc';
+                }
+                else {
+                  searchTerm.sortType = 'asc';
+                }
+                searchTerm.sortBy = 'price';
+              }
+              break;
+            case `${results.dNames[4]}`:
+              if (strPoint.value == 'pointsHistory') {
+                if (searchTerm.sortBy !== 'act') {
+                  searchTerm.sortType = 'asc';
+                }
+                else if (searchTerm.sortType === 'asc') {
+                  searchTerm.sortType = 'desc';
+                }
+                else {
+                  searchTerm.sortType = 'asc';
+                }
+                searchTerm.sortBy = 'act';
+              }
+              else {
+                if (searchTerm.sortBy !== 'cate') {
+                  searchTerm.sortType = 'asc';
+                }
+                else if (searchTerm.sortType === 'asc') {
+                  searchTerm.sortType = 'desc';
+                }
+                else {
+                  searchTerm.sortType = 'asc';
+                }
+                searchTerm.sortBy = 'cate';
+              }
+              break;
+            default:
+              break;
+          }
+          if (strPoint.value == 'pointsHistory') {
+            showCoupons();
+          }
+          else {
+            showProducts();
+          }
+        };
+
         //------------商城方法------------
         const showProducts = async () => {
           isMg.value = sessionStorage.getItem("isManager") == 'true' ? true : false;
@@ -638,21 +896,6 @@
               ? results.shops.filter((shop) => shop.productName.toLowerCase().includes(searchTerm.keyword.toLowerCase()))
               : results.shops;
 
-            results.shops = searchTerm.cate != null ? results.shops.filter((shop) => shop.category == searchTerm.cate) : results.shops;
-
-            results.shops.sort((a, b) => {
-              switch (searchTerm.sortBy) {
-                case "id":
-                  return searchTerm.sortType === "asc" ? a.productId - b.productId : b.productId - a.productId;
-                case "price":
-                  return searchTerm.sortType === "asc" ? a.productPrice - b.productPrice : b.productPrice - a.productPrice;
-                case "cate":
-                  return searchTerm.sortType === "asc" ? a.category.localeCompare(b.category) || a.productPrice - b.productPrice : b.category.localeCompare(a.category) || a.productPrice - b.productPrice;
-                default:
-                  return searchTerm.sortType === "asc" ? a.category.localeCompare(b.category) || a.productPrice - b.productPrice : b.category.localeCompare(a.category) || a.productPrice - b.productPrice;
-              }
-            });
-
             sessionStorage.removeItem('pShopEdited');
           }
           else {
@@ -662,21 +905,6 @@
               ? datas.shops.filter((shop) => shop.productName.toLowerCase().includes(searchTerm.keyword.toLowerCase()))
               : datas.shops;
 
-            results.shops = searchTerm.cate != null ? results.shops.filter((shop) => shop.category == searchTerm.cate) : results.shops;
-
-            results.shops.sort((a, b) => {
-              switch (searchTerm.sortBy) {
-                case "id":
-                  return searchTerm.sortType === "asc" ? a.productId - b.productId : b.productId - a.productId;
-                case "price":
-                  return searchTerm.sortType === "asc" ? a.productPrice - b.productPrice : b.productPrice - a.productPrice;
-                case "cate":
-                  return searchTerm.sortType === "asc" ? a.category.localeCompare(b.category) || a.productPrice - b.productPrice : b.category.localeCompare(a.category) || a.productPrice - b.productPrice;
-                default:
-                  return searchTerm.sortType === "asc" ? a.category.localeCompare(b.category) || a.productPrice - b.productPrice : b.category.localeCompare(a.category) || a.productPrice - b.productPrice;
-              }
-            });
-
             var totalCount = results.shops.length;
             var totalPages = Math.ceil(totalCount / pageSize);
             results.totalPg = totalPages;
@@ -684,6 +912,21 @@
             results.sList = datas.sList1;
             results.dNames = datas.dNames;
           }
+
+          results.shops = searchTerm.cate != null ? results.shops.filter((shop) => shop.category == searchTerm.cate) : results.shops;
+
+          results.shops.sort((a, b) => {
+            switch (searchTerm.sortBy) {
+              case "id":
+                return searchTerm.sortType === "asc" ? a.productId - b.productId : b.productId - a.productId;
+              case "price":
+                return searchTerm.sortType === "asc" ? a.productPrice - b.productPrice : b.productPrice - a.productPrice;
+              case "cate":
+                return searchTerm.sortType === "asc" ? a.category.localeCompare(b.category) || a.productPrice - b.productPrice : b.category.localeCompare(a.category) || a.productPrice - b.productPrice;
+              default:
+                return searchTerm.sortType === "asc" ? a.category.localeCompare(b.category) || a.productPrice - b.productPrice : b.category.localeCompare(a.category) || a.productPrice - b.productPrice;
+            }
+          });
 
           results.shops = results.shops.slice(skipCount, skipCount + pageSize);
 
@@ -711,50 +954,6 @@
           } else if (searchTerm.pgNum < results.totalPg) {
             lastPage.value = false;
           }
-        };
-
-        const changeSort = (dName) => {
-          switch (dName) {
-            case `${results.dNames[0]}`:
-              if (searchTerm.sortBy !== 'id') {
-                searchTerm.sortType = 'asc';
-              }
-              else if (searchTerm.sortType === 'asc') {
-                searchTerm.sortType = 'desc';
-              }
-              else {
-                searchTerm.sortType = 'asc';
-              }
-              searchTerm.sortBy = 'id';
-              break;
-            case `${results.dNames[3]}`:
-              if (searchTerm.sortBy !== 'price') {
-                searchTerm.sortType = 'asc';
-              }
-              else if (searchTerm.sortType === 'asc') {
-                searchTerm.sortType = 'desc';
-              }
-              else {
-                searchTerm.sortType = 'asc';
-              }
-              searchTerm.sortBy = 'price';
-              break;
-            case `${results.dNames[4]}`:
-              if (searchTerm.sortBy !== 'cate') {
-                searchTerm.sortType = 'asc';
-              }
-              else if (searchTerm.sortType === 'asc') {
-                searchTerm.sortType = 'desc';
-              }
-              else {
-                searchTerm.sortType = 'asc';
-              }
-              searchTerm.sortBy = 'cate';
-              break;
-            default:
-              break;
-          }
-          showProducts()
         };
 
         const pdExchange = (productId) => {
@@ -1234,6 +1433,21 @@
               });*/
             }
 
+            results.trans.sort((a, b) => {
+              switch (searchTerm.sortBy) {
+                case "id":
+                  return searchTerm.sortType === "asc" ? a.id - b.id : b.id - a.id;
+                case "mid":
+                  return searchTerm.sortType === "asc" ? a.memberId - b.memberId : b.memberId - a.memberId;
+                case "tDate":
+                  return searchTerm.sortType === "asc" ? new Date(a.transactionDate) - new Date(b.transactionDate) : new Date(b.transactionDate) - new Date(a.transactionDate);
+                case "act":
+                  return searchTerm.sortType === "asc" ? a.active - b.active : b.active - a.active;
+                default:
+                  return searchTerm.sortType === "asc" ? a.id - b.id : b.id - a.id;
+              }
+            });
+
             results.trans = results.trans.slice(skipCount, skipCount + pageSize);
 
             if (results.totalPg <= 1) {
@@ -1330,12 +1544,6 @@
           } else {
             lastPage.value = false
           }
-
-          if (searchTerm.searchBy == 'id' && searchTerm.keyword != null) {
-            if (isNaN(searchTerm.keyword) || searchTerm.keyword == '' || searchTerm.keyword.indexOf('e') != -1) {
-              searchTerm.keyword = 0;
-            }
-          }
         })
 
         return {
@@ -1355,6 +1563,7 @@
           skipTrans,
           pP,
           nP,
+          changeSort,
           //------------商城------------
           firstPage,
           lastPage,
@@ -1368,7 +1577,6 @@
           searchTerm,
           newPd,
           showProducts,
-          changeSort,
           pdExchange,
           confirmExchange,
           editPds,
@@ -1383,6 +1591,9 @@
           useCoupon,
           confirmUseCoupon,
           //------------優惠券------------
+          //------------交易紀錄------------
+          newTran,
+          //------------交易紀錄------------
         }
       }
     });
