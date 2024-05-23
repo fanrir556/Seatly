@@ -696,7 +696,7 @@ namespace Seatly1.Controllers
                 else
                 {
                     DateOnly date = DateOnly.FromDateTime(DateTime.Now.Date);
-                    var gameCountList = await _context.GamePoints.Where(s => s.MemberId == user.Id && s.PointsDate == date).ToListAsync();
+                    var gameCountList = await _context.GamePoints.Where(s => s.MemberId == user.Id && s.PointsDate == date && s.GameType == 1).ToListAsync();
                     int gameCount = gameCountList.Count;
                     if (gameCount < 3)
                     {
@@ -734,6 +734,76 @@ namespace Seatly1.Controllers
                             Id = 0,
                             MemberId = aspUser.Id,
                             PointsDate = date,
+                            GameType = 1
+                        };
+
+                        _context.Update(aspUser);
+                        _context.Add(newGamePoint);
+                        await _context.SaveChangesAsync();
+
+                        List<int> res = new List<int> { getPoints, (int)aspUser.Points, gameCount + 1 };
+                        return Json(res);
+                    }
+                    return Json("今日已完成小遊戲");
+                }
+            }
+            return NotFound();
+        }
+
+        public async Task<IActionResult> LogoGamePoints()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                // 使用者已登入
+                // 在這裡進行相關處理
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                var aspUser = await _context.AspNetUsers.FindAsync(user.Id);
+                if (aspUser == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    DateOnly date = DateOnly.FromDateTime(DateTime.Now.Date);
+                    var gameCountList = await _context.GamePoints.Where(s => s.MemberId == aspUser.Id && s.PointsDate == date && s.GameType == 2).ToListAsync();
+                    int gameCount = gameCountList.Count;
+                    if (gameCount < 1)
+                    {
+                        int ranNum = new Random().Next(1, 100);
+                        int getPoints = 0;
+                        if (ranNum == 100)
+                        {
+                            getPoints = 50;
+                        }
+                        else if (ranNum > 94 && ranNum <= 99)
+                        {
+                            getPoints = 20;
+                        }
+                        else if (ranNum > 84 && ranNum <= 94)
+                        {
+                            getPoints = 10;
+                        }
+                        else
+                        {
+                            getPoints = 5;
+                        }
+
+                        if (aspUser.Points == null)
+                        {
+                            aspUser.Points = 0;
+                            aspUser.Points += getPoints;
+                        }
+                        else
+                        {
+                            aspUser.Points += getPoints;
+                        }
+
+                        var newGamePoint = new GamePoint
+                        {
+                            Id = 0,
+                            MemberId = aspUser.Id,
+                            PointsDate = date,
+                            GameType = 2
                         };
 
                         _context.Update(aspUser);

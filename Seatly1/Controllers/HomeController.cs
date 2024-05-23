@@ -39,8 +39,10 @@ namespace Seatly1.Controllers
                 {
                     DateOnly date = DateOnly.FromDateTime(DateTime.Now.Date);
                     var dCheckIn = await _context.DailyCheckIns.FirstOrDefaultAsync(s => s.MemberId == aspUser.Id && s.CheckInTime == date);
-                    var gameCountList = await _context.GamePoints.Where(s => s.MemberId == aspUser.Id && s.PointsDate == date).ToListAsync();
+                    var gameCountList = await _context.GamePoints.Where(s => s.MemberId == aspUser.Id && s.PointsDate == date && s.GameType == 1).ToListAsync();
+                    var logoGameCountList = await _context.GamePoints.Where(s => s.MemberId == aspUser.Id && s.PointsDate == date && s.GameType == 2).ToListAsync();
                     int gameCount = gameCountList.Count;
+                    int logoGameCount = logoGameCountList.Count;
                     if (dCheckIn == null)
                     {
                         HttpContext.Session.SetString("checkedIn", "false");
@@ -57,12 +59,21 @@ namespace Seatly1.Controllers
                     {
                         HttpContext.Session.Remove("gamed");
                     }
+                    if (logoGameCount < 1)
+                    {
+                        HttpContext.Session.SetString("logoed", "false");
+                    }
+                    else
+                    {
+                        HttpContext.Session.Remove("logoed");
+                    }
                 }
             }
             else
             {
                 HttpContext.Session.Remove("checkedIn");
                 HttpContext.Session.Remove("gamed");
+                HttpContext.Session.Remove("logoed");
             }
             /*簽到判定*/
 

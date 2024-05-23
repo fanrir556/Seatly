@@ -27,11 +27,11 @@ public partial class NotificationRecord
 
     public string? ActivityMethod { get; set; }
 
+    public bool? IsActivity { get; set; }
+
     public string? Location { get; set; }
 
     public string? LocationDescription { get; set; }
-
-    public bool? IsActivity { get; set; }
 
     public string? HashTag1 { get; set; }
 
