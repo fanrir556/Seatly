@@ -110,7 +110,7 @@
         <li class="list-group-item bg-white">
           <a class="dropdown-item text-gradient" @@click.prevent="pointStore">點數商城</a>
         </li>
-        <li class="list-group-item bg-white">
+        <li v-if="!isMg" class="list-group-item bg-white">
           <a class="dropdown-item text-gradient" @@click.prevent="coupon">持有優惠券</a>
         </li>
         <li class="list-group-item bg-white">
@@ -526,7 +526,7 @@
                     </td>
                     <td></td>
                   </tr>
-                  <tr v-for="{id,productId,memberId,transactionDate,active} in results.trans" :key="id"
+                  <tr v-for="{id,productId,memberId,transactionDate,active,edited} in results.trans" :key="id"
                     class="align-middle">
                     <td>{{id}}</td>
                     <td>{{productId}}</td>
@@ -535,8 +535,8 @@
                       '2-digit', minute: '2-digit', second: '2-digit' }).format(new Date(transactionDate))}}</td>
                     <td>
                       <select class="form-control p-0 text-center cAct"
-                        :class="{'text-success': active, 'text-danger': !active}" :value="active"
-                        @@change="results.trans.find(t => t.id == id).active = $event.target.value == 'true' ? true : false;console.log(results.trans)">
+                        :class="{'text-success': active, 'text-danger': !active, 'edited': edited}" :value="active"
+                        @@change="editTrans(id, $event)">
                         <option value="true" class="text-success">未使用</option>
                         <option value="false" class="text-danger">已使用</option>
                       </select>
@@ -1406,8 +1406,8 @@
             else {
               const datas = await JSON.parse(sessionStorage.getItem('trans'));
 
-              if (strPoint.value == 'coupon' && isMg.value == false) {
-                results.trans = datas.trans.filter(t => t.memberId == datas.userId && t.active == true);
+              if (isMg.value == false) {
+                results.trans = strPoint.value == 'coupon' ? datas.trans.filter(t => t.memberId == datas.userId && t.active == true) : datas.trans.filter(t => t.memberId == datas.userId);
               }
               else if (searchTerm.keyword != null) {
                 if (searchTerm.searchBy == 'id') {
@@ -1495,7 +1495,15 @@
         }
         //------------優惠券方法------------
 
-        onMounted: {
+        //------------交易紀錄方法------------
+        const editTrans = (id, e) => {
+          var tran = results.trans.find(t => t.id == id);
+          tran.active = e.target.value == 'true' ? true : false;
+          tran.edited = true;
+        };
+        //------------交易紀錄方法------------
+
+        onMounted(() => {
           //console.log(strPoints);
           dropSmallInterval.value = setInterval(dropSmallFunction, 50);
           dropLargeInterval.value = setInterval(dropLargeFunction, 100);
@@ -1525,7 +1533,7 @@
           else {
             showCoupons();
           }
-        }
+        });
 
         watch(searchTerm, () => {
           if (isNaN(searchTerm.pgNum) || searchTerm.pgNum < 1) {
@@ -1593,6 +1601,7 @@
           //------------優惠券------------
           //------------交易紀錄------------
           newTran,
+          editTrans,
           //------------交易紀錄------------
         }
       }

@@ -1,0 +1,157 @@
+﻿@section Styles {
+    <style>
+        section {
+            padding: 0 !important;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+
+@{
+    ViewData["Title"] = "管理員登入";
+}
+
+<div id="ManagerApp">
+    <div v-if="!isMg" class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" id="mainModalHeader">
+                <h5 class="modal-title" id="mainModalLabel">請輸入通關密語</h5>
+            </div>
+            <section v-if="!correctMg && !wrongMg">
+                <div class="modal-body" id="mainModalBody">
+                    <div>
+                        <div class="d-flex justify-content-center">
+                            <h2 class="m-auto text-gradient">管理員，請證明身分</h2>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <input type="password" id="managerPw" class="form-control p-2" placeholder="可悲阿，竟然是管理員"
+                                autocomplete="off" @@keypress="managerLogin($event)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="mainModalFooter">
+                    <button class="btn btn-gradient p-0 text-align-center" style="width:100px;height:45px"
+                        id="managerLogin" @@click="managerLogin">芝麻開門</button>
+                </div>
+            </section>
+            <section v-else-if="correctMg" v-cloak>
+                <div class="d-flex justify-content-center">
+                    <h2 class="m-auto text-gradient">歡迎回來，肝苦人</h2>
+                </div>
+            </section>
+            <section v-else-if="wrongMg" v-cloak>
+                <div class="d-flex justify-content-center">
+                    <h2 class="m-auto text-gradient">你這個騙子!!!</h2>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div v-else class="modal-dialog modal-dialog-centered" v-cloak>
+        <div class="modal-content">
+            <div class="modal-header" id="mainModalHeader">
+                <h5 class="modal-title" id="mainModalLabel">上班辛苦了</h5>
+            </div>
+            <section v-if="!logout">
+                <div class="modal-body" id="mainModalBody">
+                    <div>
+                        <div class="d-flex justify-content-center">
+                            <h2 class="m-auto text-gradient">肝苦人，要下班了嗎?</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="mainModalFooter">
+                    <button class="btn btn-gradient p-0 text-align-center" style="width:100px;height:45px"
+                        @@click="managerLogout">解放!</button>
+                </div>
+            </section>
+            <section v-else v-cloak>
+                <div class="d-flex justify-content-center">
+                    <h2 class="m-auto text-gradient">恭喜下班，肝苦人</h2>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const { createApp, ref, reactive, onMounted, watch } = Vue;
+
+        const app = createApp({
+            setup() {
+                var correctMg = ref(false);
+                var wrongMg = ref(false);
+                var logout = ref(false);
+                var isMg = ref(isMG == 'true' ? true : false);
+
+                const managerLogin = (e) => {
+                    if (e.type === 'click' || e.keyCode === 13) {
+                        if (managerPw.value == "5487") {
+                            correctMg.value = true;
+                            sessionStorage.setItem("isManager", "true");
+
+                            var form = new FormData();
+                            form.append("key", "true");
+                            fetch(`@Url.Action("isMG", "Home")`, {
+                                method: "POST",
+                                body: form,
+                            }).then(function (response) {
+                            }).catch(function (err) {
+                                alert(err);
+                            });
+                            setTimeout(function () {
+                                window.location.href = "/";
+                            }, 500);
+                        }
+                        else {
+                            wrongMg.value = true;
+                            setTimeout(function () {
+                                wrongMg.value = false;
+                            }, 500);
+                        }
+                    }
+                };
+
+                const managerLogout = () => {
+                    var form = new FormData();
+                    sessionStorage.removeItem("isManager");
+                    logout.value = true;
+                    fetch(`@Url.Action("isMG", "Home")`, {
+                        method: "POST",
+                        body: form,
+                    }).then(function (response) {
+                    }).catch(function (err) {
+                        alert(err);
+                    });
+                    setTimeout(function () {
+                        window.location.href = "/";
+                    }, 500);
+                };
+
+                onMounted(() => {
+                    managerPw.focus();
+                });
+
+                watch([wrongMg, correctMg], ([newWrongMg, newCorrectMg]) => {
+                    if (!newWrongMg && !newCorrectMg) {
+                        setTimeout(function () { managerPw.focus(); }, 1);
+                    }
+                });
+
+                return {
+                    correctMg,
+                    wrongMg,
+                    logout,
+                    isMg,
+                    managerLogin,
+                    managerLogout,
+                }
+            }
+        });
+        app.mount('#ManagerApp');
+
+    </script>
+}

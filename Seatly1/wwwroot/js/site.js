@@ -58,15 +58,15 @@ $(function () {
     /*會員登入隱藏活動方*/
 
     // Managermodal
-    var managerUrl = $("#mainModal").data("url");
-    $.ajax({
-        type: "GET",
-        url: managerUrl
-    }).done(function (data) {
-        $("#mainModalBody").html(data);
-    }).fail(function (err) {
-        alert(err.responseText);
-    });
+    //var managerUrl = $("#mainModal").data("url");
+    //$.ajax({
+    //    type: "GET",
+    //    url: managerUrl
+    //}).done(function (data) {
+    //    $("#mainModalBody").html(data);
+    //}).fail(function (err) {
+    //    alert(err.responseText);
+    //});
     // Managermodal
 
     /* 管理員登入 */
@@ -76,35 +76,35 @@ $(function () {
         }, 1000);
         timer = setTimeout(function () {
             $("#logo").css("animation-name", "");
-            if (isMG == "true")
-            {
-                var isMGUrl = $("#logo").data("url");
-                //var p = {
-                //    key: "true"
-                //};
-                var form = new FormData();
-                //form.append("key", "true");
-                sessionStorage.removeItem("isManager");
-                $("#mainModalBody").html('<div class="d-flex justify-content-center"><h2 class="m-auto text-gradient">恭喜下班，肝苦人</h2></div>');
-                $('#mainModal').modal('show');
-                fetch(`${isMGUrl}`, {
-                    method: "POST",
-                    body: form,
-                    /*body: JSON.stringify(p),*/
-                    //headers: { 'Content-Type': 'application/json' }
-                }).then(function (response) {
-                    console.log(response);
-                }).catch(function (err) {
-                    alert(err);
-                });
-                setTimeout(function () {
-                    location.reload();
-                }, 1000);
-            }
-            else
-            {
-                $('#mainModal').modal('show');
-            }
+            //if (isMG == "true")
+            //{
+                //var isMGUrl = $("#logo").data("url");
+                ////var p = {
+                ////    key: "true"
+                ////};
+                //var form = new FormData();
+                ////form.append("key", "true");
+                //sessionStorage.removeItem("isManager");
+                //$("#mainModalBody").html('<div class="d-flex justify-content-center"><h2 class="m-auto text-gradient">恭喜下班，肝苦人</h2></div>');
+                //$('#mainModal').modal('show');
+                //fetch(`${isMGUrl}`, {
+                //    method: "POST",
+                //    body: form,
+                //    /*body: JSON.stringify(p),*/
+                //    //headers: { 'Content-Type': 'application/json' }
+                //}).then(function (response) {
+                //    console.log(response);
+                //}).catch(function (err) {
+                //    alert(err);
+                //});
+                //setTimeout(function () {
+                //    location.reload();
+                //}, 1000);
+            //}
+            //else
+            //{
+            //    $('#mainModal').modal('show');
+            //}
         }, 3000);
     });
     $("#home").on("mouseup", function () {
