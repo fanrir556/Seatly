@@ -112,14 +112,14 @@
                         點數專區
                     </a>
                     <ul id="pointsDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="MVCVue" id="pointsShop">點數商城</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsShop">點數商城</a></li>
                         @if (isMg != "true")
                         {
                             <li>
-                                <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="MVCVue" id="coupon">持有優惠券</a>
+                                <a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="coupon">持有優惠券</a>
                             </li>
                         }
-                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="MVCVue" id="pointsHistory">點數交易紀錄</a></li>
+                        <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="Index" id="pointsHistory">點數交易紀錄</a></li>
                         @* <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="VueIndex">Vue</a></li>
                         <li><a class="dropdown-item text-gradient" asp-area="" asp-controller="Points" asp-action="MVCVue">MVCVue</a></li> *@
                     </ul>
@@ -223,11 +223,11 @@
     @*toast*@
     <div class="position-fixed top-0 start-50 translate-middle-x p-3 toast-container" style="z-index: 11;">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
-            <div class="toast-header">
+            <div class="toast-header" id="toastHeader">
                 @* <strong class="me-auto">Bootstrap</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> *@
             </div>
-            <div class="toast-body">
+            <div class="toast-body" id="toastBody">
                 @* Hello, world! This is a toast message. *@
             </div>
         </div>

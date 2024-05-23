@@ -27,7 +27,7 @@ namespace Seatly1.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult MVCIndex()
         {
             return View();
         }
@@ -37,7 +37,7 @@ namespace Seatly1.Controllers
             return View();
         }
 
-        public IActionResult MVCVue()
+        public IActionResult Index()//MVCVue
         {
             return View();
         }
