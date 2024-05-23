@@ -80,7 +80,7 @@
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('taichung')">台中</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('tainan')">台南</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('kaohsiung')">高雄</button>
-    
+    <hr />
 
 
     <div>
@@ -114,6 +114,7 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
+                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         
                         <p class="card-text">
                             <span  v-for="i in 5">
@@ -122,9 +123,14 @@
                         </p>
                         <p class="card-text mb-5   position-relative">
                             <span>📍{{ activity.location }} </span>
-                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
+                                <span class="position-absolute top-50 end-0 translate-middle-y">
+                                    <a :class="isCollected(activity.activityId) ? 'text-danger' : 'text-secondary'" class="love-icon" @@click="toggleCollection(activity)">
+                                        {{ isCollected(activity.activityId) ? '❤️' : '🤍' }}加入收藏
+                                    </a>
+                                </span>
                         </p>
                         <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
+                        @* <a href="#" class="btn btn-primary">查看詳情</a> *@
                         
                        
 
@@ -144,6 +150,7 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
+                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                             <span v-for="i in 5">
@@ -152,7 +159,11 @@
                         </p>
                         <p class="card-text mb-5   position-relative">
                             <span>📍{{ activity.location }} </span>
-                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
+                                <span class="position-absolute top-50 end-0 translate-middle-y">
+                                    <a :class="isCollected(activity.activityId) ? 'text-danger' : 'text-secondary'" class="love-icon" @@click="toggleCollection(activity)">
+                                        {{ isCollected(activity.activityId) ? '❤️' : '🤍' }}加入收藏
+                                    </a>
+                                </span>
                         </p>
                         <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                     </div>
@@ -171,6 +182,7 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
+                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                         <p class="card-text">
@@ -180,7 +192,11 @@
                         </p>
                         <p class="card-text mb-5   position-relative">
                             <span>📍{{ activity.location }} </span>
-                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
+                                <span class="position-absolute top-50 end-0 translate-middle-y">
+                                    <a :class="isCollected(activity.activityId) ? 'text-danger' : 'text-secondary'" class="love-icon" @@click="toggleCollection(activity)">
+                                        {{ isCollected(activity.activityId) ? '❤️' : '🤍' }}加入收藏
+                                    </a>
+                                </span>
                         </p>
                         <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                     </div>
@@ -199,6 +215,7 @@
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
                         <p class="card-text">結束時間: {{ activity.endTime }}</p>
+                        @* <p class="card-text">活動內容: {{ activity.descriptionN }}</p> *@
                         <p class="card-text">活動地點: {{ activity.location }}</p>
                         <p class="card-text">
                         <p class="card-text">
@@ -208,7 +225,11 @@
                         </p>
                         <p class="card-text mb-5   position-relative">
                             <span>📍{{ activity.location }} </span>
-                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
+                                <span class="position-absolute top-50 end-0 translate-middle-y">
+                                    <a :class="isCollected(activity.activityId) ? 'text-danger' : 'text-secondary'" class="love-icon" @@click="toggleCollection(activity)">
+                                        {{ isCollected(activity.activityId) ? '❤️' : '🤍' }}加入收藏
+                                    </a>
+                                </span>
                         </p>
                         <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                     </div>
@@ -234,11 +255,12 @@
         var vueApp = {
             data() {
                 return {
-                    cate: 'tapei',
+                    cate: 'taipei',
                     activities: [], // 添加 activities 屬性，用於存儲從後端獲取的活動數據
-                   
                     sortBy: 'desc', // sortBy 目前排序方式 正序
-                    selectedType: sessionStorage.getItem('selectedType') || '' // 初始化 selectedType
+                    selectedType: sessionStorage.getItem('selectedType') || '' ,// 初始化 selectedType
+                    userCollections: [],
+                    isLoggedIn: sessionStorage.getItem('userLogin') === 'true', // 檢查用戶是否登錄
                 }
             },
             computed: {
@@ -250,6 +272,17 @@
                         return this.activities.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
                     }
                 }
+            },
+            mounted() {
+                this.changeCategory('taipei');
+                if (this.isLoggedIn) {
+
+                    // this.getUserCollections();
+                    // this.waitForUserCollections(); // 等待獲取用戶收藏列表
+                    this.restoreLocalStorage(); // 恢復收藏狀態
+                    this.getUserCollections();
+                }
+                this.changeCategory(this.cate);
             },
             methods: {
                 async changeCategory(category) {
@@ -285,14 +318,14 @@
                         this.activities = data;
                         this.activities.forEach(activity => {
                             const imgUrl = this.convertToImageUrl(activity.activityPhoto);
-                            // console.log(base64Image)
                             activity.imgUrl = imgUrl
-                            // console.log(base)
                             // activity.imageSrc = `data:image;base64,${base64Image}`;
                             // this.convertToImageUrl(activity.activityId, activity.activityPhoto);
-                            // console.log(activity.activityPhoto)
                         });
+                        // 確保在加載活動數據後更新用戶收藏列表
                        
+                            await this.getUserCollections();
+                        
                     } catch (e) {
                         console.log(e);
                     }
@@ -309,9 +342,6 @@
                     this.sortBy = this.sortBy === 'asc' ? 'desc' : 'asc';
                 },
 
-                
-
-                
                 // 更新 selectedType 到 sessionStorage
                 selectFoodType(type) {
                     this.selectedType = type;
@@ -334,46 +364,84 @@
                 },
                 
 
-                // 加入收藏
-                async addToCollection(activityId) {
-                    // 从 sessionStorage 中获取 userLogin 的值
-                    const userLogin = sessionStorage.getItem('userLogin');
-                    const userId = sessionStorage.getItem('userId');
-
-                    // 判断用户是否已登录
-                    if (userLogin !== 'true') {
-                        // 如果用户未登录，提示用户先登录
-                        alert('請先登錄會員！');
-                        return;
-                    }
-
-                    try {
-                        // 发送收藏请求
-                        const response = await fetch(`/Collections/AddToCollection?activityId=${activityId}&userId=${userId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ activityId: activityId, userId: userId })
-                            // 这里可以根据需要传递其他数据
-                        });
+                // 收藏相關判斷 -start-
+                async getUserCollections() {
+                    if (this.isLoggedIn) {
+                        const response = await fetch('/Collections/GetUserCollections');
+                        console.log(response)
                         const data = await response.json();
-                        // 处理收藏成功的情况
-                        // alert('收藏成功！');
-                        alert(data.message)
-                    } catch (error) {
-                        // 处理错误情况
-                        console.error('Error:', error);
-                        alert('收藏失敗，請稍後再試！');
+                        console.log(data)
+                       
+
+                        console.log('User collections:', this.userCollections);
                     }
                 },
+                async toggleCollection(activity) {
+                    if (!this.isLoggedIn) {
+                        // 檢查用戶是否登入
+                        alert('請先登入會員！');
+                        return;
+                    }
+                    const index = this.userCollections.indexOf(activity.activityId);
+                    if (index > -1) {
+                        // 移除收藏
+                        await this.removeFromCollection(activity.activityId);
+                    } else {
+                        // 加入收藏
+                        await this.addToCollection(activity.activityId);
+                    }
+
+                    // 更新本地存儲的收藏狀態
+                    this.updateLocalStorage();
+                },
+                async addToCollection(activityId) {
+                    const response = await fetch(`/Collections/AddToCollection?activityId=${activityId}`, {
+                        method: 'POST'
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        this.userCollections.push(activityId);
+                    } else {
+                        alert(result.message || '收藏失敗');
+                    }
+                },
+                async removeFromCollection(activityId) {
+                    const response = await fetch('/Collections/RemoveFromCollection', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ activityId: activityId })
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        const index = this.userCollections.indexOf(activityId);
+                        if (index > -1) {
+                            this.userCollections.splice(index, 1);
+                        }
+                    } else {
+                        alert(result.error || '移除收藏失敗');
+                    }
+                },
+                isCollected(activityId) {
+                        return this.userCollections.includes(activityId);
+                },
+             
+                updateLocalStorage() {
+                    localStorage.setItem('userCollections', JSON.stringify(this.userCollections));
+                },
+                restoreLocalStorage() {
+                    const storedCollections = localStorage.getItem('userCollections');
+                    if (storedCollections) {
+                        this.userCollections = JSON.parse(storedCollections);
+                    }
+                },
+                // 收藏相關判斷 -end-
             },
             created() {
                 console.log(this.cate);
             },
-            mounted() {
-                this.changeCategory('taipei'); // 初始加載時加載日式活動
-            }
+            
         };
         var app = createApp(vueApp).mount("#app");
      

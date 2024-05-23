@@ -146,6 +146,11 @@ else
                 const data = await response.json();
                 if (data.success) {
                     alert('收藏項目已移除');
+                        // 更新本地存储
+                        let userCollections = JSON.parse(localStorage.getItem('userCollections')) || [];
+                        userCollections = userCollections.filter(id => id !== activityId);
+                        localStorage.setItem('userCollections', JSON.stringify(userCollections));
+
                     location.reload(); // 刷新页面以更新视图
                 } else {
                     alert('移除收藏項目失敗：' + data.error);
