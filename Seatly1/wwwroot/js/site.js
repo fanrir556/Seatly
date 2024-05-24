@@ -110,8 +110,8 @@ $(function () {
             }
             else
             {
-                $("#liveToast>.toast-header").html(`<strong class="me-auto">今日完成次數達上限!</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`)
-                $("#liveToast>.toast-body").text(`今日完成隱藏小遊戲次數已達上限`);
+                $("#liveToast>.toast-header").html(`<strong class="me-auto">什麼都沒有發生</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`)
+                $("#liveToast>.toast-body").text(`恭喜找到小彩蛋`);
                 toast.show();
             }
         }, 3000);
