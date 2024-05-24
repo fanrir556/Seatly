@@ -78,20 +78,26 @@
             font-size: 0.875rem; /* Adjust the font size of the button */
             padding: 5px 10px; /* Adjust the padding of the button */
         }
+
+        .background-overlay {
+            background-color: #FFD2D2; /* 半透明的背景 */
+            padding: 20px 0px 20px 20px; /* 内部填充 */
+            border-radius: 10px; /* 圆角边框 */
+            color: #000; 
+            
+        }
     </style>
 }
 
 <div id="app" class="container">
-    <div class="">
+    <div class="background-overlay" style=" width: 65rem; margin: 0 auto;">
     <h2 class="cute-font">{{selectedType}}</h2>
       
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('taipei')">台北</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('taichung')">台中</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('tainan')">台南</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('kaohsiung')">高雄</button>
-    <hr />
-
-
+    
     <div>
     <span class="time-selector">
         <label for="startTime">開始時間:</label>
@@ -107,7 +113,7 @@
         </span>
     </div>
     
-
+</div>
 
     @* 台北 *@
     <section v-if="cate=='taipei'" style="width: 65rem; padding-top:100px">
