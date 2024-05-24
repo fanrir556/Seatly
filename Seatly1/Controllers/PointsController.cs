@@ -769,7 +769,7 @@ namespace Seatly1.Controllers
                     int gameCount = gameCountList.Count;
                     if (gameCount < 1)
                     {
-                        int ranNum = new Random().Next(1, 100);
+                        int ranNum = new Random().Next(1, 101);
                         int getPoints = 0;
                         if (ranNum == 100)
                         {
