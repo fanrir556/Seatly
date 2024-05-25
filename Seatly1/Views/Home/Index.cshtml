@@ -45,6 +45,24 @@
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
+        @@media (max-width: 576px) {
+        .card-span {
+            padding: 0 8px; /* 缩小卡片之间的间距 */
+        }
+        .card-span img {
+            height: auto;
+        }
+        .card-body h5 {
+            font-size: 0.875rem; /* 调整标题字体大小 */
+        }
+        .card-body span, .card-body p {
+            font-size: 0.75rem; /* 调整文字字体大小 */
+        }
+        .btn {
+            font-size: 0.75rem; /* 调整按钮字体大小 */
+            padding: 0.25rem 0.5rem; /* 调整按钮的填充 */
+        }
+    }
     </style>
 }
 

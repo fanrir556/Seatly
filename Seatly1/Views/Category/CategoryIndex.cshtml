@@ -7,10 +7,10 @@
     <style>
         .container {
             display: flex;
-            flex-direction: row;
+            flex-direction: column; /* 改為 column 以適應手機瀏覽 */
             justify-content: center;
             align-items: center; 
-            flex-wrap: wrap; /* 換行 */
+            flex-wrap: wrap;
         }
 
         #filiter span{
@@ -18,8 +18,9 @@
             margin: 3px;
         }
         #filiter{
-            width:500px;
-            height: 200px;
+            width: 100%; /* 改為百分比，以適應不同的螢幕大小 */
+            max-width: 500px;
+            height: auto;
             border: 1px solid #ccc;
         }
         .current{
@@ -30,7 +31,6 @@
         }
 
         .love-icon {
-            /* font-size: 2rem; */
             cursor: pointer;
             transition: transform 0.2s;
         }
@@ -41,17 +41,17 @@
 
         .card-container {
             display: flex;
-            flex-wrap: wrap; 
-            justify-content: space-between; 
+            flex-wrap: wrap;
+            justify-content: flex-start; /* 卡片靠左對齊 */
         }
 
         .card {
-            width: 18rem; /* Set the width of the card */
-            height: 22rem; /* Set the height of the card */
-            margin: 10px; /* Margin between cards */
+            width: 18rem;
+            height: 22rem;
+            margin: 10px;
         }
 
-           .card img {
+        .card img {
             height: 100px; /* Adjust the image height */
             object-fit: cover; /* Ensure the image covers the entire area */
             transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for transform and box-shadow */
@@ -81,16 +81,39 @@
 
         .background-overlay {
             background-color: #FFD2D2; /* 半透明的背景 */
-            padding: 20px 0px 20px 20px; /* 内部填充 */
-            border-radius: 10px; /* 圆角边框 */
+            padding: 20px ; /* 内部填充 */
+            border-radius: 10px; /* 圓角邊框 */
             color: #000; 
-            
+            width: 100%; /* 改為百分比，以適應不同的螢幕大小 */
+            max-width: 65rem;
+            margin: 0 auto;
+        }
+
+        .activity-section {
+            width: 100%;
+            max-width: 65rem;
+            padding-top: 100px;
+        }
+
+        .no-activities {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* 媒體查詢 */
+         @@media (max-width: 576px) {
+            .btn {
+                font-size: 0.75rem;
+                padding: 3px 6px;
+            }
         }
     </style>
 }
 
 <div id="app" class="container">
-    <div class="background-overlay" style=" width: 65rem; margin: 0 auto;">
+    <div class="background-overlay">
     <h2 class="cute-font">{{selectedType}}</h2>
       
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('taipei')">台北</button>
@@ -116,8 +139,8 @@
 </div>
 
     @* 台北 *@
-    <section v-if="cate=='taipei'" style="width: 65rem; padding-top:100px">
-            <div class="d-flex justify-content-between align-items-center mb-3" style="margin-right:25px">
+    <section v-if="cate=='taipei'" class="activity-section">
+            <div class="no-activities">
                 <span style="font-size:30px" class="cute-font">台北</span>
                 <!-- 排序按钮 -->
                 <div class="btn-group" role="group" aria-label="Sort Activities" >
@@ -156,8 +179,8 @@
         </div>
     </section>
     @* 台中 *@
-        <section v-else-if="cate == 'taichung'" style="width: 65rem; padding-top:100px">
-            <div class="d-flex justify-content-between align-items-center mb-3" style="margin-right:25px">
+    <section v-else-if="cate == 'taichung'" class="activity-section">
+            <div class="no-activities">
                 <span style="font-size:30px" class="cute-font">台中</span>
                 <!-- 排序按钮 -->
                 <div class="btn-group" role="group" aria-label="Sort Activities">
@@ -193,8 +216,8 @@
         </div>
     </section>
     @* 台南 *@
-        <section v-else-if="cate == 'tainan'" style="width: 65rem; padding-top:100px">
-            <div class="d-flex justify-content-between align-items-center mb-3" style="margin-right:25px">
+    <section v-else-if="cate == 'tainan'" class="activity-section">
+            <div class="no-activities">
                 <span style="font-size:30px" class="cute-font">台南</span>
                 <!-- 排序按钮 -->
                 <div class="btn-group" role="group" aria-label="Sort Activities">
@@ -231,8 +254,8 @@
         </div>
     </section>
     @* 高雄 *@
-        <section v-else-if="cate == 'kaohsiung'" style="width: 65rem; padding-top:100px">
-            <div class="d-flex justify-content-between align-items-center mb-3" style="margin-right:25px">
+    <section v-else-if="cate == 'kaohsiung'" class="activity-section">
+            <div class="no-activities">
                 <span style="font-size:30px" class="cute-font">高雄</span>
                 <!-- 排序按钮 -->
                 <div class="btn-group" role="group" aria-label="Sort Activities">
