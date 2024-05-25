@@ -6,6 +6,8 @@
 
 @section Styles{
     <style>
+       
+
     .expired-card {
     position: relative;
     background-color: #f2f2f2; /* Light gray background */
@@ -37,6 +39,51 @@
             .share-buttons > * {
                 margin: 0;
             }
+
+            /* 手機或小型螢幕樣式 */
+    @@media (max-width: 576px) {
+        .card {
+            width: 100%; /* 卡片寬度佔滿父元素 */
+            margin: 5px; /* 設置卡片間距 */
+        }
+
+        .card img {
+            height: auto; /* 圖片高度自動調整 */
+            max-width: 100%; /* 圖片最大寬度 */
+        }
+
+        .card-body {
+            padding: 5px; /* 調整卡片內容的間距 */
+        }
+
+        .card-title {
+            font-size: 1rem; /* 卡片標題字體大小 */
+        }
+
+        .card-text {
+            font-size: 0.875rem; /* 卡片文字字體大小 */
+        }
+
+        .card-body .btn {
+            font-size: 0.75rem; /* 按鈕字體大小 */
+            padding: 3px 6px; /* 按鈕內間距 */
+        }
+
+        .expired-overlay {
+            font-size: 1rem; /* 過期標籤字體大小 */
+            padding: 5px; /* 過期標籤內間距 */
+        }
+
+        .share-buttons {
+            top: 5px; /* 分享按鈕位置調整 */
+            right: 5px; /* 分享按鈕位置調整 */
+        }
+
+        .share-buttons > * {
+            margin: 0; /* 分享按鈕間距 */
+        }
+    }
+    
     </style>
 }
 
