@@ -388,7 +388,8 @@
                     <h5 class="card-title text-gradient fs-3">{{pd.productName}}</h5>
                     <p class="card-text">{{pd.productDescription}}</p>
                     <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1 btn-coupon"
-                      data-bs-toggle="modal" data-bs-target="#couponModal" @@click="useCoupon(pd, id)">使用</button>
+                      data-bs-toggle="modal" data-bs-target="#couponModal"
+                      @@click="couponRes = '';useCoupon(pd, id)">使用</button>
                   </div>
                 </div>
               </div>
@@ -405,7 +406,8 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="couponModalLabel">{{couponRes == '' ? '您確定要使用嗎?' : '使用成功!'}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                  @@click="couponRes = '';showCoupons()"></button>
               </div>
               <section v-if="couponRes == ''">
                 <div class="modal-body" id="couponModalBody">
@@ -425,7 +427,7 @@
                 </div>
               </section>
               <section v-else>
-                <h5 class="text-center" style="color:red;">此優惠碼關閉後即失效，請謹慎保存或截圖留存</h5>
+                <h5 class="text-center text-gradient mt-2 mb-0">請向店家出示此優惠碼</h5>
                 <img :src="couponRes" alt="QR Code" class="col-12 text-gradient text-center">
               </section>
               <div class="modal-footer">
@@ -1393,11 +1395,11 @@
               results.userId = datas.userId;
               results.shops = datas.shops;
               results.shops.forEach((shop) => {
-                shop.productImage = @Url.Content("~/images/") + shop.productImage
+                shop.productImage = @Url.Content("~/images/") + shop.productImage;
               });
               results.trans.forEach((tran) => {
-                tran.pd = results.shops.find(p => p.productId === tran.productId)
-              })
+                tran.pd = results.shops.find(p => p.productId === tran.productId);
+              });
 
               await sessionStorage.setItem('trans', JSON.stringify(datas));
 
@@ -1486,11 +1488,11 @@
 
         const useCoupon = (product, id) => {
           if (isUser) {
-            exchangePd.id = product.productId
-            exchangePd.img = product.productImage
-            exchangePd.name = product.productName
-            exchangePd.price = product.productPrice
-            exchangePd.transId = `${id}`
+            exchangePd.id = product.productId;
+            exchangePd.img = product.productImage;
+            exchangePd.name = product.productName;
+            exchangePd.price = product.productPrice;
+            exchangePd.transId = id;
           }
           else {
             window.location.href = "/Identity/Account/Login";
@@ -1498,13 +1500,10 @@
         };
 
         const confirmUseCoupon = async () => {
-          var p = {
-            Id: exchangePd.transId,
-            Active: false
-          };
+          var tid = exchangePd.transId;
           await fetch(`@Url.Action("couponUse", "Points")`, {
             method: "POST",
-            body: JSON.stringify(p),
+            body: JSON.stringify(tid),
             headers: { 'Content-Type': 'application/json' }
           }).then(response => {
             return response.blob();

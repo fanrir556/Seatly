@@ -1,0 +1,79 @@
+﻿@section Styles {
+    <style>
+        section {
+            padding: 0 !important;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .table {
+            --bs-table-striped-bg: rgba(231, 49, 64, 0.05);
+        }
+    </style>
+}
+
+@{
+    ViewData["Title"] = "優惠券掃描";
+}
+
+<div id="CouponScanApp">
+    <div class="row">
+        <div class="col-12 col-md-3">
+            <h2 class="text-gradient">掃描使用優惠券</h2>
+        </div>
+    </div>
+    <table class="table table-striped text-center">
+        <tr>
+            <th>優惠券編號</th>
+            <th>商品編號</th>
+            <th>會員編號</th>
+            <th>兌換狀態</th>
+        </tr>
+        <tr v-for="{id, productId, memberId, active} in coupons" :key="index">
+            <td>{{id}}</td>
+            <td>{{productId}}</td>
+            <td>{{memberId}}</td>
+            <td :class="active ? 'text-success' : 'text-danger'">{{active ? '使用成功': '使用失敗'}}</td>
+        </tr>
+    </table>
+    <button class="btn btn-gradient p-0 text-align-center" style="height:45px;" @@click="QRCodeScan">點擊掃描QR
+        Code</button>
+</div>
+
+@section Scripts {
+    <script>
+        const { createApp, ref, reactive, onMounted, watch } = Vue;
+
+        const app = createApp({
+            setup() {
+                var coupons = ref([]);
+
+
+                const QRCodeScan = () => {
+
+
+                    /*await fetch(`@Url.Action("CouponScan", "Points")`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+
+                        })
+                    })*/
+                }
+
+                onMounted(() => {
+                });
+
+                return {
+                    coupons,
+                    QRCodeScan,
+                }
+            }
+        });
+        app.mount('#CouponScanApp');
+    </script>
+}

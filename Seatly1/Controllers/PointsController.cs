@@ -12,6 +12,7 @@ using QRCoder;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Cors;
+using Newtonsoft.Json;
 
 namespace Seatly1.Controllers
 {
@@ -41,6 +42,12 @@ namespace Seatly1.Controllers
         {
             return View();
         }
+
+        public IActionResult CouponScan()
+        {
+            return View();
+        }
+
         //點數商城導覽列
         public async Task<IActionResult> pointsShopContentHead()
         {
@@ -399,23 +406,26 @@ namespace Seatly1.Controllers
 
         //優惠券使用post
         [HttpPost]
-        public async Task<IActionResult> couponUse([FromBody] pShopExchange p)
+        public async Task<IActionResult> couponUse([FromBody] int tid)
         {
-            int id = Int32.Parse(p.Id);
-            PointTransaction trans = await _context.PointTransactions.FindAsync(id);
+            PointTransaction trans = await _context.PointTransactions.FindAsync(tid);
             if (trans == null)
             {
                 return NotFound();
             }
 
-            trans.Active = p.Active;
-
             if (ModelState.IsValid)
             {
-                _context.Update(trans);
-                await _context.SaveChangesAsync();
+                string dataString = JsonConvert.SerializeObject(trans);
 
-                string dataString = $"優惠券編號:{trans.Id},會員編號:{trans.MemberId},商品編號:{trans.ProductId},兌換日期:{trans.TransactionDate}";
+
+                /*if (trans.Active == true)
+                {
+                    trans.Active = false;
+                    _context.Update(trans);
+                    await _context.SaveChangesAsync();
+                }*/
+
 
                 // 創建 QR code
                 QRCodeGenerator qrGenerator = new QRCodeGenerator();
@@ -428,6 +438,35 @@ namespace Seatly1.Controllers
                 {
                     return File(ms.ToArray(), "image/png");
                 }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        //優惠券掃描post
+        [HttpPost]
+        public async Task<IActionResult> CouponScan([FromBody] PointTransaction trans)
+        {
+            if (trans == null)
+            {
+                return Content(JsonConvert.SerializeObject("查無優惠券"), "application/json");
+            }
+
+            if (ModelState.IsValid)
+            {
+                string dataString = JsonConvert.SerializeObject(trans);
+
+
+                if (trans.Active == true)
+                {
+                    trans.Active = false;
+                    _context.Update(trans);
+                    await _context.SaveChangesAsync();
+                }
+
+                return Content(dataString, "application/json");
             }
             else
             {
