@@ -56,6 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="C:\Users\ken33\source\repos\Seatly\Seatly1\.editorconfig" />
     <None Include="efpt.config.json.user" />
     <None Include="wwwroot\public\vendors\%40popperjs\%40popper.min.js" />
   </ItemGroup>
@@ -71,6 +72,10 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\ken33\source\repos\Seatly\Seatly1\.editorconfig" />
   </ItemGroup>
 
 </Project>

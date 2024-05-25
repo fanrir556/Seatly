@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Cors;
 using Newtonsoft.Json;
+using Seatly1.DTO;
 
 namespace Seatly1.Controllers
 {
@@ -199,7 +200,7 @@ namespace Seatly1.Controllers
                 // 在這裡進行相關處理
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
                 aspUser = await _context.AspNetUsers.FindAsync(user.Id);
-                if(aspUser == null)
+                if (aspUser == null)
                 {
                     return "兌換失敗";
                 }
@@ -454,15 +455,23 @@ namespace Seatly1.Controllers
                 return Content(JsonConvert.SerializeObject("查無優惠券"), "application/json");
             }
 
-            if (ModelState.IsValid)
+            var data = _context.PointTransactions.Find(trans.Id);
+
+            if (data != null)
             {
-                string dataString = JsonConvert.SerializeObject(trans);
-
-
-                if (trans.Active == true)
+                var pd = await _context.PointStores.FindAsync(data.ProductId);
+                PointsPagingDTO pgDTO = new PointsPagingDTO
                 {
-                    trans.Active = false;
-                    _context.Update(trans);
+                    Trans = new List<PointTransaction> { data },
+                    Shops = new List<PointStore> { pd },
+                };
+
+                string dataString = JsonConvert.SerializeObject(pgDTO);
+
+                if (data.Active == true)
+                {
+                    data.Active = false;
+                    _context.Update(data);
                     await _context.SaveChangesAsync();
                 }
 
@@ -470,7 +479,7 @@ namespace Seatly1.Controllers
             }
             else
             {
-                return NotFound();
+                return Content(JsonConvert.SerializeObject("查無優惠券"), "application/json");
             }
         }
 

@@ -28,21 +28,30 @@
         <tr>
             <th>優惠券編號</th>
             <th>商品編號</th>
+            <th>商品名稱</th>
+            <th>商品圖片</th>
             <th>會員編號</th>
             <th>兌換狀態</th>
         </tr>
-        <tr v-for="{id, productId, memberId, active} in coupons" :key="index">
-            <td>{{id}}</td>
-            <td>{{productId}}</td>
-            <td>{{memberId}}</td>
-            <td :class="active ? 'text-success' : 'text-danger'">{{active ? '使用成功': '使用失敗'}}</td>
+        <tr v-for="{Trans,Shops} in coupons" :key="Trans">
+            <td>{{Trans[0].Id}}</td>
+            <td>{{Trans[0].ProductId}}</td>
+            <td>{{Shops[0].ProductName}}</td>
+            <td><img :src="Shops[0].ProductImage" class="img-fluid rounded-start" style="width:100px"
+                    :alt="Shops[0].ProductName" :title="Shops[0].ProductName">
+            </td>
+            <td>{{Trans[0].MemberId}}</td>
+            <td :class="Trans[0].Active ? 'text-success' : 'text-danger'">{{Trans[0].Active ? '使用成功': '該兌換券已被使用'}}</td>
         </tr>
     </table>
     <button class="btn btn-gradient p-0 text-align-center" style="height:45px;" @@click="QRCodeScan">點擊掃描QR
         Code</button>
+    <video id="preview" class="d-none"></video>
+    <div id="reader" style="width: 300px;"></div>
 </div>
 
 @section Scripts {
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script>
         const { createApp, ref, reactive, onMounted, watch } = Vue;
 
@@ -50,27 +59,65 @@
             setup() {
                 var coupons = ref([]);
 
+                const html5QrCode = ref(null);
 
-                const QRCodeScan = () => {
+                const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
+                    // Handle the decoded text here
+                    console.log(`QR Code detected: ${decodedText}`);
 
+                    // Do something with the decoded text, e.g., add to coupons
 
-                    /*await fetch(`@Url.Action("CouponScan", "Points")`, {
+                    var toast = new bootstrap.Toast(liveToast)
+                    var response = await fetch(`@Url.Action("CouponScan", "Points")`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
+                        body: decodedText
+                    });
+                    var result = await response.json();
+                    console.log(result);
+                    if (result == '查無優惠券') {
+                        toastHeader.innerHTML = `<strong class="me-auto">優惠券錯誤!</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
+                        toastBody.textContent = `查無優惠券!`;
+                    }
+                    else {
+                        result.Shops.map(s => s.ProductImage = @Url.Content("~/images/") + s.ProductImage);
+                        if (result.Trans[0].Active) {
+                            toastHeader.innerHTML = `<strong class="me-auto">兌換成功!</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
+                            toastBody.textContent = `優惠券可使用`;
+                        }
+                        else {
+                            toastHeader.innerHTML = `<strong class="me-auto">兌換失敗!</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
+                            toastBody.textContent = `此優惠券已被使用`;
+                        }
+                        if (!coupons.value.some(c => JSON.stringify(c) === JSON.stringify(result))) {
+                            coupons.value.push(result);
+                        }
+                    }
+                    toast.show();
 
-                        })
-                    })*/
+                    html5QrCode.value.stop();
+                };
+                const QRCodeScan = async () => {
+                    const config = { fps: 10, qrbox: 250 };
+
+                    // Start scanning
+                    html5QrCode.value.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+                        .catch(err => {
+                            console.error(`Error starting QR code scanner: ${err}`);
+                        });
                 }
 
                 onMounted(() => {
+                    html5QrCode.value = new Html5Qrcode("reader");
                 });
 
                 return {
                     coupons,
                     QRCodeScan,
+                    html5QrCode,
+                    //qrCodeSuccessCallback
                 }
             }
         });
