@@ -151,6 +151,7 @@
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body ">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
@@ -169,7 +170,11 @@
                                     </a>
                                 </span>
                         </p>
-                        <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
+                        <div>
+
+                            
+                          
+                            <a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                         
                        
 
@@ -191,6 +196,7 @@
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
@@ -228,6 +234,7 @@
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
@@ -266,6 +273,7 @@
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
@@ -485,6 +493,18 @@
                     }
                 },
                 // 收藏相關判斷 -end-
+
+                // 徽章顏色
+                badgeClass(method) {
+                    switch (method) {
+                        case '公告':
+                            return 'bg-warning';
+                        case '排隊':
+                            return 'bg-success';
+                        default:
+                            return 'bg-secondary';
+                    }
+                },
             },
             created() {
             },

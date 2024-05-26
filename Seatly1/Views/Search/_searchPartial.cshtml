@@ -181,14 +181,27 @@
                                         }
                                     }
                                 </p>
-
-                                <span class="position-absolute top-0 end-0 m-3">
+                                <div class="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end">
+                                <p >
                                     <a :class="isCollected(@activity.ActivityId) ? 'text-danger' : 'text-secondary'" class="love-icon" @@click="toggleCollection({ activityId: @activity.ActivityId })">
                                         {{ isCollected(@activity.ActivityId) ? '❤️已收藏' : '🤍加入收藏' }}
                                     </a>
-                                </span>
-                              
-                                
+                                </p>
+                                    
+                                @if (activity.ActivityMethod == "公告")
+                                {
+                                        <p class="badge bg-warning card-text">@activity.ActivityMethod</p>
+                                }
+                                else if (activity.ActivityMethod == "排隊")
+                                {
+                                        <p class="badge bg-success card-text ">@activity.ActivityMethod</p>
+                                }
+                                else
+                                {
+                                        <p class="badge bg-secondary card-text ">@activity.ActivityMethod</p>
+                                    }
+                                    
+                                </div>
 
                                 <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
                                     <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2" @@click="userview"

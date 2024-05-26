@@ -115,7 +115,21 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">@item.ActivityName</h5>
-                        <p class="card-text">活動 ID: @item.ActivityId</p>
+                        <div>
+                        <span class="card-text">活動 ID: @item.ActivityId</span>
+                                @if (item.ActivityMethod == "公告")
+                                {
+                                    <span class="badge bg-warning card-text">@item.ActivityMethod</span>
+                                }
+                                else if (item.ActivityMethod == "排隊")
+                                {
+                                    <span class="badge bg-success card-text">@item.ActivityMethod</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary card-text">@item.ActivityMethod</span>
+                                }
+                        </div>
                         
                         @{
                             string formattedStartTime = string.Format("{0:yyyy-MM-dd}", item.StartTime);

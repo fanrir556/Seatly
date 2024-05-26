@@ -163,7 +163,18 @@
                                                             @* span>No photo available</span> *@
                                                             <img src="~/images/noimage.jpg" />
                                                         }
-
+                                                        @if (item.ActivityMethod == "公告")
+                                                        {
+                                                            <span class="badge bg-warning card-text position-absolute top-0 end-0">@item.ActivityMethod</span>
+                                                        }
+                                                        else if (item.ActivityMethod == "排隊")
+                                                        {
+                                                            <span class="badge bg-success card-text position-absolute top-0 end-0">@item.ActivityMethod</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-secondary card-text position-absolute top-0 end-0">@item.ActivityMethod</span>
+                                                        }
                                                        @*  <div class="position-absolute top-0 start-0 m-2">
                                                             <div class="fb-share-button"
                                                                  data-href="http://4.217.249.190/NotificationRecord/UsersView/@item.ActivityId"

@@ -28,6 +28,7 @@ namespace Seatly1.Controllers
             public string HashTag4 { get; set; }
             public string HashTag5 { get; set; }
             public string DescriptionN { get; set; }
+            public string ActivityMethod {  get; set; }
         }
 
         public class RemoveCollectionRequest
@@ -75,6 +76,7 @@ namespace Seatly1.Controllers
                                          HashTag4 = n.HashTag4,
                                          HashTag5 = n.HashTag5,
                                          DescriptionN = n.DescriptionN,
+                                         ActivityMethod = n.ActivityMethod
                                      }).ToListAsync();
 
             // 输出 Session 中的值
