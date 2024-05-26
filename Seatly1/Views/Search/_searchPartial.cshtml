@@ -141,6 +141,7 @@
         .card img {
             height: 75px;
         }
+        
     }
 </style>
 
@@ -161,6 +162,19 @@
                                 var imageSrc = $"data:image;base64,{base64Image}";
                             }
                             <img src="@imageSrc" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2 w-75"  />
+                            @if (activity.ActivityMethod == "公告")
+                            {
+                                <p class="badge bg-warning card-text position-absolute top-0 start-0">@activity.ActivityMethod</p>
+                            }
+                            else if (activity.ActivityMethod == "排隊")
+                            {
+                                <p class="badge bg-success card-text position-absolute top-0 start-0">@activity.ActivityMethod</p>
+                            }
+                            else
+                            {
+                                <p class="badge bg-secondary card-text position-absolute top-0 start-0">@activity.ActivityMethod</p>
+                            }
+
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -188,19 +202,7 @@
                                     </a>
                                 </p>
                                     
-                                @if (activity.ActivityMethod == "公告")
-                                {
-                                        <p class="badge bg-warning card-text">@activity.ActivityMethod</p>
-                                }
-                                else if (activity.ActivityMethod == "排隊")
-                                {
-                                        <p class="badge bg-success card-text ">@activity.ActivityMethod</p>
-                                }
-                                else
-                                {
-                                        <p class="badge bg-secondary card-text ">@activity.ActivityMethod</p>
-                                    }
-                                    
+                               
                                 </div>
 
                                 <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
@@ -215,6 +217,8 @@
             }
         </ul>
     </div>
+
+   
 }
 
 else
@@ -224,7 +228,7 @@ else
 
 
 <script>
-  
+   
 
     $(function () {
         var isSearching = sessionStorage.getItem("isSearching");

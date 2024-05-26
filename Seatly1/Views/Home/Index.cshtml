@@ -11,13 +11,38 @@
 
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
     <style>
-    .love-icon {
+        /* 懸浮按鈕樣式 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            /* background-color: #007bff;
+                    color: white; */
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+            .back-to-top:hover {
+                background-color: #FFE153;
+                transform: scale(1.1);
+            }
+            
+        /* 收藏按鈕樣式 */
+        .love-icon {
             /* font-size: 2rem; */
             cursor: pointer;
             transition: transform 0.2s;
         }
 
-    .love-icon:hover {
+        .love-icon:hover {
                 transform: scale(1.2);
             }
 
@@ -615,7 +640,8 @@
         </div>
     </section>
 
-
+    <!-- 懸浮按鈕 -->
+    <button class="back-to-top" id="backToTopBtn"><img style="width:55px" src="~/images/queuely-upp.png" /></button>
    
 </main>
 
@@ -625,7 +651,11 @@
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js" integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-       
+        // 回到頂部按鈕功能
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
         // 旋轉木馬自動換頁
         const carousel = new bootstrap.Carousel(document.getElementById('carouselSearchByFood'), {
