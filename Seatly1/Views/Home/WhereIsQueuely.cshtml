@@ -18,33 +18,39 @@
     <div v-if="!isMg" class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header" id="mainModalHeader">
-                <h5 class="modal-title" id="mainModalLabel">請輸入通關密語</h5>
+                <h5 class="modal-title" id="mainModalLabel">請掃描登入驗證碼</h5>
             </div>
             <section v-if="!correctMg && !wrongMg">
                 <div class="modal-body" id="mainModalBody">
                     <div>
                         <div class="d-flex justify-content-center">
-                            <h2 class="m-auto text-gradient">管理員，請證明身分</h2>
+                            <h2 class="m-auto text-gradient">管理員，請驗證身分</h2>
                         </div>
-                        <div class="d-flex justify-content-center">
-                            <input type="password" id="managerPw" class="form-control p-2" placeholder="可悲阿，竟然是管理員"
+                        <div v-if="noCamara" class="d-flex justify-content-center" v-cloak>
+                            <input type="password" id="managerPw" class="form-control p-2" placeholder="管理員，請輸入驗證碼"
                                 autocomplete="off" @@keypress="managerLogin($event)" />
+                        </div>
+                        <div v-else class="d-flex justify-content-center align-items-center" v-cloak>
+                            <div id="reader" style="width: 300px;" class=""></div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer" id="mainModalFooter">
+                <div v-if="noCamara" class="modal-footer" id="mainModalFooter" v-cloak>
                     <button class="btn btn-gradient p-0 text-align-center" style="width:100px;height:45px"
-                        id="managerLogin" @@click="managerLogin">芝麻開門</button>
+                        id="managerLogin" @@click="managerLogin">登入</button>
                 </div>
             </section>
             <section v-else-if="correctMg" v-cloak>
                 <div class="d-flex justify-content-center">
-                    <h2 class="m-auto text-gradient">歡迎回來，肝苦人</h2>
+                    <h2 class="m-auto text-gradient">{{mgName ? `歡迎回來，${mgName}` : '歡迎回來，肝苦人'}}</h2>
+                    <img v-if="mgImg" :src="mgImg" class="img-fluid rounded me-2" style="width:100px" :alt="mgName"
+                        :title="mgName">
+                    </td>
                 </div>
             </section>
             <section v-else-if="wrongMg" v-cloak>
                 <div class="d-flex justify-content-center">
-                    <h2 class="m-auto text-gradient">你這個騙子!!!</h2>
+                    <h2 class="m-auto text-gradient">驗證碼錯誤!!!</h2>
                 </div>
             </section>
         </div>
@@ -58,13 +64,13 @@
                 <div class="modal-body" id="mainModalBody">
                     <div>
                         <div class="d-flex justify-content-center">
-                            <h2 class="m-auto text-gradient">肝苦人，要下班了嗎?</h2>
+                            <h2 class="m-auto text-gradient">確認要登出嗎?</h2>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer" id="mainModalFooter">
                     <button class="btn btn-gradient p-0 text-align-center" style="width:100px;height:45px"
-                        @@click="managerLogout">解放!</button>
+                        @@click="managerLogout">登出</button>
                 </div>
             </section>
             <section v-else v-cloak>
@@ -77,6 +83,7 @@
 </div>
 
 @section Scripts {
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script>
         const { createApp, ref, reactive, onMounted, watch } = Vue;
 
@@ -86,58 +93,118 @@
                 var wrongMg = ref(false);
                 var logout = ref(false);
                 var isMg = ref(isMG == 'true' ? true : false);
+                var mgName = ref('');
+                var mgImg = ref('');
+                var mgJS = ref('');
+                var noCamara = ref(false);
 
-                const managerLogin = (e) => {
+                const html5QrCode = ref(null);
+                const config = { fps: 10, qrbox: 250 };
+
+                const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
+                    // Handle the decoded text here
+                    //console.log(`QR Code detected: ${decodedText}`);
+
+                    // Do something with the decoded text, e.g., add to coupons
+
+                    var toast = new bootstrap.Toast(liveToast)
+                    var response = await fetch(`@Url.Action("MGLogin", "Home")`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: decodedText
+                    });
+                    var result = await response.json();
+                    if (result == '密碼錯誤') {
+                        toastHeader.innerHTML = `<strong class="me-auto">驗證碼錯誤!</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
+                        toastBody.textContent = `並無管理員權限!`;
+                        wrongMg.value = true;
+                        setTimeout(function () {
+                            wrongMg.value = false;
+                        }, 500);
+                    }
+                    else {
+                        toastHeader.innerHTML = `<strong class="me-auto">驗證碼正確!</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
+                        toastBody.textContent = `管理員登入成功`;
+                        correctMg.value = true;
+                        mgName.value = result.mgName;
+                        mgImg.value = result.mgImg;
+                        setTimeout(function () {
+                            eval(result.mgJS);
+                        }, 500);
+                    }
+                    toast.show();
+
+                    html5QrCode.value.stop();
+                };
+
+                const managerLogin = async (e) => {
                     if (e.type === 'click' || e.keyCode === 13) {
-                        if (managerPw.value == "5487") {
-                            correctMg.value = true;
-                            sessionStorage.setItem("isManager", "true");
-
-                            var form = new FormData();
-                            form.append("key", "true");
-                            fetch(`@Url.Action("isMG", "Home")`, {
-                                method: "POST",
-                                body: form,
-                            }).then(function (response) {
-                            }).catch(function (err) {
-                                alert(err);
-                            });
-                            setTimeout(function () {
-                                window.location.href = "/";
-                            }, 500);
-                        }
-                        else {
-                            wrongMg.value = true;
-                            setTimeout(function () {
-                                wrongMg.value = false;
-                            }, 500);
+                        if (managerPw.value != "") {
+                            qrCodeSuccessCallback(JSON.stringify(managerPw.value));
                         }
                     }
                 };
 
-                const managerLogout = () => {
-                    var form = new FormData();
+                const managerLogout = async () => {
+                    /*var form = new FormData();
                     sessionStorage.removeItem("isManager");
-                    logout.value = true;
-                    fetch(`@Url.Action("isMG", "Home")`, {
+                    logout.value = true;*/
+                    fetch(`@Url.Action("MGLogin", "Home")`, {
                         method: "POST",
-                        body: form,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify('54Logout')
                     }).then(function (response) {
+                        return response.json();
+                    }).then(function (result) {
+                        eval(result);
                     }).catch(function (err) {
                         alert(err);
                     });
-                    setTimeout(function () {
-                        window.location.href = "/";
-                    }, 500);
                 };
 
                 onMounted(() => {
-                    managerPw.focus();
+                    //managerPw.focus();
+                    if (!noCamara.value) {
+                        html5QrCode.value = new Html5Qrcode("reader");
+
+                        // Start scanning
+                        html5QrCode.value.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+                            .catch(err => {
+                                console.error(`Error starting QR code scanner: ${err}`);
+                                if (err == "Error getting userMedia, error = NotFoundError: Requested device not found") {
+                                    noCamara.value = true;
+                                }
+                            });
+                    }
                 });
 
-                watch([wrongMg, correctMg], ([newWrongMg, newCorrectMg]) => {
+                watch([wrongMg, correctMg, noCamara], ([newWrongMg, newCorrectMg, newNoCamara]) => {
                     if (!newWrongMg && !newCorrectMg) {
-                        setTimeout(function () { managerPw.focus(); }, 1);
+                        if (!noCamara.value) {
+                            setTimeout(function () {
+                                html5QrCode.value.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+                                    .catch(err => {
+                                        console.error(`Error starting QR code scanner: ${err}`);
+                                        if (err == "Error getting userMedia, error = NotFoundError: Requested device not found") {
+                                            noCamara.value = true;
+                                        }
+                                    });
+                            }, 1);
+                        }
+                        else {
+                            setTimeout(function () {
+                                managerPw.focus();
+                            }, 1)
+                        }
+                    }
+                    if (newNoCamara) {
+                        setTimeout(function () {
+                            managerPw.focus();
+                        }, 1)
                     }
                 });
 
@@ -148,6 +215,12 @@
                     isMg,
                     managerLogin,
                     managerLogout,
+                    html5QrCode,
+                    mgName,
+                    mgImg,
+                    mgJS,
+                    qrCodeSuccessCallback,
+                    noCamara
                 }
             }
         });

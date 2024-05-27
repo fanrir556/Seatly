@@ -37,7 +37,7 @@
             <td>{{Trans[0].Id}}</td>
             <td>{{Trans[0].ProductId}}</td>
             <td>{{Shops[0].ProductName}}</td>
-            <td><img :src="Shops[0].ProductImage" class="img-fluid rounded-start" style="width:100px"
+            <td><img :src="Shops[0].ProductImage" class="img-fluid rounded" style="width:100px"
                     :alt="Shops[0].ProductName" :title="Shops[0].ProductName">
             </td>
             <td>{{Trans[0].MemberId}}</td>
@@ -63,7 +63,7 @@
 
                 const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
                     // Handle the decoded text here
-                    console.log(`QR Code detected: ${decodedText}`);
+                    //console.log(`QR Code detected: ${decodedText}`);
 
                     // Do something with the decoded text, e.g., add to coupons
 

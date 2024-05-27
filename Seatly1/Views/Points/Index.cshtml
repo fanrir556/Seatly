@@ -286,7 +286,8 @@
                     <p class="card-text">{{ productDescription }}</p>
                     <p class="card-text text-gradient">{{ productPrice === 0 ? "免費!!" : `兌換需要 ${productPrice} 點數` }}</p>
                     <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1 btn-exchange"
-                      data-bs-toggle="modal" data-bs-target="#exchangeModal" @@click="pdExchange(productId)"
+                      data-bs-toggle="modal" data-bs-target="#exchangeModal"
+                      @@click="exchangeRes == '';pdExchange(productId)"
                       :disabled="results.userPoints < productPrice && results.userPoints != null">
                       兌換
                     </button>
