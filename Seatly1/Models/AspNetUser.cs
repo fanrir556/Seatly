@@ -46,7 +46,7 @@ public partial class AspNetUser
     public string? MemberRealName { get; set; }
     [DisplayName("使用者暱稱")]
     public string? MemberNickname { get; set; }
-    [DisplayName("認證")]
+    [DisplayName("權限")]
     public int? Permission { get; set; }
     [DisplayName("累積點數")]
     public int? Points { get; set; }
@@ -57,7 +57,7 @@ public partial class AspNetUser
 
     public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; } = new List<AspNetUserLogin>();
 
-    public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
+    public virtual ICollection<AspNetUserRole> AspNetUserRoles { get; set; } = new List<AspNetUserRole>();
 
-    public virtual ICollection<AspNetRole> Roles { get; set; } = new List<AspNetRole>();
+    public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
 }

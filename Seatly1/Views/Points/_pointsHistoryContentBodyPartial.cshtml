@@ -295,9 +295,10 @@ else
                         pTran.tDate = tranDate;
                     }
 
-                    // console.log(pTran);
                     
                     pTrans.push(pTran);
+                    //console.log(pTrans);
+                    //console.log(JSON.stringify(pTrans));
 
                     fetch(`@Url.Action("EditPointsTran", "Points")`, {
                         method: "POST",

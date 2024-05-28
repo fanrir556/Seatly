@@ -12,6 +12,8 @@ using QRCoder;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Cors;
+using Newtonsoft.Json;
+using Seatly1.DTO;
 
 namespace Seatly1.Controllers
 {
@@ -27,7 +29,7 @@ namespace Seatly1.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult MVCIndex()
         {
             return View();
         }
@@ -37,10 +39,16 @@ namespace Seatly1.Controllers
             return View();
         }
 
-        public IActionResult MVCVue()
+        public IActionResult Index()//MVCVue
         {
             return View();
         }
+
+        public IActionResult CouponScan()
+        {
+            return View();
+        }
+
         //點數商城導覽列
         public async Task<IActionResult> pointsShopContentHead()
         {
@@ -192,7 +200,7 @@ namespace Seatly1.Controllers
                 // 在這裡進行相關處理
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
                 aspUser = await _context.AspNetUsers.FindAsync(user.Id);
-                if(aspUser == null)
+                if (aspUser == null)
                 {
                     return "兌換失敗";
                 }
@@ -399,23 +407,26 @@ namespace Seatly1.Controllers
 
         //優惠券使用post
         [HttpPost]
-        public async Task<IActionResult> couponUse([FromBody] pShopExchange p)
+        public async Task<IActionResult> couponUse([FromBody] int tid)
         {
-            int id = Int32.Parse(p.Id);
-            PointTransaction trans = await _context.PointTransactions.FindAsync(id);
+            PointTransaction trans = await _context.PointTransactions.FindAsync(tid);
             if (trans == null)
             {
                 return NotFound();
             }
 
-            trans.Active = p.Active;
-
             if (ModelState.IsValid)
             {
-                _context.Update(trans);
-                await _context.SaveChangesAsync();
+                string dataString = JsonConvert.SerializeObject(trans);
 
-                string dataString = $"優惠券編號:{trans.Id},會員編號:{trans.MemberId},商品編號:{trans.ProductId},兌換日期:{trans.TransactionDate}";
+
+                /*if (trans.Active == true)
+                {
+                    trans.Active = false;
+                    _context.Update(trans);
+                    await _context.SaveChangesAsync();
+                }*/
+
 
                 // 創建 QR code
                 QRCodeGenerator qrGenerator = new QRCodeGenerator();
@@ -432,6 +443,43 @@ namespace Seatly1.Controllers
             else
             {
                 return NotFound();
+            }
+        }
+
+        //優惠券掃描post
+        [HttpPost]
+        public async Task<IActionResult> CouponScan([FromBody] PointTransaction trans)
+        {
+            if (trans == null)
+            {
+                return Content(JsonConvert.SerializeObject("查無優惠券"), "application/json");
+            }
+
+            var data = _context.PointTransactions.Find(trans.Id);
+
+            if (data != null)
+            {
+                var pd = await _context.PointStores.FindAsync(data.ProductId);
+                PointsPagingDTO pgDTO = new PointsPagingDTO
+                {
+                    Trans = new List<PointTransaction> { data },
+                    Shops = new List<PointStore> { pd },
+                };
+
+                string dataString = JsonConvert.SerializeObject(pgDTO);
+
+                if (data.Active == true)
+                {
+                    data.Active = false;
+                    _context.Update(data);
+                    await _context.SaveChangesAsync();
+                }
+
+                return Content(dataString, "application/json");
+            }
+            else
+            {
+                return Content(JsonConvert.SerializeObject("查無優惠券"), "application/json");
             }
         }
 
@@ -696,7 +744,7 @@ namespace Seatly1.Controllers
                 else
                 {
                     DateOnly date = DateOnly.FromDateTime(DateTime.Now.Date);
-                    var gameCountList = await _context.GamePoints.Where(s => s.MemberId == user.Id && s.PointsDate == date).ToListAsync();
+                    var gameCountList = await _context.GamePoints.Where(s => s.MemberId == user.Id && s.PointsDate == date && s.GameType == 1).ToListAsync();
                     int gameCount = gameCountList.Count;
                     if (gameCount < 3)
                     {
@@ -734,6 +782,76 @@ namespace Seatly1.Controllers
                             Id = 0,
                             MemberId = aspUser.Id,
                             PointsDate = date,
+                            GameType = 1
+                        };
+
+                        _context.Update(aspUser);
+                        _context.Add(newGamePoint);
+                        await _context.SaveChangesAsync();
+
+                        List<int> res = new List<int> { getPoints, (int)aspUser.Points, gameCount + 1 };
+                        return Json(res);
+                    }
+                    return Json("今日已完成小遊戲");
+                }
+            }
+            return NotFound();
+        }
+
+        public async Task<IActionResult> LogoGamePoints()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                // 使用者已登入
+                // 在這裡進行相關處理
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                var aspUser = await _context.AspNetUsers.FindAsync(user.Id);
+                if (aspUser == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    DateOnly date = DateOnly.FromDateTime(DateTime.Now.Date);
+                    var gameCountList = await _context.GamePoints.Where(s => s.MemberId == aspUser.Id && s.PointsDate == date && s.GameType == 2).ToListAsync();
+                    int gameCount = gameCountList.Count;
+                    if (gameCount < 1)
+                    {
+                        int ranNum = new Random().Next(1, 101);
+                        int getPoints = 0;
+                        if (ranNum == 100)
+                        {
+                            getPoints = 50;
+                        }
+                        else if (ranNum > 94 && ranNum <= 99)
+                        {
+                            getPoints = 20;
+                        }
+                        else if (ranNum > 84 && ranNum <= 94)
+                        {
+                            getPoints = 10;
+                        }
+                        else
+                        {
+                            getPoints = 5;
+                        }
+
+                        if (aspUser.Points == null)
+                        {
+                            aspUser.Points = 0;
+                            aspUser.Points += getPoints;
+                        }
+                        else
+                        {
+                            aspUser.Points += getPoints;
+                        }
+
+                        var newGamePoint = new GamePoint
+                        {
+                            Id = 0,
+                            MemberId = aspUser.Id,
+                            PointsDate = date,
+                            GameType = 2
                         };
 
                         _context.Update(aspUser);
