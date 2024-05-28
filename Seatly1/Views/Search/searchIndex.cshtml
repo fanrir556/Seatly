@@ -5,7 +5,29 @@
 @section Styles
 {
     <style>
+        /* 懸浮按鈕樣式 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            /* background-color: #007bff;
+            color: white; */
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
 
+            .back-to-top:hover {
+                background-color: #FFE153;
+                transform: scale(1.1);
+            }
     </style>
 }
 <div class="container">
@@ -24,13 +46,21 @@
     </div>
 
 
+    </div>
 </div>
-</div>
+<!-- 懸浮按鈕 -->
+<button class="back-to-top" id="backToTopBtn"><img style="width:55px" src="~/images/queuely-upp.png" /></button>
 
 
 
 @section Scripts{
 <script>
+        // 回到頂部按鈕功能
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
         $(function () {
 
             // $.ajax({
