@@ -10,4 +10,6 @@ public partial class GamePoint
     public string? MemberId { get; set; }
 
     public DateOnly? PointsDate { get; set; }
+
+    public int? GameType { get; set; }
 }

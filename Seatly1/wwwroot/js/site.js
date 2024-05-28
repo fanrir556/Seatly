@@ -69,49 +69,58 @@ $(function () {
     //});
     // Managermodal
 
-    /* 管理員登入 */
+    /* Logo小遊戲 */
     $("#home").on("mousedown", function (e) {
         setTimeout(function () {
             $("#logo").css("animation-name", "logoSpin")
         }, 1000);
         timer = setTimeout(function () {
             $("#logo").css("animation-name", "");
-            //if (isMG == "true")
-            //{
-                //var isMGUrl = $("#logo").data("url");
-                ////var p = {
-                ////    key: "true"
-                ////};
-                //var form = new FormData();
-                ////form.append("key", "true");
-                //sessionStorage.removeItem("isManager");
-                //$("#mainModalBody").html('<div class="d-flex justify-content-center"><h2 class="m-auto text-gradient">恭喜下班，肝苦人</h2></div>');
-                //$('#mainModal').modal('show');
-                //fetch(`${isMGUrl}`, {
-                //    method: "POST",
-                //    body: form,
-                //    /*body: JSON.stringify(p),*/
-                //    //headers: { 'Content-Type': 'application/json' }
-                //}).then(function (response) {
-                //    console.log(response);
-                //}).catch(function (err) {
-                //    alert(err);
-                //});
-                //setTimeout(function () {
-                //    location.reload();
-                //}, 1000);
-            //}
-            //else
-            //{
-            //    $('#mainModal').modal('show');
-            //}
+            var toast = new bootstrap.Toast($("#liveToast"))
+            if ($("#logoed").index() != -1)
+            {
+                var logoGameUri = $("#logoed").data("uri");
+                fetch(logoGameUri, {
+                method: "GET",
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                //console.log(data);
+                if (data == "今日已完成小遊戲") {
+                    $("#liveToast>.toast-header").html(`<strong class="me-auto">今日完成次數達上限!</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`)
+                    $("#liveToast>.toast-body").text(`今日完成隱藏小遊戲次數已達上限`);
+                }
+                else {
+                    $("#liveToast>.toast-header").html(`<strong class="me-auto">恭喜找到隱藏小遊戲</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`)
+                    $("#liveToast>.toast-body").text(`恭喜獲得${data[0]}點\n現在點數:${data[1]}\n今日已完成隱藏小遊戲次數:(${data[2]}/1)`);
+                    var homeUri = `${$("#home").data("uri")}`
+                        fetch(homeUri, {
+                            method: "GET",
+                        }).then(response => {
+                            sessionStorage.setItem('userPointsEdited', 'true');
+                        }).catch(err => {
+                            alert(err);
+                        });
+                }
+
+                toast.show();
+            }).catch(err => {
+                alert(err);
+            });
+            }
+            else
+            {
+                $("#liveToast>.toast-header").html(`<strong class="me-auto">什麼都沒有發生</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`)
+                $("#liveToast>.toast-body").text(`恭喜找到小彩蛋`);
+                toast.show();
+            }
         }, 3000);
     });
     $("#home").on("mouseup", function () {
         $("#logo").css("animation-name", "")
         clearTimeout(timer);
     });
-    /* 管理員登入 */
+    /* Logo小遊戲 */
 
     /*每日簽到*/
     $("#checkIn").on("click", function () {
