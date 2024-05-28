@@ -195,10 +195,8 @@
                                 </span>
                         </p>
                         <div>
-
-                            
-                          
-                            <a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
+                            <div><a @@click="userview" :btn-Aid="activity.activityId" :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
+                        </div>
                         
                        
 

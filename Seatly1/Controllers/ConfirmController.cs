@@ -444,6 +444,54 @@ namespace Seatly1.Controllers
             return Json(results);
         }
 
+
+
+
+
+        // UserActivityView用的
+        // 依日期篩選會員已參加活動
+        // GET:/Confirm/DateInfo
+        [HttpGet]
+        public async Task<JsonResult> DateInfo(DateTime date)
+        {
+            // 獲取當前登入的使用者
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Json(null);
+            }
+
+            var userName = user.UserName; // 直接從 user 對象中獲取 UserName
+            var userId = user.Id; // 直接從 user 對象中獲取 UserId
+
+            // 計算指定日期的開始和結束時間
+            var startOfDay = date.Date; // 當天的開始時間 (00:00:00)
+            var endOfDay = date.Date.AddDays(1).AddTicks(-1); // 當天的結束時間 (23:59:59.9999999)
+
+            var results = (from bo in _context.BookingOrders
+                           join nr in _context.NotificationRecords on bo.ActivityId equals nr.ActivityId
+                           where bo.UserName == userName
+                                 && nr.StartTime <= startOfDay
+                                 && nr.EndTime >= endOfDay
+                           orderby bo.ActivityId, bo.WaitingNumber
+                           select new
+                           {
+                               bo.ActivityId,
+                               bo.UserName,
+                               bo.WaitingNumber,
+                               bo.Checked,
+                               nr.ActivityName,
+                               nr.ActivityPhoto,
+                               nr.StartTime,
+                               nr.EndTime
+                           }).ToList();
+
+            return Json(results);
+        }
+
+
+
+
         //--------------------------------------------------------------------------
 
 
