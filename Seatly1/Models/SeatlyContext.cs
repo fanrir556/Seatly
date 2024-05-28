@@ -137,9 +137,10 @@ public partial class SeatlyContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens).HasForeignKey(d => d.UserId);
         });
 
+
         modelBuilder.Entity<BookingOrder>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.OrderId); // 設置 OrderId 為主鍵
 
             entity.Property(e => e.ActivityBarcode).HasMaxLength(6);
             entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
@@ -151,6 +152,21 @@ public partial class SeatlyContext : DbContext
             entity.Property(e => e.Status).HasMaxLength(50);
             entity.Property(e => e.UserName).HasMaxLength(256);
         });
+
+        //modelBuilder.Entity<BookingOrder>(entity =>
+        //{
+        //    entity.HasNoKey();
+
+        //    entity.Property(e => e.ActivityBarcode).HasMaxLength(6);
+        //    entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
+        //    entity.Property(e => e.ActivityName).HasMaxLength(100);
+        //    entity.Property(e => e.DateTime).HasColumnType("datetime");
+        //    entity.Property(e => e.OrderId)
+        //        .ValueGeneratedOnAdd()
+        //        .HasColumnName("OrderID");
+        //    entity.Property(e => e.Status).HasMaxLength(50);
+        //    entity.Property(e => e.UserName).HasMaxLength(256);
+        //});
 
         modelBuilder.Entity<CollectionItem>(entity =>
         {

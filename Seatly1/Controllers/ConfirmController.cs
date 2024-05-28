@@ -140,6 +140,7 @@ namespace Seatly1.Controllers
                 _context.BookingOrders.Add(newBookingOrder);
                 _context.SaveChanges();
             }
+
             catch (Exception ex)
             {
                 // 處理寫入失敗的異常
