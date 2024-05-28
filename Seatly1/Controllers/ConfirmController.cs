@@ -12,6 +12,8 @@ using Seatly1.DTO;
 using Microsoft.AspNetCore.Identity;
 using Seatly1.Data;
 using static System.Net.WebRequestMethods;
+using Azure.Core;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Seatly1.Controllers
 {
@@ -246,7 +248,52 @@ namespace Seatly1.Controllers
             await _context.SaveChangesAsync();
         }
 
-        //管理者使用 -
+        //OrganizerActiveCheck使用
+        // POST: /Confirm/QRCheck
+        [HttpPost]
+        public async Task<IActionResult> QRCheck([FromBody] QRRequest request)
+        {
+            if (request == null || string.IsNullOrEmpty(request.Barcode))
+            {
+                return BadRequest("資料錯誤");
+            }
+            string userName = request.userName;
+            string barcode = request.Barcode;
+            int activityId = request.activityId;
+
+
+            var aa = _context.BookingOrders.FirstOrDefault(
+                    e => e.UserName == userName && e.ActivityBarcode == barcode && e.ActivityId == activityId
+                );
+
+            if (aa == null)
+            {
+                return NotFound(new { success = false, message = "找不到對應的簽到資訊" });
+            }
+
+            if (aa.Checked == false)
+            {
+                aa.Checked = true;
+            }
+            else {
+                return Ok(new { success = false, message = "有簽到過了喔~" });
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { success = true, message = "簽到成功" });
+        }
+
+        //建立一個QRRequest給QRCheck用
+        public class QRRequest
+        {
+            public string userName { get; set; }
+            public string Barcode { get; set; }
+            public int activityId { get; set; }
+        }
+
+        //--------------------------------------------------------
+
+        //管理者使用 簽到 -  Admin那邊用的
         //POST:/Confirm/TransUnCheck
         [HttpPost]
         public async Task TransUnCheck(string Barcode, int waitNum)

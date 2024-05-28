@@ -80,7 +80,7 @@
             // 生成列表
             list: function () {
                 let _this = this;
-                axios.get(`${vuebase}/Confirm/ActiveList/${organizerid}`)
+                axios.get(`/Confirm/ActiveList/${organizerid}`)
                     .then(async response => {
                         let res = [];
                         for (let e of response.data) {
@@ -105,9 +105,9 @@
                 sessionStorage.removeItem("ActID");
                 sessionStorage.setItem("ActID", btnId);
 
-                axios.get(`${vuebase}/Confirm/OrganizerActiveCheck/${btnId}`)
+                axios.get(`/Confirm/OrganizerActiveCheck/${btnId}`)
                     .then(response => {
-                        window.location.href = `${vuebase}/Confirm/OrganizerActiveCheck/${btnId}`;
+                        window.location.href = `/Confirm/OrganizerActiveCheck/${btnId}`;
                     })
                     .catch(error => {
                         alert(error);
@@ -121,7 +121,7 @@
 
                 var ret = confirm("確定要結束活動?");
                 if (ret == true) {
-                    axios.post(`${vuebase}/Confirm/TransActive/${btnId}`)
+                    axios.post(`/Confirm/TransActive/${btnId}`)
                         .then(e => {
                             alert("結束成功");
                             _this.list();
