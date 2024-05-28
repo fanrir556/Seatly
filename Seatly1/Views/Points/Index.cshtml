@@ -1028,7 +1028,8 @@
                 //document.querySelector('#exchangeModal').classList.remove('show');
                 exchangeModal.classList.remove('show');
                 exchangeModal.style.display = 'none';
-                exchangeModal.setAttribute('aria-modal', 'false');
+                exchangeModal.removeAttribute('aria-modal');
+                exchangeModal.removeAttribute('role');
                 exchangeModal.setAttribute('aria-hidden', 'true');
 
                 document.querySelector('.modal-backdrop').classList.remove('show');
@@ -1745,6 +1746,7 @@
             showProducts();
             exchangeModal.addEventListener('hidden.bs.modal', () => {
               exchangeRes.value = '';
+              console.log('hidden');
               showProducts();
             })
           }
