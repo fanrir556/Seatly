@@ -18,6 +18,9 @@
     ViewData["Title"] = "優惠券掃描";
 }
 
+@* 防偽標籤 生成(會是個 input hidden 元素) *@
+@Html.AntiForgeryToken()
+
 <div id="CouponScanApp">
     <div class="row">
         <div class="col-12 col-md-3">
@@ -53,6 +56,8 @@
 @section Scripts {
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script>
+        const token = document.querySelector('input[name="__Antiforgery__Queuely"]').value;
+
         const { createApp, ref, reactive, onMounted, watch } = Vue;
 
         const app = createApp({
@@ -71,7 +76,8 @@
                     var response = await fetch(`@Url.Action("CouponScan", "Points")`, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': token
                         },
                         body: decodedText
                     });

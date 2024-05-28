@@ -191,6 +191,7 @@ namespace Seatly1.Controllers
 
         //點數商城兌換
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<string> pointsShopContentBody([FromBody] pShopExchange p)
         {
             var aspUser = new AspNetUser();
@@ -234,6 +235,7 @@ namespace Seatly1.Controllers
 
         //點數商城編輯
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPointsShop([FromBody] List<PointStore> pShop)
         {
             if (ModelState.IsValid)
@@ -263,6 +265,7 @@ namespace Seatly1.Controllers
         }
         //點數商城刪除
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePointsShop([FromBody] List<int> ids)
         {
             try
@@ -287,6 +290,7 @@ namespace Seatly1.Controllers
 
         //點數商城上傳照片
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadImage(IFormFile image)
         {
             if (image == null || image.Length == 0)
@@ -315,6 +319,7 @@ namespace Seatly1.Controllers
 
         // 點數商城刪除照片
         [HttpDelete]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteImage([FromBody] List<string> fileNames)
         {
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
@@ -407,6 +412,7 @@ namespace Seatly1.Controllers
 
         //優惠券使用post
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> couponUse([FromBody] int tid)
         {
             PointTransaction trans = await _context.PointTransactions.FindAsync(tid);
@@ -448,6 +454,7 @@ namespace Seatly1.Controllers
 
         //優惠券掃描post
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CouponScan([FromBody] PointTransaction trans)
         {
             if (trans == null)
@@ -596,6 +603,7 @@ namespace Seatly1.Controllers
 
         //交易紀錄編輯
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPointsTran([FromBody] List<pShopExchange> pTrans)
         {
             if (ModelState.IsValid)
@@ -640,6 +648,7 @@ namespace Seatly1.Controllers
         }
         //交易紀錄刪除
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePointsTran([FromBody] List<int> ids)
         {
             try

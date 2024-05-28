@@ -34,7 +34,8 @@ builder.Services.AddControllersWithViews();
 
 
 // ���UDI�e��
-builder.Services.AddDbContext<SeatlyContext>(options => {
+builder.Services.AddDbContext<SeatlyContext>(options =>
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("Seatly"));
 });
 
@@ -53,6 +54,17 @@ builder.Services.AddSession(option =>
     option.Cookie.SecurePolicy = CookieSecurePolicy.Always; //要求Cookie必須透過HTTPS傳送
 });
 
+// 配置 防偽標籤 Antiforgery ~ 用於防止 CSRF 攻擊
+builder.Services.AddAntiforgery(options =>
+{
+    // 指定在 HTML 表單中生成的隱藏欄位的名稱，該欄位將包含防偽標籤值。 <== 默認名稱可能會被猜出來
+    options.FormFieldName = "__Antiforgery__Queuely";
+    // 防偽標籤名稱
+    options.HeaderName = "X-CSRF-TOKEN";
+    // 防止 X-Frame-Options 標頭被禁用 <== 網頁不能被攻擊者嵌入到其他網站的 iframe 中
+    options.SuppressXFrameOptionsHeader = false;
+});
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -63,7 +75,8 @@ builder.Services.AddSwaggerGen();
 string PolicyName = "AllowAny";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: PolicyName, policy => {
+    options.AddPolicy(name: PolicyName, policy =>
+    {
         policy.WithOrigins("*").WithHeaders("*").WithMethods("*");
     });
 });
@@ -97,6 +110,9 @@ app.UseAuthorization();
 
 //Session
 app.UseSession();
+
+// 啟用 防偽標籤 cookie 服務
+app.UseAntiforgery();
 
 //CORS
 app.UseCors();
