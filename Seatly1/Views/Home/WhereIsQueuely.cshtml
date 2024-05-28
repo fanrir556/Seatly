@@ -36,8 +36,14 @@
                     </div>
                 </div>
                 <div v-if="noCamara" class="modal-footer" id="mainModalFooter" v-cloak>
+                    <button class="btn btn-gradient p-0 text-align-center" style="height:45px"
+                        @@click="noCamara = !noCamara;">切換登入方式</button>
                     <button class="btn btn-gradient p-0 text-align-center" style="width:100px;height:45px"
                         id="managerLogin" @@click="managerLogin">登入</button>
+                </div>
+                <div v-else class="modal-footer" id="mainModalFooter" v-cloak>
+                    <button class="btn btn-gradient p-0 text-align-center" style="height:45px"
+                        @@click="noCamara = !noCamara;">切換登入方式</button>
                 </div>
             </section>
             <section v-else-if="correctMg" v-cloak>
@@ -175,9 +181,7 @@
                         html5QrCode.value.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
                             .catch(err => {
                                 console.error(`Error starting QR code scanner: ${err}`);
-                                if (err == "Error getting userMedia, error = NotFoundError: Requested device not found") {
-                                    noCamara.value = true;
-                                }
+                                noCamara.value = true;
                             });
                     }
                 });
@@ -189,9 +193,7 @@
                                 html5QrCode.value.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
                                     .catch(err => {
                                         console.error(`Error starting QR code scanner: ${err}`);
-                                        if (err == "Error getting userMedia, error = NotFoundError: Requested device not found") {
-                                            noCamara.value = true;
-                                        }
+                                        noCamara.value = true;
                                     });
                             }, 1);
                         }
@@ -202,6 +204,7 @@
                         }
                     }
                     if (newNoCamara) {
+                        html5QrCode.value.stop();
                         setTimeout(function () {
                             managerPw.focus();
                         }, 1)
