@@ -151,6 +151,7 @@
    
 @* 卡片內容 *@
     <div>
+        @* <img id="dancingtime" src="~/images/giphy.gif" /> *@
         <ul id="activityList" >
             @foreach (var activity in Model)
             {
@@ -231,6 +232,8 @@ else
    
 
     $(function () {
+
+        
         var isSearching = sessionStorage.getItem("isSearching");
         if (isSearching == "true") {
             var hashtags = [];
