@@ -151,7 +151,7 @@
    
 @* 卡片內容 *@
     <div>
-        @* <img id="dancingtime" src="~/images/giphy.gif" /> *@
+        <img id="dancingtime" src="~/images/giphy.gif" />
         <ul id="activityList" >
             @foreach (var activity in Model)
             {
@@ -232,6 +232,26 @@ else
    
 
     $(function () {
+        // 初始加載時顯示 loading 圖片
+        function showLoading() {
+            $("#dancingtime").show();
+            $("#activityList").hide();
+        }
+
+        function hideLoading() {
+            $("#dancingtime").hide();
+            $("#activityList").show();
+        }
+        // $.ajax({
+        //     type: "GET",
+        //     url: `@Url.Action("_searchPartial", "Search")`
+        // }).done(function (data) {
+        //     $("#resultBody").html(data);
+        //     $("#dancingtime").hide();
+        // }).fail(function (err) {
+        //     // alert(err.responseText);
+        //     $("#dancingtime").hide();
+        // });
 
         
         var isSearching = sessionStorage.getItem("isSearching");
@@ -263,10 +283,12 @@ else
                 headers: { 'Content-type': 'application/json' }
             }).then(function (response) {
                 return response.text();
+                hideLoading();
             }).then(function (data) {
                 $("#sideFilterContainer").html(data);
+                hideLoading();
             }).catch(function (err) {
-
+                hideLoading();
             });
             sessionStorage.removeItem("isSearching");
         }
