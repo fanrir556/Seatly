@@ -17,7 +17,16 @@ var vueApp = {
             LocationDescrption: null,
         };
     },
+    watch: {
+        StartTime(newStartTime, oldStartTime) {
+            if (newStartTime >= this.EndTime) {
+                console.log(newStartTime);
+                console.log(oldStartTime);
+            }
+        }
+    },
     methods: {
+        // 活動開始必須早於結束時間
         getOrganizerId() {
             // 透過Session取得活動方的id
             let organizerid = sessionStorage.getItem("OrganizerId");
@@ -61,6 +70,7 @@ var vueApp = {
 
                 // 建立formdata
                 const formData = new FormData()
+                console.log(self.ActivityMethod);
 
                 if (self.ActivityMethod == '公告') {
                     // 活動方法為公告時，FormData不讀取活動名稱跟活動人數上限的資料
@@ -68,7 +78,9 @@ var vueApp = {
                     formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
                     formData.append('StartTime', self.StartTime);
                     formData.append('EndTime', self.EndTime);
-                    formData.append('Capacity', self.Capacity);
+                    formData.append('Capacity', 0);
+                    formData.append('ActivityName', null);
+                    formData.append('ActivityMethod', self.ActivityMethod);
                     formData.append('isActivity', true); // 預設啟用活動
                     formData.append('Location', self.location);
                     formData.append('LocationDescription', self.LocationDescrption);
@@ -77,8 +89,26 @@ var vueApp = {
                     formData.append('HashTag3', self.hashtag3);
                     formData.append('HashTag4', self.hashtag4);
                     formData.append('HashTag5', self.hashtag5);
+
+                    // 发送 POST 请求
+                    axios.post('/api/OrganizersApi/activity', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
+                        }
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                            let newActivityId = response.data; // 假设服务器返回的响应中包含新活动的id
+                            alert("新增活動成功，請進行活動描述的編輯");
+                            window.location.href = `./Description/${newActivityId}`; // 将新活动的id添加到URL中
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            alert("新增活動失敗");
+                        });
                 }
                 else {
+                    // 活動方法為公告時，FormData不讀取活動名稱跟活動人數上限的資料
                     formData.append('OrganizerId', organizeridInt);
                     formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
                     formData.append('StartTime', self.StartTime);
@@ -94,24 +124,24 @@ var vueApp = {
                     formData.append('HashTag3', self.hashtag3);
                     formData.append('HashTag4', self.hashtag4);
                     formData.append('HashTag5', self.hashtag5);
-                }
-                console.log(formData);
-                // 发送 POST 请求
-                axios.post('/api/OrganizersApi/activity', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
-                    }
-                })
-                    .then(function (response) {
-                        console.log(response);
-                        let newActivityId = response.data; // 假设服务器返回的响应中包含新活动的id
-                        alert("新增活動成功，請進行活動描述的編輯");
-                        window.location.href = `./Description/${newActivityId}`; // 将新活动的id添加到URL中
+
+                    // 发送 POST 请求
+                    axios.post('/api/OrganizersApi/activity', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
+                        }
                     })
-                    .catch(function (error) {
-                        console.log(error);
-                        alert("新增活動失敗");
-                    });
+                        .then(function (response) {
+                            console.log(response);
+                            let newActivityId = response.data; // 假设服务器返回的响应中包含新活动的id
+                            alert("新增活動成功，請進行活動描述的編輯");
+                            window.location.href = `./Description/${newActivityId}`; // 将新活动的id添加到URL中
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            alert("新增活動失敗");
+                        });
+                }
             }
             // 讀取檔案為 ArrayBuffer
             reader.readAsArrayBuffer(uploadedFile);

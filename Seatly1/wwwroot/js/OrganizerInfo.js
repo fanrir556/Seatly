@@ -181,8 +181,8 @@ $('#modifyOrganizerForm').submit(function (event) {
                     contentType: 'application/json',
                     success: function (result) {
                         alert(result);
-                        // 修改成功，重定向到登入頁面
-                        window.location.href = '/OrganizerRoute/OrganizerInfo';
+                        // 修改成功
+                        window.location.href = '/OrganizerRoute/Index';
                     },
                     error: function (err) {
                         alert(err.responseText);

@@ -111,7 +111,7 @@ namespace Seatly1.Controllers
             await activity.ActivityPhoto.CopyToAsync(memoryStream);
             var photoBytes = memoryStream.ToArray();
 
-            NotificationRecord act = new NotificationRecord
+            NotificationRecord act = new()
             {
                 ActivityId = activity.ActivityId,
                 OrganizerId = activity.OrganizerId,
