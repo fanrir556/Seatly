@@ -164,14 +164,18 @@
 
     @* 台北 *@
     <section v-if="cate=='taipei'" class="activity-section">
+       
             <div class="no-activities">
-                <span style="font-size:30px" class="cute-font">台北</span>
+            <span style="font-size:30px" class="cute-font">台北</span>
                 <!-- 排序按钮 -->
                 <div class="btn-group" role="group" aria-label="Sort Activities" >
                     <button type="button" class="btn btn-secondary" v-on:click="toggleSortOrder">目前排序: {{ sortBy === 'asc' ? '由舊到新' : '由新到舊' }}</button>
                 </div>
             </div>
         <div class="row card-container">
+            <div>
+                <img v-if="loading" src="~/images/giphy.gif" style="width:500px" />
+            </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
@@ -217,6 +221,9 @@
                 </div>
             </div>
         <div class="row card-container">
+            <div>
+                <img v-if="loading" src="~/images/giphy.gif" style="width:500px" />
+            </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
@@ -244,6 +251,7 @@
                 </div>
             </div>
         </div>
+
     </section>
     @* 台南 *@
     <section v-else-if="cate == 'tainan'" class="activity-section">
@@ -255,6 +263,9 @@
                 </div>
             </div>
         <div class="row card-container">
+            <div>
+                <img v-if="loading" src="~/images/giphy.gif" style="width:500px" />
+            </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
@@ -294,6 +305,9 @@
                 </div>
             </div>
         <div class="row card-container">
+            <div>
+            <img v-if="loading" src="~/images/giphy.gif" style="width:500px" />
+            </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
@@ -323,10 +337,9 @@
             </div>
         </div>
     </section>
-    <template v-else>
+    <div v-else class="no-activities">
         <p>查無此活動</p>
-    </template>
-</div>
+    </div>
 </div>
 <!-- 懸浮按鈕 -->
 <button class="back-to-top" id="backToTopBtn"><img style="width:55px" src="~/images/queuely-upp.png" /></button>
@@ -341,6 +354,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
+       
     const { createApp, ref, reactive } = Vue;
 
         var vueApp = {
@@ -352,6 +366,7 @@
                     selectedType: sessionStorage.getItem('selectedType') || '' ,// 初始化 selectedType
                     userCollections: [],
                     isLoggedIn: sessionStorage.getItem('userLogin') === 'true', // 檢查用戶是否登錄
+                    loading: false, // loading動畫
                 }
             },
             computed: {
@@ -378,6 +393,7 @@
             methods: {
                 async changeCategory(category) {
                     try {
+                        this.loading = true
                         // 時間篩選
                         const startTime = document.getElementById('startTime').value;
                         const endTime = document.getElementById('endTime').value;
@@ -410,6 +426,7 @@
                             activity.imgUrl = imgUrl
                             // activity.imageSrc = `data:image;base64,${base64Image}`;
                             // this.convertToImageUrl(activity.activityId, activity.activityPhoto);
+                        this.loading = false
                         });
                         // 確保在加載活動數據後更新用戶收藏列表
                        
@@ -417,7 +434,11 @@
                         
                     } catch (e) {
                         console.log(e);
+                        this.loading = false
+
                     }
+                   
+                    this.loading = false
                 },
                                
                 // 轉換圖片格式
@@ -458,7 +479,6 @@
                     if (this.isLoggedIn) {
                         const response = await fetch('/Collections/GetUserCollections');
                         const data = await response.json();
-                       
                     }
                 },
                 async toggleCollection(activity) {
