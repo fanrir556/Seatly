@@ -241,9 +241,11 @@
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@item.ActivityId">
-                                                        <div class="d-grid gap-2"><button class="btn btn-lg btn-danger mb-2" href="#!" role="button">查看活動</button></div>
-                                                    </form>
+                                                    <form asp-action="UsersView" asp-controller="NotificationRecord">
+                                                        <div class="d-grid gap-2">
+                                                            <button class="btn btn-lg btn-danger mb-2" btn-id="@item.ActivityId" @@click="activityConnect">查看活動</button>
+                                                        </div>
+                                                     </form>                                                         
                                                 </div>
                                             }
                                         </div>
@@ -633,7 +635,8 @@
                 return {
                     userCollections: [],
                     isLoggedIn: sessionStorage.getItem('userLogin') === 'true', // 檢查用戶是否登錄
-                } },
+                }
+            },
             mounted() {
                 if (this.isLoggedIn) {
                     this.restoreLocalStorage(); // 恢復收藏狀態
@@ -718,6 +721,20 @@
                     }
                 },
                 // 收藏相關判斷 -end-
+
+
+                //活動設置sessionStorage
+                activityConnect: function () {
+                    // alert("活動已觸發");
+                    // 從事件對象(event object)中取得觸發事件的按鈕元素
+                    const btn = event.target;
+                    // 從按鈕元素中取得自定義屬性"btn-id"
+                    const btnId = btn.getAttribute("btn-id");
+
+                    //設置session
+                    sessionStorage.removeItem("ActID");
+                    sessionStorage.setItem("ActID", btnId);
+                },
             },
         }
         Vue.createApp(vueApp).mount("#hotItems");
@@ -737,6 +754,13 @@
                 // alert("請選擇日期");
             }
         });
+
+
+
+ 
+
+
+
     </script>
 
        
