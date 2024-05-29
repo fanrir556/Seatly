@@ -88,6 +88,9 @@
   ViewData["Title"] = "點數專區";
 }
 
+@* 防偽標籤 生成(會是個 input hidden 元素) *@
+@Html.AntiForgeryToken()
+
 <div id="PointsApp">
   <section>
     @* 轉場動畫 *@
@@ -286,8 +289,7 @@
                     <p class="card-text">{{ productDescription }}</p>
                     <p class="card-text text-gradient">{{ productPrice === 0 ? "免費!!" : `兌換需要 ${productPrice} 點數` }}</p>
                     <button class="btn btn-gradient position-absolute bottom-0 end-0 mb-1 me-1 btn-exchange"
-                      data-bs-toggle="modal" data-bs-target="#exchangeModal"
-                      @@click="exchangeRes == '';pdExchange(productId)"
+                      @@click="pdExchange(productId)"
                       :disabled="results.userPoints < productPrice && results.userPoints != null">
                       兌換
                     </button>
@@ -605,6 +607,8 @@
 
 @section Scripts {
   <script>
+    const token = document.querySelector('input[name="__Antiforgery__Queuely"]').value;
+
     const { createApp, ref, reactive, onMounted, watch } = Vue;
 
     const app = createApp({
@@ -673,6 +677,14 @@
           deleteList.value = [];
           sessionStorage.setItem('strPoints', 'pointsShop');
           showProducts();
+          setTimeout(() => {
+            exchangeModal.addEventListener('hidden.bs.modal', () => {
+              if (exchangeRes.value != '') {
+                exchangeRes.value = '';
+                showProducts();
+              }
+            });
+          }, 1);
         };
         const coupon = () => {
           searchTerm.cate = null;
@@ -691,6 +703,14 @@
           else {
             strPoint.value = 'coupon';
             sessionStorage.setItem('strPoints', 'coupon');
+            setTimeout(() => {
+              couponModal.addEventListener('hidden.bs.modal', () => {
+                if (couponRes.value != '') {
+                  couponRes.value = '';
+                  showCoupons();
+                }
+              });
+            }, 1);
           }
           showCoupons();
         };
@@ -885,7 +905,8 @@
               body: JSON.stringify(searchTerm),
               credentials: 'include',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token
               }
             });
             const datas = await response.json();
@@ -898,6 +919,7 @@
             results.shops.forEach((shop) => {
               shop.productImage = @Url.Content("~/images/") + shop.productImage
             });
+            isMg.value = datas.isMg;
             await sessionStorage.setItem('pShop', JSON.stringify(datas));
 
             results.shops = searchTerm.keyword
@@ -919,6 +941,7 @@
             results.userPoints = datas.userPoints;
             results.sList = datas.sList1;
             results.dNames = datas.dNames;
+            isMg.value = datas.isMg;
           }
 
           results.shops = searchTerm.cate != null ? results.shops.filter((shop) => shop.category == searchTerm.cate) : results.shops;
@@ -979,6 +1002,9 @@
             exchangePd.img = product.productImage
             exchangePd.name = product.productName
             exchangePd.price = product.productPrice
+            const modal = new bootstrap.Modal(exchangeModal);
+            modal.show();
+            exchangeModal.modalInstance = modal;
           }
           else {
             window.location.href = "/Identity/Account/Login";
@@ -994,7 +1020,10 @@
             fetch(`@Url.Action("pointsShopContentBody", "Points")`, {
               method: "POST",
               body: JSON.stringify(p),
-              headers: { 'Content-Type': 'application/json' }
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token
+              }
             }).then(response => {
               return response.text();
             }).then(data => {
@@ -1002,15 +1031,24 @@
               sessionStorage.setItem('transEdited', 'true');
               sessionStorage.setItem('userPointsEdited', 'true');
               setTimeout(function () {
-                document.querySelector('#exchangeModal').classList.remove('show');
-                document.querySelector('.modal-backdrop').classList.remove('show');
-                showProducts();
+                //document.querySelector('#exchangeModal').classList.remove('show');
+                /*exchangeModal.classList.remove('show');
+                exchangeModal.style.display = 'none';
+                exchangeModal.removeAttribute('aria-modal');
+                exchangeModal.removeAttribute('role');
+                exchangeModal.setAttribute('aria-hidden', 'true');
+
+                document.querySelector('.modal-backdrop').classList.remove('show');*/
+                //showProducts();
               }, 500);
               setTimeout(function () {
-                document.querySelector('body').classList.remove('modal-open');
+                /*document.querySelector('body').classList.remove('modal-open');
                 document.querySelector('body').style = '';
                 document.querySelector('.modal-backdrop').remove();
-                exchangeRes.value = '';
+                const event = new Event('hidden.bs.modal');
+                exchangeModal.dispatchEvent(event);*/
+                //exchangeRes.value = '';
+                exchangeModal.modalInstance.hide();
               }, 700);
             }).catch(err => {
               alert(err);
@@ -1098,7 +1136,10 @@
 
                 fetch(`@Url.Action("UploadImage", "Points")`, {
                   method: "POST",
-                  body: formData
+                  body: formData,
+                  headers: {
+                    'X-CSRF-TOKEN': token
+                  }
                 }).then(function (response) {
                   delete p.newImg;
                   delete p.file;
@@ -1121,7 +1162,10 @@
               await fetch(`@Url.Action("EditPointsShop", "Points")`, {
                 method: "POST",
                 body: JSON.stringify(pShop),
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': token
+                }
               }).then(function (response) {
                 var count = pShop.length;
                 //alert(`${count}筆資料已修改`);
@@ -1282,7 +1326,10 @@
 
               await fetch(`@Url.Action("UploadImage", "Points")`, {
                 method: "POST",
-                body: formData
+                body: formData,
+                headers: {
+                  'X-CSRF-TOKEN': token
+                }
               }).then(function (response) {
                 delete newPd.file;
               }).catch(function (err) {
@@ -1293,7 +1340,10 @@
             await fetch(`@Url.Action("EditPointsShop", "Points")`, {
               method: "POST",
               body: JSON.stringify(pShop),
-              headers: { 'Content-Type': 'application/json' }
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token
+              }
             }).then(function (response) {
               var count = pShop.length;
               //alert(`${count}筆資料已新增`);
@@ -1325,9 +1375,9 @@
           var toastHeader = document.querySelector("#liveToast>.toast-header");
           var toastBody = document.querySelector("#liveToast>.toast-body");
           //console.log(deleteList.value);
-          var ids = deleteList.value.sort();
+          var ids = deleteList.value.sort((a, b) => a - b);
           var fileNames = await results.shops.filter(p => ids.includes(p.productId)).map(p => (p.productImage.slice(p.productImage.lastIndexOf("/images/") + "/images/".length)));
-          var strIds = deleteList.value.join(", ");
+          var strIds = ids.join(", ");
           if (deleteList.value.length > 0) {
             /*console.log(strIds);
             console.log(ids);
@@ -1338,7 +1388,10 @@
               await fetch(`@Url.Action("DeleteImage", "Points")`, {
                 method: "DELETE",
                 body: JSON.stringify(fileNames),
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': token
+                }
               }).then(function (response) {
                 // console.log(response);
               }).catch(function (err) {
@@ -1348,7 +1401,10 @@
               await fetch(`@Url.Action("DeletePointsShop", "Points")`, {
                 method: "POST",
                 body: JSON.stringify(ids),
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': token
+                }
               }).then(function (response) {
                 var count = ids.length;
                 toastHeader.innerHTML = `<strong class="me-auto">刪除資料成功</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
@@ -1383,7 +1439,8 @@
                 body: JSON.stringify(searchTerm),
                 credentials: 'include',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': token
                 }
               });
               const datas = await response.json();
@@ -1401,7 +1458,7 @@
               results.trans.forEach((tran) => {
                 tran.pd = results.shops.find(p => p.productId === tran.productId);
               });
-
+              isMg.value = datas.isMg;
               await sessionStorage.setItem('trans', JSON.stringify(datas));
 
               if (strPoint.value == 'coupon' && isMg.value == false) {
@@ -1446,6 +1503,7 @@
               results.dNames = datas.dNames;
               results.userId = datas.userId;
               results.shops = datas.shops;
+              isMg.value = datas.isMg;
               /*results.shops.forEach((shop) => {
                 shop.productImage = @Url.Content("~/images/") + shop.productImage
               });*/
@@ -1456,7 +1514,7 @@
                 case "id":
                   return searchTerm.sortType === "asc" ? a.id - b.id : b.id - a.id;
                 case "mid":
-                  return searchTerm.sortType === "asc" ? a.memberId - b.memberId : b.memberId - a.memberId;
+                  return searchTerm.sortType === "asc" ? a.memberId.localeCompare(b.memberId) || a.memberId - b.memberId : b.memberId.localeCompare(a.memberId) || a.memberId - b.memberId;
                 case "tDate":
                   return searchTerm.sortType === "asc" ? new Date(a.transactionDate) - new Date(b.transactionDate) : new Date(b.transactionDate) - new Date(a.transactionDate);
                 case "act":
@@ -1505,7 +1563,10 @@
           await fetch(`@Url.Action("couponUse", "Points")`, {
             method: "POST",
             body: JSON.stringify(tid),
-            headers: { 'Content-Type': 'application/json' }
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': token
+            }
           }).then(response => {
             return response.blob();
           }).then(blob => {
@@ -1532,7 +1593,10 @@
             await fetch(`@Url.Action("EditPointsTran", "Points")`, {
               method: "POST",
               body: JSON.stringify(pTrans),
-              headers: { 'Content-Type': 'application/json' }
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token
+              }
             }).then(function (response) {
               var count = pTrans.length;
               //alert(`${count}筆資料已修改`);
@@ -1607,7 +1671,10 @@
               await fetch(`@Url.Action("EditPointsTran", "Points")`, {
                 method: "POST",
                 body: JSON.stringify(pTrans),
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': token
+                }
               }).then(function (response) {
                 var count = pTrans.length;
                 //alert(`${count}筆資料已新增`);
@@ -1631,8 +1698,8 @@
         const deleteTrans = async () => {
           var toast = new bootstrap.Toast(liveToast);
           //console.log(deleteList.value);
-          var ids = deleteList.value.sort();
-          var strIds = deleteList.value.join(", ");
+          var ids = deleteList.value.sort((a, b) => a - b);
+          var strIds = ids.join(", ");
           if (deleteList.value.length > 0) {
             var result = confirm(`確定要刪除編號「${strIds}」的交易紀錄嗎?`);
             // console.log(result);
@@ -1640,7 +1707,10 @@
               await fetch(`@Url.Action("DeletePointsTran", "Points")`, {
                 method: "POST",
                 body: JSON.stringify(ids),
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': token
+                }
               }).then(function (response) {
                 var count = ids.length;
                 toastHeader.innerHTML = `<strong class="me-auto">刪除資料成功</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
@@ -1681,6 +1751,12 @@
 
           if (strPoint.value == 'pointsShop') {
             showProducts();
+            exchangeModal.addEventListener('hidden.bs.modal', () => {
+              if (exchangeRes.value != '') {
+                exchangeRes.value = '';
+                showProducts();
+              }
+            })
           }
           else if (strPoint.value == 'pointsHistory' || isMG == 'true') {
             strPoint.value = 'pointsHistory'
@@ -1689,6 +1765,12 @@
           }
           else {
             showCoupons();
+            couponModal.addEventListener('hidden.bs.modal', () => {
+              if (couponRes.value != '') {
+                couponRes.value = '';
+                showCoupons();
+              }
+            });
           }
         });
 

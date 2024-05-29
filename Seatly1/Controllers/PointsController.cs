@@ -191,6 +191,7 @@ namespace Seatly1.Controllers
 
         //點數商城兌換
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<string> pointsShopContentBody([FromBody] pShopExchange p)
         {
             var aspUser = new AspNetUser();
@@ -234,110 +235,134 @@ namespace Seatly1.Controllers
 
         //點數商城編輯
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPointsShop([FromBody] List<PointStore> pShop)
         {
-            if (ModelState.IsValid)
+            var isMg = HttpContext.Session.GetString("isMg"); //管理員登入判定
+            if (isMg == "true")
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    if (pShop.Count == 1 && pShop[0].ProductId == 0)
+                    try
                     {
-                        _context.Add(pShop[0]);
-                    }
-                    else
-                    {
-                        foreach (var pPd in pShop)
+                        if (pShop.Count == 1 && pShop[0].ProductId == 0)
                         {
-                            _context.Update(pPd);
+                            _context.Add(pShop[0]);
                         }
+                        else
+                        {
+                            foreach (var pPd in pShop)
+                            {
+                                _context.Update(pPd);
+                            }
+                        }
+                        await _context.SaveChangesAsync();
                     }
-                    await _context.SaveChangesAsync();
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        // Handle exception
+                    }
+                    return Ok();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    // Handle exception
-                }
-                return Ok();
+                return NotFound();
             }
             return NotFound();
         }
         //點數商城刪除
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePointsShop([FromBody] List<int> ids)
         {
-            try
+            var isMg = HttpContext.Session.GetString("isMg"); //管理員登入判定
+            if (isMg == "true")
             {
-                foreach (var id in ids)
+                try
                 {
-                    var pPd = await _context.PointStores.FindAsync(id);
-                    if (pPd != null)
+                    foreach (var id in ids)
                     {
-                        _context.PointStores.Remove(pPd);
+                        var pPd = await _context.PointStores.FindAsync(id);
+                        if (pPd != null)
+                        {
+                            _context.PointStores.Remove(pPd);
+                        }
                     }
-                }
 
-                await _context.SaveChangesAsync();
-                return Ok();
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+                }
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                return NotFound();
-            }
+            return NotFound();
         }
 
         //點數商城上傳照片
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadImage(IFormFile image)
         {
-            if (image == null || image.Length == 0)
+            var isMg = HttpContext.Session.GetString("isMg"); //管理員登入判定
+            if (isMg == "true")
             {
-                return BadRequest("No image uploaded.");
+                if (image == null || image.Length == 0)
+                {
+                    return BadRequest("No image uploaded.");
+                }
+
+                // 处理图片上传逻辑，例如保存到服务器上的某个位置
+                // 这里只是一个简单的示例，将图片保存到 wwwroot/uploads 文件夹下
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var fileName = image.FileName; // 保留原始檔名
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+
+                return Ok(new { fileName });
             }
-
-            // 处理图片上传逻辑，例如保存到服务器上的某个位置
-            // 这里只是一个简单的示例，将图片保存到 wwwroot/uploads 文件夹下
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
-            if (!Directory.Exists(uploadsFolder))
-            {
-                Directory.CreateDirectory(uploadsFolder);
-            }
-
-            var fileName = image.FileName; // 保留原始檔名
-            var filePath = Path.Combine(uploadsFolder, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await image.CopyToAsync(stream);
-            }
-
-            return Ok(new { fileName });
+            return NotFound();
         }
 
         // 點數商城刪除照片
         [HttpDelete]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteImage([FromBody] List<string> fileNames)
         {
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
-            try
+            var isMg = HttpContext.Session.GetString("isMg"); //管理員登入判定
+            if (isMg == "true")
             {
-                foreach (var fileName in fileNames)
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                try
                 {
-                    var filePath = Path.Combine(uploadsFolder, fileName);
+                    foreach (var fileName in fileNames)
+                    {
+                        var filePath = Path.Combine(uploadsFolder, fileName);
 
-                    if (System.IO.File.Exists(filePath))
-                    {
-                        await Task.Run(() => System.IO.File.Delete(filePath));
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            await Task.Run(() => System.IO.File.Delete(filePath));
+                        }
+                        else
+                        {
+                        }
                     }
-                    else
-                    {
-                    }
+                    return Ok($"Files deleted successfully.");
                 }
-                return Ok($"Files deleted successfully.");
+                catch (Exception ex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, $"Error deleting file: {ex.Message}");
+                }
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error deleting file: {ex.Message}");
-            }
+            return NotFound();
         }
 
         //點數商城兌換modal
@@ -407,6 +432,7 @@ namespace Seatly1.Controllers
 
         //優惠券使用post
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> couponUse([FromBody] int tid)
         {
             PointTransaction trans = await _context.PointTransactions.FindAsync(tid);
@@ -448,6 +474,7 @@ namespace Seatly1.Controllers
 
         //優惠券掃描post
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CouponScan([FromBody] PointTransaction trans)
         {
             if (trans == null)
@@ -596,70 +623,82 @@ namespace Seatly1.Controllers
 
         //交易紀錄編輯
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPointsTran([FromBody] List<pShopExchange> pTrans)
         {
-            if (ModelState.IsValid)
+            var isMg = HttpContext.Session.GetString("isMg"); //管理員登入判定
+            if (isMg == "true")
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    if (pTrans.Count == 1 && pTrans[0].Id == "0")
+                    try
                     {
-                        var newTran = new PointTransaction
+                        if (pTrans.Count == 1 && pTrans[0].Id == "0")
                         {
-                            MemberId = pTrans[0].MemberId,
-                            ProductId = pTrans[0].ProductId,
-                            Active = pTrans[0].Active,
-                            TransactionDate = DateTime.Now
-                        };
-                        if (pTrans[0].tDate != null)
-                        {
-                            DateTime.TryParse(pTrans[0].tDate, out DateTime tDate);
-                            newTran.TransactionDate = tDate;
+                            var newTran = new PointTransaction
+                            {
+                                MemberId = pTrans[0].MemberId,
+                                ProductId = pTrans[0].ProductId,
+                                Active = pTrans[0].Active,
+                                TransactionDate = DateTime.Now
+                            };
+                            if (pTrans[0].tDate != null)
+                            {
+                                DateTime.TryParse(pTrans[0].tDate, out DateTime tDate);
+                                newTran.TransactionDate = tDate;
+                            }
+                            _context.Add(newTran);
                         }
-                        _context.Add(newTran);
+                        else
+                        {
+                            foreach (var pTran in pTrans)
+                            {
+                                int Id = Int32.Parse(pTran.Id);
+                                var tran = await _context.PointTransactions.FindAsync(Id);
+                                tran.Active = pTran.Active;
+                                _context.Update(tran);
+                            }
+                        }
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        foreach (var pTran in pTrans)
-                        {
-                            int Id = Int32.Parse(pTran.Id);
-                            var tran = await _context.PointTransactions.FindAsync(Id);
-                            tran.Active = pTran.Active;
-                            _context.Update(tran);
-                        }
+                        // Handle exception
                     }
-                    await _context.SaveChangesAsync();
+                    return Ok();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    // Handle exception
-                }
-                return Ok();
+                return NotFound();
             }
             return NotFound();
         }
         //交易紀錄刪除
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePointsTran([FromBody] List<int> ids)
         {
-            try
+            var isMg = HttpContext.Session.GetString("isMg"); //管理員登入判定
+            if (isMg == "true")
             {
-                foreach (var id in ids)
+                try
                 {
-                    var pTran = await _context.PointTransactions.FindAsync(id);
-                    if (pTran != null)
+                    foreach (var id in ids)
                     {
-                        _context.PointTransactions.Remove(pTran);
+                        var pTran = await _context.PointTransactions.FindAsync(id);
+                        if (pTran != null)
+                        {
+                            _context.PointTransactions.Remove(pTran);
+                        }
                     }
-                }
 
-                await _context.SaveChangesAsync();
-                return Ok();
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+                }
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                return NotFound();
-            }
+            return NotFound();
         }
 
         public async Task<IActionResult> CheckIn()

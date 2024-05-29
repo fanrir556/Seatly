@@ -1,0 +1,74 @@
+﻿#calendar {
+    max-width: 400px; /* 設定最大寬度為400px */
+    /*margin: 0 auto;*/ /* 讓行事曆在頁面中置中 */
+    height: auto; /* 自動調整高度 */
+    background-color: #ffffff;
+    border: 2px solid #000; /* 添加2像素的黑色邊框 */
+    border-radius: 10px; /* 添加圓角邊框，半徑為10像素 */
+    overflow: hidden; /* 隱藏卷軸 */
+    box-sizing: border-box; /* 包括邊框和內邊距在內的總寬度和高度 */
+}
+
+.fc {
+    max-width: 100%;
+    height: 100%;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: #ffeb3b; /* 設定今天的背景色，例如黃色 */
+    color: #000; /* 設定今天的文字顏色，例如黑色 */
+}
+
+.fc-daygrid-day-number {
+    pointer-events: none; /* 移除每日日期的超連結效果 */
+    color: inherit; /* 保持文字顏色 */
+    text-decoration: none; /* 移除底線 */
+}
+
+
+.fc-event, .fc-daygrid-day {
+    cursor: pointer; /* 設置游標為手形 */
+}
+
+    .fc-daygrid-day:hover {
+        background-color: #d3d3d3; /* 懸停時變色 */
+    }
+
+/* 取消星期一到星期日的超連結效果 */
+.fc .fc-col-header-cell-cushion {
+    pointer-events: none;
+    color: inherit;
+    text-decoration: none;
+    cursor: default;
+}
+
+
+/* 調整標題部分 */
+.fc-toolbar-title {
+    font-size: 1.2em; /* 調整標題的字體大小 */
+}
+
+/* 調整按鈕部分 */
+.fc .fc-toolbar button {
+    font-size: 0.8em; /* 調整按鈕內文字的字體大小 */
+    padding: 4px 6px; /* 調整按鈕的內邊距 */
+}
+
+    .fc .fc-toolbar button.fc-prev-button,
+    .fc .fc-toolbar button.fc-next-button,
+    .fc .fc-toolbar button.fc-today-button {
+        font-size: 0.8em; /* 調整這些特定按鈕的字體大小 */
+        padding: 4px 6px; /* 調整這些特定按鈕的內邊距 */
+    }
+
+/* 調整按鈕的外觀 */
+.fc .fc-button {
+    background-color: #37474f; /* 背景顏色 */
+    border: none; /* 去除邊框 */
+    border-radius: 4px; /* 邊框圓角 */
+    color: #fff; /* 文字顏色 */
+}
+
+    .fc .fc-button:hover {
+        background-color: #455a64; /* 懸停時背景顏色 */
+    }

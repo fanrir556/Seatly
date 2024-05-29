@@ -274,9 +274,9 @@
                 joinclick: function () {
                     let _this = this;
                     const Aid = sessionStorage.getItem("ActID");
-
+                    // alert(Aid)
                     // get/Confirm/Index
-                    axios.get(`/Confirm/Index?Nid=${Aid}`)
+                    axios.get(`/Confirm/Index?NId=${Aid}`)
                         .then(res => {
                             // 根據回應的狀態進行不同處理
                             switch (res.data.status) {
