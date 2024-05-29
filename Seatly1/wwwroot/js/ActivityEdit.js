@@ -8,6 +8,13 @@ var vueApp = {
             Capacity: null,
             ActivityName: null,
             ActivityMethod: '',
+            hashtag1: '',
+            hashtag2: '',
+            hashtag3: '',
+            hashtag4: '',
+            hashtag5: '',
+            location: null,
+            LocationDescrption: null,
             ActivityPhoto: null,
         };
     },
@@ -28,6 +35,13 @@ var vueApp = {
                     this.Capacity = activity.capacity
                     this.ActivityName = activity.activityName;
                     this.ActivityMethod = activity.activityMethod;
+                    this.hashtag1 = activity.hashTag1;
+                    this.hashtag2 = activity.hashTag2;
+                    this.hashtag3 = activity.hashTag3;
+                    this.hashtag4 = activity.hashTag4;
+                    this.hashtag5 = activity.hashTag5;
+                    this.location = activity.location;
+                    this.LocationDescrption = activity.locationDescription;
 
                     // blob 物件轉換成圖片
                     const fileReader = new FileReader();
@@ -98,9 +112,14 @@ var vueApp = {
                 formData.append('Capacity', self.Capacity);
                 formData.append('ActivityName', self.ActivityName);
                 formData.append('ActivityMethod', self.ActivityMethod);
-                formData.append('DescriptionN', self.DescriptionN);
-                formData.append('RecurringTime', self.RecurringTime);
-                formData.append('IsRecurring', Boolean(self.IsRecurring));
+                formData.append('isActivity', true); // 預設啟用活動
+                formData.append('Location', self.location);
+                formData.append('LocationDescription', self.LocationDescrption);
+                formData.append('HashTag1', self.hashtag1);
+                formData.append('HashTag2', self.hashtag2);
+                formData.append('HashTag3', self.hashtag3);
+                formData.append('HashTag4', self.hashtag4);
+                formData.append('HashTag5', self.hashtag5);
 
                 // 发送 put 请求
                 axios.put(`/api/OrganizersApi/activity/${activityId}`, formData, {
@@ -110,8 +129,9 @@ var vueApp = {
                 })
                     .then(function (response) {
                         console.log(response);
-                        alert("修改活動成功");
-                        window.location.href = `/OrganizerRoute/Activity/${activityId}`;
+                        let newActivityId = response.data; // 假设服务器返回的响应中包含新活动的id
+                        alert("修改活動成功，請進行活動描述的編輯");
+                        window.location.href = `../Description/${newActivityId}`; // 将新活动的id添加到URL中
                     })
                     .catch(function (error) {
                         console.log(error);

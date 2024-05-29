@@ -59,10 +59,26 @@
                                     </div>
 
                                     <div class="col-12 col-md-3">
+                                        <label for="ActivityMethod" class="form-label">活動方法</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <select v-model="ActivityMethod" class="form-select" id="ActivityMethod" required>
+                                            <option>公告</option>
+                                            <option>排隊</option>
+                                            <option>抽籤</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <!-- 活動方法為公告時，活動人數上限、活動名稱欄位為唯讀-->
+                                    <div class="col-12 col-md-3">
                                         <label for="Capacity" class="form-label">活動人數上限</label>
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
-                                        <input type="number" v-model="Capacity" id="Capacity" class="form-control" placeholder="請輸入人數" required>
+                                        <input v-if="ActivityMethod=='公告'" type="number" v-model="Capacity" id="Capacity" class="form-control" placeholder="人數上限為唯讀" disabled>
+                                        <input v-else type="number" v-model="Capacity" id="Capacity" class="form-control" placeholder="請輸入人數" required>
                                         <div class="invalid-feedback">
                                             此為必填欄位
                                         </div>
@@ -72,21 +88,171 @@
                                         <label for="ActivityName" class="form-label">活動名稱</label>
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
-                                        <input type="text" v-model="ActivityName" id="ActivityName" class="form-control" placeholder="請輸入活動名稱" required>
+                                        <input v-if="ActivityMethod=='公告'" type="text" v-model="ActivityName" id="ActivityName" class="form-control" placeholder="活動名稱為唯讀" disabled>
+                                        <input v-else type="text" v-model="ActivityName" id="ActivityName" class="form-control" placeholder="請輸入活動名稱" required>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+                                    <!-- 活動方法為公告時，活動人數上限、活動名稱欄位為唯讀-->
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="hashtag1" class="form-label">HashTag1</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <select v-model="hashtag1" class="form-select" id="hashtag1">
+                                            <option>藝文</option>
+                                            <option>親子</option>
+                                            <option>美食</option>
+                                            <option>戶外體驗</option>
+                                            <option>健康</option>
+                                            <option>運動</option>
+                                            <option>寵物</option>
+                                            <option>動漫</option>
+                                            <option>遊戲</option>
+                                            <option>公益</option>
+                                            <option>其他生活娛樂</option>
+                                            <option>美術</option>
+                                            <option>音樂</option>
+                                            <option>設計</option>
+                                            <option>商業</option>
+                                            <option>科技</option>
+                                            <option>語言</option>
+                                            <option>投資</option>
+                                            <option>時尚</option>
+                                            <option>手作</option>
+                                            <option>料理</option>
+                                            <option>攝影</option>
+                                            <option>其他學習成長</option>
+                                        </select>
                                         <div class="invalid-feedback">
                                             此為必填欄位
                                         </div>
                                     </div>
 
                                     <div class="col-12 col-md-3">
-                                        <label for="ActivityMethod" class="form-label">活動方法</label>
+                                        <label for="hashtag2" class="form-label">HashTag2</label>
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
-                                        <select v-model="ActivityMethod" class="form-select" id="ActivityMethod" required>
-                                            <option>公告</option>
-                                            <option>排隊</option>
-                                            <option>抽籤</option>
+                                        <select v-model="hashtag2" class="form-select" id="hashtag2">
+                                            <option>藝文</option>
+                                            <option>親子</option>
+                                            <option>美食</option>
+                                            <option>戶外體驗</option>
+                                            <option>健康</option>
+                                            <option>運動</option>
+                                            <option>寵物</option>
+                                            <option>動漫</option>
+                                            <option>遊戲</option>
+                                            <option>公益</option>
+                                            <option>其他生活娛樂</option>
+                                            <option>美術</option>
+                                            <option>音樂</option>
+                                            <option>設計</option>
+                                            <option>商業</option>
+                                            <option>科技</option>
+                                            <option>語言</option>
+                                            <option>投資</option>
+                                            <option>時尚</option>
+                                            <option>手作</option>
+                                            <option>料理</option>
+                                            <option>攝影</option>
+                                            <option>其他學習成長</option>
                                         </select>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="hashtag3" class="form-label">HashTag3</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <select v-model="hashtag3" class="form-select" id="hashtag3">
+                                            <option>藝文</option>
+                                            <option>親子</option>
+                                            <option>美食</option>
+                                            <option>戶外體驗</option>
+                                            <option>健康</option>
+                                            <option>運動</option>
+                                            <option>寵物</option>
+                                            <option>動漫</option>
+                                            <option>遊戲</option>
+                                            <option>公益</option>
+                                            <option>其他生活娛樂</option>
+                                            <option>美術</option>
+                                            <option>音樂</option>
+                                            <option>設計</option>
+                                            <option>商業</option>
+                                            <option>科技</option>
+                                            <option>語言</option>
+                                            <option>投資</option>
+                                            <option>時尚</option>
+                                            <option>手作</option>
+                                            <option>料理</option>
+                                            <option>攝影</option>
+                                            <option>其他學習成長</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="hashtag4" class="form-label">HashTag4</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <select v-model="hashtag4" class="form-select" id="hashtag4">
+                                            <option>藝文</option>
+                                            <option>親子</option>
+                                            <option>美食</option>
+                                            <option>戶外體驗</option>
+                                            <option>健康</option>
+                                            <option>運動</option>
+                                            <option>寵物</option>
+                                            <option>動漫</option>
+                                            <option>遊戲</option>
+                                            <option>公益</option>
+                                            <option>其他生活娛樂</option>
+                                            <option>美術</option>
+                                            <option>音樂</option>
+                                            <option>設計</option>
+                                            <option>商業</option>
+                                            <option>科技</option>
+                                            <option>語言</option>
+                                            <option>投資</option>
+                                            <option>時尚</option>
+                                            <option>手作</option>
+                                            <option>料理</option>
+                                            <option>攝影</option>
+                                            <option>其他學習成長</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="location" class="form-label">縣市</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <select v-model="location" class="form-select" id="location" required>
+                                            <!--因為是測試用，放4個縣市就好-->
+                                            <option>台北</option>
+                                            <option>台中</option>
+                                            <option>台南</option>
+                                            <option>高雄</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            此為必填欄位
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label for="LocationDescrption" class="form-label">地址</label>
+                                    </div>
+                                    <div class="col-12 col-md-9 mb-3">
+                                        <input type="text" v-model="LocationDescrption" id="LocationDescrption" class="form-control" placeholder="請輸入地址" required>
                                         <div class="invalid-feedback">
                                             此為必填欄位
                                         </div>
@@ -108,7 +274,7 @@
 
                                 <div class="d-flex flex-column flex-md-row bd-highlight mb-3 justify-content-md-start justify-content-sm-end">
                                     <div class="p-2 bd-highlight sm-w-100 ml-auto">
-                                        <button id="submit" type="submit" class="btn btn-primary" formnovalidate>送出</button>
+                                        <button id="submit" type="submit" class="btn btn-primary" formnovalidate>下一頁</button>
                                     </div>
                                 </div>
                             </form>
