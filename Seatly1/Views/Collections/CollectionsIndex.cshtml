@@ -190,7 +190,7 @@ else
     async function removeFromCollection(activityId) {
         if (confirm('確定要移除該收藏項目嗎？')) {
             try {
-                    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                    // const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
                     const payload = { activityId: activityId };
 
                     console.log('Payload:', payload);
@@ -199,7 +199,7 @@ else
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'RequestVerificationToken': token
+                        // 'RequestVerificationToken': token
                     },
                     body: JSON.stringify(payload)
                 });
