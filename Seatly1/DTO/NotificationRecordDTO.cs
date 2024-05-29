@@ -19,13 +19,19 @@ namespace Seatly1.DTO
 
         public string? ActivityName { get; set; }
 
-        public string? ActivityMethod { get; set; }
-
         public string? DescriptionN { get; set; }
 
         public bool? IsRecurring { get; set; }
 
         public string? RecurringTime { get; set; }
+
+        public string? ActivityMethod { get; set; }
+
+        public string? Location { get; set; }
+
+        public string? LocationDescription { get; set; }
+
+        public bool? IsActivity { get; set; }
 
         public string? HashTag1 { get; set; }
 

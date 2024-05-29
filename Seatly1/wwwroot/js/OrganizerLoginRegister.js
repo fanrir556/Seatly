@@ -136,51 +136,55 @@ $('#registerForm').submit(function (event) {
         // 将文件名存储到photo变量中
         photo = fileName;
 
-        // 发送Ajax请求到后端上传图片
-        $.ajax({
+        // 使用axios发送请求到后端上传图片
+        axios({
             url: '/api/OrganizersApi/uploads', // 后端上传图片的 URL
-            type: 'POST',
+            method: 'POST',
             data: formData,
-            processData: false, // 告诉 jQuery 不要处理数据
-            contentType: false, // 告诉 jQuery 不要设置 contentType
-            success: function (response) {
-                $('#status').text('Image uploaded successfully.');
-                console.log('Image uploaded successfully:', response);
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(function (response) {
+            $('#status').text('圖片上傳成功');
+            console.log('Image uploaded successfully:', response);
 
-                // 图片上传成功后，再发送表单数据
-                $.ajax({
-                    url: '/api/OrganizersApi/register', // 后端登录接口的 URL
-                    type: 'POST',
-                    data: JSON.stringify({
-                        OrganizerAccount: account,
-                        LoginPassword: password1,
-                        OrganizerName: name,
-                        OrganizerCategory: category,
-                        OrganizerPhoto: photo, // 使用新的文件名
-                        Menu: menu,
-                        Address: address,
-                        ReservationUrl: url,
-                        Hashtag: hashtag,
-                        Email: email,
-                        Phone: phone,
-                        Validation: validation
-                    }),
-                    contentType: 'application/json',
-                    success: function (result) {
-                        alert(result);
-                        // 註冊成功，重定向到登入頁面
-                        window.location.href = '/';
-                    },
-                    error: function (err) {
-                        alert(err.responseText);
-                    }
-                });
-            },
-            error: function (textStatus, errorThrown) {
+            // 图片上传成功后，再发送表单数据
+            return axios({
+                url: '/api/OrganizersApi/register', // 后端登录接口的 URL
+                method: 'POST',
+                data: {
+                    OrganizerAccount: account,
+                    LoginPassword: password1,
+                    OrganizerName: name,
+                    OrganizerCategory: category,
+                    OrganizerPhoto: photo, // 使用新的文件名
+                    Menu: menu,
+                    Address: address,
+                    ReservationUrl: url,
+                    Hashtag: hashtag,
+                    Email: email,
+                    Phone: phone,
+                    Validation: validation
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }).then(function (result) {
+            alert(result.data);
+            // 註冊成功，重定向到登入頁面
+            window.location.href = '/';
+        }).catch(function (error) {
+            if (error.response) {
+                alert(error.response.data);
+            } else if (error.request) {
                 $('#status').text('Error uploading image.');
-                console.error('Error uploading image:', textStatus, errorThrown);
+                console.error('Error uploading image:', error.request);
+            } else {
+                console.error('Error', error.message);
             }
         });
+
     }
 });
 
