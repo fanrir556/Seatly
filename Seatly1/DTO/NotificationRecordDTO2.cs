@@ -15,12 +15,25 @@
         public int? Capacity { get; set; }
 
         public string? ActivityName { get; set; }
+
         public string? ActivityMethod { get; set; }
 
         public string? DescriptionN { get; set; }
 
-        public bool? IsRecurring { get; set; }
+        public string? Location { get; set; }
 
-        public string? RecurringTime { get; set; }
+        public string? LocationDescription { get; set; }
+
+        public bool? IsActivity { get; set; }
+
+        public string? HashTag1 { get; set; }
+
+        public string? HashTag2 { get; set; }
+
+        public string? HashTag3 { get; set; }
+
+        public string? HashTag4 { get; set; }
+
+        public string? HashTag5 { get; set; }
     }
 }

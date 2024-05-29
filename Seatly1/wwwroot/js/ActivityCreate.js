@@ -8,6 +8,13 @@ var vueApp = {
             Capacity: null,
             ActivityName: null,
             ActivityMethod: '',
+            hashtag1: null,
+            hashtag2: null,
+            hashtag3: null,
+            hashtag4: null,
+            hashtag5: null,
+            location: null,
+            LocationDescrption: null,
         };
     },
     methods: {
@@ -51,7 +58,6 @@ var vueApp = {
             reader.onload = function () {
                 // 將讀取到的二進位資料轉換為blbo物件
                 var blob = new Blob([reader.result]);
-                console.log('blob Data:', blob);
 
                 // 建立formdata
                 const formData = new FormData()
@@ -64,6 +70,14 @@ var vueApp = {
                 formData.append('Capacity', self.Capacity);
                 formData.append('ActivityName', self.ActivityName);
                 formData.append('ActivityMethod', self.ActivityMethod);
+                formData.append('isActivity', true); // 預設啟用活動
+                formData.append('Location', self.location);
+                formData.append('LocationDescription', self.LocationDescrption);
+                formData.append('HashTag1', self.hashtag1);
+                formData.append('HashTag2', self.hashtag2);
+                formData.append('HashTag3', self.hashtag3);
+                formData.append('HashTag4', self.hashtag4);
+                formData.append('HashTag5', self.hashtag5);
 
                 // 发送 POST 请求
                 axios.post('/api/OrganizersApi/activity', formData, {
@@ -73,8 +87,9 @@ var vueApp = {
                 })
                     .then(function (response) {
                         console.log(response);
-                        alert("新增活動成功");
-                        window.location.href = './NotificationRecord';
+                        let newActivityId = response.data; // 假设服务器返回的响应中包含新活动的id
+                        alert("新增活動成功，請進行活動描述的編輯");
+                        window.location.href = `./Description/${newActivityId}`; // 将新活动的id添加到URL中
                     })
                     .catch(function (error) {
                         console.log(error);
