@@ -150,7 +150,9 @@
                     }
                     toast.show();
 
-                    html5QrCode.value.stop();
+                    if (!noCamara) {
+                        html5QrCode.value.stop();
+                    }
                 };
 
                 const managerLogin = async (e) => {
@@ -185,7 +187,7 @@
 
                 onMounted(() => {
                     //managerPw.focus();
-                    if (!noCamara.value) {
+                    if (!noCamara.value && !isMg.value) {
                         html5QrCode.value = new Html5Qrcode("reader");
 
                         // Start scanning
@@ -214,7 +216,7 @@
                             }, 1)
                         }
                     }
-                    if (newNoCamara) {
+                    if (newNoCamara && !newCorrectMg) {
                         html5QrCode.value.stop();
                         setTimeout(function () {
                             managerPw.focus();

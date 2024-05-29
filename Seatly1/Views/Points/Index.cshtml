@@ -1375,9 +1375,9 @@
           var toastHeader = document.querySelector("#liveToast>.toast-header");
           var toastBody = document.querySelector("#liveToast>.toast-body");
           //console.log(deleteList.value);
-          var ids = deleteList.value.sort();
+          var ids = deleteList.value.sort((a, b) => a - b);
           var fileNames = await results.shops.filter(p => ids.includes(p.productId)).map(p => (p.productImage.slice(p.productImage.lastIndexOf("/images/") + "/images/".length)));
-          var strIds = deleteList.value.join(", ");
+          var strIds = ids.join(", ");
           if (deleteList.value.length > 0) {
             /*console.log(strIds);
             console.log(ids);
@@ -1514,7 +1514,7 @@
                 case "id":
                   return searchTerm.sortType === "asc" ? a.id - b.id : b.id - a.id;
                 case "mid":
-                  return searchTerm.sortType === "asc" ? a.memberId - b.memberId : b.memberId - a.memberId;
+                  return searchTerm.sortType === "asc" ? a.memberId.localeCompare(b.memberId) || a.memberId - b.memberId : b.memberId.localeCompare(a.memberId) || a.memberId - b.memberId;
                 case "tDate":
                   return searchTerm.sortType === "asc" ? new Date(a.transactionDate) - new Date(b.transactionDate) : new Date(b.transactionDate) - new Date(a.transactionDate);
                 case "act":
@@ -1698,8 +1698,8 @@
         const deleteTrans = async () => {
           var toast = new bootstrap.Toast(liveToast);
           //console.log(deleteList.value);
-          var ids = deleteList.value.sort();
-          var strIds = deleteList.value.join(", ");
+          var ids = deleteList.value.sort((a, b) => a - b);
+          var strIds = ids.join(", ");
           if (deleteList.value.length > 0) {
             var result = confirm(`確定要刪除編號「${strIds}」的交易紀錄嗎?`);
             // console.log(result);
