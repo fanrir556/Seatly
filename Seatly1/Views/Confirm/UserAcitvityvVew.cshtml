@@ -26,15 +26,13 @@
 
 <div class="container" id="app">
     <h1 class="mt-3">我的活動</h1>
-    <hr />
     <button class=" btn btn-primary" @@click="fetchList">現在參加</button>
     <button class="m-3 btn btn-success" @@click="history">歷史記錄</button>
-    <h3 class="m-3" style="display: inline;">{{ title }}</h3>
 
     <div class="row">
         <div id="calendar" class="col-md-4"></div>
         <div class="col-md-8 m-3">
-
+            <h3 class="m-3" style="display: inline;">-- {{ title }} --</h3>
             <div class="now-box">
                 <div class="m-3">
                     <div style="height: 100%; overflow-y: auto;">
@@ -76,6 +74,8 @@
         </div>
     </div>
 </div>
+
+<hr class="mt-3 mb-5"/>
 
   
 
