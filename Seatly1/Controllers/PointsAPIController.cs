@@ -30,6 +30,7 @@ namespace Seatly1.Controllers
 
         //點數商城VUE
         [HttpPost("pointsShop")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult<PointsPagingDTO>> pointsShopVue([FromBody] PointsSearchDTO search)
         {
             var isMg = HttpContext.Session.GetString("isMg"); //管理員登入判定
@@ -117,12 +118,13 @@ namespace Seatly1.Controllers
             {
                 pointsPaging.isMg = true;
             }
-            
+
             return pointsPaging;
         }
 
         //點數商城VUE
         [HttpPost("coupon")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult<PointsPagingDTO>> couponVue([FromBody] PointsSearchDTO search)
         {
             var isMg = HttpContext.Session.GetString("isMg"); //管理員登入判定

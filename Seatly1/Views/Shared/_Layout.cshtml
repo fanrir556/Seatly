@@ -103,25 +103,33 @@
             <a  id="userCollections" asp-area="" asp-controller="Collections" asp-action="CollectionsIndex">❤收藏清單</a>
             </div>
 
-            <!--試連結集中區-->
-            <div class="collapse navbar-collapse border-top border-lg-0 justify-content-end" id="navbarSupportedContent">
+                <!--試連結集中區-->
+                @if (isMg == "true")
+                {
+                    <li class="nav-item dropdown text-gradient list-group">
+                        <a class="dropdown-item text-gradient " asp-area="" asp-controller="Admin"
+                            asp-action="Index">管理員連接測試</a>
+                    </li>
+                }
+                <!--試連結集中區-->
                 <li class="nav-item dropdown text-gradient list-group">
                     <a class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false"> 測試連結集中區 </a>
+                        aria-expanded="false"> 會員專區 </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                       
                         <li>
-                            <a class="dropdown-item text-gradient " asp-area="" asp-controller="Admin"
-                                asp-action="Index">管理員連接測試</a>
+                            <a class="dropdown-item text-gradient me-1" asp-area="Identity"
+                                asp-page="/Account/Manage/Index" title="點擊進入會員中心">會員中心</a>
                         </li>
-
+                        <li>
+                            <a class="dropdown-item text-gradient me-1" id="userCollections" asp-area=""
+                                asp-controller="Collections" asp-action="CollectionsIndex">❤收藏清單</a>
+                        </li>
                         <li>
                             <a class="dropdown-item text-gradient " asp-area="" asp-controller="Confirm"
-                                asp-action="UserAcitvityvVew">歷史紀錄</a>
+                                asp-action="UserAcitvityvVew">活動紀錄</a>
                         </li>
                     </ul>
                 </li>
-                <!--試連結集中區-->
 
                 @* 點數專區開始 *@
                 <li class="nav-item dropdown text-gradient list-group">

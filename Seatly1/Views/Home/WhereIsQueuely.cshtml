@@ -14,6 +14,9 @@
     ViewData["Title"] = "管理員登入";
 }
 
+@* 防偽標籤 生成(會是個 input hidden 元素) *@
+@Html.AntiForgeryToken()
+
 <div id="ManagerApp">
     <div v-if="!isMg" class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -91,6 +94,8 @@
 @section Scripts {
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script>
+        const token = document.querySelector('input[name="__Antiforgery__Queuely"]').value;
+
         const { createApp, ref, reactive, onMounted, watch } = Vue;
 
         const app = createApp({
@@ -117,7 +122,8 @@
                     var response = await fetch(`@Url.Action("MGLogin", "Home")`, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': token
                         },
                         body: decodedText
                     });
@@ -136,13 +142,17 @@
                         correctMg.value = true;
                         mgName.value = result.mgName;
                         mgImg.value = result.mgImg;
+                        sessionStorage.setItem('pShopEdited', 'true');
+                        sessionStorage.setItem('transEdited', 'true');
                         setTimeout(function () {
                             eval(result.mgJS);
                         }, 500);
                     }
                     toast.show();
 
-                    html5QrCode.value.stop();
+                    if (!noCamara.value) {
+                        html5QrCode.value.stop();
+                    }
                 };
 
                 const managerLogin = async (e) => {
@@ -160,12 +170,15 @@
                     fetch(`@Url.Action("MGLogin", "Home")`, {
                         method: "POST",
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': token
                         },
                         body: JSON.stringify('54Logout')
                     }).then(function (response) {
                         return response.json();
                     }).then(function (result) {
+                        sessionStorage.setItem('pShopEdited', 'true');
+                        sessionStorage.setItem('transEdited', 'true');
                         eval(result);
                     }).catch(function (err) {
                         alert(err);
@@ -174,7 +187,7 @@
 
                 onMounted(() => {
                     //managerPw.focus();
-                    if (!noCamara.value) {
+                    if (!noCamara.value && !isMg.value) {
                         html5QrCode.value = new Html5Qrcode("reader");
 
                         // Start scanning
@@ -203,7 +216,7 @@
                             }, 1)
                         }
                     }
-                    if (newNoCamara) {
+                    if (newNoCamara && !newCorrectMg) {
                         html5QrCode.value.stop();
                         setTimeout(function () {
                             managerPw.focus();
