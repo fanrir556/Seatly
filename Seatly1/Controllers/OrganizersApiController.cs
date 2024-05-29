@@ -512,10 +512,6 @@ namespace Seatly1.Controllers
             {
                 return NotFound("活動方不存在");
             }
-            else if (await _context.Organizers.AnyAsync(o => o.OrganizerAccount == organizer.OrganizerAccount && o.OrganizerId != id))
-            {
-                return BadRequest("帳號已被註冊");
-            }
             else if (await _context.Organizers.AnyAsync(o => o.Email == organizer.Email && o.OrganizerId != id))
             {
                 return BadRequest("信箱已被註冊");
