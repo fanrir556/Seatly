@@ -36,13 +36,13 @@
 </div>
 
 
-<div class="row ps-5 pe-5">
+    <div class="row ps-5 pe-5" id="resultBody">
     <div class="col-12 col-md-2 p-3" id="sideFilterContainer">
         @* @Html.Partial("_sideFilterPartial") *@
     </div>
 
-    <div class="col-12 col-md-10 p-3" id="searchResultContainer">
-
+        <div class="col-12 col-md-10 p-3" id="searchResultContainer">
+            @* <img id="dancingtime" src="~/images/giphy.gif"  /> *@
     </div>
 
 
@@ -55,6 +55,19 @@
 
 @section Scripts{
 <script>
+        // 初始加載時顯示 loading 圖片
+        $("#dancingtime").show();
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("_searchPartial", "Search")`
+        }).done(function (data) {
+            $("#resultBody").html(data);
+            $("#dancingtime").hide();
+        }).fail(function (err) {
+            // alert(err.responseText);
+            $("#dancingtime").hide();
+        });
+
         // 回到頂部按鈕功能
         const backToTopBtn = document.getElementById('backToTopBtn');
         backToTopBtn.addEventListener('click', () => {
@@ -63,14 +76,17 @@
 
         $(function () {
 
+            // // 初始加載時顯示 loading 圖片
+            // $("#dancingtime").show();
             // $.ajax({
-            //     type: "POST",
-            //     url: `@Url.Action("sideFilterPartial", "Search")`,
-                
+            //     type: "GET",
+            //     url: `@Url.Action("_searchPartial", "Search")`
             // }).done(function (data) {
-            //     $("#sideFilterContainer").html(data);
+            //     $("#resultBody").html(data);
+            //     $("#dancingtime").hide();
             // }).fail(function (err) {
-            //     alert(err.responseText);
+            //     // alert(err.responseText);
+            //     $("#dancingtime").hide();
             // });
 
 

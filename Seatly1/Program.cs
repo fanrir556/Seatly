@@ -19,7 +19,7 @@ services.AddAuthentication().AddGoogle(googleOptions =>
     //googleOptions.ClientId = "546918205472-3p0reoblv7q9pcuqqftkl19ao5ufhd0h.apps.googleusercontent.com";
     //googleOptions.ClientSecret = "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";
 
-    // Azure網域QueuelyWeb ! 待修
+    // Azure網域QueuelyWeb ! 
     googleOptions.ClientId = "600911081668-micikktb27e2fleams2t528u7pe422gj.apps.googleusercontent.com";
     googleOptions.ClientSecret = "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";
     //googleOptions.ClientId = Environment.GetEnvironmentVariable("Authentication:Google:ClientId");

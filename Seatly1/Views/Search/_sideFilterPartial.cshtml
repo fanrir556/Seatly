@@ -80,6 +80,16 @@
             $("#all").prop("checked", true);
         });
 
+        function showLoading() {
+            $("#dancingtime").show();
+            $("#activityList").hide();
+        }
+
+        function hideLoading() {
+            $("#dancingtime").hide();
+            $("#activityList").show();
+        }
+
         // 日期篩選變化
         $('#searchDurtion').click(handleDuration)
 
@@ -117,6 +127,8 @@
                 parametersDate.endDate = selectedEndDate;
             }
 
+            showLoading();
+
             if (searchKeyword !== null) {
                 if (selectedCategories.includes('all')) {
                     // 原始搜尋
@@ -126,8 +138,10 @@
                         data: parameters,
                     }).done(function (data) {
                         $("#searchResultContainer").html(data);
+                        hideLoading();
                     }).fail(function (err) {
                         alert(err.responseText);
+                        hideLoading();
                     });
                 } else {
                     //
@@ -139,9 +153,11 @@
                             // alert(parameters),
                             function (data) {
                                 $('#searchResultContainer').html(data);
+                                hideLoading();
                             },
                         error: function (xhr, status, error) {
                             console.error(error);
+                            hideLoading();
                         }
                     });
                 }
@@ -154,8 +170,10 @@
                         data: parametersDate,
                     }).done(function (data) {
                         $("#searchResultContainer").html(data);
+                        hideLoading();
                     }).fail(function (err) {
                         alert(err.responseText);
+                        hideLoading();
                     });
                 } else {
                     //
@@ -165,9 +183,11 @@
                         data: parametersDate,
                         success: function (data) {
                             $('#searchResultContainer').html(data);
+                            hideLoading();
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
+                            hideLoading();
                         }
                     });
                 }
@@ -201,6 +221,8 @@
 
             }
 
+            showLoading();
+
             if (searchKeyword !== null) {
                 if (selectedStartDate == null && selectedEndDate == null) {
                     // 首頁輸入關鍵字 原始搜尋
@@ -210,8 +232,10 @@
                         data: parameters,
                     }).done(function (data) {
                         $("#searchResultContainer").html(data);
+                        hideLoading();
                     }).fail(function (err) {
                         alert(err.responseText);
+                        hideLoading()
                     });
                 } else {
                     // 加入篩選
@@ -226,9 +250,11 @@
                             // alert(parameters),
                             function (data) {
                                 $('#searchResultContainer').html(data);
+                                hideLoading();
                             },
                         error: function (xhr, status, error) {
                             console.error(error);
+                            hideLoading();
                         }
                     });
                 }
@@ -241,8 +267,10 @@
                         data: parametersDate,
                     }).done(function (data) {
                         $("#searchResultContainer").html(data);
+                        hideLoading();
                     }).fail(function (err) {
                         alert(err.responseText);
+                        hideLoading();
                     });
                 } else {
                     // 加入篩選
@@ -255,9 +283,11 @@
                         data: parametersDate,
                         success: function (data) {
                             $('#searchResultContainer').html(data);
+                            hideLoading();
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
+                            hideLoading();
                         }
                     });
                 }
