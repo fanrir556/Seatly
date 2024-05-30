@@ -206,7 +206,7 @@ else
 
                 const data = await response.json();
                 if (data.success) {
-                    alert('收藏項目已移除');
+                    showToast('收藏項目已移除');
                         // 更新本地存储
                         let userCollections = JSON.parse(localStorage.getItem('userCollections')) || [];
                         userCollections = userCollections.filter(id => id !== activityId);
@@ -214,11 +214,11 @@ else
 
                     location.reload(); // 刷新页面以更新视图
                 } else {
-                    alert('移除收藏項目失敗：' + data.error);
+                    showToast('移除收藏項目失敗：' + data.error);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('移除收藏項目失敗，請稍後再試！');
+                showToast('移除收藏項目失敗，請稍後再試！');
             }
         }
     }
@@ -228,6 +228,32 @@ else
                 const facebook = `http://www.facebook.com/sharer/sharer.php?u=${cardDetailUrl}`;
                 window.open(facebook, '_blank');
     }
+
+        function showToast(message, type) {
+            let toastHeaderClass = 'bg-primary';
+            if (type === 'success') {
+                toastHeaderClass = 'bg-success';
+            } else if (type === 'error') {
+                toastHeaderClass = 'bg-danger';
+            }
+
+            const toastContainer = document.querySelector('.toast-container');
+            const toastElement = document.getElementById('liveToast');
+            const toastHeader = document.getElementById('toastHeader');
+            const toastBody = document.getElementById('toastBody');
+
+            // Update toast content and style
+            toastHeader.className = `toast-header ${toastHeaderClass}`;
+            toastBody.innerText = message;
+
+            // Initialize toast
+            const toast = new bootstrap.Toast(toastElement, {
+                delay: 2000
+            });
+
+            // Show toast
+            toast.show();
+        }
 </script>
     <!-- Load Facebook SDK for JavaScript -->
     <div id="fb-root"></div>

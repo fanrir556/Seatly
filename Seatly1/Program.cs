@@ -24,7 +24,7 @@ services.AddAuthentication().AddGoogle(googleOptions =>
     googleOptions.ClientSecret = "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";
     //googleOptions.ClientId = Environment.GetEnvironmentVariable("Authentication:Google:ClientId");
     //googleOptions.ClientSecret = Environment.GetEnvironmentVariable("Authentication:Google:ClientSecret");
-    //googleOptions.CallbackPath = new PathString("/signin-google");  // 确保这与 Google Cloud Console 中的重定向 URI 匹配
+    googleOptions.CallbackPath = new PathString("/signin-google");  // 确保这与 Google Cloud Console 中的重定向 URI 匹配
 });
 
 // Add services to the container.
