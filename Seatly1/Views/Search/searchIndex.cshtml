@@ -42,7 +42,7 @@
     </div>
 
         <div class="col-12 col-md-10 p-3" id="searchResultContainer">
-            @* <img id="dancingtime" src="~/images/giphy.gif"  /> *@
+            <img id="dancingtime" src="~/images/giphy.gif"  />
     </div>
 
 
@@ -55,18 +55,16 @@
 
 @section Scripts{
 <script>
-        // 初始加載時顯示 loading 圖片
-        $("#dancingtime").show();
-        $.ajax({
-            type: "GET",
-            url: `@Url.Action("_searchPartial", "Search")`
-        }).done(function (data) {
-            $("#resultBody").html(data);
+// 初始加載時顯示 loading 圖片
+        function showLoading() {
+            $("#dancingtime").show();
+            $("#activityList").hide();
+        }
+
+        function hideLoading() {
             $("#dancingtime").hide();
-        }).fail(function (err) {
-            // alert(err.responseText);
-            $("#dancingtime").hide();
-        });
+            $("#activityList").show();
+        }
 
         // 回到頂部按鈕功能
         const backToTopBtn = document.getElementById('backToTopBtn');
@@ -76,18 +74,7 @@
 
         $(function () {
 
-            // // 初始加載時顯示 loading 圖片
-            // $("#dancingtime").show();
-            // $.ajax({
-            //     type: "GET",
-            //     url: `@Url.Action("_searchPartial", "Search")`
-            // }).done(function (data) {
-            //     $("#resultBody").html(data);
-            //     $("#dancingtime").hide();
-            // }).fail(function (err) {
-            //     // alert(err.responseText);
-            //     $("#dancingtime").hide();
-            // });
+         
 
 
             sessionStorage.setItem("isSearching", "true")
