@@ -132,6 +132,16 @@ namespace Seatly1.Controllers
             return Ok();
         }
 
+        public IActionResult CheckIsMG()
+        {
+            string isMG = HttpContext.Session.GetString("isMg");
+            if (!string.IsNullOrEmpty(isMG))
+            {
+                return Content(isMG, "text/plain");
+            }
+            return Content("false", "text/plain");
+        }
+
         public IActionResult MGLogin([FromBody] string pwd)
         {
             string mgJS = @"

@@ -2,10 +2,73 @@
 var strCate = sessionStorage.getItem('strCate') || "all";
 var isSearching = sessionStorage.getItem('isSearching');
 var isTranSearching = sessionStorage.getItem("isTranSearching");
-var isMG = sessionStorage.getItem("isManager");
+var isMG = null;
 var isUser = sessionStorage.getItem("userLogin");
+var mouseX = 0;
+var mouseY = 0;
+
+/*載入動畫*/
+window.addEventListener('mousemove',(e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+const insertLoading = () => {
+    var cursor = { x: mouseX, y: mouseY };
+
+    document.querySelector('body').insertAdjacentHTML(
+        'beforeend',
+        `<div id="saveLoading" class="position-fixed" style="top: ${cursor.y}px; left: ${cursor.x}px;"><div role="img" class="wheel-and-queuely"><div class="wheel"></div><img src="${window.location.origin}/images/queuelyhome.png" class="queuely" /><div class="spoke"></div></div></div>`
+    );
+};
+
+const followingLoading = (e) => {
+    var cursor = { x: e.clientX, y: e.clientY };
+    const saveLoading = document.querySelector('#saveLoading');
+    if (saveLoading){
+        saveLoading.style.top = `${cursor.y}px`;
+        saveLoading.style.left = `${cursor.x}px`;
+    }
+};
+
+const removeMouseMoveListener = () => {
+    window.removeEventListener('mousemove', followingLoading);
+};
+
+const saveLoading = () => {
+    insertLoading();
+    window.addEventListener('mousemove', followingLoading);
+};
+
+const removeSaveLoading = () => {
+    removeMouseMoveListener();
+    const saveLoading = document.querySelector('#saveLoading');
+    if (saveLoading){
+        saveLoading.remove();
+    }
+};
+/*載入動畫*/
+
+/*管理員登入檢查*/
+const MGCheck = () => {
+    const checkIsMgActionUri = `${window.location.origin}/Home/CheckIsMG`;
+    fetch(checkIsMgActionUri, { method: "GET" })
+    .then(response => response.text())
+    .then(data => {
+        if (data !== "false") {
+            sessionStorage.setItem("isManager","true");
+        }
+    })
+    .catch(err => console.error('Error fetching MG status:', err.message));
+
+    const ismg = sessionStorage.getItem("isManager");
+    return ismg;
+};
+
+isMG = MGCheck();
+/*管理員登入檢查*/
 
 $(function () {
+    removeSaveLoading();
     /*點數專區導覽列hover開始*/
     var timer;
     $("#pointsNav, #pointsDropdown").on("mouseenter", function () {
@@ -161,16 +224,29 @@ $(function () {
     var gameSrc = $("#game").data("src");
     var gameUri = $("#game").data("uri");
     function gameLogoPop() {
-        var gameTargets = $("main").find("div, p, h1, h2, h3, h4, h5, h6").not(".expired-overlay");
+        var gameTargets = $("main").find("div, p, h1, h2, h3, h4, h5, h6, li").not(".modal, .modal div, p, h1, h2, h3, h4, h5, h6, li");
         var randEl = Math.floor(Math.random() * gameTargets.length);
         var aniNum = Math.ceil(Math.random() * 4);
-        if (gameTargets.eq(randEl).hasClass("position-relative")) {
-            sessionStorage.setItem("oriPosRel", "true");
+        var el = gameTargets.eq(randEl);
+        var rect = el[0].getBoundingClientRect();
+        var top = rect.top + window.scrollY;
+        var left = rect.left + window.scrollX;
+        var bottom = top + el.outerHeight();
+        var right = left + el.outerWidth();
+        var gamePosition = {x: 0, y: 0};
+        if (aniNum == 1 || aniNum == 2) {
+            gamePosition.y = top;
         }
-        else {
-            gameTargets.eq(randEl).addClass("position-relative");
+        else{
+            gamePosition.y = bottom;
         }
-        gameTargets.eq(randEl).append(`<img id="gameLogo" class="position-absolute p-0" style="width: 30px; height: 30px; z-index: -1;" src=${gameSrc} />`);
+        if (aniNum == 1 || aniNum == 4) {
+            gamePosition.x = left;
+        }
+        else{
+            gamePosition.x = right;
+        }
+        $("body").append(`<div id="gameLogoDiv" class="position-fixed container-fluid p-0" style="width: 0px; height: 0px; top:${gamePosition.y}px; left:${gamePosition.x}px;"><div class="container-fluid position-relative p-0"><img id="gameLogo" class="position-absolute p-0" style="width: 30px; height: 30px; z-index: -1;" src=${gameSrc} /></div></div>`);
         $("#gameLogo").css("animation-name", `gameLogoShow${aniNum}`);
         $("#gameLogo").on("click", function () {
             //alert("恭喜找到小Q!");
@@ -201,19 +277,18 @@ $(function () {
                 }
 
                 toast.show();
-                $(this).hide();
+                $("#gameLogoDiv").remove();
                 clearInterval(gameLoop);
             }).catch(err => {
                 alert(err);
             });
         });
         setTimeout(function () {
-            sessionStorage.getItem("oriPosRel") == "true" ? sessionStorage.removeItem("oriPosRel") : $("main").find("#gameLogo").parent().removeClass("position-relative");
-            $("main").find("#gameLogo").remove();
+            $("#gameLogoDiv").remove();
         }, 4000);
     }
 
-    if ($("#game").index() != -1 && $(".spinBtn").index() == -1) {
+    if ($("#game").index() != -1) {
         var gameLoop = setInterval(function () {
             gameLogoPop();
         }, 4100);
