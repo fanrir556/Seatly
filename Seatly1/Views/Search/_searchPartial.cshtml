@@ -158,11 +158,14 @@
                 <div  class="card mb-3 position-relative">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            @{
+                            @if(activity.ActivityPhoto != null){
                                 var base64Image = Convert.ToBase64String(activity.ActivityPhoto);
                                 var imageSrc = $"data:image;base64,{base64Image}";
+                                <img src="@imageSrc" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2 w-75"  />
+                            }else{
+                                <img src="~/images/noimage.webp" />
                             }
-                            <img src="@imageSrc" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2 w-75"  />
+                            
                             @if (activity.ActivityMethod == "公告")
                             {
                                 <p class="badge bg-warning card-text position-absolute top-0 start-0">@activity.ActivityMethod</p>

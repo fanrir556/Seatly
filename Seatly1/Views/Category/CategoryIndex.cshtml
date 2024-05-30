@@ -178,7 +178,9 @@
             </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
-                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId">
+                        <img :src="activity.imgUrl || '/images/noimage.webp'" class="card-img-top" alt="Activity Photo">
+                    </a>
                     <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body ">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
@@ -226,7 +228,9 @@
             </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
-                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId">
+                        <img :src="activity.imgUrl || '/images/noimage.webp'" class="card-img-top" alt="Activity Photo">
+                        </a>
                     <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
@@ -268,7 +272,9 @@
             </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
-                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId">
+                        <img :src="activity.imgUrl || '/images/noimage.webp'" class="card-img-top" alt="Activity Photo">
+                        </a>
                     <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
@@ -310,7 +316,9 @@
             </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
-                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <a :href="'/NotificationRecord/UsersView/' + activity.activityId">
+                        <img :src="activity.imgUrl || '/images/noimage.webp'" class="card-img-top" alt="Activity Photo">
+                        </a>
                     <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
@@ -443,8 +451,8 @@
                                
                 // 轉換圖片格式
                 convertToImageUrl(photoData) {
-                    const imageUrl = 'data:image/png;base64,' + photoData;
-                    return imageUrl;
+                        const imageUrl = 'data:image/png;base64,' + photoData;
+                        return imageUrl;
                 },
                 // 切换排序方式
                 toggleSortOrder() {
