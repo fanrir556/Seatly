@@ -18,12 +18,41 @@ var vueApp = {
         };
     },
     watch: {
-        StartTime(newStartTime, oldStartTime) {
+        // 當StartTime或EndTime值改變時，執行以下程式，當開始時間比結束時間晚時，自動將結束時間設定成開始時間加1天
+        StartTime(newStartTime) {
             if (newStartTime >= this.EndTime) {
-                console.log(newStartTime);
-                console.log(oldStartTime);
+                let starttime = new Date(newStartTime);
+                let endtime = new Date(starttime.setDate(starttime.getDate() + 1));
+
+                // 將日期時間轉換為v-model可以接受的格式
+                let year = endtime.getFullYear();
+                let month = ("0" + (endtime.getMonth() + 1)).slice(-2); // Months are zero based
+                let day = ("0" + endtime.getDate()).slice(-2);
+                let hour = ("0" + endtime.getHours()).slice(-2);
+                let minute = ("0" + endtime.getMinutes()).slice(-2);
+                let formattedDate = `${year}-${month}-${day}T${hour}:${minute}`;
+
+                this.EndTime = formattedDate;
+                console.log('結束時間' + this.EndTime);
+                }
+        },
+        EndTime(newEndTime) {
+            if (newEndTime <= this.StartTime) {
+                let endtime = new Date(newEndTime);
+                let starttime = new Date(endtime.setDate(endtime.getDate() - 1));
+
+                // 將日期時間轉換為v-model可以接受的格式
+                let year = starttime.getFullYear();
+                let month = ("0" + (starttime.getMonth() + 1)).slice(-2); // Months are zero based
+                let day = ("0" + starttime.getDate()).slice(-2);
+                let hour = ("0" + starttime.getHours()).slice(-2);
+                let minute = ("0" + starttime.getMinutes()).slice(-2);
+
+                let formattedDate = `${year}-${month}-${day}T${hour}:${minute}`;
+                this.StartTime = formattedDate;
+                console.log('開始時間' + this.StartTime);
             }
-        }
+        },
     },
     methods: {
         // 活動開始必須早於結束時間
