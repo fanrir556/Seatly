@@ -773,14 +773,6 @@
           deleteList.value = [];
           sessionStorage.setItem('strPoints', 'pointsShop');
           showProducts();
-          setTimeout(() => {
-            exchangeModal.addEventListener('hidden.bs.modal', () => {
-              if (exchangeRes.value != '') {
-                exchangeRes.value = '';
-                showProducts();
-              }
-            });
-          }, 1);
         };
         const coupon = () => {
           isLoading.value = true;
@@ -800,14 +792,6 @@
           else {
             strPoint.value = 'coupon';
             sessionStorage.setItem('strPoints', 'coupon');
-            setTimeout(() => {
-              couponModal.addEventListener('hidden.bs.modal', () => {
-                if (couponRes.value != '') {
-                  couponRes.value = '';
-                  showCoupons();
-                }
-              });
-            }, 1);
           }
           showCoupons();
         };
@@ -1094,6 +1078,14 @@
           results.shops = results.shops.slice(skipCount, skipCount + pageSize);
 
           isLoading.value = false;
+          setTimeout(() => {
+            exchangeModal.addEventListener('hidden.bs.modal', () => {
+              if (exchangeRes.value != '') {
+                exchangeRes.value = '';
+                showProducts();
+              }
+            });
+          }, 1);
         };
 
         const pdExchange = (productId) => {
@@ -1650,6 +1642,16 @@
             results.trans = results.trans.slice(skipCount, skipCount + pageSize);
 
             isLoading.value = false;
+            if (strPoint.value == 'coupon') {
+              setTimeout(() => {
+                couponModal.addEventListener('hidden.bs.modal', () => {
+                  if (couponRes.value != '') {
+                    couponRes.value = '';
+                    showCoupons();
+                  }
+                });
+              }, 1);
+            }
           }
           else {
             window.location.href = "/Identity/Account/Login";
@@ -1868,14 +1870,6 @@
 
           if (strPoint.value == 'pointsShop') {
             showProducts();
-            setTimeout(() => {
-              exchangeModal.addEventListener('hidden.bs.modal', () => {
-                if (exchangeRes.value != '') {
-                  exchangeRes.value = '';
-                  showProducts();
-                }
-              });
-            }, 1);
           }
           else if (strPoint.value == 'pointsHistory' || isMG == 'true') {
             strPoint.value = 'pointsHistory'
@@ -1884,14 +1878,6 @@
           }
           else {
             showCoupons();
-            setTimeout(() => {
-              couponModal.addEventListener('hidden.bs.modal', () => {
-                if (couponRes.value != '') {
-                  couponRes.value = '';
-                  showCoupons();
-                }
-              });
-            }, 1);
           }
         });
 
