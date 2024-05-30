@@ -273,6 +273,21 @@ namespace Seatly1.Controllers
         }
 
 
+        //搜尋資料
+
+        [HttpGet]
+        public JsonResult GetAllOrganizerIds()
+        {
+            var organizerIds = _context.Organizers
+                                       .Select(o => new
+                                       {
+                                           Id = o.OrganizerId,
+                                           Account = o.OrganizerAccount
+                                       })
+                                       .ToList();
+            return Json(organizerIds);
+        }
+
 
 
         private bool NotificationRecordExists(int id)
