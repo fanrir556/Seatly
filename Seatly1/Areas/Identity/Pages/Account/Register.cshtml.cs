@@ -85,7 +85,7 @@ namespace Seatly1.Areas.Identity.Pages.Account
             [Display(Name = "真實姓名")]
             public string MemberRealName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "請填寫Email")]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -94,7 +94,7 @@ namespace Seatly1.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "請填寫密碼")]
             [StringLength(100, ErrorMessage = "{0}至少{2}位，最多 {1}位", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "密碼")]
