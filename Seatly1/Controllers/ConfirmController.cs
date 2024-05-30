@@ -324,7 +324,7 @@ namespace Seatly1.Controllers
         public async Task<IEnumerable<NotificationRecordDTO>> ActiveHistoryList(int id)
         {
             var aa = await _context.NotificationRecords
-                .Where(e => e.OrganizerId == id && e.EndTime < DateTime.Now && e.IsActivity == false)
+                .Where(e => e.OrganizerId == id && e.EndTime < DateTime.Now || e.IsActivity == false)
 
                 .Select(
                 e => new NotificationRecordDTO
