@@ -128,15 +128,98 @@ var vueApp = {
             // 讀取圖片
             const uploadedFile = this.$refs.files.files[0]
 
-            const reader = new FileReader()
+            // 有重新上傳封面圖片時才執行if內的程式，防止修改活動資訊沒有要變更圖片的時候需要重新上傳圖片
+            if (uploadedFile != null) {
+                const reader = new FileReader()
 
-            // 在回調函數外部保存 `this` 的值
-            const self = this;
+                // 在回調函數外部保存 `this` 的值
+                const self = this;
 
-            reader.onload = function () {
-                // 將讀取到的二進位資料轉換為blbo物件
-                var blob = new Blob([reader.result]);
-                console.log('blob Data:', blob);
+                reader.onload = function () {
+                    // 將讀取到的二進位資料轉換為blbo物件
+                    var blob = new Blob([reader.result]);
+                    console.log('blob Data:', blob);
+
+                    // 建立formdata
+                    const formData = new FormData()
+
+                    if (self.ActivityMethod == '公告') {
+                        // 活動方法為公告時，FormData不讀取活動名稱跟活動人數上限的資料
+                        formData.append('OrganizerId', organizeridInt);
+                        formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
+                        formData.append('StartTime', self.StartTime);
+                        formData.append('EndTime', self.EndTime);
+                        formData.append('Capacity', 0);
+                        formData.append('ActivityName', null);
+                        formData.append('ActivityMethod', self.ActivityMethod);
+                        formData.append('isActivity', true); // 預設啟用活動
+                        formData.append('Location', self.location);
+                        formData.append('LocationDescription', self.LocationDescrption);
+                        formData.append('HashTag1', self.hashtag1);
+                        formData.append('HashTag2', self.hashtag2);
+                        formData.append('HashTag3', self.hashtag3);
+                        formData.append('HashTag4', self.hashtag4);
+                        formData.append('HashTag5', self.hashtag5);
+
+                        // 发送 put 请求
+                        axios.put(`/api/OrganizersApi/activity/${activityId}`, formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
+                            }
+                        })
+                            .then(function (response) {
+                                console.log(response);
+                                let newActivityId = response.data; // 假设服务器返回的响应中包含新活动的id
+                                alert("修改活動成功，請進行活動描述的編輯");
+                                window.location.href = `../Description/${newActivityId}`; // 将新活动的id添加到URL中
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                                alert("修改活動失敗");
+                            });
+                    }
+                    else {
+                        // 活動方法為公告時，FormData不讀取活動名稱跟活動人數上限的資料
+                        formData.append('OrganizerId', organizeridInt);
+                        formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
+                        formData.append('StartTime', self.StartTime);
+                        formData.append('EndTime', self.EndTime);
+                        formData.append('Capacity', self.Capacity);
+                        formData.append('ActivityName', self.ActivityName);
+                        formData.append('ActivityMethod', self.ActivityMethod);
+                        formData.append('isActivity', true); // 預設啟用活動
+                        formData.append('Location', self.location);
+                        formData.append('LocationDescription', self.LocationDescrption);
+                        formData.append('HashTag1', self.hashtag1);
+                        formData.append('HashTag2', self.hashtag2);
+                        formData.append('HashTag3', self.hashtag3);
+                        formData.append('HashTag4', self.hashtag4);
+                        formData.append('HashTag5', self.hashtag5);
+
+                        // 发送 put 请求
+                        axios.put(`/api/OrganizersApi/activity/${activityId}`, formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
+                            }
+                        })
+                            .then(function (response) {
+                                console.log(response);
+                                let newActivityId = response.data; // 假设服务器返回的响应中包含新活动的id
+                                alert("修改活動成功，請進行活動描述的編輯");
+                                window.location.href = `../Description/${newActivityId}`; // 将新活动的id添加到URL中
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                                alert("修改活動失敗");
+                            });
+                    }
+                }
+                // 讀取檔案為 ArrayBuffer
+                reader.readAsArrayBuffer(uploadedFile);
+            }
+            else {
+                // 在回調函數外部保存 `this` 的值
+                const self = this;
 
                 // 建立formdata
                 const formData = new FormData()
@@ -144,7 +227,6 @@ var vueApp = {
                 if (self.ActivityMethod == '公告') {
                     // 活動方法為公告時，FormData不讀取活動名稱跟活動人數上限的資料
                     formData.append('OrganizerId', organizeridInt);
-                    formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
                     formData.append('StartTime', self.StartTime);
                     formData.append('EndTime', self.EndTime);
                     formData.append('Capacity', 0);
@@ -179,7 +261,6 @@ var vueApp = {
                 else {
                     // 活動方法為公告時，FormData不讀取活動名稱跟活動人數上限的資料
                     formData.append('OrganizerId', organizeridInt);
-                    formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
                     formData.append('StartTime', self.StartTime);
                     formData.append('EndTime', self.EndTime);
                     formData.append('Capacity', self.Capacity);
@@ -212,8 +293,7 @@ var vueApp = {
                         });
                 }
             }
-            // 讀取檔案為 ArrayBuffer
-            reader.readAsArrayBuffer(uploadedFile);
+            
         },
         // 二進位字串轉換成 blob 物件
         binaryStringToBlob(binaryString, contentType) {
