@@ -60,7 +60,6 @@
                                         <select v-model="ActivityMethod" class="form-select" id="ActivityMethod" required>
                                             <option>公告</option>
                                             <option>排隊</option>
-                                            <option>抽籤</option>
                                         </select>
                                         <div class="invalid-feedback">
                                             此為必填欄位
@@ -83,8 +82,7 @@
                                         <label for="ActivityName" class="form-label">活動名稱</label>
                                     </div>
                                     <div class="col-12 col-md-9 mb-3">
-                                        <input v-if="ActivityMethod=='公告'" type="text" v-model="ActivityName" id="ActivityName" class="form-control" placeholder="活動名稱為唯讀" disabled>
-                                        <input v-else type="text" v-model="ActivityName" id="ActivityName" class="form-control" placeholder="請輸入活動名稱" required>
+                                        <input type="text" v-model="ActivityName" id="ActivityName" class="form-control" placeholder="請輸入活動名稱" required>
                                         <div class="invalid-feedback">
                                             此為必填欄位
                                         </div>
