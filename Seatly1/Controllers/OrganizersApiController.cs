@@ -111,7 +111,7 @@ namespace Seatly1.Controllers
             await activity.ActivityPhoto.CopyToAsync(memoryStream);
             var photoBytes = memoryStream.ToArray();
 
-            NotificationRecord act = new NotificationRecord
+            NotificationRecord act = new()
             {
                 ActivityId = activity.ActivityId,
                 OrganizerId = activity.OrganizerId,
@@ -145,37 +145,59 @@ namespace Seatly1.Controllers
                 return "活動不存在";
             }
 
+            // 不變更圖片時的方法
             if (activity.ActivityPhoto == null)
             {
-                return "未提供活動照片";
+                // 更新現有活動的屬性
+                existingActivity.OrganizerId = activity.OrganizerId;
+                existingActivity.StartTime = activity.StartTime;
+                existingActivity.EndTime = activity.EndTime;
+                existingActivity.Capacity = activity.Capacity;
+                existingActivity.ActivityName = activity.ActivityName;
+                existingActivity.ActivityMethod = activity.ActivityMethod;
+                existingActivity.IsActivity = activity.IsActivity;
+                existingActivity.Location = activity.Location;
+                existingActivity.LocationDescription = activity.LocationDescription;
+                existingActivity.HashTag1 = activity.HashTag1;
+                existingActivity.HashTag2 = activity.HashTag2;
+                existingActivity.HashTag3 = activity.HashTag3;
+                existingActivity.HashTag4 = activity.HashTag4;
+                existingActivity.HashTag5 = activity.HashTag5;
+
+                // 儲存變更
+                await _context.SaveChangesAsync();
+
+                return $"{existingActivity.ActivityId}";
             }
+            else
+            {
+                // 將 IFormFile 讀取為 byte 陣列，然後將 byte 陣列儲存到 varbinary 欄位。
+                using var memoryStream = new MemoryStream();
+                await activity.ActivityPhoto.CopyToAsync(memoryStream);
+                var photoBytes = memoryStream.ToArray();
 
-            // 將 IFormFile 讀取為 byte 陣列，然後將 byte 陣列儲存到 varbinary 欄位。
-            using var memoryStream = new MemoryStream();
-            await activity.ActivityPhoto.CopyToAsync(memoryStream);
-            var photoBytes = memoryStream.ToArray();
+                // 更新現有活動的屬性
+                existingActivity.OrganizerId = activity.OrganizerId;
+                existingActivity.ActivityPhoto = photoBytes;
+                existingActivity.StartTime = activity.StartTime;
+                existingActivity.EndTime = activity.EndTime;
+                existingActivity.Capacity = activity.Capacity;
+                existingActivity.ActivityName = activity.ActivityName;
+                existingActivity.ActivityMethod = activity.ActivityMethod;
+                existingActivity.IsActivity = activity.IsActivity;
+                existingActivity.Location = activity.Location;
+                existingActivity.LocationDescription = activity.LocationDescription;
+                existingActivity.HashTag1 = activity.HashTag1;
+                existingActivity.HashTag2 = activity.HashTag2;
+                existingActivity.HashTag3 = activity.HashTag3;
+                existingActivity.HashTag4 = activity.HashTag4;
+                existingActivity.HashTag5 = activity.HashTag5;
 
-            // 更新現有活動的屬性
-            existingActivity.OrganizerId = activity.OrganizerId;
-            existingActivity.ActivityPhoto = photoBytes;
-            existingActivity.StartTime = activity.StartTime;
-            existingActivity.EndTime = activity.EndTime;
-            existingActivity.Capacity = activity.Capacity;
-            existingActivity.ActivityName = activity.ActivityName;
-            existingActivity.ActivityMethod = activity.ActivityMethod;
-            existingActivity.IsActivity = activity.IsActivity;
-            existingActivity.Location = activity.Location;
-            existingActivity.LocationDescription = activity.LocationDescription;
-            existingActivity.HashTag1 = activity.HashTag1;
-            existingActivity.HashTag2 = activity.HashTag2;
-            existingActivity.HashTag3 = activity.HashTag3;
-            existingActivity.HashTag4 = activity.HashTag4;
-            existingActivity.HashTag5 = activity.HashTag5;
+                // 儲存變更
+                await _context.SaveChangesAsync();
 
-            // 儲存變更
-            await _context.SaveChangesAsync();
-
-            return $"{existingActivity.ActivityId}";
+                return $"{existingActivity.ActivityId}";
+            } 
         }
 
         // 修改活動敘述
@@ -522,24 +544,47 @@ namespace Seatly1.Controllers
             }
             else
             {
-                org.LoginPassword = organizer.LoginPassword;
-                org.OrganizerName = organizer.OrganizerName;
-                org.OrganizerCategory = organizer.OrganizerCategory;
-                org.OrganizerPhoto = organizer.OrganizerPhoto;
-                org.Menu = organizer.Menu;
-                org.Address = organizer.Address;
-                org.ReservationUrl = organizer.ReservationUrl;
-                org.Hashtag = organizer.Hashtag;
-                org.Email = organizer.Email;
-                org.Phone = organizer.Phone;
-                _context.Entry(org).State = EntityState.Modified;
-                try { await _context.AddRangeAsync(); }
-                catch (DbUpdateConcurrencyException)
+                if (organizer.OrganizerPhoto == null)
                 {
-                    throw;
+                    org.LoginPassword = organizer.LoginPassword;
+                    org.OrganizerName = organizer.OrganizerName;
+                    org.OrganizerCategory = organizer.OrganizerCategory;
+                    org.Menu = organizer.Menu;
+                    org.Address = organizer.Address;
+                    org.ReservationUrl = organizer.ReservationUrl;
+                    org.Hashtag = organizer.Hashtag;
+                    org.Email = organizer.Email;
+                    org.Phone = organizer.Phone;
+                    _context.Entry(org).State = EntityState.Modified;
+                    try { await _context.AddRangeAsync(); }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        throw;
+                    }
+                    await _context.SaveChangesAsync();
+                    return Ok("已送出修改");
                 }
-                await _context.SaveChangesAsync();
-                return Ok("已送出修改");
+                else
+                {
+                    org.LoginPassword = organizer.LoginPassword;
+                    org.OrganizerName = organizer.OrganizerName;
+                    org.OrganizerCategory = organizer.OrganizerCategory;
+                    org.OrganizerPhoto = organizer.OrganizerPhoto;
+                    org.Menu = organizer.Menu;
+                    org.Address = organizer.Address;
+                    org.ReservationUrl = organizer.ReservationUrl;
+                    org.Hashtag = organizer.Hashtag;
+                    org.Email = organizer.Email;
+                    org.Phone = organizer.Phone;
+                    _context.Entry(org).State = EntityState.Modified;
+                    try { await _context.AddRangeAsync(); }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        throw;
+                    }
+                    await _context.SaveChangesAsync();
+                    return Ok("已送出修改");
+                }
             }
         }
 
