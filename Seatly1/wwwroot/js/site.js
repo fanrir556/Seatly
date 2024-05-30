@@ -2,10 +2,73 @@
 var strCate = sessionStorage.getItem('strCate') || "all";
 var isSearching = sessionStorage.getItem('isSearching');
 var isTranSearching = sessionStorage.getItem("isTranSearching");
-var isMG = sessionStorage.getItem("isManager");
+var isMG = null;
 var isUser = sessionStorage.getItem("userLogin");
+var mouseX = 0;
+var mouseY = 0;
+
+/*載入動畫*/
+window.addEventListener('mousemove',(e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+const insertLoading = () => {
+    var cursor = { x: mouseX, y: mouseY };
+
+    document.querySelector('body').insertAdjacentHTML(
+        'beforeend',
+        `<div id="saveLoading" class="position-fixed" style="top: ${cursor.y}px; left: ${cursor.x}px;"><div role="img" class="wheel-and-queuely"><div class="wheel"></div><img src="${window.location.origin}/images/queuelyhome.png" class="queuely" /><div class="spoke"></div></div></div>`
+    );
+};
+
+const followingLoading = (e) => {
+    var cursor = { x: e.clientX, y: e.clientY };
+    const saveLoading = document.querySelector('#saveLoading');
+    if (saveLoading){
+        saveLoading.style.top = `${cursor.y}px`;
+        saveLoading.style.left = `${cursor.x}px`;
+    }
+};
+
+const removeMouseMoveListener = () => {
+    window.removeEventListener('mousemove', followingLoading);
+};
+
+const saveLoading = () => {
+    insertLoading();
+    window.addEventListener('mousemove', followingLoading);
+};
+
+const removeSaveLoading = () => {
+    removeMouseMoveListener();
+    const saveLoading = document.querySelector('#saveLoading');
+    if (saveLoading){
+        saveLoading.remove();
+    }
+};
+/*載入動畫*/
+
+/*管理員登入檢查*/
+const MGCheck = () => {
+    const checkIsMgActionUri = `${window.location.origin}/Home/CheckIsMG`;
+    fetch(checkIsMgActionUri, { method: "GET" })
+    .then(response => response.text())
+    .then(data => {
+        if (data !== "false") {
+            sessionStorage.setItem("isManager","true");
+        }
+    })
+    .catch(err => console.error('Error fetching MG status:', err.message));
+
+    const ismg = sessionStorage.getItem("isManager");
+    return ismg;
+};
+
+isMG = MGCheck();
+/*管理員登入檢查*/
 
 $(function () {
+    removeSaveLoading();
     /*點數專區導覽列hover開始*/
     var timer;
     $("#pointsNav, #pointsDropdown").on("mouseenter", function () {

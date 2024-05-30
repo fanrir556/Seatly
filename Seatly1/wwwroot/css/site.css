@@ -308,3 +308,70 @@ body {
         z-index: 1;
     }
 }
+
+/*載入動畫*/
+.wheel-and-queuely {
+    --dur: 1s;
+    position: relative;
+    width: 6em;
+    height: 6em;
+    font-size: 14px;
+}
+
+.wheel,
+.queuely,
+.spoke {
+    position: absolute;
+}
+
+.wheel,
+.spoke {
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.wheel {
+    background: radial-gradient(100% 100% at center, hsla(0, 0%, 60%, 0) 47.8%, hsl(0, 0%, 60%) 48%);
+    z-index: 2;
+}
+
+.queuely {
+    animation: queuely var(--dur) linear infinite;
+    top: 47%;
+    left: calc(50% - 2em);
+    width: 4em;
+    height: 4em;
+    z-index: 1;
+}
+
+.spoke {
+    animation: spoke var(--dur) linear infinite;
+    background: radial-gradient(100% 100% at center, hsl(0, 0%, 60%) 4.8%, hsla(0, 0%, 60%, 0) 5%),
+        linear-gradient(hsla(0, 0%, 55%, 0) 46.9%, hsl(0, 0%, 65%) 47% 52.9%, hsla(0, 0%, 65%, 0) 53%) 50% 50% / 99% 99% no-repeat;
+}
+
+/* Animations */
+@keyframes queuely {
+
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(-2turn);
+    }
+}
+
+@keyframes spoke {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(-1turn);
+    }
+}
+/*載入動畫*/

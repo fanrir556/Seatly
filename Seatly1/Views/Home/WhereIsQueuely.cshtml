@@ -137,6 +137,7 @@
                         }, 500);
                     }
                     else {
+                        saveLoading();
                         toastHeader.innerHTML = `<strong class="me-auto">驗證碼正確!</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
                         toastBody.textContent = `管理員登入成功`;
                         correctMg.value = true;
@@ -167,6 +168,7 @@
                     /*var form = new FormData();
                     sessionStorage.removeItem("isManager");
                     logout.value = true;*/
+                    saveLoading();
                     fetch(`@Url.Action("MGLogin", "Home")`, {
                         method: "POST",
                         headers: {
