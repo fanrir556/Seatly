@@ -11,27 +11,83 @@
 
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
     <style>
-    .love-icon {
+        /* 懸浮按鈕樣式 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            /* background-color: #007bff;
+                    color: white; */
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+            .back-to-top:hover {
+                background-color: #FFE153;
+                transform: scale(1.1);
+            }
+            
+        /* 收藏按鈕樣式 */
+        .love-icon {
             /* font-size: 2rem; */
             cursor: pointer;
             transition: transform 0.2s;
         }
 
-    .love-icon:hover {
+        .love-icon:hover {
                 transform: scale(1.2);
             }
 
-            #carouselPopularItems img{
-            height: 100px; /* Adjust the image height */
+     #carouselPopularItems img{
+        height: 100px; /* Adjust the image height */
                 object-fit: cover; /* Ensure the image covers the entire area */
             transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for transform and box-shadow */
             }
 
-             #carouselPopularItems img:hover{
+      #carouselPopularItems img:hover{
                  transform: scale(1.1); /* Scale the image */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow effect */
              }
 
+
+
+        #carouselSearchByFood img, #carouselSearchByAct img {
+            object-fit: cover;
+            transition: transform 0.3s, box-shadow 0.3s;
+                
+        }
+
+            #carouselSearchByFood img:hover, #carouselSearchByAct img:hover {
+            transform: scale(1.1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        @@media (max-width: 576px) {
+        .card-span {
+            padding: 0 8px; /* 缩小卡片之间的间距 */
+        }
+        .card-span img {
+            height: auto;
+        }
+        .card-body h5 {
+            font-size: 0.875rem; /* 调整标题字体大小 */
+        }
+        .card-body span, .card-body p {
+            font-size: 0.75rem; /* 调整文字字体大小 */
+        }
+        .btn {
+            font-size: 0.75rem; /* 调整按钮字体大小 */
+            padding: 0.25rem 0.5rem; /* 调整按钮的填充 */
+        }
+    }
     </style>
 }
 
@@ -132,7 +188,18 @@
                                                             @* span>No photo available</span> *@
                                                             <img src="~/images/noimage.jpg" />
                                                         }
-
+                                                        @if (item.ActivityMethod == "公告")
+                                                        {
+                                                            <span class="badge bg-warning card-text position-absolute top-0 end-0">@item.ActivityMethod</span>
+                                                        }
+                                                        else if (item.ActivityMethod == "排隊")
+                                                        {
+                                                            <span class="badge bg-success card-text position-absolute top-0 end-0">@item.ActivityMethod</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge bg-secondary card-text position-absolute top-0 end-0">@item.ActivityMethod</span>
+                                                        }
                                                        @*  <div class="position-absolute top-0 start-0 m-2">
                                                             <div class="fb-share-button"
                                                                  data-href="http://4.217.249.190/NotificationRecord/UsersView/@item.ActivityId"
@@ -148,7 +215,12 @@
                                                             <h5 class="fw-bold text-1000 text-truncate mb-1">@item.ActivityName</h5>
                                                             <div class="position-relative">
                                                                 <span class="text-warning me-2"><i class="fas fa-map-marker-alt"></i></span><span class="text-primary">@item.Location</span>
-                                                                <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(@item.ActivityId)">❤加入收藏</a></span>
+                                                                <span class="position-absolute top-50 end-0 translate-middle-y">
+                                                                    <a :class="isCollected(@item.ActivityId) ? 'text-danger' : 'text-secondary'" class="love-icon" @@click="toggleCollection({ activityId: @item.ActivityId })">
+                                                                        {{ isCollected(@item.ActivityId) ? '❤️已收藏' : '🤍加入收藏' }}
+                                                                    </a>
+                                                                </span>
+                                                                @* <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(@item.ActivityId)">❤加入收藏</a></span> *@
                                                             </div>
 
                                                             @{
@@ -169,9 +241,11 @@
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@item.ActivityId">
-                                                        <div class="d-grid gap-2"><button class="btn btn-lg btn-danger mb-2" href="#!" role="button">查看活動</button></div>
-                                                    </form>
+                                                    <form asp-action="UsersView" asp-controller="NotificationRecord">
+                                                        <div class="d-grid gap-2">
+                                                            <button class="btn btn-lg btn-danger mb-2" btn-id="@item.ActivityId" @@click="activityConnect">查看活動</button>
+                                                        </div>
+                                                     </form>                                                         
                                                 </div>
                                             }
                                         </div>
@@ -207,7 +281,7 @@
         <div class="container">
             <div class="row flex-center mb-5">
                 <div class="col-lg-7">
-                    <h2 class="fw-bold fs-3 fs-lg-5 lh-sm text-center text-lg-start cute-font">美食與生活娛樂</h2>
+                    <h2 class="fw-bold fs-3 fs-lg-5 lh-sm text-center text-lg-start cute-font">生活與娛樂</h2>
                 </div>
                 <div class="col-lg-4 text-lg-end text-center"></div>
                 <div class="col-lg-auto position-relative">
@@ -218,13 +292,13 @@
 
             <div class="row flex-center">
                 <div class="col-12">
-                    <div class="carousel slide" id="carouselSearchByFood" data-bs-touch="true" data-bs-interval="true">
+                    <div class="carousel slide" id="carouselSearchByFood" data-bs-touch="true" data-bs-interval="true" >
                         <div class="carousel-inner">
                             <div class="carousel-item active " data-bs-interval="5000">
                                 <div class="row h-100 align-items-center">
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('藝文')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/search-pizza.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('藝文')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/art (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">藝文</h5>
                                             </div>
@@ -232,7 +306,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('親子')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/burger.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('親子')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/familykids.jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">親子</h5>
                                             </div>
@@ -240,33 +314,33 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('美式')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/noodles.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('美食')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/food.jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">美式</h5>
+                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">美食</h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('泰式')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/sub-sandwich.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('樂活')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/lohas.jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">泰式</h5>
+                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">樂活</h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('越式')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/chowmein.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('戶外體驗')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/outdoor (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">越式</h5>
+                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">戶外體驗</h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('港式')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/steak.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('健康')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/health (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">港式</h5>
+                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">健康</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -277,59 +351,7 @@
                                 <div class="row h-100 align-items-center">
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('義式')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/search-pizza.png" alt="..." /></a>
-                                            <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">義式</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
-                                        <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('中式')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/burger.png" alt="..." /></a>
-                                            <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">中式</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
-                                        <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('日式')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/noodles.png" alt="..." /></a>
-                                            <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">日式</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
-                                        <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('其他美食')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/sub-sandwich.png" alt="..." /></a>
-                                            <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">其他美食娛樂</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
-                                        <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('戶外體驗')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/chowmein.png" alt="..." /></a>
-                                            <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">戶外體驗</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
-                                        <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('健康')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/steak.png" alt="..." /></a>
-                                            <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">健康</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="carousel-item" data-bs-interval="5000">
-                                <div class="row h-100 align-items-center">
-                                    <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
-                                        <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('運動')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/steak.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('運動')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/sport (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">運動</h5>
                                             </div>
@@ -337,7 +359,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('寵物')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/steak.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('寵物')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/pets (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">寵物</h5>
                                             </div>
@@ -345,15 +367,15 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('公益')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/steak.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('公益')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/walfare (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">娛樂</h5>
+                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">公益</h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('動漫')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/steak.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('動漫')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/anime2.jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">動漫</h5>
                                             </div>
@@ -361,7 +383,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('遊戲')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/steak.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('遊戲')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/game (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">遊戲</h5>
                                             </div>
@@ -369,9 +391,9 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('其他娛樂')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/steak.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('其他生活娛樂')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/othersEnt.jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">公益</h5>
+                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">其他生活娛樂</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -394,7 +416,7 @@
         <div class="container">
             <div class="row flex-center mb-5">
                 <div class="col-lg-7">
-                    <h2 class="fw-bold fs-3 fs-lg-5 lh-sm text-center text-lg-start cute-font">學習與事業發展</h2>
+                    <h2 class="fw-bold fs-3 fs-lg-5 lh-sm text-center text-lg-start cute-font">學習與成長</h2>
                 </div>
                 <div class="col-lg-4 text-lg-end text-center"></div>
                 <div class="col-lg-auto position-relative">
@@ -411,7 +433,7 @@
                                 <div class="row h-100 align-items-center">
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('美術')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/search-pizza.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('美術')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/fineart (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">美術</h5>
                                             </div>
@@ -419,7 +441,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('音樂')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/burger.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('音樂')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/music (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">音樂</h5>
                                             </div>
@@ -427,7 +449,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('設計')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/noodles.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('設計')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/design (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">設計</h5>
                                             </div>
@@ -435,7 +457,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('商業')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/sub-sandwich.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('商業')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/business (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">商業</h5>
                                             </div>
@@ -443,7 +465,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('科技')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/chowmein.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('科技')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/tech (3).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">科技</h5>
                                             </div>
@@ -451,9 +473,9 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('創業')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/steak.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('語言')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/language (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">創業</h5>
+                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">語言</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -464,7 +486,7 @@
                                 <div class="row h-100 align-items-center">
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('投資')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/search-pizza.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('投資')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/investment (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">投資</h5>
                                             </div>
@@ -472,7 +494,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('時尚')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/burger.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('時尚')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/fashion (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">時尚</h5>
                                             </div>
@@ -480,7 +502,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('手作')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/noodles.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('手作')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/diy.jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">手作</h5>
                                             </div>
@@ -488,7 +510,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('料理')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/sub-sandwich.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('料理')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/cooking (2).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">料理</h5>
                                             </div>
@@ -496,7 +518,7 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('攝影')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/chowmein.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('攝影')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/photography (3).jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
                                                 <h5 class="text-center fw-bold text-1000 text-truncate mb-2">攝影</h5>
                                             </div>
@@ -504,9 +526,9 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-xl mb-5 h-100">
                                         <div class="card card-span h-100 rounded-circle">
-                                            <a onclick="storeFoodType('其他學習)" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/gallery/steak.png" alt="..." /></a>
+                                            <a onclick="storeFoodType('其他學習成長')" asp-area="" asp-controller="Category" asp-action="categoryIndex"><img class="img-fluid rounded-circle h-100" src="~/img/indexpic/otherlearning.jpg" alt="..." /></a>
                                             <div class="card-body ps-0">
-                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">其他學習</h5>
+                                                <h5 class="text-center fw-bold text-1000 text-truncate mb-2">其他學習成長</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -523,110 +545,15 @@
     </section>
     <!-- <section> close ============================-->
     <!-- ============================================-->
-    
-    
+   
+  
    
 
-    
 
+   
 
-  
-    <!-- ============================================-->
-    <!-- <section> begin ============================-->
-    <section class="pb-5 pt-8">
-
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card card-span mb-3 shadow-lg">
-                        <div class="card-body py-0">
-                            <div class="row justify-content-center">
-                                <div class="col-md-5 col-xl-7 col-xxl-8 g-0 order-0 order-md-1"><img class="img-fluid w-100 fit-cover h-100 rounded-top rounded-md-end rounded-md-top-0" src="~/img/gallery/crispy-sandwiches.png" alt="..." /></div>
-                                <div class="col-md-7 col-xl-5 col-xxl-4 p-4 p-lg-5">
-                                    <h1 class="card-title mt-xl-5 mb-4">Best deals <span class="text-primary"> Crispy Sandwiches</span></h1>
-                                    <p class="fs-1">Enjoy the large size of sandwiches. Complete your meal with the perfect slice of sandwiches.</p>
-                                    <div class="d-grid bottom-0"><a class="btn btn-lg btn-primary mt-xl-6" href="#!">PROCEED TO ORDER<i class="fas fa-chevron-right ms-2"></i></a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div><!-- end of .container-->
-
-    </section>
-    <!-- <section> close ============================-->
-    <!-- ============================================-->
-    <!-- ============================================-->
-    <!-- <section> begin ============================-->
-    <section class="py-0">
-
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card card-span mb-3 shadow-lg">
-                        <div class="card-body py-0">
-                            <div class="row justify-content-center">
-                                <div class="col-md-5 col-xl-7 col-xxl-8 g-0 order-md-0"><img class="img-fluid w-100 fit-cover h-100 rounded-top rounded-md-start rounded-md-top-0" src="~/img/gallery/fried-chicken.png" alt="..." /></div>
-                                <div class="col-md-7 col-xl-5 col-xxl-4 p-4 p-lg-5">
-                                    <h1 class="card-title mt-xl-5 mb-4">Celebrate parties with <span class="text-primary">Fried Chicken</span></h1>
-                                    <p class="fs-1">Get the best fried chicken smeared with a lip smacking lemon chili flavor. Check out best deals for fried chicken.</p>
-                                    <div class="d-grid bottom-0"><a class="btn btn-lg btn-primary mt-xl-6" href="#!">PROCEED TO ORDER<i class="fas fa-chevron-right ms-2"></i></a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div><!-- end of .container-->
-
-    </section>
-    <!-- <section> close ============================-->
-    <!-- ============================================-->
-    <!-- ============================================-->
-    <!-- <section> begin ============================-->
-    <section class="pt-5">
-
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card card-span mb-3 shadow-lg">
-                        <div class="card-body py-0">
-                            <div class="row justify-content-center">
-                                <div class="col-md-5 col-xl-7 col-xxl-8 g-0 order-0 order-md-1"><img class="img-fluid w-100 fit-cover h-100 rounded-top rounded-md-end rounded-md-top-0" src="~/img/gallery/pizza.png" alt="..." /></div>
-                                <div class="col-md-7 col-xl-5 col-xxl-4 p-4 p-lg-5">
-                                    <h1 class="card-title mt-xl-5 mb-4">Wanna eat hot & <span class="text-primary">spicy Pizza?</span></h1>
-                                    <p class="fs-1">Pair up with a friend and enjoy the hot and crispy pizza pops. Try it with the best deals.</p>
-                                    <div class="d-grid bottom-0"><a class="btn btn-lg btn-primary mt-xl-6" href="#!">PROCEED TO ORDER<i class="fas fa-chevron-right ms-2"></i></a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div><!-- end of .container-->
-
-    </section>
-    <!-- <section> close ============================-->
-    <!-- ============================================-->
-
-
-    <section class="py-0">
-        <div class="bg-holder" style="background-position:center;background-size:cover;">
-        </div>
-        @* background-image:url(~/img/gallery/cta-two-bg.png); *@
-        <!--/.bg-holder-->
-
-        <div class="container">
-            <div class="row flex-center">
-                <div class="col-xxl-9 py-7 text-center">
-                    <h1 class="fw-bold mb-4 text-white fs-6">Are you ready to order <br />with the best deals? </h1><a class="btn btn-danger" href="#"> PROCEED TO ORDER<i class="fas fa-chevron-right ms-2"></i></a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
+    <!-- 懸浮按鈕 -->
+    <button class="back-to-top" id="backToTopBtn"><img style="width:55px" src="~/images/queuely-upp.png" /></button>
    
 </main>
 
@@ -636,7 +563,11 @@
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js" integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-       
+        // 回到頂部按鈕功能
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
         // 旋轉木馬自動換頁
         const carousel = new bootstrap.Carousel(document.getElementById('carouselSearchByFood'), {
@@ -701,41 +632,109 @@
         // 熱門活動收藏
         var vueApp = {
             data() {
-                return {} },
-            methods: { 
-                   // 加入收藏
-                   async addToCollection(activityId) {
-                        // 从 sessionStorage 中获取 userLogin 的值
-                        const userLogin = sessionStorage.getItem('userLogin');
-                        const userId = sessionStorage.getItem('userId');
-
-                        // 判斷用戶是否已登錄
-                        if (userLogin !== 'true') {
-                        
-                        alert('請先登錄會員！');
-                        return;
-                        }
-
-                        try {
-                        
-                         const response = await fetch(`/Collections/AddToCollection?activityId=${activityId}&userId=${userId}`, {
-                         method: 'POST',
-                         headers: {
-                        'Content-Type': 'application/json'
-                         },
-                         body: JSON.stringify({ activityId: activityId, userId: userId })
-                         
-                         });
+                return {
+                    userCollections: [],
+                    isLoggedIn: sessionStorage.getItem('userLogin') === 'true', // 檢查用戶是否登錄
+                }
+            },
+            mounted() {
+                if (this.isLoggedIn) {
+                    this.restoreLocalStorage(); // 恢復收藏狀態
+                    this.getUserCollections();
+                }
+                // console.log('Mounted, isLoggedIn:', this.isLoggedIn);
+                // console.log('Mounted, userCollections:', this.userCollections);
+            },
+            methods: {
+                // 收藏相關判斷 -start-
+                async getUserCollections() {
+                    if (this.isLoggedIn) {
+                        const response = await fetch('/Collections/GetUserCollections');
+                        console.log(response)
                         const data = await response.json();
-                        // alert('收藏成功！');
-                        alert(data.message);
+                        console.log(data)
 
-                        } catch (error) {
-                        
-                        console.error('Error:', error);
-                        alert('收藏失敗，請稍後再試！');
+
+                        console.log('User collections:', this.userCollections);
+                    }
+                },
+                async toggleCollection(activity) {
+                    if (!this.isLoggedIn) {
+                        // 檢查用戶是否登入
+                        alert('請先登入會員！');
+                        return;
+                    }
+                    const index = this.userCollections.indexOf(activity.activityId);
+                    if (index > -1) {
+                        // 移除收藏
+                        await this.removeFromCollection(activity.activityId);
+                    } else {
+                        // 加入收藏
+                        await this.addToCollection(activity.activityId);
+                    }
+
+                    // 更新本地存儲的收藏狀態
+                    this.updateLocalStorage();
+                },
+                async addToCollection(activityId) {
+                    console.log('Trying to add to collection:', activityId); // Debug: log activityId
+                    const response = await fetch(`/Collections/AddToCollection?activityId=${activityId}`, {
+                        method: 'POST'
+                    });
+                    const result = await response.json();
+                    console.log('Add to collection response:', result); // Debug: log server response
+                    if (result.success) {
+                        this.userCollections.push(activityId);
+                    } else {
+                        alert(result.message || '熱門項收藏失敗');
+                    }
+                },
+                async removeFromCollection(activityId) {
+                    const response = await fetch('/Collections/RemoveFromCollection', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ activityId: activityId })
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        const index = this.userCollections.indexOf(activityId);
+                        if (index > -1) {
+                            this.userCollections.splice(index, 1);
                         }
-                    },
+                    } else {
+                        alert(result.error || '移除收藏失敗');
+                    }
+                },
+                isCollected(activityId) {
+                    return this.userCollections.includes(activityId);
+                },
+
+                updateLocalStorage() {
+                    localStorage.setItem('userCollections', JSON.stringify(this.userCollections));
+                },
+                restoreLocalStorage() {
+                    const storedCollections = localStorage.getItem('userCollections');
+                    if (storedCollections) {
+                        this.userCollections = JSON.parse(storedCollections);
+                    }
+                },
+                // 收藏相關判斷 -end-
+
+
+                //活動設置sessionStorage
+                activityConnect: function () {
+                    // alert("活動已觸發");
+                    // 從事件對象(event object)中取得觸發事件的按鈕元素
+                    const btn = event.target;
+                    // 從按鈕元素中取得自定義屬性"btn-id"
+                    const btnId = btn.getAttribute("btn-id");
+
+                    //設置session
+                    sessionStorage.removeItem("ActID");
+                    sessionStorage.setItem("ActID", btnId);
+                },
             },
         }
         Vue.createApp(vueApp).mount("#hotItems");
@@ -755,21 +754,14 @@
                 // alert("請選擇日期");
             }
         });
+
+
+
+ 
+
+
+
     </script>
 
-        @* 分享按鈕 *@
-    @* <!--Load Facebook SDK for JavaScript-- > *@
-        <div id= "fb-root" > </div>
-        <script>
-                    (function (d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0];
-                        if (d.getElementById(id)) return;
-                        js = d.createElement(s); js.id = id;
-                        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-                        fjs.parentNode.insertBefore(js, fjs);
-                    }(document, 'script', 'facebook-jssdk'));
-        </script>
-    @* LINE分享按鈕 *@
-    <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
-        <script type="text/javascript">    LineIt.loadButton();</script>
+       
 }

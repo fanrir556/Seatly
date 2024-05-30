@@ -6,6 +6,8 @@
 
 @section Styles{
     <style>
+       
+
     .expired-card {
     position: relative;
     background-color: #f2f2f2; /* Light gray background */
@@ -37,6 +39,51 @@
             .share-buttons > * {
                 margin: 0;
             }
+
+            /* 手機或小型螢幕樣式 */
+    @@media (max-width: 576px) {
+        .card {
+            width: 100%; /* 卡片寬度佔滿父元素 */
+            margin: 5px; /* 設置卡片間距 */
+        }
+
+        .card img {
+            height: auto; /* 圖片高度自動調整 */
+            max-width: 100%; /* 圖片最大寬度 */
+        }
+
+        .card-body {
+            padding: 5px; /* 調整卡片內容的間距 */
+        }
+
+        .card-title {
+            font-size: 1rem; /* 卡片標題字體大小 */
+        }
+
+        .card-text {
+            font-size: 0.875rem; /* 卡片文字字體大小 */
+        }
+
+        .card-body .btn {
+            font-size: 0.75rem; /* 按鈕字體大小 */
+            padding: 3px 6px; /* 按鈕內間距 */
+        }
+
+        .expired-overlay {
+            font-size: 1rem; /* 過期標籤字體大小 */
+            padding: 5px; /* 過期標籤內間距 */
+        }
+
+        .share-buttons {
+            top: 5px; /* 分享按鈕位置調整 */
+            right: 5px; /* 分享按鈕位置調整 */
+        }
+
+        .share-buttons > * {
+            margin: 0; /* 分享按鈕間距 */
+        }
+    }
+    
     </style>
 }
 
@@ -68,7 +115,21 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">@item.ActivityName</h5>
-                        <p class="card-text">活動 ID: @item.ActivityId</p>
+                        <div>
+                        <span class="card-text">活動 ID: @item.ActivityId</span>
+                                @if (item.ActivityMethod == "公告")
+                                {
+                                    <span class="badge bg-warning card-text">@item.ActivityMethod</span>
+                                }
+                                else if (item.ActivityMethod == "排隊")
+                                {
+                                    <span class="badge bg-success card-text">@item.ActivityMethod</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary card-text">@item.ActivityMethod</span>
+                                }
+                        </div>
                         
                         @{
                             string formattedStartTime = string.Format("{0:yyyy-MM-dd}", item.StartTime);
@@ -129,7 +190,7 @@ else
     async function removeFromCollection(activityId) {
         if (confirm('確定要移除該收藏項目嗎？')) {
             try {
-                    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                    // const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
                     const payload = { activityId: activityId };
 
                     console.log('Payload:', payload);
@@ -138,7 +199,7 @@ else
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'RequestVerificationToken': token
+                        // 'RequestVerificationToken': token
                     },
                     body: JSON.stringify(payload)
                 });
@@ -146,6 +207,11 @@ else
                 const data = await response.json();
                 if (data.success) {
                     alert('收藏項目已移除');
+                        // 更新本地存储
+                        let userCollections = JSON.parse(localStorage.getItem('userCollections')) || [];
+                        userCollections = userCollections.filter(id => id !== activityId);
+                        localStorage.setItem('userCollections', JSON.stringify(userCollections));
+
                     location.reload(); // 刷新页面以更新视图
                 } else {
                     alert('移除收藏項目失敗：' + data.error);

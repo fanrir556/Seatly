@@ -5,9 +5,36 @@
 }
 @section Styles{
     <style>
+        /* 懸浮按鈕樣式 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            /* background-color: #007bff;
+                            color: white; */
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+            .back-to-top:hover {
+                background-color: #FFE153;
+                transform: scale(1.1);
+            }
+
         .container {
-            padding-left: 15px;
-            padding-right: 15px;
+            display: flex;
+            flex-direction: column; /* 改為 column 以適應手機瀏覽 */
+            justify-content: center;
+            align-items: center; 
+            flex-wrap: wrap;
         }
 
         #filiter span{
@@ -15,8 +42,9 @@
             margin: 3px;
         }
         #filiter{
-            width:500px;
-            height: 200px;
+            width: 100%; /* 改為百分比，以適應不同的螢幕大小 */
+            max-width: 500px;
+            height: auto;
             border: 1px solid #ccc;
         }
         .current{
@@ -27,7 +55,6 @@
         }
 
         .love-icon {
-            /* font-size: 2rem; */
             cursor: pointer;
             transition: transform 0.2s;
         }
@@ -36,13 +63,19 @@
             transform: scale(1.2);
         }
 
-        .card {
-            width: 18rem; /* Set the width of the card */
-            height: 22rem; /* Set the height of the card */
-            margin: 10px; /* Margin between cards */
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start; /* 卡片靠左對齊 */
         }
 
-           .card img {
+        .card {
+            width: 18rem;
+            height: 22rem;
+            margin: 10px;
+        }
+
+        .card img {
             height: 100px; /* Adjust the image height */
             object-fit: cover; /* Ensure the image covers the entire area */
             transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition for transform and box-shadow */
@@ -69,20 +102,49 @@
             font-size: 0.875rem; /* Adjust the font size of the button */
             padding: 5px 10px; /* Adjust the padding of the button */
         }
+
+        .background-overlay {
+            background-color: #FFD2D2; /* 半透明的背景 */
+            padding: 20px ; /* 内部填充 */
+            border-radius: 10px; /* 圓角邊框 */
+            color: #000; 
+            width: 100%; /* 改為百分比，以適應不同的螢幕大小 */
+            max-width: 65rem;
+            margin: 0 auto;
+        }
+
+        .activity-section {
+            width: 100%;
+            max-width: 65rem;
+            padding-top: 100px;
+        }
+
+        .no-activities {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* 媒體查詢 */
+         @@media (max-width: 576px) {
+            .btn {
+                font-size: 0.75rem;
+                padding: 3px 6px;
+            }
+        }
     </style>
 }
 
-<div id="app" class="container position-relative vh-100">
-    <div class="position-absolute top-50 start-50 translate-middle">
-    <h2>{{selectedType}}</h2>
+<div id="app" class="container">
+    <div class="background-overlay">
+    <h2 class="cute-font">{{selectedType}}</h2>
       
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('taipei')">台北</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('taichung')">台中</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('tainan')">台南</button>
     <button class="btn btn-secondary m-2" v-on:click="changeCategory('kaohsiung')">高雄</button>
     
-
-
     <div>
     <span class="time-selector">
         <label for="startTime">開始時間:</label>
@@ -97,19 +159,27 @@
     <button id="clearFilter" class="btn btn-primary m-2" @@click="clearTimeFilter">清除時間篩選</button>
         </span>
     </div>
-    <!-- 排序按钮 -->
-    <div class="btn-group" role="group" aria-label="Sort Activities">
-        <button type="button" class="btn btn-secondary" v-on:click="toggleSortOrder">目前排序: {{ sortBy === 'asc' ? '由舊到新' : '由新到舊' }}</button>
-    </div>
-
+    
+</div>
 
     @* 台北 *@
-    <section v-if="cate=='taipei'" style="width: 65rem;">
-        <h3>台北</h3>
-        <div class="row">
+    <section v-if="cate=='taipei'" class="activity-section">
+       
+            <div class="no-activities">
+            <span style="font-size:30px" class="cute-font">台北</span>
+                <!-- 排序按钮 -->
+                <div class="btn-group" role="group" aria-label="Sort Activities" >
+                    <button type="button" class="btn btn-secondary" v-on:click="toggleSortOrder">目前排序: {{ sortBy === 'asc' ? '由舊到新' : '由新到舊' }}</button>
+                </div>
+            </div>
+        <div class="row card-container">
+            <div>
+                <img v-if="loading" src="~/images/giphy.gif" style="width:500px" />
+            </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body ">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
@@ -122,9 +192,17 @@
                         </p>
                         <p class="card-text mb-5   position-relative">
                             <span>📍{{ activity.location }} </span>
-                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
+                                <span class="position-absolute top-50 end-0 translate-middle-y">
+                                    <a :class="isCollected(activity.activityId) ? 'text-danger' : 'text-secondary'" class="love-icon" @@click="toggleCollection(activity)">
+                                        {{ isCollected(activity.activityId) ? '❤️已收藏' : '🤍加入收藏' }}
+                                    </a>
+                                </span>
                         </p>
-                        <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
+                        <div>
+
+
+
+                            <div><a @@click="userview" :btn-Aid="activity.activityId" :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                         
                        
 
@@ -134,12 +212,22 @@
         </div>
     </section>
     @* 台中 *@
-    <section v-else-if="cate == 'taichung'" style="width: 65rem;">
-        <h3>台中</h3>
-        <div class="row">
+    <section v-else-if="cate == 'taichung'" class="activity-section">
+            <div class="no-activities">
+                <span style="font-size:30px" class="cute-font">台中</span>
+                <!-- 排序按钮 -->
+                <div class="btn-group" role="group" aria-label="Sort Activities">
+                    <button type="button" class="btn btn-secondary" v-on:click="toggleSortOrder">目前排序: {{ sortBy === 'asc' ? '由舊到新' : '由新到舊' }}</button>
+                </div>
+            </div>
+        <div class="row card-container">
+            <div>
+                <img v-if="loading" src="~/images/giphy.gif" style="width:500px" />
+            </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
@@ -152,21 +240,36 @@
                         </p>
                         <p class="card-text mb-5   position-relative">
                             <span>📍{{ activity.location }} </span>
-                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
+                                <span class="position-absolute top-50 end-0 translate-middle-y">
+                                    <a :class="isCollected(activity.activityId) ? 'text-danger' : 'text-secondary'" class="love-icon" @@click="toggleCollection(activity)">
+                                        {{ isCollected(activity.activityId) ? '❤️已收藏' : '🤍加入收藏' }}
+                                    </a>
+                                </span>
                         </p>
-                        <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
+                            <div><a @@click="userview" :btn-Aid="activity.activityId" :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                     </div>
                 </div>
             </div>
         </div>
+
     </section>
     @* 台南 *@
-    <section v-else-if="cate == 'tainan'" style="width: 65rem;">
-        <h3>台南</h3>
-        <div class="row">
+    <section v-else-if="cate == 'tainan'" class="activity-section">
+            <div class="no-activities">
+                <span style="font-size:30px" class="cute-font">台南</span>
+                <!-- 排序按钮 -->
+                <div class="btn-group" role="group" aria-label="Sort Activities">
+                    <button type="button" class="btn btn-secondary" v-on:click="toggleSortOrder">目前排序: {{ sortBy === 'asc' ? '由舊到新' : '由新到舊' }}</button>
+                </div>
+            </div>
+        <div class="row card-container">
+            <div>
+                <img v-if="loading" src="~/images/giphy.gif" style="width:500px" />
+            </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
@@ -180,21 +283,35 @@
                         </p>
                         <p class="card-text mb-5   position-relative">
                             <span>📍{{ activity.location }} </span>
-                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
+                                <span class="position-absolute top-50 end-0 translate-middle-y">
+                                    <a :class="isCollected(activity.activityId) ? 'text-danger' : 'text-secondary'" class="love-icon" @@click="toggleCollection(activity)">
+                                        {{ isCollected(activity.activityId) ? '❤️已收藏' : '🤍加入收藏' }}
+                                    </a>
+                                </span>
                         </p>
-                        <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
+                            <div><a @@click="userview" :btn-Aid="activity.activityId" :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     @* 高雄 *@
-    <section v-else-if="cate == 'kaohsiung'" style="width: 65rem;">
-        <h3>高雄</h3>
-        <div class="row">
+    <section v-else-if="cate == 'kaohsiung'" class="activity-section">
+            <div class="no-activities">
+                <span style="font-size:30px" class="cute-font">高雄</span>
+                <!-- 排序按钮 -->
+                <div class="btn-group" role="group" aria-label="Sort Activities">
+                    <button type="button" class="btn btn-secondary" v-on:click="toggleSortOrder">目前排序: {{ sortBy === 'asc' ? '由舊到新' : '由新到舊' }}</button>
+                </div>
+            </div>
+        <div class="row card-container">
+            <div>
+            <img v-if="loading" src="~/images/giphy.gif" style="width:500px" />
+            </div>
             <div class="col-md-4" v-for="activity in sortedActivities" :key="activity.ActivityId">
                 <div class="card">
                     <a :href="'/NotificationRecord/UsersView/' + activity.activityId"><img :src="activity.imgUrl" class="card-img-top" alt="Activity Photo"></a>
+                    <span :class="badgeClass(activity.activityMethod)" class="badge card-text position-absolute top-0 end-0">{{activity.activityMethod}}</span>
                     <div class="card-body">
                         <h5 class="card-title">{{ activity.activityName }}</h5>
                         <p class="card-text">開始時間: {{ activity.startTime }}</p>
@@ -208,37 +325,48 @@
                         </p>
                         <p class="card-text mb-5   position-relative">
                             <span>📍{{ activity.location }} </span>
-                            <span class="position-absolute top-50 end-0 translate-middle-y"><a class="text-danger love-icon" @@click="addToCollection(activity.activityId)">❤加入收藏</a></span>
+                                <span class="position-absolute top-50 end-0 translate-middle-y">
+                                    <a :class="isCollected(activity.activityId) ? 'text-danger' : 'text-secondary'" class="love-icon" @@click="toggleCollection(activity)">
+                                        {{ isCollected(activity.activityId) ? '❤️已收藏' : '🤍加入收藏' }}
+                                    </a>
+                                </span>
                         </p>
-                        <div><a :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
+                            <div><a @@click="userview" :btn-Aid="activity.activityId" :href="'/NotificationRecord/UsersView/' + activity.activityId" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2">查看詳情</a></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <template v-else>
+    <div v-else class="no-activities">
         <p>查無此活動</p>
-    </template>
+    </div>
 </div>
-</div>
+<!-- 懸浮按鈕 -->
+<button class="back-to-top" id="backToTopBtn"><img style="width:55px" src="~/images/queuely-upp.png" /></button>
 
 @section Scripts{
     <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
 
 <script>
+        // 回到頂部按鈕功能
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
+       
     const { createApp, ref, reactive } = Vue;
 
-   
-        
         var vueApp = {
             data() {
                 return {
-                    cate: 'tapei',
+                    cate: 'taipei',
                     activities: [], // 添加 activities 屬性，用於存儲從後端獲取的活動數據
-                   
                     sortBy: 'desc', // sortBy 目前排序方式 正序
-                    selectedType: sessionStorage.getItem('selectedType') || '' // 初始化 selectedType
+                    selectedType: sessionStorage.getItem('selectedType') || '' ,// 初始化 selectedType
+                    userCollections: [],
+                    isLoggedIn: sessionStorage.getItem('userLogin') === 'true', // 檢查用戶是否登錄
+                    loading: false, // loading動畫
                 }
             },
             computed: {
@@ -251,9 +379,21 @@
                     }
                 }
             },
+            mounted() {
+                this.changeCategory('taipei');
+                if (this.isLoggedIn) {
+
+                    // this.getUserCollections();
+                    // this.waitForUserCollections(); // 等待獲取用戶收藏列表
+                    this.restoreLocalStorage(); // 恢復收藏狀態
+                    this.getUserCollections();
+                }
+                this.changeCategory(this.cate);
+            },
             methods: {
                 async changeCategory(category) {
                     try {
+                        this.loading = true
                         // 時間篩選
                         const startTime = document.getElementById('startTime').value;
                         const endTime = document.getElementById('endTime').value;
@@ -277,25 +417,28 @@
                                 location = ''; // 預設情況
                                 break;
                         }
-                        // console.log(this.cate);
                         const selectedType = sessionStorage.getItem('selectedType'); // 獲取 selectedType 值
                         const response = await fetch(`/Category/GetActivitiesByLocation?location=${location}&selectedType=${selectedType}&startTime=${startTime}&endTime=${endTime}`);
                         const data = await response.json();
-                        console.log(data);
                         this.activities = data;
                         this.activities.forEach(activity => {
                             const imgUrl = this.convertToImageUrl(activity.activityPhoto);
-                            // console.log(base64Image)
                             activity.imgUrl = imgUrl
-                            // console.log(base)
                             // activity.imageSrc = `data:image;base64,${base64Image}`;
                             // this.convertToImageUrl(activity.activityId, activity.activityPhoto);
-                            // console.log(activity.activityPhoto)
+                        this.loading = false
                         });
+                        // 確保在加載活動數據後更新用戶收藏列表
                        
+                            await this.getUserCollections();
+                        
                     } catch (e) {
                         console.log(e);
+                        this.loading = false
+
                     }
+                   
+                    this.loading = false
                 },
                                
                 // 轉換圖片格式
@@ -309,9 +452,6 @@
                     this.sortBy = this.sortBy === 'asc' ? 'desc' : 'asc';
                 },
 
-                
-
-                
                 // 更新 selectedType 到 sessionStorage
                 selectFoodType(type) {
                     this.selectedType = type;
@@ -334,46 +474,101 @@
                 },
                 
 
-                // 加入收藏
-                async addToCollection(activityId) {
-                    // 从 sessionStorage 中获取 userLogin 的值
-                    const userLogin = sessionStorage.getItem('userLogin');
-                    const userId = sessionStorage.getItem('userId');
-
-                    // 判断用户是否已登录
-                    if (userLogin !== 'true') {
-                        // 如果用户未登录，提示用户先登录
-                        alert('請先登錄會員！');
+                // 收藏相關判斷 -start-
+                async getUserCollections() {
+                    if (this.isLoggedIn) {
+                        const response = await fetch('/Collections/GetUserCollections');
+                        const data = await response.json();
+                    }
+                },
+                async toggleCollection(activity) {
+                    if (!this.isLoggedIn) {
+                        // 檢查用戶是否登入
+                        alert('請先登入會員！');
                         return;
                     }
-
-                    try {
-                        // 发送收藏请求
-                        const response = await fetch(`/Collections/AddToCollection?activityId=${activityId}&userId=${userId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ activityId: activityId, userId: userId })
-                            // 这里可以根据需要传递其他数据
-                        });
-                        const data = await response.json();
-                        // 处理收藏成功的情况
-                        // alert('收藏成功！');
-                        alert(data.message)
-                    } catch (error) {
-                        // 处理错误情况
-                        console.error('Error:', error);
-                        alert('收藏失敗，請稍後再試！');
+                    const index = this.userCollections.indexOf(activity.activityId);
+                    if (index > -1) {
+                        // 移除收藏
+                        await this.removeFromCollection(activity.activityId);
+                    } else {
+                        // 加入收藏
+                        await this.addToCollection(activity.activityId);
                     }
+
+                    // 更新本地存儲的收藏狀態
+                    this.updateLocalStorage();
+                },
+                async addToCollection(activityId) {
+                    const response = await fetch(`/Collections/AddToCollection?activityId=${activityId}`, {
+                        method: 'POST'
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        this.userCollections.push(activityId);
+                    } else {
+                        alert(result.message || '收藏失敗');
+                    }
+                },
+                async removeFromCollection(activityId) {
+                    const response = await fetch('/Collections/RemoveFromCollection', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ activityId: activityId })
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        const index = this.userCollections.indexOf(activityId);
+                        if (index > -1) {
+                            this.userCollections.splice(index, 1);
+                        }
+                    } else {
+                        alert(result.error || '移除收藏失敗');
+                    }
+                },
+                isCollected(activityId) {
+                        return this.userCollections.includes(activityId);
+                },
+             
+                updateLocalStorage() {
+                    localStorage.setItem('userCollections', JSON.stringify(this.userCollections));
+                },
+                restoreLocalStorage() {
+                    const storedCollections = localStorage.getItem('userCollections');
+                    if (storedCollections) {
+                        this.userCollections = JSON.parse(storedCollections);
+                    }
+                },
+                // 收藏相關判斷 -end-
+
+                // 徽章顏色
+                badgeClass(method) {
+                    switch (method) {
+                        case '公告':
+                            return 'bg-warning';
+                        case '排隊':
+                            return 'bg-success';
+                        default:
+                            return 'bg-secondary';
+                    }
+                },
+
+                //資訊頁面
+                userview: function () {
+                    const btn = event.target;
+                    // 從按鈕元素中取得自定義屬性"btn-Aid"
+                    const btnAid = btn.getAttribute("btn-Aid");
+                    // 將btnAid值存入sessionStorage
+                    sessionStorage.setItem("ActID", btnAid);
+                    // 選擇性地顯示alert
+                    // alert(btnAid);
                 },
             },
             created() {
-                console.log(this.cate);
             },
-            mounted() {
-                this.changeCategory('taipei'); // 初始加載時加載日式活動
-            }
+            
         };
         var app = createApp(vueApp).mount("#app");
      

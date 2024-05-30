@@ -32,6 +32,9 @@
         <thead class="bg-primary text-white">
             <tr>
                 <th>
+                    @Html.DisplayNameFor(model => model.OrganizerId)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.OrganizerAccount)
                 </th>
                 <th>
@@ -74,6 +77,9 @@
             @foreach (var item in Model)
             {
                 <tr class="m-3">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrganizerId)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.OrganizerAccount)
                     </td>

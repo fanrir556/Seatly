@@ -38,6 +38,7 @@ $.ajax({
 
                 fileReader.onload = e => {
                     $('#preview').attr('src', e.target.result).show();
+                    $('#imageInput').attr('src', e.target.result);
                 };
                 fileReader.readAsDataURL(data);
             },
@@ -128,72 +129,103 @@ $('#modifyOrganizerForm').submit(function (event) {
         $('#password1').addClass("is-invalid");
         $('#invalid_password1').text("密碼至少包含一個數字、一個大寫字母、至少包含一個小寫字母、至少包含一個特殊字符(不包含底線、空白、冒號)、長度在8到16個字符之間");
     }
-
     else {
         $('#password1').addClass("is-valid");
         $('#password2').addClass("is-valid");
         $('#email').addClass("is-valid");
         $('#URL').addClass("is-valid");
 
-        // 获取当前日期和时间
-        var currentDate = new Date();
-        var dateString = currentDate.getFullYear() + ('0' + (currentDate.getMonth() + 1)).slice(-2) + ('0' + currentDate.getDate()).slice(-2);
-        var timeString = ('0' + currentDate.getHours()).slice(-2) + ('0' + currentDate.getMinutes()).slice(-2) + ('0' + currentDate.getSeconds()).slice(-2);
-        var fileExtension = file.name.split('.').pop(); // 获取文件的扩展名
-        var fileName = dateString + '_' + timeString + '.' + fileExtension; // 文件名只保留附檔名，其他部分用日期和时间替换
+        if (file == null) {
+            // 透過Session取得活動方的id
+            const organizerid = sessionStorage.getItem("OrganizerId");
+            console.log(`Session：${organizerid}`);
 
-        formData.append('image', file, fileName);
+            $.ajax({
+                url: `/api/OrganizersApi/put/${organizerid}`,
+                type: 'PUT',
+                data: JSON.stringify({
+                    LoginPassword: password1,
+                    OrganizerName: name,
+                    OrganizerCategory: category,
+                    Menu: menu,
+                    Address: address,
+                    ReservationUrl: url,
+                    Hashtag: hashtag,
+                    Email: email,
+                    Phone: phone,
+                }),
+                contentType: 'application/json',
+                success: function (result) {
+                    alert(result);
+                    // 修改成功
+                    window.location.href = '/OrganizerRoute/Index';
+                },
+                error: function (err) {
+                    alert(err.responseText);
+                }
+            });
+        }
+        else {
+            // 获取当前日期和时间
+            var currentDate = new Date();
+            var dateString = currentDate.getFullYear() + ('0' + (currentDate.getMonth() + 1)).slice(-2) + ('0' + currentDate.getDate()).slice(-2);
+            var timeString = ('0' + currentDate.getHours()).slice(-2) + ('0' + currentDate.getMinutes()).slice(-2) + ('0' + currentDate.getSeconds()).slice(-2);
+            var fileExtension = file.name.split('.').pop(); // 获取文件的扩展名
+            var fileName = dateString + '_' + timeString + '.' + fileExtension; // 文件名只保留附檔名，其他部分用日期和时间替换
 
-        // 将文件名存储到photo变量中
-        photo = fileName;
+            formData.append('image', file, fileName);
 
-        // 发送Ajax请求到后端上传图片
-        $.ajax({
-            url: '/api/OrganizersApi/uploads', // 后端上传图片的 URL
-            type: 'POST',
-            data: formData,
-            processData: false, // 告诉 jQuery 不要处理数据
-            contentType: false, // 告诉 jQuery 不要设置 contentType
-            success: function (response) {
-                $('#status').text('Image uploaded successfully.');
-                console.log('Image uploaded successfully:', response);
+            // 将文件名存储到photo变量中
+            photo = fileName;
 
-                // 透過Session取得活動方的id
-                const organizerid = sessionStorage.getItem("OrganizerId");
-                console.log(`Session：${organizerid}`);
+            // 发送Ajax请求到后端上传图片
+            $.ajax({
+                url: '/api/OrganizersApi/uploads', // 后端上传图片的 URL
+                type: 'POST',
+                data: formData,
+                processData: false, // 告诉 jQuery 不要处理数据
+                contentType: false, // 告诉 jQuery 不要设置 contentType
+                success: function (response) {
+                    $('#status').text('Image uploaded successfully.');
+                    console.log('Image uploaded successfully:', response);
 
-                // 图片上传成功后，再发送表单数据
-                $.ajax({
-                    url: `/api/OrganizersApi/put/${organizerid}`, 
-                    type: 'PUT',
-                    data: JSON.stringify({
-                        LoginPassword: password1,
-                        OrganizerName: name,
-                        OrganizerCategory: category,
-                        OrganizerPhoto: photo, // 使用新的文件名
-                        Menu: menu,
-                        Address: address,
-                        ReservationUrl: url,
-                        Hashtag: hashtag,
-                        Email: email,
-                        Phone: phone,
-                    }),
-                    contentType: 'application/json',
-                    success: function (result) {
-                        alert(result);
-                        // 修改成功，重定向到登入頁面
-                        window.location.href = '/OrganizerRoute/OrganizerInfo';
-                    },
-                    error: function (err) {
-                        alert(err.responseText);
-                    }
-                });
-            },
-            error: function (textStatus, errorThrown) {
-                $('#status').text('Error uploading image.');
-                console.error('Error uploading image:', textStatus, errorThrown);
-            }
-        });
+                    // 透過Session取得活動方的id
+                    const organizerid = sessionStorage.getItem("OrganizerId");
+                    console.log(`Session：${organizerid}`);
+
+                    // 图片上传成功后，再发送表单数据
+                    $.ajax({
+                        url: `/api/OrganizersApi/put/${organizerid}`,
+                        type: 'PUT',
+                        data: JSON.stringify({
+                            LoginPassword: password1,
+                            OrganizerName: name,
+                            OrganizerCategory: category,
+                            OrganizerPhoto: photo, // 使用新的文件名
+                            Menu: menu,
+                            Address: address,
+                            ReservationUrl: url,
+                            Hashtag: hashtag,
+                            Email: email,
+                            Phone: phone,
+                        }),
+                        contentType: 'application/json',
+                        success: function (result) {
+                            alert(result);
+                            // 修改成功
+                            window.location.href = '/OrganizerRoute/Index';
+                        },
+                        error: function (err) {
+                            alert(err.responseText);
+                        }
+                    });
+                },
+                error: function (textStatus, errorThrown) {
+                    $('#status').text('Error uploading image.');
+                    console.error('Error uploading image:', textStatus, errorThrown);
+                }
+            });
+        }
     }
 });
 

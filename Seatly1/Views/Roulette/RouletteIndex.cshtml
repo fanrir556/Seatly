@@ -72,7 +72,7 @@
                 sessionStorage.setItem('selectedTag', selectedTag);
 
                 let rotationAngle = 360 - (randomIndex * 45);
-                let extraRotation = Math.floor(Math.random() * 8) + 1;
+                let extraRotation = Math.floor(Math.random() * 80) + 1;
 
                 $('.wheel').css('transition', 'transform 5s ease-in-out');
                 $('.wheel').css('transform', `rotate(${rotationAngle + (360 * extraRotation)}deg)`);

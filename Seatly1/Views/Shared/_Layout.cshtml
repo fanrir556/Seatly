@@ -52,7 +52,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Lilita+One&display=swap"
         rel="stylesheet">
     @RenderSection("Styles", required: false) <!-- 如果提供了 Styles 部分，则渲染 Styles 部分 -->
-
+    <meta name="google-site-verification" content="lC_T7wsOfULktyjhrDeZmTaJoZSQYNEpk2KLxxd_Avs" />
 </head>
 
 <body>
@@ -99,8 +99,9 @@
             </div>
 
             @* 收藏清單 *@
-            <div class="collapse navbar-collapse border-top border-lg-0 justify-content-end"
-                id="navbarSupportedContent">
+            @* <div id="" class="collapse navbar-collapse border-top border-lg-0 justify-content-end">
+            <a  id="userCollections" asp-area="" asp-controller="Collections" asp-action="CollectionsIndex">❤收藏清單</a>
+            </div> *@
 
                 <!--試連結集中區-->
                 @if (isMg == "true")

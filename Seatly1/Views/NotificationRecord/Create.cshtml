@@ -20,14 +20,36 @@
 
             <div class="form-group">
                 <label asp-for="OrganizerId" class="control-label"></label>
-                <input asp-for="OrganizerId" class="form-control" />
+                <select asp-for="OrganizerId" class="form-control" id="OrganizerIdSelect">
+                    <option value="">選擇帳號</option>
+                </select>
                 <span asp-validation-for="OrganizerId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ActivityName" class="control-label"></label>
+                <input asp-for="ActivityName" class="form-control" />
+                <span asp-validation-for="ActivityName" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="ActivityPhoto" class="control-label"></label>
                 <partial name="_ShowActivityPhoto" />
                 <input type="file" id="ActivityPhoto" name="ActivityPhoto" class="form-control" accept="image/*" style="margin:7px;" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ActivityMethod" class="control-label"></label>
+                <select asp-for="ActivityMethod" class="form-control" id="ActivityMethodSelect">
+                    <option value="公告">公告</option>
+                    <option value="排隊">排隊</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Capacity" class="control-label"></label>
+                <input asp-for="Capacity" class="form-control" id="CapacityInput" />
+                <span asp-validation-for="Capacity" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -42,34 +64,13 @@
                 <span asp-validation-for="EndTime" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Capacity" class="control-label"></label>
-                <input asp-for="Capacity" class="form-control" />
-                <span asp-validation-for="Capacity" class="text-danger"></span>
-            </div>
+    
 
-            <div class="form-group">
-                <label asp-for="ActivityName" class="control-label"></label>
-                <input asp-for="ActivityName" class="form-control" />
-                <span asp-validation-for="ActivityName" class="text-danger"></span>
-            </div>
 
             <div class="form-group">
                 <label asp-for="DescriptionN" class="control-label"></label>
                 <textarea asp-for="DescriptionN" class="form-control"></textarea>
                 <span asp-validation-for="DescriptionN" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="IsRecurring" class="control-label"></label>
-                <input asp-for="IsRecurring" class="form-control" />
-                <span asp-validation-for="IsRecurring" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="RecurringTime" class="control-label"></label>
-                <input asp-for="RecurringTime" class="form-control" />
-                <span asp-validation-for="RecurringTime" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -79,58 +80,166 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="ActivityMethod" class="control-label"></label>
-                <select asp-for="ActivityMethod" class="form-control">
-                    <option value="公告">公告</option>
-                    <option value="排隊">排隊</option>
-                    <option value="抽籤">抽籤</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="IsActivity" class="control-label"></label>
-                <input asp-for="IsActivity" class="form-control" />
-            </div>
-
-            <div class="form-group">
                 <label asp-for="LocationDescription" class="control-label"></label>
                 <input asp-for="LocationDescription" class="form-control" />
                 <span asp-validation-for="LocationDescription" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="HashTag4" class="control-label"></label>
-                <input asp-for="HashTag4" class="form-control" />
-            </div>
 
-            <div class="form-group">
-                <label asp-for="HashTag5" class="control-label"></label>
-                <input asp-for="HashTag5" class="form-control" />
-            </div>
 
             <div class="form-group">
                 <label asp-for="HashTag1" class="control-label"></label>
-                <input asp-for="HashTag1" class="form-control" />
+                <select asp-for="HashTag1" class="form-control">
+                    <option value="">選擇標籤</option>
+                    <option value="藝文">藝文</option>
+                    <option value="親子">親子</option>
+                    <option value="美食">美食</option>
+                    <option value="樂活">樂活</option>
+                    <option value="戶外體驗">戶外體驗</option>
+                    <option value="健康">健康</option>
+                    <option value="運動">運動</option>
+                    <option value="寵物">寵物</option>
+                    <option value="動漫">動漫</option>
+                    <option value="遊戲">遊戲</option>
+                    <option value="公益">公益</option>
+                    <option value="其他生活娛樂">其他生活娛樂</option>
+                    <option value="美術">美術</option>
+                    <option value="音樂">音樂</option>
+                    <option value="設計">設計</option>
+                    <option value="商業">商業</option>
+                    <option value="科技">科技</option>
+                    <option value="語言">語言</option>
+                    <option value="投資">投資</option>
+                    <option value="時尚">時尚</option>
+                    <option value="手作">手作</option>
+                    <option value="料理">料理</option>
+                    <option value="攝影">攝影</option>
+                    <option value="其他學習成長">其他學習成長</option>
+                </select>
             </div>
 
             <div class="form-group">
                 <label asp-for="HashTag2" class="control-label"></label>
-                <input asp-for="HashTag2" class="form-control" />
+                <select asp-for="HashTag2" class="form-control">
+                    <option value="">選擇標籤</option>
+                    <option value="藝文">藝文</option>
+                    <option value="親子">親子</option>
+                    <option value="美食">美食</option>
+                    <option value="樂活">樂活</option>
+                    <option value="戶外體驗">戶外體驗</option>
+                    <option value="健康">健康</option>
+                    <option value="運動">運動</option>
+                    <option value="寵物">寵物</option>
+                    <option value="動漫">動漫</option>
+                    <option value="遊戲">遊戲</option>
+                    <option value="公益">公益</option>
+                    <option value="其他生活娛樂">其他生活娛樂</option>
+                    <option value="美術">美術</option>
+                    <option value="音樂">音樂</option>
+                    <option value="設計">設計</option>
+                    <option value="商業">商業</option>
+                    <option value="科技">科技</option>
+                    <option value="語言">語言</option>
+                    <option value="投資">投資</option>
+                    <option value="時尚">時尚</option>
+                    <option value="手作">手作</option>
+                    <option value="料理">料理</option>
+                    <option value="攝影">攝影</option>
+                    <option value="其他學習成長">其他學習成長</option>
+                </select>
             </div>
 
             <div class="form-group">
                 <label asp-for="HashTag3" class="control-label"></label>
-                <input asp-for="HashTag3" class="form-control" />
+                <select asp-for="HashTag3" class="form-control">
+                    <option value="">選擇標籤</option>
+                    <option value="藝文">藝文</option>
+                    <option value="親子">親子</option>
+                    <option value="美食">美食</option>
+                    <option value="樂活">樂活</option>
+                    <option value="戶外體驗">戶外體驗</option>
+                    <option value="健康">健康</option>
+                    <option value="運動">運動</option>
+                    <option value="寵物">寵物</option>
+                    <option value="動漫">動漫</option>
+                    <option value="遊戲">遊戲</option>
+                    <option value="公益">公益</option>
+                    <option value="其他生活娛樂">其他生活娛樂</option>
+                    <option value="美術">美術</option>
+                    <option value="音樂">音樂</option>
+                    <option value="設計">設計</option>
+                    <option value="商業">商業</option>
+                    <option value="科技">科技</option>
+                    <option value="語言">語言</option>
+                    <option value="投資">投資</option>
+                    <option value="時尚">時尚</option>
+                    <option value="手作">手作</option>
+                    <option value="料理">料理</option>
+                    <option value="攝影">攝影</option>
+                    <option value="其他學習成長">其他學習成長</option>
+                </select>
             </div>
 
             <div class="form-group">
                 <label asp-for="HashTag4" class="control-label"></label>
-                <input asp-for="HashTag4" class="form-control" />
+                <select asp-for="HashTag4" class="form-control">
+                    <option value="">選擇標籤</option>
+                    <option value="藝文">藝文</option>
+                    <option value="親子">親子</option>
+                    <option value="美食">美食</option>
+                    <option value="樂活">樂活</option>
+                    <option value="戶外體驗">戶外體驗</option>
+                    <option value="健康">健康</option>
+                    <option value="運動">運動</option>
+                    <option value="寵物">寵物</option>
+                    <option value="動漫">動漫</option>
+                    <option value="遊戲">遊戲</option>
+                    <option value="公益">公益</option>
+                    <option value="其他生活娛樂">其他生活娛樂</option>
+                    <option value="美術">美術</option>
+                    <option value="音樂">音樂</option>
+                    <option value="設計">設計</option>
+                    <option value="商業">商業</option>
+                    <option value="科技">科技</option>
+                    <option value="語言">語言</option>
+                    <option value="投資">投資</option>
+                    <option value="時尚">時尚</option>
+                    <option value="手作">手作</option>
+                    <option value="料理">料理</option>
+                    <option value="攝影">攝影</option>
+                    <option value="其他學習成長">其他學習成長</option>
+                </select>
             </div>
 
             <div class="form-group">
                 <label asp-for="HashTag5" class="control-label"></label>
-                <input asp-for="HashTag5" class="form-control" />
+                <select asp-for="HashTag5" class="form-control">
+                    <option value="">選擇標籤</option>
+                    <option value="藝文">藝文</option>
+                    <option value="親子">親子</option>
+                    <option value="美食">美食</option>
+                    <option value="樂活">樂活</option>
+                    <option value="戶外體驗">戶外體驗</option>
+                    <option value="健康">健康</option>
+                    <option value="運動">運動</option>
+                    <option value="寵物">寵物</option>
+                    <option value="動漫">動漫</option>
+                    <option value="遊戲">遊戲</option>
+                    <option value="公益">公益</option>
+                    <option value="其他生活娛樂">其他生活娛樂</option>
+                    <option value="美術">美術</option>
+                    <option value="音樂">音樂</option>
+                    <option value="設計">設計</option>
+                    <option value="商業">商業</option>
+                    <option value="科技">科技</option>
+                    <option value="語言">語言</option>
+                    <option value="投資">投資</option>
+                    <option value="時尚">時尚</option>
+                    <option value="手作">手作</option>
+                    <option value="料理">料理</option>
+                    <option value="攝影">攝影</option>
+                    <option value="其他學習成長">其他學習成長</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -146,6 +255,45 @@
 
 
 <script>
+
+
+ 
+    $(document).ready(function () {
+
+        //搜尋帳號
+        $.ajax({
+            url: '@Url.Action("GetAllOrganizerIds")',
+            type: 'GET',
+            success: function (data) {
+                var select = $("#OrganizerIdSelect");
+                $.each(data, function (index, value) {
+                    var option = `<option value="${value.id}">${value.account}</option>`;
+                    select.append(option);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+        // 動態啟用或禁用 Capacity 輸入框
+        $('#ActivityMethodSelect').change(function () {
+            var selectedMethod = $(this).val();
+            if (selectedMethod === '公告') {
+                $('#CapacityInput').prop('disabled', true);
+                $('#CapacityInput').val(''); // 清空輸入框的值
+            } else {
+                $('#CapacityInput').prop('disabled', false);
+            }
+        });
+
+        // 頁面加載時檢查一次
+        $('#ActivityMethodSelect').trigger('change');
+
+
+
+    //圖片顯示
     function previewImage(inputFile, img) {
         if (inputFile.files && inputFile.files[0]) {
             var file = inputFile.files[0];
@@ -170,30 +318,35 @@
         }
     }
 
-        $("#ActivityPhoto").change(function () {
-            previewImage(this, $("#ActivityPhoto").prev());
-        });
+    $("#ActivityPhoto").change(function () {
+        previewImage(this, $("#ActivityPhoto").prev());
+    });
 
-        $("#createButton").click(function (e) {
-            e.preventDefault(); // 防止表單的默認提交行為
-            // var formData = $("form").serialize();
-        var formData = new FormData($("#fform")[0]);
-            // 發送 AJAX 請求
-            $.ajax({
-                type: "POST",
-                url: `/NotificationRecord/Create`, // 如果路徑正確，則可以直接指定URL
-                data: formData, // 將序列化後的表單數據發送到服務器
-                contentType: false, // 不設置 contentType，讓 jQuery 自動設置為 multipart/form-data
-                processData: false, // 不處理數據，讓 jQuery 不將數據轉為字串
-                success: function (data) {
-                    $("#adminBody").html(data);
-                },
-                error: function (xhr, status, error) {
-                    // 請求失敗時的處理
-                    console.error(xhr.responseText);
-                }
-            });
+
+
+    //-------------------------------------------------------
+
+    //建立活動
+    $("#createButton").click(function (e) {
+        e.preventDefault(); // 防止表單的默認提交行為
+        // var formData = $("form").serialize();
+    var formData = new FormData($("#fform")[0]);
+        // 發送 AJAX 請求
+        $.ajax({
+            type: "POST",
+            url: `/NotificationRecord/Create`, // 如果路徑正確，則可以直接指定URL
+            data: formData, // 將序列化後的表單數據發送到服務器
+            contentType: false, // 不設置 contentType，讓 jQuery 自動設置為 multipart/form-data
+            processData: false, // 不處理數據，讓 jQuery 不將數據轉為字串
+            success: function (data) {
+                $("#adminBody").html(data);
+            },
+            error: function (xhr, status, error) {
+                // 請求失敗時的處理
+                console.error(xhr.responseText);
+            }
         });
+    });
 
 
 

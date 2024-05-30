@@ -7,15 +7,142 @@
 <style>
 
 
-.love-icon {
-    cursor: pointer;
-    transition: transform 0.2s;
-}
+ .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
 
-.love-icon:hover {
-    transform: scale(1.2);
-}
+    .love-icon {
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
 
+    .love-icon:hover {
+        transform: scale(1.2);
+    }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 65rem;
+        margin: 10px;
+    }
+
+    .card img {
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card img:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .card-text {
+        font-size: 0.875rem;
+    }
+
+    .card-body .btn {
+        font-size: 0.875rem;
+        padding: 5px 10px;
+    }
+
+    .background-overlay {
+        background-color: #FFD2D2;
+        padding: 20px 20px;
+        border-radius: 10px;
+        color: #000;
+        width: 100%;
+        max-width: 65rem;
+        margin: 0 auto;
+    }
+
+    .activity-section {
+        width: 100%;
+        max-width: 65rem;
+        padding-top: 100px;
+    }
+
+    .no-activities {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .search-filter-group {
+        width: 100%;
+    }
+
+    .search-filter-group_header {
+        font-size: 1.2rem;
+    }
+
+    .search-checkbox_box {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-checkbox_label {
+        margin-left: 5px;
+    }
+
+    .search-filter {
+        margin-bottom: 10px;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+
+    @@media (max-width: 576px) {
+        .btn {
+            font-size: 0.75rem;
+            padding: 3px 6px;
+        }
+
+        .card {
+            width: 100%;
+        }
+
+        .container {
+            padding: 0;
+        }
+
+        .search-filter-group_header {
+            font-size: 1rem;
+        }
+
+        .form-control {
+            font-size: 0.875rem;
+        }
+
+        .card-title, .card-text, .card-body .btn {
+            font-size: 0.75rem;
+        }
+
+        .card img {
+            height: 75px;
+        }
+        
+    }
 </style>
 
 
@@ -24,6 +151,7 @@
    
 @* 卡片內容 *@
     <div>
+        <img id="dancingtime" src="~/images/giphy.gif" />
         <ul id="activityList" >
             @foreach (var activity in Model)
             {
@@ -35,11 +163,24 @@
                                 var imageSrc = $"data:image;base64,{base64Image}";
                             }
                             <img src="@imageSrc" alt="Activity Photo" class="img-fluid mb-2 mt-2 ms-2 w-75"  />
+                            @if (activity.ActivityMethod == "公告")
+                            {
+                                <p class="badge bg-warning card-text position-absolute top-0 start-0">@activity.ActivityMethod</p>
+                            }
+                            else if (activity.ActivityMethod == "排隊")
+                            {
+                                <p class="badge bg-success card-text position-absolute top-0 start-0">@activity.ActivityMethod</p>
+                            }
+                            else
+                            {
+                                <p class="badge bg-secondary card-text position-absolute top-0 start-0">@activity.ActivityMethod</p>
+                            }
+
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h3 class="card-title fs-3">活動名稱: @activity.ActivityName</h3>
-                                <p class="card-text">活動代碼: @activity.ActivityId</p>
+                                <h3 class="card-title fs-1">@activity.ActivityName</h3>
+                                @* <p class="card-text">活動代碼: @activity.ActivityId</p> *@
                                 <p class="card-text">開始時間: @activity.StartTime</p>
                                 <p class="card-text">結束時間: @activity.EndTime</p>
                                 
@@ -55,10 +196,15 @@
                                         }
                                     }
                                 </p>
-
-                                <span class="position-absolute top-0 end-0 m-3"><a class="text-danger love-icon" @@click="addToCollection(@activity.ActivityId)">❤加入收藏</a></span>
-                              
-                                
+                                <div class="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end">
+                                <p >
+                                    <a :class="isCollected(@activity.ActivityId) ? 'text-danger' : 'text-secondary'" class="love-icon" @@click="toggleCollection({ activityId: @activity.ActivityId })">
+                                        {{ isCollected(@activity.ActivityId) ? '❤️已收藏' : '🤍加入收藏' }}
+                                    </a>
+                                </p>
+                                    
+                               
+                                </div>
 
                                 <form asp-action="UsersView" asp-controller="NotificationRecord" asp-route-id="@activity.ActivityId">
                                     <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0 mb-2 me-2" @@click="userview"
@@ -72,6 +218,8 @@
             }
         </ul>
     </div>
+
+   
 }
 
 else
@@ -81,9 +229,31 @@ else
 
 
 <script>
-  
+   
 
     $(function () {
+        // 初始加載時顯示 loading 圖片
+        function showLoading() {
+            $("#dancingtime").show();
+            $("#activityList").hide();
+        }
+
+        function hideLoading() {
+            $("#dancingtime").hide();
+            $("#activityList").show();
+        }
+        // $.ajax({
+        //     type: "GET",
+        //     url: `@Url.Action("_searchPartial", "Search")`
+        // }).done(function (data) {
+        //     $("#resultBody").html(data);
+        //     $("#dancingtime").hide();
+        // }).fail(function (err) {
+        //     // alert(err.responseText);
+        //     $("#dancingtime").hide();
+        // });
+
+        
         var isSearching = sessionStorage.getItem("isSearching");
         if (isSearching == "true") {
             var hashtags = [];
@@ -113,10 +283,12 @@ else
                 headers: { 'Content-type': 'application/json' }
             }).then(function (response) {
                 return response.text();
+                hideLoading();
             }).then(function (data) {
                 $("#sideFilterContainer").html(data);
+                hideLoading();
             }).catch(function (err) {
-
+                hideLoading();
             });
             sessionStorage.removeItem("isSearching");
         }
@@ -127,39 +299,95 @@ else
 
     var vueApp = {
         data() {
-            return {}
+            return {
+                userCollections: [],
+                isLoggedIn: sessionStorage.getItem('userLogin') === 'true', // 檢查用戶是否登錄
+            }
+        },
+        mounted() {
+            if (this.isLoggedIn) {
+                this.restoreLocalStorage(); // 恢復收藏狀態
+                this.getUserCollections();
+            }
+            // console.log('Mounted, isLoggedIn:', this.isLoggedIn);
+            // console.log('Mounted, userCollections:', this.userCollections);
         },
         methods: {
-            async addToCollection(activityId) {
-                const userLogin = sessionStorage.getItem('userLogin');
-                const userId = sessionStorage.getItem('userId');
-
-                if (userLogin !== 'true') {
-
-                    alert('請先登錄會員！');
-                    return;
-                }
-
-                try {
-
-                    const response = await fetch(`/Collections/AddToCollection?activityId=${activityId}&userId=${userId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ activityId: activityId, userId: userId })
-
-                    });
+            // 收藏相關判斷 -start-
+            async getUserCollections() {
+                if (this.isLoggedIn) {
+                    const response = await fetch('/Collections/GetUserCollections');
+                    console.log(response)
                     const data = await response.json();
+                    console.log(data)
 
-                    // alert('收藏成功！');
-                    alert(data.message);
-                } catch (error) {
 
-                    console.error('Error:', error);
-                    alert('收藏失敗，請稍後再試！');
+                    console.log('User collections:', this.userCollections);
                 }
             },
+            async toggleCollection(activity) {
+                if (!this.isLoggedIn) {
+                    // 檢查用戶是否登入
+                    alert('請先登入會員！');
+                    return;
+                }
+                const index = this.userCollections.indexOf(activity.activityId);
+                if (index > -1) {
+                    // 移除收藏
+                    await this.removeFromCollection(activity.activityId);
+                } else {
+                    // 加入收藏
+                    await this.addToCollection(activity.activityId);
+                }
+
+                // 更新本地存儲的收藏狀態
+                this.updateLocalStorage();
+            },
+            async addToCollection(activityId) {
+                console.log('Trying to add to collection:', activityId); // Debug: log activityId
+                const response = await fetch(`/Collections/AddToCollection?activityId=${activityId}`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                console.log('Add to collection response:', result); // Debug: log server response
+                if (result.success) {
+                    this.userCollections.push(activityId);
+                } else {
+                    alert(result.message || '熱門項收藏失敗');
+                }
+            },
+            async removeFromCollection(activityId) {
+                const response = await fetch('/Collections/RemoveFromCollection', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ activityId: activityId })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    const index = this.userCollections.indexOf(activityId);
+                    if (index > -1) {
+                        this.userCollections.splice(index, 1);
+                    }
+                } else {
+                    alert(result.error || '移除收藏失敗');
+                }
+            },
+            isCollected(activityId) {
+                return this.userCollections.includes(activityId);
+            },
+
+            updateLocalStorage() {
+                localStorage.setItem('userCollections', JSON.stringify(this.userCollections));
+            },
+            restoreLocalStorage() {
+                const storedCollections = localStorage.getItem('userCollections');
+                if (storedCollections) {
+                    this.userCollections = JSON.parse(storedCollections);
+                }
+            },
+            // 收藏相關判斷 -end-
 
             //資訊頁面
             userview: function () 

@@ -5,7 +5,29 @@
 @section Styles
 {
     <style>
+        /* 懸浮按鈕樣式 */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            /* background-color: #007bff;
+            color: white; */
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
 
+            .back-to-top:hover {
+                background-color: #FFE153;
+                transform: scale(1.1);
+            }
     </style>
 }
 <div class="container">
@@ -14,34 +36,45 @@
 </div>
 
 
-<div class="row ps-5 pe-5">
+    <div class="row ps-5 pe-5" id="resultBody">
     <div class="col-12 col-md-2 p-3" id="sideFilterContainer">
         @* @Html.Partial("_sideFilterPartial") *@
     </div>
 
-    <div class="col-12 col-md-10 p-3" id="searchResultContainer">
-
+        <div class="col-12 col-md-10 p-3" id="searchResultContainer">
+            <img id="dancingtime" src="~/images/giphy.gif"  />
     </div>
 
 
+    </div>
 </div>
-</div>
+<!-- 懸浮按鈕 -->
+<button class="back-to-top" id="backToTopBtn"><img style="width:55px" src="~/images/queuely-upp.png" /></button>
 
 
 
 @section Scripts{
 <script>
+// 初始加載時顯示 loading 圖片
+        function showLoading() {
+            $("#dancingtime").show();
+            $("#activityList").hide();
+        }
+
+        function hideLoading() {
+            $("#dancingtime").hide();
+            $("#activityList").show();
+        }
+
+        // 回到頂部按鈕功能
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
         $(function () {
 
-            // $.ajax({
-            //     type: "POST",
-            //     url: `@Url.Action("sideFilterPartial", "Search")`,
-                
-            // }).done(function (data) {
-            //     $("#sideFilterContainer").html(data);
-            // }).fail(function (err) {
-            //     alert(err.responseText);
-            // });
+         
 
 
             sessionStorage.setItem("isSearching", "true")

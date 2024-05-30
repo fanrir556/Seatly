@@ -41,15 +41,69 @@
                 <button class="btn btn-primary btn-sm" style="margin" @@click="QR">生成QRcode</button>
 
                 <hr />
-                <p> 活動名稱 :{{activityName}}</p>
+                    <p> 活動名稱 :{{activityName}}</p>
                 <p class="justify-text" style="color:#999999">{{activityId}}</p>
-                <p>活動開始時間 : {{startTime}}</p>
-                <p>活動結束時間 : {{endTime}}</p>
+                    <p>活動開始時間 : {{startTime}}</p>
+                    <p>活動結束時間 : {{endTime}}</p>
 
-                
             </div>
         </div>
+
+
+
+
+        <!--Modal-->
+        <div class="modal fade"
+             id="QRcode-Model"
+             tabindex="-1"
+             data-bs-backdrop="static"
+             data-bs-keyboard="false"
+             role="dialog"
+             aria-labelledby="modalTitleId"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md"
+                 role="document">
+                <div class="modal-content" >
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitleId">
+                            簽到QR code
+                        </h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+
+                    <!--body start-->
+                    <div style="width:100%; display: grid; place-items: center;">
+                        <div class="modal-body" id="modalbody">
+                            <div class="form-group mt-3">
+                                <p>用戶名稱 : {{userName}}</p>
+                                <br />
+                                <div id="qrcode"></div>
+                            </div>
+                        </div>
+                    </div>
+
+   
+                    <!--body end-->
+
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            關閉
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal-->
+
     </div>
+
+
+
 
 
 
@@ -57,6 +111,9 @@
     <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script>
         //基本路徑
         const vuebase = "https://localhost:7271";
@@ -80,10 +137,10 @@
                 fetchlist: function () {
                     const Aid = sessionStorage.getItem("ActID");
                     let _this = this;
-                    axios.get(`${vuebase}/Confirm/BookOKList?id=${Aid}`)
+                    axios.get(`/Confirm/BookOKList?id=${Aid}`)
                         .then(res => {
                             let data = res.data;
-                            console.log(data)
+                            // console.log(data)
 
                             // 分別將資料字段存放到不同的變數中
                             _this.activityId = data.activityId;
@@ -99,17 +156,47 @@
                             _this.endTime = moment(data.endTime).format('YYYY-MM-DD HH:mm');
                             _this.Barcode = data.activityBarcode;
 
-                            console.log("Activity ID:", _this.activityId);
-                            console.log("Activity Name:", _this.activityName);
+                            // console.log("Activity ID:", _this.activityId);
+                            // console.log("Activity Name:", _this.activityName);
                         })
                         .catch(err => {
                             alert(err);
                         });
                 },
                 QR:function(){
-                    alert("QR")
+                    document.getElementById("qrcode").innerHTML = "";
 
-                    
+
+                    // 獲取輸入的文本和屬性
+                    var userName = this.userName
+                    var Barcode = this.Barcode
+                    var activityId = this.activityId
+
+                    // console.log(userName +"-----"+Barcode)
+
+                    // 創建包含屬性的物件
+                    var data = {
+                        userName: userName,
+                        Barcode: Barcode,
+                        activityId:activityId
+                    };
+                    // console.log(data.activityId)
+
+                    // 將物件轉換為 JSON 字符串
+                    var jsonData = JSON.stringify(data);
+
+                    // 生成 QR 碼
+                    new QRCode(document.getElementById("qrcode"), {
+                        text: jsonData,
+                        width: 256,
+                        height: 256,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+
+                    $("#QRcode-Model").modal("show");
+
                 },
             },
             mounted: function () {

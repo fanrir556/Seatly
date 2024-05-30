@@ -7,6 +7,18 @@
     3.更改排隊號碼的欄位狀況
  -->
 <!---->
+<style>
+    #reader-container {
+        display: flex;
+        justify-content: center; /* 將內容置中 */
+        align-items: center; /* 垂直置中，如果需要 */
+    }
+
+    #reader {
+        width: 300px;
+    }
+</style>
+
 
 <div id="app">
     <div class = "container mt-3">
@@ -16,6 +28,18 @@
         <div>
             <span>{{startTime}}</span> ~ <span>{{endTime}}</span>
         </div>
+
+        <div style="width:100%;">
+            <button class="btn btn-primary btn-sm" id="scanQRcode" @@click="scanQRcode">掃描QRcode</button>
+        </div>
+
+        @*
+        <div style="width:100%;">
+            <div style="display: flex;justify-content: flex-end;">
+                <span>搜尋 : </span><input placeholder="ccc"></input>
+            </div>
+        </div> 
+        *@
 
         <table class="table table-striped">
             <thead>
@@ -49,6 +73,56 @@
 
         </table>
 
+
+        <!--Modal-->
+        <div class="modal fade"
+             id="QRcode-Model"
+             tabindex="-1"
+             data-bs-backdrop="static"
+             data-bs-keyboard="false"
+             role="dialog"
+             aria-labelledby="modalTitleId"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md"
+                 role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitleId">
+                            簽到QR code
+                        </h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+
+                    <!--body start-->
+                    <div style="width:100%; display: grid; place-items: center;">
+                        <div class="modal-body" id="modalbody">
+                            <div class="form-group mt-3">
+                                <div id="reader-container">
+                                    <div id="reader"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--body end-->
+
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            關閉
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal-->
+
+
     </div>
  
     
@@ -56,7 +130,11 @@
 
 <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<!--掃描 時間格式CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+<!--掃描QRcode CDN -->
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
 <script>
     //路徑
@@ -95,7 +173,7 @@
                 // alert("list"); // 可以暫時移除
                 let _this = this;
 
-                axios.get(`${vuebase}/Confirm/ActiveInfo/${ActId}`)
+                axios.get(`/Confirm/ActiveInfo/${ActId}`)
                     .then(response => {
                         // 在這裡處理成功的回應
                         var res = response.data
@@ -126,7 +204,7 @@
             BookInfo: function () { 
                 let _this = this;
                 // alert("Book")
-                axios.get(`${vuebase}/Confirm/BookInfo/${ActId}`)
+                axios.get(`/Confirm/BookInfo/${ActId}`)
                     .then(response => {
                         // console.log(response)
                         res = response.data
@@ -163,12 +241,63 @@
 
                 var ret = confirm("確認簽到?");
                 if (ret == true) { 
-                    axios.post(`${vuebase}/Confirm/TransCheck/?Barcode=${btnBarcode}&waitNum=${waitNum1}`)
+                    axios.post(`/Confirm/TransCheck/?Barcode=${btnBarcode}&waitNum=${waitNum1}`)
                     .then(res => {_this.BookInfo();})
                     .catch(err=> { alert(err)})
                 }
    
              },
+
+            //QRcode掃描
+            scanQRcode: function () {
+                // alert("dd")
+
+                $("#QRcode-Model").modal("show");
+
+                // 初始化 QR 碼掃描器，並將結果顯示在 ID 為 "reader" 的 HTML 元素中
+                const html5QrCode = new Html5Qrcode("reader");
+
+                // 定義掃描成功後的回調函數
+                const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                    // 處理解碼後的文本
+                    let QR = JSON.parse(decodedText);
+
+                    // 停止 QR 碼掃描
+                    html5QrCode.stop();
+
+                    if (QR.activityId == this.activityId) {
+                        // 將解碼後的文本發送到後端
+                        axios.post('/Confirm/QRCheck', QR)
+                            .then(res => {
+                                $("#QRcode-Model").modal("hide");
+                                alert(res.data.message);
+                                this.BookInfo()
+                            })
+                            .catch(err => {
+                                $("#QRcode-Model").modal("hide");
+                                alert(err);
+                            });
+                    }
+                    else {
+                        $("#QRcode-Model").modal("hide");
+                        alert("不同活動的QRcode喔")
+                    }
+
+                };
+
+                // 設置掃描的配置選項
+                const config = { fps: 10, qrbox: 250 };
+
+
+                // 開始掃描 QR 碼
+                html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback)
+                    .catch(err => {
+                        // 處理啟動過程中的錯誤
+                        console.error(`Error starting QR code scanner: ${err}`);
+                    });
+
+               
+            },
         },
         mounted: function () {
             let _this = this;

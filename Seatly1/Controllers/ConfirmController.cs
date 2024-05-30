@@ -12,6 +12,8 @@ using Seatly1.DTO;
 using Microsoft.AspNetCore.Identity;
 using Seatly1.Data;
 using static System.Net.WebRequestMethods;
+using Azure.Core;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Seatly1.Controllers
 {
@@ -138,6 +140,7 @@ namespace Seatly1.Controllers
                 _context.BookingOrders.Add(newBookingOrder);
                 _context.SaveChanges();
             }
+
             catch (Exception ex)
             {
                 // 處理寫入失敗的異常
@@ -246,7 +249,52 @@ namespace Seatly1.Controllers
             await _context.SaveChangesAsync();
         }
 
-        //管理者使用 -
+        //OrganizerActiveCheck使用
+        // POST: /Confirm/QRCheck
+        [HttpPost]
+        public async Task<IActionResult> QRCheck([FromBody] QRRequest request)
+        {
+            if (request == null || string.IsNullOrEmpty(request.Barcode))
+            {
+                return BadRequest("資料錯誤");
+            }
+            string userName = request.userName;
+            string barcode = request.Barcode;
+            int activityId = request.activityId;
+
+
+            var aa = _context.BookingOrders.FirstOrDefault(
+                    e => e.UserName == userName && e.ActivityBarcode == barcode && e.ActivityId == activityId
+                );
+
+            if (aa == null)
+            {
+                return NotFound(new { success = false, message = "找不到對應的簽到資訊" });
+            }
+
+            if (aa.Checked == false)
+            {
+                aa.Checked = true;
+            }
+            else {
+                return Ok(new { success = false, message = "有簽到過了喔~" });
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(new { success = true, message = "簽到成功" });
+        }
+
+        //建立一個QRRequest給QRCheck用
+        public class QRRequest
+        {
+            public string userName { get; set; }
+            public string Barcode { get; set; }
+            public int activityId { get; set; }
+        }
+
+        //--------------------------------------------------------
+
+        //管理者使用 簽到 -  Admin那邊用的
         //POST:/Confirm/TransUnCheck
         [HttpPost]
         public async Task TransUnCheck(string Barcode, int waitNum)
@@ -395,6 +443,54 @@ namespace Seatly1.Controllers
 
             return Json(results);
         }
+
+
+
+
+
+        // UserActivityView用的
+        // 依日期篩選會員已參加活動
+        // GET:/Confirm/DateInfo
+        [HttpGet]
+        public async Task<JsonResult> DateInfo(DateTime date)
+        {
+            // 獲取當前登入的使用者
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Json(null);
+            }
+
+            var userName = user.UserName; // 直接從 user 對象中獲取 UserName
+            var userId = user.Id; // 直接從 user 對象中獲取 UserId
+
+            // 計算指定日期的開始和結束時間
+            var startOfDay = date.Date; // 當天的開始時間 (00:00:00)
+            var endOfDay = date.Date.AddDays(1).AddTicks(-1); // 當天的結束時間 (23:59:59.9999999)
+
+            var results = (from bo in _context.BookingOrders
+                           join nr in _context.NotificationRecords on bo.ActivityId equals nr.ActivityId
+                           where bo.UserName == userName
+                                 && nr.StartTime <= startOfDay
+                                 && nr.EndTime >= endOfDay
+                           orderby bo.ActivityId, bo.WaitingNumber
+                           select new
+                           {
+                               bo.ActivityId,
+                               bo.UserName,
+                               bo.WaitingNumber,
+                               bo.Checked,
+                               nr.ActivityName,
+                               nr.ActivityPhoto,
+                               nr.StartTime,
+                               nr.EndTime
+                           }).ToList();
+
+            return Json(results);
+        }
+
+
+
 
         //--------------------------------------------------------------------------
 

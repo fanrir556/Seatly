@@ -28,6 +28,7 @@ namespace Seatly1.Controllers
             public string HashTag4 { get; set; }
             public string HashTag5 { get; set; }
             public string DescriptionN { get; set; }
+            public string ActivityMethod {  get; set; }
         }
 
         public class RemoveCollectionRequest
@@ -75,6 +76,7 @@ namespace Seatly1.Controllers
                                          HashTag4 = n.HashTag4,
                                          HashTag5 = n.HashTag5,
                                          DescriptionN = n.DescriptionN,
+                                         ActivityMethod = n.ActivityMethod
                                      }).ToListAsync();
 
             // 输出 Session 中的值
@@ -104,7 +106,7 @@ namespace Seatly1.Controllers
 
             if (existingItem != null)
             {
-                return Json(new { success = false, message = "已經收藏過囉~" });
+                return Json(new { success = false, message = "已經在收藏清單裡囉~" });
             }
 
             var collectionItem = new CollectionItem
@@ -147,6 +149,27 @@ namespace Seatly1.Controllers
             }
 
             return Json(new { success = false, error = "未找到收藏项" }); 
+        }
+
+        // 用戶收藏狀態
+        public async Task<IActionResult> GetUserCollections()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized(); // 用户未登入
+            }
+
+            var userId = user.Id;
+
+            // 取得用戶收藏
+            var userCollections = await _context.CollectionItems
+                .Where(c => c.UserId == userId)
+                .Select(c => c.ActivityId)
+                .ToListAsync();
+
+            Debug.WriteLine($"{userCollections.Count} users");
+            return Json(userCollections); 
         }
     }
 }

@@ -138,8 +138,8 @@
                         </div>
 
 
-
                     </div>
+                   
 
                     <!--按鈕框框-->
                     <!--判斷是不是公告-->
@@ -167,7 +167,8 @@
 
 
                 </div>
-            </div>
+            <hr class="mb-5" />
+            </div>     
         </div>
 
 
@@ -216,7 +217,7 @@
                     // alert(_this.Actid);
 
                     //呼叫資料
-                    axios.get(`${vuebase}/NotificationRecord/UserList?id=${Aid}`)
+                    axios.get(`/NotificationRecord/UserList?id=${Aid}`)
                     .then(res => {
                         _this.Activity = res.data;
                         console.log("活動資料")
@@ -254,7 +255,7 @@
                     let _this = this;
                     const Aid = sessionStorage.getItem("ActID");
 
-                    axios.get(`${vuebase}/NotificationRecord/BookNumber?id=${Aid}`)
+                    axios.get(`/NotificationRecord/BookNumber?id=${Aid}`)
                         .then(res => {
                             _this.book = res.data;
                             console.log("排隊資料");
@@ -274,9 +275,9 @@
                 joinclick: function () {
                     let _this = this;
                     const Aid = sessionStorage.getItem("ActID");
-
+                    // alert(Aid)
                     // get/Confirm/Index
-                    axios.get(`${vuebase}/Confirm/Index?Nid=${Aid}`)
+                    axios.get(`/Confirm/Index?NId=${Aid}`)
                         .then(res => {
                             // 根據回應的狀態進行不同處理
                             switch (res.data.status) {

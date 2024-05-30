@@ -34,7 +34,7 @@
         // alert("list"); // 可以暫時移除
         let _this = this;
 
-    axios.get(`${vuebase}/Confirm/ActiveInfo/${ActId}`)
+    axios.get(`/Confirm/ActiveInfo/${ActId}`)
                     .then(response => {
                         // 在這裡處理成功的回應
                         var res = response.data
@@ -60,7 +60,7 @@
     BookInfo: function () {
         let _this = this;
     // alert("Book")
-    axios.get(`${vuebase}/Confirm/BookInfo/${ActId}`)
+    axios.get(`/Confirm/BookInfo/${ActId}`)
                     .then(response => {
         // console.log(response)
         res = response.data
@@ -96,7 +96,7 @@
     // console.log(waitNum1);
     var ret = confirm("確認簽到?");
     if (ret == true) {
-        axios.post(`${vuebase}/Confirm/TransCheck/?Barcode=${btnBarcode}&waitNum=${waitNum1}`)
+        axios.post(`/Confirm/TransCheck/?Barcode=${btnBarcode}&waitNum=${waitNum1}`)
             .then(res => { _this.BookInfo(); })
             .catch(err => { alert(err) })
     }
@@ -116,7 +116,7 @@
 
     var ret = confirm("確認解除?");
     if (ret == true) {
-        axios.post(`${vuebase}/Confirm/TransUnCheck/?Barcode=${btnBarcode}&waitNum=${waitNum1}`)
+        axios.post(`/Confirm/TransUnCheck/?Barcode=${btnBarcode}&waitNum=${waitNum1}`)
             .then(res => { _this.BookInfo(); })
             .catch(err => { alert(err) })
     }

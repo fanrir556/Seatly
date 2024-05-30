@@ -1,6 +1,7 @@
 ﻿var vueApp = {
     data() {
         return {
+            ActivityId: null,
             ActivityPhoto: null,
             StartTime: null,
             EndTime: null,
@@ -8,7 +9,6 @@
             ActivityName: null,
             ActivityMethod: null,
             DescriptionN: null,
-            IsRecurring: null,
             HashTag1: null,
             HashTag2: null,
             HashTag3: null,
@@ -41,13 +41,14 @@
                 .then(response => {
                     console.log(response.data);
                     const activity = response.data;
+                    this.ActivityId = activity.activityId;
                     this.ActivityPhoto = this.binaryStringToBlob(activity.activityPhoto);
                     this.StartTime = this.convertToPM(activity.startTime);
                     this.EndTime = this.convertToPM(activity.endTime);
+                    this.Capacity = activity.capacity;
                     this.ActivityName = activity.activityName;
                     this.ActivityMethod = activity.activityMethod;
                     this.DescriptionN = activity.descriptionN;
-                    this.IsRecurring = activity.isRecurring;
                     this.HashTag1 = activity.hashTag1;
                     this.HashTag2 = activity.hashTag2;
                     this.HashTag3 = activity.hashTag3;

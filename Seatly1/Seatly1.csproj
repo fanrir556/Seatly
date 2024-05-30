@@ -35,6 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Views\Home\google4ccbabde7fced93c.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Bootstrap.v3.Datetimepicker" Version="4.17.49" />
     <PackageReference Include="Bootstrap.v3.Datetimepicker.CSS" Version="4.17.49" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.5" />
@@ -69,6 +73,34 @@
 
   <ItemGroup>
     <Content Update="Views\OrganizerRoute\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\favicon_io\android-chrome-192x192.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\favicon_io\android-chrome-512x512.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\favicon_io\apple-touch-icon.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\favicon_io\favicon-16x16.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\favicon_io\favicon-32x32.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\favicon_io\favicon.ico">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\favicon_io\site.webmanifest">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

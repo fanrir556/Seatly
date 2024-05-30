@@ -185,7 +185,7 @@
                     // alert(_this.Actid);
 
                     //呼叫資料
-                    axios.get(`${vuebase}/NotificationRecord/UserList?id=${Aid}`)
+                    axios.get(`/NotificationRecord/UserList?id=${Aid}`)
                         .then(res => {
                             _this.Activity = res.data;
                             console.log("活動資料")
@@ -223,7 +223,7 @@
                     let _this = this;
                     const Aid = sessionStorage.getItem("ActID");
 
-                    axios.get(`${vuebase}/NotificationRecord/BookNumber?id=${Aid}`)
+                    axios.get(`/NotificationRecord/BookNumber?id=${Aid}`)
                         .then(res => {
                             _this.book = res.data;
                             console.log("排隊資料");
