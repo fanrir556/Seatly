@@ -18,7 +18,7 @@ var vueApp = {
         };
     },
     watch: {
-        // 當StartTime或EndTime值改變時，執行以下程式，當開始時間比結束時間晚時，自動將結束時間設定成開始時間加1天
+        // 當StartTime或EndTime值改變時，執行以下程式，當開始時間比結束時間晚時，將結束時間設定成開始時間加1天
         StartTime(newStartTime) {
             if (newStartTime >= this.EndTime) {
                 let starttime = new Date(newStartTime);
