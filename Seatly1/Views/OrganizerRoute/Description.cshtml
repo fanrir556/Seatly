@@ -1,0 +1,110 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>新增活動</title>
+</head>
+
+<body>
+
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+        <section class="py-8 overflow-hidden">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 class="text-start text-md-center mb-3">活動描述</h1>
+                        </div>
+                        <div class="col-12">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                圖片上傳
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">圖片上傳</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">從裝置中選取圖片</button>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content" id="pills-tabContent">
+                                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                                                    <div class="col-12 col-md-9 mb-3">
+                                                        @* 顯示圖片預覽 *@
+                                                        <img style="width:320px;height:240px" id="preview" src="~/images/NoImage.jpg" class="img-fluid mb-3">
+                                                        <input type="file" id="imageInput" name="imageInput" class="form-control" aria-label="file example"
+                                                               placeholder="請上傳圖片" required>
+                                                        <div class="invalid-feedback">
+                                                            請選擇要上傳的圖片
+                                                        </div>
+                                                            <p></p>
+                                                        <button type="button" onclick="uploadpicture()" class="btn btn-primary btn-sm m-2">上傳</button>
+                                                        <button type="button" onclick="clearImage()" class="btn btn-primary btn-sm">清除圖片</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">關閉</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <!--編輯區-->
+                        <div class="col-12">
+                            <!--開頭-->
+                            <textarea id="editor">
+
+                            </textarea>
+                            <!--結尾-->
+
+                            <br />
+                            <button onclick="submitForm()">提交</button>
+                        </div>
+                        <!--編輯區-->
+                    </div>
+                    <!-- 表單 end -->
+                </div>
+            <!-- col-8 end -->
+        </section>
+
+    </main>
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    @section Scripts {
+
+        <script src="https://unpkg.com/axios@1.6.8/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="~/lib/ckbulid/build/ckeditor.js"></script>
+        <script src="~/js/DescriptionEdit.js"></script>
+    }
+</body>
+
+</html>

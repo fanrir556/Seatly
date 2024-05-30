@@ -105,7 +105,7 @@ function read(activity) {
             <div class="card">
                 <img src="${e.target.result}" style="height: 200px;  width: 150px;" class="d-block w-100 card-img-top" alt="https://placehold.co/300x250" onclick="viewActivity(${activity.activityId})">
                 <div class="card-body">
-                    <p class="card-text">${activity.startTime} - ${activity.endTime}</p>
+                    <p class="card-text"> ${activity.startTime} ~ ${activity.endTime}</p>
                     <h5 class="card-title">${activity.activityName}</h5>
                     <button onclick="viewActivity(${activity.activityId})" class="btn btn-primary mt-3">進入活動</button>
                 </div>
