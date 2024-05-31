@@ -57,6 +57,9 @@ const MGCheck = () => {
         if (data !== "false") {
             sessionStorage.setItem("isManager","true");
         }
+        else{
+            sessionStorage.removeItem("isManager");
+        }
     })
     .catch(err => console.error('Error fetching MG status:', err.message));
 

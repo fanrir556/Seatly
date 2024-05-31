@@ -197,14 +197,14 @@
       <section v-else-if="strPoint == 'pointsShop' && !isLoading" v-cloak>
         <div>
           <button class="btn btn-gradient mb-2 me-1 btn-cate"
-            @@click="searchTerm.cate = null;searchTerm.keyword = null;this.$refs.pdSearch.value = '';showProducts()">全部</button>
+            @@click="searchTerm.cate = null; searchTerm.keyword = null; searchTerm.pgNum = 1; this.$refs.pdSearch.value = '';showProducts()">全部</button>
           @* <button
           v-for="cate in results.shops.map(shop => shop.category).filter((value, index, self) => self.indexOf(value)
           === index)"
           :key="cate" class="btn btn-gradient mb-2 me-1 btn-cate"
           @@click="searchTerm.cate = cate; showProducts()">{{cate}}</button> *@
           <button v-for="cate in results.sList" :key="cate" class="btn btn-gradient mb-2 me-1 btn-cate"
-            @@click="searchTerm.cate = cate;searchTerm.keyword = null;this.$refs.pdSearch.value = '';showProducts()">{{cate}}</button>
+            @@click="searchTerm.cate = cate; searchTerm.keyword = null; searchTerm.pgNum = 1; this.$refs.pdSearch.value = '';showProducts()">{{cate}}</button>
         </div>
 
         <div class="d-flex align-items-center">
@@ -275,7 +275,7 @@
                   <tr v-if="isAdding" class="align-middle" id="newPd">
                     <td></td>
                     <td>
-                      <img :src="noImgUrl" class="img-fluid rounded" style="width: 100px" alt="..." title=".." />
+                      <img :src="noImgUrl" class="img-fluid rounded mb-1" style="width: 100px" alt="..." title=".." />
                       <input class="form-control p-0 pimg" type="file" accept="image/*" @@change="addPd($event)" />
                     </td>
                     <td><input class="form-control p-0 text-center ms-auto me-auto" style="width: 120px" type="text"
@@ -309,7 +309,7 @@
         } in results.shops" :key="productId" class="align-middle">
                     <td>{{productId}}</td>
                     <td>
-                      <img :src="productImage" class="img-fluid rounded" style="width: 100px" :alt="productName"
+                      <img :src="productImage" class="img-fluid rounded mb-1" style="width: 100px" :alt="productName"
                         :title="productName" />
                       <input class="form-control p-0 pimg" type="file" accept="image/*"
                         @@change="editPds(productId,`productImage`,$event)" />
@@ -552,7 +552,7 @@
               @@click="searchTerm.keyword = null;this.$refs.pdSearch.value = '';showCoupons()">清除搜尋</button>
           </div>
         </section>
-        <div class="d-flex justify-content-end align-items-center">
+        <div v-if="results.totalPg >= 1" class="d-flex justify-content-end align-items-center">
           <span class="me-2">每頁顯示<select v-model="searchTerm.pgSize" @@change="showCoupons()">
               <option value="10">10</option>
               <option value="25">25</option>
@@ -1005,6 +1005,8 @@
             isMg.value = datas.isMg;
             await sessionStorage.setItem('pShop', JSON.stringify(datas));
 
+            results.shops = searchTerm.cate != null ? results.shops.filter((shop) => shop.category == searchTerm.cate) : results.shops;
+
             results.shops = searchTerm.keyword
               ? results.shops.filter((shop) => shop.productName.toLowerCase().includes(searchTerm.keyword.toLowerCase()))
               : results.shops;
@@ -1014,9 +1016,11 @@
           else {
             const datas = await JSON.parse(sessionStorage.getItem('pShop'));
 
+            results.shops = searchTerm.cate != null ? datas.shops.filter((shop) => shop.category == searchTerm.cate) : datas.shops;
+
             results.shops = searchTerm.keyword
-              ? datas.shops.filter((shop) => shop.productName.toLowerCase().includes(searchTerm.keyword.toLowerCase()))
-              : datas.shops;
+              ? results.shops.filter((shop) => shop.productName.toLowerCase().includes(searchTerm.keyword.toLowerCase()))
+              : results.shops;
 
             var totalCount = results.shops.length;
             var totalPages = Math.ceil(totalCount / pageSize);
@@ -1026,8 +1030,6 @@
             results.dNames = datas.dNames;
             isMg.value = datas.isMg;
           }
-
-          results.shops = searchTerm.cate != null ? results.shops.filter((shop) => shop.category == searchTerm.cate) : results.shops;
 
           results.shops.sort((a, b) => {
             switch (searchTerm.sortBy) {
@@ -1562,8 +1564,8 @@
               isMg.value = datas.isMg;
               await sessionStorage.setItem('trans', JSON.stringify(datas));
 
-              if (strPoint.value == 'coupon' && isMg.value == false) {
-                results.trans = results.trans.filter(t => t.memberId == results.userId && t.active == true);
+              if (isMg.value == false) {
+                results.trans = strPoint.value == 'coupon' ? results.trans.filter(t => t.memberId == results.userId && t.active == true) : results.trans.filter(t => t.memberId == results.userId);
               }
               else if (searchTerm.keyword != null) {
                 if (searchTerm.searchBy == 'id') {
@@ -1596,9 +1598,6 @@
               else {
                 results.trans = datas.trans;
               }
-              var totalCount = results.trans.length;
-              var totalPages = Math.ceil(totalCount / pageSize);
-              results.totalPg = totalPages;
               results.sList = datas.sList1;
               results.iList = datas.iList1;
               results.dNames = datas.dNames;
@@ -1609,6 +1608,10 @@
                 shop.productImage = @Url.Content("~/images/") + shop.productImage
               });*/
             }
+
+            var totalCount = results.trans.length;
+            var totalPages = Math.ceil(totalCount / pageSize);
+            results.totalPg = totalPages;
 
             results.trans.sort((a, b) => {
               switch (searchTerm.sortBy) {
@@ -1893,7 +1896,7 @@
           } else {
             firstPage.value = false
           }
-          if (searchTerm.pgNum === results.totalPg) {
+          if (searchTerm.pgNum >= results.totalPg) {
             lastPage.value = true
           } else {
             lastPage.value = false
