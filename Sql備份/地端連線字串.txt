@@ -1,0 +1,4 @@
+"ConnectionStrings": {
+  "DefaultConnection": "Server=.;Database=Seatly;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "Seatly": "Data Source=.;Initial Catalog=Seatly;TrustServerCertificate=True;Integrated Security=true"
+},
