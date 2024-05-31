@@ -1146,7 +1146,7 @@
                 exchangeModal.modalInstance.hide();
               }, 700);
             }).catch(err => {
-              alert(err);
+              console.err(err);
             });
           }
         };
@@ -1241,7 +1241,7 @@
                   delete p.file;
                   delete p.edited;
                 }).catch(function (err) {
-                  alert(err);
+                  console.err(err);
                 });
               });
             }
@@ -1264,7 +1264,7 @@
                 }
               }).then(function (response) {
                 var count = pShop.length;
-                //alert(`${count}筆資料已修改`);
+                //console.err(`${count}筆資料已修改`);
                 toastHeader.innerHTML = `<strong class="me-auto">修改資料成功</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
                 toastBody.textContent = `${count}筆資料已修改`;
                 removeSaveLoading();
@@ -1276,7 +1276,7 @@
                 sessionStorage.setItem('transEdited', 'true');
                 showProducts();
               }).catch(function (err) {
-                alert(err);
+                console.err(err);
               });
             }
           }
@@ -1431,7 +1431,7 @@
               }).then(function (response) {
                 delete newPd.file;
               }).catch(function (err) {
-                alert(err);
+                console.err(err);
               });
             }
             pShop.push(newPd);
@@ -1444,7 +1444,7 @@
               }
             }).then(function (response) {
               var count = pShop.length;
-              //alert(`${count}筆資料已新增`);
+              //console.err(`${count}筆資料已新增`);
               toastHeader.innerHTML = `<strong class="me-auto">新建資料成功</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
               toastBody.textContent = `${count}筆資料已新增`;
               removeSaveLoading();
@@ -1459,7 +1459,7 @@
               sessionStorage.setItem('transEdited', 'true');
               showProducts();
             }).catch(function (err) {
-              alert(err);
+              console.err(err);
             });
           }
           else {
@@ -1496,7 +1496,7 @@
                 }).then(function (response) {
                   // console.log(response);
                 }).catch(function (err) {
-                  alert(err);
+                  console.err(err);
                 });
               };
 
@@ -1518,7 +1518,7 @@
                 sessionStorage.setItem('transEdited', 'true');
                 showProducts();
               }).catch(function (err) {
-                alert(err);
+                console.err(err);
               });
             }
             else {
@@ -1689,7 +1689,7 @@
             couponRes.value = URL.createObjectURL(blob);
             sessionStorage.setItem('transEdited', 'true');
           }).catch(err => {
-            alert(err);
+            console.err(err);
           });
         }
         //------------優惠券方法------------
@@ -1716,7 +1716,7 @@
               }
             }).then(function (response) {
               var count = pTrans.length;
-              //alert(`${count}筆資料已修改`);
+              //console.err(`${count}筆資料已修改`);
               toastHeader.innerHTML = `<strong class="me-auto">修改資料成功</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
               toastBody.textContent = `${count}筆資料已修改`;
               removeSaveLoading();
@@ -1725,7 +1725,7 @@
               sessionStorage.setItem('transEdited', 'true');
               showCoupons();
             }).catch(function (err) {
-              alert(err);
+              console.err(err);
             });
           }
         };
@@ -1796,7 +1796,7 @@
                 }
               }).then(function (response) {
                 var count = pTrans.length;
-                //alert(`${count}筆資料已新增`);
+                //console.err(`${count}筆資料已新增`);
                 toastHeader.innerHTML = `<strong class="me-auto">新增資料成功</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
                 toastBody.textContent = `${count}筆資料已新增`;
                 removeSaveLoading();
@@ -1809,7 +1809,7 @@
                 sessionStorage.setItem('transEdited', 'true');
                 showCoupons();
               }).catch(function (err) {
-                alert(err);
+                console.err(err);
               });
             }
           }
@@ -1842,7 +1842,7 @@
                 sessionStorage.setItem('transEdited', 'true');
                 showCoupons();
               }).catch(function (err) {
-                alert(err);
+                console.err(err);
               });
             }
             else {
