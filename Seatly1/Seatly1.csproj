@@ -69,6 +69,7 @@
     <Folder Include="Data\Migrations\" />
     <Folder Include="wwwroot\src\router\" />
     <Folder Include="wwwroot\uploads\" />
+    <Folder Include="wwwroot\uploads\organizers\" />
   </ItemGroup>
 
   <ItemGroup>
