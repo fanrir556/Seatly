@@ -55,6 +55,21 @@ var vueApp = {
         },
     },
     methods: {
+        // demo用一鍵輸入
+        demo() {
+            this.StartTime = "2024/05/31-04:24";
+            this.EndTime = "2024/06/04-04:24";
+            this.Capacity= "";
+            this.ActivityName= "";
+            this.ActivityMethod = "";
+            this.hashtag1 = "";
+            this.hashtag2 = "";
+            this.hashtag3 = "";
+            this.hashtag4 = "";
+            this.hashtag5 = "";
+            this.location = "";
+            this.LocationDescrption = "";
+        },
         // 活動開始必須早於結束時間
         getOrganizerId() {
             // 透過Session取得活動方的id
