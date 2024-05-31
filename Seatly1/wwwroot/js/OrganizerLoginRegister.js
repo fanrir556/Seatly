@@ -172,7 +172,7 @@ $('#registerForm').submit(function (event) {
             });
         }).then(function (result) {
             alert(result.data);
-            // 註冊成功，重定向到登入頁面
+            // 註冊成功，重定向到首頁
             window.location.href = '/';
         }).catch(function (error) {
             if (error.response) {
