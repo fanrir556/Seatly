@@ -92,6 +92,7 @@
                         if (result.Trans[0].Active) {
                             toastHeader.innerHTML = `<strong class="me-auto">兌換成功!</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
                             toastBody.textContent = `優惠券可使用`;
+                            sessionStorage.setItem('transEdited', 'true');
                         }
                         else {
                             toastHeader.innerHTML = `<strong class="me-auto">兌換失敗!</strong><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`
