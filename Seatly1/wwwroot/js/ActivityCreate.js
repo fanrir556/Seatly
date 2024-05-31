@@ -55,20 +55,20 @@ var vueApp = {
         },
     },
     methods: {
-        // demo用一鍵輸入
+        // demo用一鍵輸入資料
         demo() {
-            this.StartTime = "2024/05/31-04:24";
-            this.EndTime = "2024/06/04-04:24";
-            this.Capacity= "";
-            this.ActivityName= "";
-            this.ActivityMethod = "";
-            this.hashtag1 = "";
-            this.hashtag2 = "";
-            this.hashtag3 = "";
-            this.hashtag4 = "";
-            this.hashtag5 = "";
-            this.location = "";
-            this.LocationDescrption = "";
+            this.StartTime = "2024-05-31T10:00";
+            this.EndTime = "2024-05-31T15:30";
+            this.Capacity= "30";
+            this.ActivityName = "安平樹屋導覽解說";
+            this.ActivityMethod = "排隊";
+            this.hashtag1 = "戶外體驗";
+            this.hashtag2 = "親子";
+            this.hashtag3 = "其他生活娛樂";
+            this.hashtag4 = "其他學習成長";
+            this.hashtag5 = "公益";
+            this.location = "台南";
+            this.LocationDescrption = "708台南市安平區古堡街104號";
         },
         // 活動開始必須早於結束時間
         getOrganizerId() {
