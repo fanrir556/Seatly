@@ -108,7 +108,7 @@ var vueApp = {
                     formData.append('StartTime', self.StartTime);
                     formData.append('EndTime', self.EndTime);
                     formData.append('Capacity', 0);
-                    formData.append('ActivityName', null);
+                    formData.append('ActivityName', self.ActivityName);
                     formData.append('ActivityMethod', self.ActivityMethod);
                     formData.append('isActivity', true); // 預設啟用活動
                     formData.append('Location', self.location);
