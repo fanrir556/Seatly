@@ -119,10 +119,10 @@ namespace Seatly1.Controllers
             {
                 _context.CollectionItems.Add(collectionItem);
                 await _context.SaveChangesAsync();
-                return Json(new { success = true, message = "收藏成功!" }); // 返回有效的 JSON 响应
+                return Json(new { success = true, message = "收藏成功!" }); 
             }
 
-            return Json(new { success = false, error = "模型驗證失敗" }); // 返回错误详情的 JSON 响应
+            return Json(new { success = false, error = "模型驗證失敗" }); 
         }
 
         // 移除收藏
