@@ -70,22 +70,23 @@
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
+        /* 手機瀏覽RWD */
         @@media (max-width: 576px) {
         .card-span {
-            padding: 0 8px; /* 缩小卡片之间的间距 */
+            padding: 0 8px; /* 卡片間距 */
         }
         .card-span img {
             height: auto;
         }
         .card-body h5 {
-            font-size: 0.875rem; /* 调整标题字体大小 */
+            font-size: 0.875rem; /* 標題字體大小 */
         }
         .card-body span, .card-body p {
-            font-size: 0.75rem; /* 调整文字字体大小 */
+            font-size: 0.75rem; /* 文字字體大小 */
         }
         .btn {
-            font-size: 0.75rem; /* 调整按钮字体大小 */
-            padding: 0.25rem 0.5rem; /* 调整按钮的填充 */
+            font-size: 0.75rem; /*  按鈕字體大小 */
+            padding: 0.25rem 0.5rem; /* 按鈕padding */
         }
     }
     </style>
@@ -739,6 +740,7 @@
         }
         Vue.createApp(vueApp).mount("#hotItems");
 
+        // 若沒輸入搜尋字串時不會跳轉
         document.getElementById("customSearchButton").addEventListener("click", function (event) {
             var input = document.getElementById("inputDelivery").value;
             if (!input) {
