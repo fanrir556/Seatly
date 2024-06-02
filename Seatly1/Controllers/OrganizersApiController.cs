@@ -68,6 +68,7 @@ namespace Seatly1.Controllers
 
             return activities;
         }
+
         // 根據活動id取得活動資訊
         [HttpGet("activity/{activityid}")]
         public async Task<NotificationRecordDTO?> GetActivity(int activityid)
