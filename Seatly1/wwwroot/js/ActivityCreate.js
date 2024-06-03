@@ -3,18 +3,18 @@
 var vueApp = {
     data() {
         return {
-            StartTime: null,
-            EndTime: null,
-            Capacity: null,
-            ActivityName: null,
-            ActivityMethod: null,
-            hashtag1: null,
-            hashtag2: null,
-            hashtag3: null,
-            hashtag4: null,
-            hashtag5: null,
-            location: null,
-            LocationDescrption: null,
+            StartTime: '',
+            EndTime: '',
+            Capacity: '',
+            ActivityName: '',
+            ActivityMethod: '',
+            hashtag1: '',
+            hashtag2: '',
+            hashtag3: '',
+            hashtag4: '',
+            hashtag5: '',
+            location: '',
+            LocationDescrption: '',
         };
     },
     watch: {
@@ -55,6 +55,21 @@ var vueApp = {
         },
     },
     methods: {
+        // demo用一鍵輸入資料
+        demo() {
+            this.StartTime = "2024-05-31T10:00";
+            this.EndTime = "2024-05-31T15:30";
+            this.Capacity= "30";
+            this.ActivityName = "安平樹屋導覽解說";
+            this.ActivityMethod = "排隊";
+            this.hashtag1 = "戶外體驗";
+            this.hashtag2 = "親子";
+            this.hashtag3 = "其他生活娛樂";
+            this.hashtag4 = "其他學習成長";
+            this.hashtag5 = "公益";
+            this.location = "台南";
+            this.LocationDescrption = "708台南市安平區古堡街104號";
+        },
         // 活動開始必須早於結束時間
         getOrganizerId() {
             // 透過Session取得活動方的id
@@ -102,13 +117,13 @@ var vueApp = {
                 console.log(self.ActivityMethod);
 
                 if (self.ActivityMethod == '公告') {
-                    // 活動方法為公告時，FormData不讀取活動名稱跟活動人數上限的資料
+                    // 活動方法為公告時，FormData不讀取活動人數上限的資料
                     formData.append('OrganizerId', organizeridInt);
                     formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
                     formData.append('StartTime', self.StartTime);
                     formData.append('EndTime', self.EndTime);
                     formData.append('Capacity', 0);
-                    formData.append('ActivityName', null);
+                    formData.append('ActivityName', self.ActivityName);
                     formData.append('ActivityMethod', self.ActivityMethod);
                     formData.append('isActivity', true); // 預設啟用活動
                     formData.append('Location', self.location);

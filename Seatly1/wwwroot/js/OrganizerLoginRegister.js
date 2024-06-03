@@ -4,6 +4,18 @@
 
 /* 預覽上傳圖片 */
 
+// demo用一鍵輸入資料
+function demo() {
+    // 获取用户输入的注册表单信息
+    $('#account').val('TainanTraval');
+    $('#name').val('台南旅遊網');
+    $('#URL').val('https://www.twtainan.net/');
+    $('#email').val('tainantraval@gmail.com');
+    $('#phone').val('0966111555');
+    $('#password1').val('Pass0rd-iii');
+    $('#password2').val('Pass0rd-iii');
+}
+
 // 引用自：https://codepen.io/tohousanae/pen/mdgzYxZ
 $(function () {
     $('#imageInput').on('change', function (event) {
@@ -65,12 +77,8 @@ $('#registerForm').submit(function (event) {
     // 获取用户输入的注册表单信息
     let account = $('#account').val();
     let name = $('#name').val();
-    let category = $('#category').val();
     let photo;
-    let menu = $('#menu').val();
-    let address = $('#address').val();
     let url = $('#URL').val();
-    let hashtag = $('#hashtag').val();
     let email = $('#email').val();
     let phone = $('#phone').val();
     let password1 = $('#password1').val();
@@ -156,12 +164,8 @@ $('#registerForm').submit(function (event) {
                     OrganizerAccount: account,
                     LoginPassword: password1,
                     OrganizerName: name,
-                    OrganizerCategory: category,
                     OrganizerPhoto: photo, // 使用新的文件名
-                    Menu: menu,
-                    Address: address,
                     ReservationUrl: url,
-                    Hashtag: hashtag,
                     Email: email,
                     Phone: phone,
                     Validation: validation
@@ -172,7 +176,7 @@ $('#registerForm').submit(function (event) {
             });
         }).then(function (result) {
             alert(result.data);
-            // 註冊成功，重定向到登入頁面
+            // 註冊成功，重定向到首頁
             window.location.href = '/';
         }).catch(function (error) {
             if (error.response) {

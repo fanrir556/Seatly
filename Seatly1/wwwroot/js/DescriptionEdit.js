@@ -88,7 +88,7 @@ function uploadpicture() {
 
         // 使用 getData 方法來獲取當前的內容，然後再添加新的內容
         var currentData = editor.getData();
-        editor.setData(currentData + `<img src="../../../uploads/description/${fileName}" alt="描述圖片內容">`); // 添加圖檔
+        editor.setData(currentData + `<img alt="描述圖片內容" src="../../../uploads/description/${fileName}">`); // 添加圖檔
 
     }).then(function (result) {
         console.log(result);

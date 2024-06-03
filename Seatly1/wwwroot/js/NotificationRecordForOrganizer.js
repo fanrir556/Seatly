@@ -99,6 +99,7 @@ function read(activity) {
 
     fileReader.onload = e => {
         // 點擊圖片時進入活動資訊頁面，傳遞活動的 ID
+        // HashTag部分已三元運算子 ? : 來檢查 activity.hashTag1 到 activity.hashTag5 的值是否存在。如果存在，就印出 # 加上該值；如果不存在，我們就印出空字串，就能讓空的HashTag不印出。
         const card = document.createElement('div');
         card.className = 'col-12 col-md-4 col-lg-3 mb-5';
         card.innerHTML = `
@@ -110,7 +111,7 @@ function read(activity) {
                     <button onclick="viewActivity(${activity.activityId})" class="btn btn-primary mt-3">進入活動</button>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">#${activity.hashTag1} #${activity.hashTag2} #${activity.hashTag3} #${activity.hashTag4} #${activity.hashTag5}</li>
+                    <li class="list-group-item">${activity.hashTag1 ? '#' + activity.hashTag1 : ''} ${activity.hashTag2 ? '#' + activity.hashTag2 : ''} ${activity.hashTag3 ? '#' + activity.hashTag3 : ''} ${activity.hashTag4 ? '#' + activity.hashTag4 : ''} ${activity.hashTag5 ? '#' + activity.hashTag5 : ''}</li>
                 </ul>
             </div>
         `;
@@ -118,6 +119,7 @@ function read(activity) {
     };
     fileReader.readAsDataURL(activityPhoto);
 }
+
 
 // 二進位字串轉換成 blob 物件
 function binaryStringToBlob(binaryString, contentType) {
