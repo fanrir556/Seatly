@@ -21,6 +21,10 @@ azure:
 queuely
 P@ssw0rd-iii
 
+certbot certonly --standalone -d queuely.online -d www.queuely.online
+certbot certonly --manual -m queuely139@outlook.com -d queuely.online -d *.queuely.online
+certbot certonly --manual --preferred-challenges http -m queuely139@outlook.com -d queuely.online
+
 "ConnectionStrings": {
   "DefaultConnection": "Server=(localdb)\\ProjectModels;Database=Seatly;Trusted_Connection=True;MultipleActiveResultSets=true",
   "Seatly": "Data Source=(localdb)\\ProjectModels;Initial Catalog=Seatly;TrustServerCertificate=True;Integrated Security=true"
