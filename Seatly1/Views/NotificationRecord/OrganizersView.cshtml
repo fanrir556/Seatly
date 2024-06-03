@@ -144,24 +144,15 @@
                     <!--按鈕框框-->
                     <!--判斷是不是公告-->
                     <!--不是公告就排隊-->
-                    <div v-if="Activity.activityMethod !== '公告'" class="col-3">
+                    <div class="col-3">
                         <div class="joinBlock text-center">
                             <div style="border:3px solid pink; border-radius:8px; padding:0;">
                                 <p class="m-0 bg-primary waitingnumber">
                                     活動人數
                                 </p>
-                                <p style="padding:10px 5px 5px; margin-bottom:5px;">
-                                    {{ book.waitingNumber }}/{{ Activity.capacity }}
-                                </p>
                             </div>
-                            <button class="btn btn-sm btn-primary w-100 mt-2" v-if="canJoinActivity" @@click="joinclick">加入活動</button>
-                            <p v-else class="text-danger mt-2">活動已滿，無法加入</p>
+                            <button class="btn btn-sm btn-primary w-100 mt-2" @@click="outclick">回到上一頁</button>
                         </div>
-                    </div>
-
-                    <!--是公告就寫廢話-->
-                    <div v-else class="col-3">
-
                     </div>
 
 
@@ -272,43 +263,12 @@
                 },
 
                 // 加入按鈕
-                joinclick: function () {
+                outclick: function () {
                     let _this = this;
-                    const Aid = sessionStorage.getItem("ActID");
-                    // alert(Aid)
-                    // get/Confirm/Index
-                    axios.get(`/Confirm/Index?NId=${Aid}`)
-                        .then(res => {
-                            // 根據回應的狀態進行不同處理
-                            switch (res.data.status) {
-                                case 'UserAlreadyBooked':
-                                    alert(res.data.message);
-                                    window.location.href = res.data.url;
-                                    break;
 
-                                case 'ActivityFull':
-                                    alert(res.data.message);
-                                    window.location.href = res.data.url;
-                                    break;
+                    window.location.href = "/OrganizerRoute/NotificationRecord"
 
-                                case 'Success':
-                                    window.location.href = res.data.url;
-                                    break;
-
-                                case 'NotAuthenticated':
-                                    alert(res.data.message);
-                                    window.location.href = `${window.location.origin}/Identity/Account/Login`;
-                                    break;
-
-                                default:
-                                    alert("發生未知錯誤，請稍後再試");
-                                    break;
-                            }
-                        })
-                        .catch(err => {
-                            console.error("Error during joinclick:", err);
-                            alert("發生錯誤，請稍後再試");
-                        });
+                        
                 },
 
             },

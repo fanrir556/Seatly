@@ -64,7 +64,7 @@ namespace Seatly1.Controllers
             }
             else
             {
-                return Json(new { status = "NotAuthenticated", message = "請先登入", url = "https://localhost:7271/Identity/Account/Login" });
+                return Json(new { status = "NotAuthenticated", message = "請先登入" });
             }
         }
 

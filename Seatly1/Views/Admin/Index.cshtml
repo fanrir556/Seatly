@@ -104,7 +104,23 @@
         //進主頁就換
         $(function () {
             const AdminID = sessionStorage.getItem("AdminID");
-            $(`#${AdminID}`).trigger("click");
+            let manager = sessionStorage.getItem("isManager");
+
+            if (manager == null) {
+                alert("你不是管理員喔")
+                window.location.href = "Home/Index";
+            }
+
+            else { 
+                if (AdminID !== null) {
+                    $(`#${AdminID}`).trigger("click");
+                }
+                else {
+                    $(`#Notification`).trigger("click");
+                }
+            }
+
+
         });
 
         // //---------------主要頁面結尾------------------------------
