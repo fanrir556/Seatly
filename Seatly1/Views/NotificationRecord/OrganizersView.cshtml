@@ -61,7 +61,7 @@
 <div>
     <div class="container" id="app">
 
-        <div class="B" >
+        <div class="B" v-if="Activity">
             <img :src="ActivityPhotoSrc" alt="封面照片" class="coverPhoto" v-if="ActivityPhotoSrc" />
             <img src="@Url.Content("~/images/NoImage.jpg")" title="NoImage" class="coverPhoto" v-else />
             <!--
@@ -146,11 +146,6 @@
                     <!--不是公告就排隊-->
                     <div class="col-3">
                         <div class="joinBlock text-center">
-                            <div style="border:3px solid pink; border-radius:8px; padding:0;">
-                                <p class="m-0 bg-primary waitingnumber">
-                                    活動人數
-                                </p>
-                            </div>
                             <button class="btn btn-sm btn-primary w-100 mt-2" @@click="outclick">回到上一頁</button>
                         </div>
                     </div>

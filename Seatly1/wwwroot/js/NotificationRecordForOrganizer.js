@@ -108,7 +108,7 @@ function read(activity) {
                 <div class="card-body">
                     <p class="card-text"> ${activity.startTime} ~ ${activity.endTime}</p>
                     <h5 class="card-title">${activity.activityName}</h5>
-                    <button onclick="viewActivity" btn-id=${activity.activityId} class="btn btn-primary mt-3">進入活動</button>
+                    <button onclick="viewActivity()" btn-id="${activity.activityId}" class="btn btn-primary mt-3">進入活動</button>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">${activity.hashTag1 ? '#' + activity.hashTag1 : ''} ${activity.hashTag2 ? '#' + activity.hashTag2 : ''} ${activity.hashTag3 ? '#' + activity.hashTag3 : ''} ${activity.hashTag4 ? '#' + activity.hashTag4 : ''} ${activity.hashTag5 ? '#' + activity.hashTag5 : ''}</li>
@@ -167,7 +167,7 @@ function viewActivity( ) {
     //設置session
     sessionStorage.setItem("ActID", btnId);
 
-    window.location.href = `NotificationRecord/OrganizersView`;
+    window.location.href = `/NotificationRecord/OrganizersView`;
 }
 
 // 新增活動

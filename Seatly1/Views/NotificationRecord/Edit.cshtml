@@ -16,6 +16,7 @@
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ActivityId" value="@Model.ActivityId" readonly/>
+
             <div class="form-group">
                 <label asp-for="OrganizerId" class="control-label"></label>
                 <input asp-for="OrganizerId" class="form-control" readonly />
@@ -327,29 +328,56 @@
 
     //----------------------------------------
 
-    $("#check").click(function () {
+    $("#check").click(function (event) {
         // 從事件對象(event object)中取得觸發事件的按鈕元素
         const btn = event.target;
         // 從按鈕元素中取得自定義屬性"btn-id"
         const btnId = btn.getAttribute("btn-id");
-        // alert(btnId)
         sessionStorage.removeItem("ActID");
         sessionStorage.setItem("ActID", btnId);
-        // alert("check")
         $.ajax({
             type: "GET",
             url: `@Url.Action("_Check", "Admin")`
         }).done(function (data) {
             $("#adminBody").html(data);
-
+        });
+    });
     //----------------------------------------
 
 
     // 設置 HashTag 的初始值並設置為選中狀態
     $(document).ready(function () {
-        $("#HashTag1Select").val("@Model.HashTag1");
-        $("#HashTag2Select").val("@Model.HashTag2");
-        $("#HashTag3Select").val("@Model.HashTag3");
-        $("#HashTag4Select").val("@Model.HashTag4");
-        $("#HashTag5Select").val("@Model.HashTag5");
-    });
+
+        // console.log("@Model.HashTag1")
+        // console.log("@Model.HashTag2")
+        // console.log("@Model.HashTag3")
+        // console.log("@Model.HashTag4")
+        // console.log("@Model.HashTag5")
+            // $("#HashTag1Select").val(@Model.HashTag1);
+            // $("#HashTag2Select").val(@Model.HashTag2);
+            // $("#HashTag3Select").val(@Model.HashTag3);
+            // $("#HashTag4Select").val(@Model.HashTag4);
+            // $("#HashTag5Select").val(@Model.HashTag5);
+        })
+  
+
+
+    //-----------------------------------------
+    function Load() {
+        $("#dancingtime").show();
+        $.ajax({
+            type: "GET",
+            url: `@Url.Action("_NotificationRecord", "Admin")`
+        }).done(function (data) {
+            $("#adminBody").html(data);
+            $("#dancingtime").hide();
+        }).fail(function (err) {
+            alert(err.responseText);
+            $("#dancingtime").hide();
+        });
+    }
+
+
+
+
+</script>

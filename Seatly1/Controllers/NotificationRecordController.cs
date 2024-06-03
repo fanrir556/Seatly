@@ -135,7 +135,6 @@ namespace Seatly1.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit([Bind("ActivityId,OrganizerId,ActivityPhoto,StartTime,EndTime,Capacity,ActivityName,DescriptionN,IsRecurring,RecurringTime,ActivityMethod,Location,LocationDescription,IsActivity,HashTag1,HashTag2,HashTag3,HashTag4,HashTag5")] NotificationRecord notificationRecord)
 
-
         {
             NotificationRecord nr = await _context.NotificationRecords.FindAsync(notificationRecord.ActivityId);
 
