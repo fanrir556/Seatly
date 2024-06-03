@@ -7,13 +7,13 @@
 // demo用一鍵輸入資料
 function demo() {
     // 获取用户输入的注册表单信息
-    $('#account').val() = 'TainanTraval';
-    $('#name').val() = '台南旅行團';
-    $('#URL').val() = 'https://www.twtainan.net/';
-    $('#email').val() = 'tainantraval@gmail.com';
-    $('#phone').val() = '0966111555';
-    $('#password1').val() = 'Pass0rd-iii';
-    $('#password2').val() = 'Pass0rd-iii';
+    $('#account').val('TainanTraval');
+    $('#name').val('台南旅遊網');
+    $('#URL').val('https://www.twtainan.net/');
+    $('#email').val('tainantraval@gmail.com');
+    $('#phone').val('0966111555');
+    $('#password1').val('Pass0rd-iii');
+    $('#password2').val('Pass0rd-iii');
 }
 
 // 引用自：https://codepen.io/tohousanae/pen/mdgzYxZ
