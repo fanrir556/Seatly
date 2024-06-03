@@ -9,7 +9,6 @@ ClassicEditor
     .catch(error => {
         console.error(error);
     });
-
 function getOrganizerId() {
     // 透過Session取得活動方的id
     let organizerid = sessionStorage.getItem("OrganizerId");
