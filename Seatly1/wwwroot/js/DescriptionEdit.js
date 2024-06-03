@@ -1,9 +1,7 @@
 ﻿let editor;
 
 ClassicEditor
-    .create(document.querySelector('#editor')), {
-    plugins: [Image, ImageResizeEditing, ImageResizeHandles, /* ... */],
-    }
+    .create(document.querySelector('#editor'))
     .then(newEditor => {
         editor = newEditor;
         getDescription();
@@ -11,32 +9,6 @@ ClassicEditor
     .catch(error => {
         console.error(error);
     });
-
-const imageConfiguration = {
-    resizeOptions: [
-        {
-            name: 'resizeImage:original',
-            value: null,
-            label: 'Original'
-        },
-        {
-            name: 'resizeImage:custom',
-            label: 'Custom',
-            value: 'custom'
-        },
-        {
-            name: 'resizeImage:40',
-            value: '40',
-            label: '40%'
-        },
-        {
-            name: 'resizeImage:60',
-            value: '60',
-            label: '60%'
-        }
-    ],
-    toolbar: ['resizeImage', /* ... */]
-}
 function getOrganizerId() {
     // 透過Session取得活動方的id
     let organizerid = sessionStorage.getItem("OrganizerId");
