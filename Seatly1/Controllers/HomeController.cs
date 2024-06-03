@@ -86,10 +86,7 @@ namespace Seatly1.Controllers
             query = query.Where(p => p.IsActivity == true && p.EndTime > now);
 
             var hotItems = await query
-                .Where(r => r.HashTag1.Contains("HOT") ||
-                r.HashTag2.Contains("HOT") ||
-                r.HashTag3.Contains("HOT") ||
-                r.HashTag4.Contains("HOT") ||
+                .Where(r => 
                 r.HashTag5.Contains("HOT"))
                  .OrderBy(r => Guid.NewGuid()) // 隨機排序
                  .Take(10) // 選取10筆
