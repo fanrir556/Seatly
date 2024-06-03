@@ -108,7 +108,7 @@ function read(activity) {
                 <div class="card-body">
                     <p class="card-text"> ${activity.startTime} ~ ${activity.endTime}</p>
                     <h5 class="card-title">${activity.activityName}</h5>
-                    <button onclick="viewActivity(${activity.activityId})" class="btn btn-primary mt-3">進入活動</button>
+                    <button onclick="viewActivity" btn-id=${activity.activityId} class="btn btn-primary mt-3">進入活動</button>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">${activity.hashTag1 ? '#' + activity.hashTag1 : ''} ${activity.hashTag2 ? '#' + activity.hashTag2 : ''} ${activity.hashTag3 ? '#' + activity.hashTag3 : ''} ${activity.hashTag4 ? '#' + activity.hashTag4 : ''} ${activity.hashTag5 ? '#' + activity.hashTag5 : ''}</li>
@@ -120,6 +120,18 @@ function read(activity) {
     fileReader.readAsDataURL(activityPhoto);
 }
 
+///活動設置sessionStorage
+//activityConnect: function () {
+//    // alert("活動已觸發");
+//    // 從事件對象(event object)中取得觸發事件的按鈕元素
+//    const btn = event.target;
+//    // 從按鈕元素中取得自定義屬性"btn-id"
+//    const btnId = btn.getAttribute("btn-id");
+
+//    //設置session
+//    sessionStorage.removeItem("ActID");
+//    sessionStorage.setItem("ActID", btnId);
+//},
 
 // 二進位字串轉換成 blob 物件
 function binaryStringToBlob(binaryString, contentType) {
@@ -145,8 +157,17 @@ function binaryStringToBlob(binaryString, contentType) {
 }
 
 // 進入活動資訊頁面
-function viewActivity(activityId) {
-    window.location.href = `/OrganizerRoute/Activity/${activityId}`;
+function viewActivity( ) {
+
+    // alert("活動已觸發");
+    // 從事件對象(event object)中取得觸發事件的按鈕元素
+    const btn = event.target;
+    // 從按鈕元素中取得自定義屬性"btn-id"
+    const btnId = btn.getAttribute("btn-id");
+    //設置session
+    sessionStorage.setItem("ActID", btnId);
+
+    window.location.href = `NotificationRecord/OrganizersView`;
 }
 
 // 新增活動

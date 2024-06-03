@@ -290,6 +290,20 @@ namespace Seatly1.Controllers
 
 
 
+
+
+
+        //活動方頁面
+        //NotificationRecord/OrganizersView
+        [HttpGet]
+        public IActionResult OrganizersView() {
+        
+            return View();
+        }
+
+
+
+
         private bool NotificationRecordExists(int id)
         {
             return _context.NotificationRecords.Any(e => e.ActivityId == id);

@@ -158,9 +158,6 @@ app.MapControllerRoute(
     name: "ActivityEdit",
     pattern: "{controller=OrganizerRoute}/{action=ActivityEdit}/{id?}");
 
-app.MapControllerRoute(
-    name: "Activity",
-    pattern: "{controller=OrganizerRoute}/{action=Activity}/{id?}");
 
 app.MapRazorPages();
 

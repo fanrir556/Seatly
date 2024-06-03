@@ -70,7 +70,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="Validation" class="control-label"></label>
-                <input asp-for="Validation" class="form-control" />
+                <select asp-for="Validation" class="form-control">
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
                 <span asp-validation-for="Validation" class="text-danger"></span>
             </div>
             <div class="form-group">
