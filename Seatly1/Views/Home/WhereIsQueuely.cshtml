@@ -151,7 +151,7 @@
                     }
                     toast.show();
 
-                    if (!noCamara.value) {
+                    if (!noCamara.valu && html5QrCode.value.isScanning) {
                         html5QrCode.value.stop();
                     }
                 };
@@ -219,7 +219,9 @@
                         }
                     }
                     if (newNoCamara && !newCorrectMg) {
-                        html5QrCode.value.stop();
+                        if (html5QrCode.value.isScanning) {
+                            html5QrCode.value.stop();
+                        }
                         setTimeout(function () {
                             managerPw.focus();
                         }, 1)
