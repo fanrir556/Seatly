@@ -5,10 +5,9 @@
 1. [專案介紹](#專案介紹)
 2. [團隊成員與負責項目](#團隊成員與負責項目)
 3. [技術棧](#技術棧)
-4. [資料夾結構](#資料夾結構)
-5. [安裝與運行](#安裝與運行)
-6. [功能展示](#功能展示)
-7. [未來展望](#未來展望)
+4. [安裝與運行](#安裝與運行)
+5. [功能展示](#功能展示)
+6. [未來展望](#未來展望)
 
 ## 專案介紹
 
@@ -18,88 +17,38 @@ Queuely是一個提供活動宣傳和報到服務的整合平台。
 
 ## 團隊成員與負責項目
 
+### 湯其霖 [<img src="https://avatars.githubusercontent.com/fanrir556" width="50px" style="border-radius: 50%; vertical-align: middle; margin-left: 10px"/>](https://github.com/fanrir556)
+
+領導小組、統整意見及決策、專案開發時程管理、專案整合、使用者活動登記頁面、主辦方活動簽到頁面、活動資訊頁面、後台管理頁面開發
+
+### 周郁慈 [<img src="https://avatars.githubusercontent.com/yucichou" width="50px" style="border-radius: 50%; vertical-align: middle; margin-left: 10px"/>](https://github.com/yucichou)
+
+一般會員註冊登入、收藏清單、首頁、搜尋功能、Azure雲端架設
+
+### 邱泓穎 [<img src="https://avatars.githubusercontent.com/tohousanae" width="50px" style="border-radius: 50%; vertical-align: middle; margin-left: 10px"/>](https://github.com/tohousanae)
+
+廠商會員登入註冊、修改廠商資訊、活動CRUD、圖片上傳功能優化
+
 ### 施和融 [<img src="https://avatars.githubusercontent.com/twins0angel" width="50px" style="border-radius: 50%; vertical-align: middle; margin-left: 10px"/>](https://github.com/twins0angel)
 
-領導小組、統整意見及決策、專案開發時程管理、專案整合、資料庫構想、技術支援、導覽列頁尾視覺製作、遊戲電腦組裝系統前後台整體製作、前端整體路由及狀態管理、網站前後端部署
-
-### 王俊婕 [<img src="https://avatars.githubusercontent.com/Gina628" width="50px" style="border-radius: 50%; vertical-align: middle; margin-left: 10px"/>](https://github.com/Gina628)
-
-整體遊戲資訊抓取、每日定時更新、首頁製作、搜尋系統（關鍵字搜尋）、遊戲資訊系統前台後台視覺製作、技術支援
-
-### 李憶承 [<img src="https://avatars.githubusercontent.com/sr18893828" width="50px" style="border-radius: 50%; vertical-align: middle; margin-left: 10px"/>](https://github.com/sr18893828)
-
-會員管理系統、遊戲收藏管理系統、會員登入註冊、會員前後台視覺製作
+點數商城、每日簽到、小遊戲、優惠券、配色更改、管理者登入
 
 ## 技術棧
 
-- **前端**：Vue.js, Vue Router, Pinia, jQuery, Bootstrap
-- **後端**：ASP.NET Core Web API
+- **前端**：Vue.js, MVC, CSS, JavaScript, jQuery, Bootstrap
+- **後端**：MVC, ASP.NET Core
 - **資料庫**：Microsoft SQL Server, Entity Framework Core 8
-- **爬蟲技術**：C# (HtmlAgilityPack), Python (Request, BeautifulSoup)
 - **雲端平台**：Azure
 - **版本控制**：Git
 
-## 資料夾結構
-
-本專案初期為一個 ASP.NET Core MVC 項目，中期才全面轉換為 Vue.js、ASP.NET Core Web API 實作前後端分離的開發。
-
-```plaintext
-.
-├── SteamNexus/            # 初學 ASP.NET Core MVC 的項目
-│   ├── Controllers/       # 控制器
-│   ├── Models/            # 模型
-│   └── Views/             # 視圖
-├── steamnexus_client/     # 前端項目 (Vue.js)
-│   ├── src/               # 源代碼
-│   │   ├── assets/        # 資源文件 (圖片、樣式等)
-│   │   ├── components/    # Vue.js 組件
-│   │   ├── router/        # 路由設定 (Vue Router)
-│   │   ├── store/         # 狀態管理 (Pinia)
-│   │   ├── views/         # 視圖
-│   │   └── App.vue        # 主應用組件
-│   ├── public/            # 靜態資源
-│   ├── index.html         # 主 HTML 文件
-│   └── package.json       # 項目配置文件
-├── SteamNexus_Server/     # 後端項目 (ASP.NET Core Web API)
-│   ├── Controllers/       # 控制器
-│   ├── Models/            # 模型
-|   ├── Dtos/              # 數據傳輸對象 (DTOs)
-│   ├── Data/              # 數據庫上下文
-│   ├── Migrations/        # 數據庫遷移
-│   ├── Services/          # 服務
-│   ├── appsettings.json   # 應用程序設置
-│   └── Program.cs         # 程序入口
-└── README.md              # 說明文件
-```
-
 ## 安裝與運行
-
-### 前端 (Vue Project)
-
-1. 進入 `steamnexus_client` 資料夾：
-
-   ```bash
-   cd steamnexus_client
-   ```
-
-2. 安裝套件：
-
-   ```bash
-   npm install
-   ```
-
-3. 運行開發伺服器：
-
-   ```bash
-   npm run dev
-   ```
 
 ### 後端 (ASP.NET Core Web API)
 
-1. 進入 `SteamNexus_Server` 資料夾：
+1. 進入 `Seatly1` 資料夾：
 
    ```bash
-   cd SteamNexus_Server
+   cd Seatly1
    ```
 
 2. 恢復 NuGet 套件：
