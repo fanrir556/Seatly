@@ -1,7 +1,9 @@
 ﻿let editor;
 
 ClassicEditor
-    .create(document.querySelector('#editor'))
+    .create(document.querySelector('#editor')), {
+    plugins: [Image, ImageResizeEditing, ImageResizeHandles, /* ... */],
+    }
     .then(newEditor => {
         editor = newEditor;
         getDescription();
