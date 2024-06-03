@@ -134,9 +134,27 @@
 
                             <hr />
                             <p v-html="Activity.descriptionN"></p>
-
                         </div>
-
+                        <hr />
+                        <button @@click="edit" href="#" class="btn btn-secondary mx-auto">編輯</button> <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteActivityModal">刪除</button>
+                        <!--刪除活動modal-->
+                        <div class="modal fade" id="deleteActivityModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">刪除活動</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        確定要刪除活動?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                        <button type="button" class="btn btn-primary" @@click="deleteActivity">刪除</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                    
@@ -263,6 +281,20 @@
                         
                 },
 
+                // 編輯活動
+                edit() {
+                    window.location.href = `/OrganizerRoute/ActivityEdit/${_this.Actid}`;
+                },
+                // 刪除活動
+                deleteActivity() {
+                    axios.delete(`/api/OrganizersApi/activity/${_this.Actid}`)
+                        .then(response => {
+                            console.log(response.data);
+                            window.location.href = `/OrganizerRoute/NotificationRecord`;
+                        }).catch(err => {
+                            console.log(err);
+                        });
+                },
             },
             mounted: function () {
                 _this = this
