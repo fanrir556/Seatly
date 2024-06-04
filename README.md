@@ -75,7 +75,7 @@ Queuely是一個提供活動宣傳和報到服務的整合平台。
 8. [管理員登入](#管理員登入)
 
 ### 首頁
-1. 首頁頁面呈現
+1. 首頁畫面展示
 
 ![首頁](https://github.com/fanrir556/Seatly1/assets/158997558/f75d1c47-c542-4427-ba23-3c388dabfa21)
 
@@ -91,7 +91,7 @@ Queuely是一個提供活動宣傳和報到服務的整合平台。
    
 ![關鍵字480](https://github.com/fanrir556/Seatly1/assets/158997558/da5079e6-8ff8-4d55-92cd-6ed63c40eb94)
 
-3. 依日期搜尋篩選
+2. 依日期搜尋篩選
    
 ![日期480](https://github.com/fanrir556/Seatly1/assets/158997558/8f193384-3816-4ac6-969e-0898054400e9)
 
@@ -101,15 +101,15 @@ Queuely是一個提供活動宣傳和報到服務的整合平台。
    
 ![一般註冊 (2)](https://github.com/fanrir556/Seatly1/assets/158997558/6a7e5f07-1828-42d5-bf1a-764f1d29315d)
 
-3. 使用Google第三方進行一般會員註冊
+2. 使用Google第三方進行一般會員註冊
    
 ![google註冊](https://github.com/fanrir556/Seatly1/assets/158997558/c02d78ce-9a59-42ed-a7b4-a22155cdb6b9)
 
-4. 收藏&分享活動功能
+3. 收藏&分享活動功能
    
 ![收藏清單480](https://github.com/fanrir556/Seatly1/assets/158997558/fd9c583f-6d99-432b-9def-80d9005ac846)
 
-5. 會員中心
+4. 會員中心
 
 ![會員中心](https://github.com/fanrir556/Seatly1/assets/158997558/49757ba1-a3d8-4b08-8932-8d0c75cc121b)
    
