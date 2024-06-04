@@ -82,14 +82,17 @@ Queuely是一個提供活動宣傳和報到服務的整合平台。
 
 ### 活動瀏覽
 1. 依活動類別瀏覽
+   
 ![分類 (1)](https://github.com/fanrir556/Seatly1/assets/158997558/6956be26-89c9-4e19-838e-c0d87f0cd2f8)
 
    
 ### 搜尋
 1. 依關鍵字搜尋篩選
+   
 ![關鍵字480](https://github.com/fanrir556/Seatly1/assets/158997558/da5079e6-8ff8-4d55-92cd-6ed63c40eb94)
 
-2. 依日期搜尋篩選
+3. 依日期搜尋篩選
+   
 ![日期480](https://github.com/fanrir556/Seatly1/assets/158997558/8f193384-3816-4ac6-969e-0898054400e9)
 
    
