@@ -65,115 +65,73 @@ Queuely是一個提供活動宣傳和報到服務的整合平台。
 
 ## 功能展示
 
-1. [遊戲資訊系統](#遊戲資訊系統)
-2. [遊戲電腦組裝系統](#遊戲電腦組裝系統)
-3. [會員系統](#會員系統)
-
-### 遊戲資訊系統
-
-### 遊戲電腦組裝系統
-
-#### 前台
-
-1. 導覽列上方點擊"遊戲電腦組裝"
-
-![遊戲組裝系統](ReadmeFiles/Hardware/HeroBanner.png)
-
-2. 點擊開始可以使用組裝系統(可配合 Filter 過濾)
-
-![過濾系統](ReadmeFiles/Hardware/Filter.gif)
-
-3.可以步驟式的選擇電腦零件，像是你有選 Intel 的 CPU，系統就會幫你篩選出 Intel 的主機板
-
-![電腦零件篩選](ReadmeFiles/Hardware/TenSystem.gif)
-
-4. 一選擇就會加入下方的產品列表，同時幫你計算總瓦數及價格
-
-![產品列表](ReadmeFiles/Hardware/ProductList.png)
-
-5. 當至少有選擇 CPU、GPU、RAM 時，即可啟動遊戲配備需求計算系統，即時去計算當前硬體配置可以滿足多少 Steam 遊戲的最低、建議配備
-
-![配備計算](ReadmeFiles/Hardware/Match.gif)
-
-6. 可以點擊比例下方按鈕進去觀看實際可玩的遊戲列表，由於資料量大，有實作關鍵字搜尋及分頁功能，而點擊遊戲名稱即可前往網站的遊戲資訊系統
-
-![遊戲列表](ReadmeFiles/Hardware/GameList.gif)
-
-7. 如果不想一個一個選擇電腦零件，也有提供現成菜單可供選擇，一樣可以享受完整功能
-
-![切換系統](ReadmeFiles/Hardware/Switch.png)
-
-![菜單系統](ReadmeFiles/Hardware/MenuList.png)
-
-![菜單產品列表](ReadmeFiles/Hardware/MenuProducts.png)
-
-![菜單遊戲需求系統](ReadmeFiles/Hardware/MenuMatch.png)
-
-#### 後台
-
-1. 右上角登入管理員帳號，點擊"後台系統"
-
-![登入管理員](ReadmeFiles/Hardware/AdminLogin.png)
-
-2. 側邊導覽列可以看到硬體系統
-
-![硬體系統](ReadmeFiles/Hardware/AdminSystem.png)
-
-3. 點擊產品管理可以讀取各項分類的產品列表，如果瓦數有務也可以點擊編輯系統即時修正
-
-![產品管理](ReadmeFiles/Hardware/ProductUpdate.gif)
-
-4. 而需要更新時，可以點擊全部零件更新，會呼叫 Web API，啟動 C# 的 HtmlAgilityPack 對電腦零售商網站發送請求及解析，然後利用 LINQ 對資料進行處理後，新產品會寫入資料庫，已有產品則是進行資訊更新
-
-![產品更新1](ReadmeFiles/Hardware/scrape1.png)
-
-![產品更新2](ReadmeFiles/Hardware/scrape2.png)
-
-![產品更新3](ReadmeFiles/Hardware/scrape3.png)
-
-![產品更新4](ReadmeFiles/Hardware/scrape4.png)
-
-![產品更新5](ReadmeFiles/Hardware/scrape5.png)
-
-5. 至於菜單系統，點擊側邊導覽列菜單管理可進入頁面看到前台上架的所有菜單
-
-![菜單管理](ReadmeFiles/Hardware/Menus.png)
-
-6. 新增菜單，點擊"新增菜單"按鈕，跳出新增菜單互動視窗
-
-![新增菜單](ReadmeFiles/Hardware/MenuCreate.png)
-
-![新增菜單 Modal](ReadmeFiles/Hardware/CreateModal.png)
-
-![新增成功](ReadmeFiles/Hardware/CreateSuccess.png)
-
-7. 編輯菜單，點擊菜單上的"編輯"按鈕，跳出編輯菜單互動視窗
-
-![編輯菜單](ReadmeFiles/Hardware/MenuUpdate.png)
-
-![編輯菜單2](ReadmeFiles/Hardware/MenuUpdate2.png)
-
-![編輯菜單3](ReadmeFiles/Hardware/MenuUpdate3.png)
-
-8. 菜單上架，點擊 "上架" checkbox，返回前台即可看到成功上架的菜單；下架同理
-
-![上架菜單](ReadmeFiles/Hardware/onsale.png)
-
-![上架菜單2](ReadmeFiles/Hardware/onsale2.png)
-
-![下架菜單](ReadmeFiles/Hardware/offsale.png)
-
-9. 刪除菜單，此菜單就永遠的消失了~
-
-![刪除菜單](ReadmeFiles/Hardware/MenuDelete.png)
-
-![刪除菜單2](ReadmeFiles/Hardware/MenuDelete2.png)
+1. [會員系統](#會員系統)
+2. [活動方系統](#活動方系統)
+3. [點數專區](#點數專區)
+4. [小遊戲與簽到](#小遊戲與簽到)
+5. [管理員登入](#管理員登入)
 
 ### 會員系統
+
+### 活動方系統
+
+### 點數專區
+
+#### 會員介面
+
+1. 依照持有點數兌換優惠券
+
+![兌換優惠券](readme/兌換優惠券.gif)
+
+2. 使用優惠券，顯示QR Code給合作活動方
+
+![使用優惠券](readme/使用優惠券.gif)
+
+3. 轉場動畫
+
+![轉場動畫](readme/轉場動畫.gif)
+
+#### 活動方介面(優惠券使用)
+
+1. 優惠券使用失敗
+
+![優惠券使用失敗](readme/優惠券使用失敗.gif)
+
+2. 優惠券使用成功
+
+![優惠券使用成功](readme/優惠券使用成功.gif)
+
+#### 管理員介面
+
+1.CRUD及登入時載入動畫
+
+![載入動畫](readme/載入動畫.gif)
+
+### 小遊戲與簽到
+
+1. 每日簽到
+
+![每日簽到](readme/簽到.gif)
+
+2. Queuely在哪裡小遊戲
+
+![小遊戲](readme/小遊戲.gif)
+
+3. logo彩蛋小遊戲
+
+![logo小遊戲](readme/logo小遊戲.gif)
+
+### 管理員登入
+
+1. QR Code登入
+
+![管理員登入](readme/管理員登入.gif)
+
+2. 密碼登入
+
+![管理員密碼登入](readme/管理員密碼登入.gif)
 
 ## 未來展望
 
 - 優化前後端性能，縮短響應時間
-- 後端引用日誌模組，紀錄服務的執行狀況
-- 導入容器化技術 Docker、Kubernetes
-- 加入自動化測試，提升系統的穩定性和可靠性
+- 採用Vue跟WebAPI做前後端分離開發，以元件化開發簡潔程式碼、優惠使用者體驗
