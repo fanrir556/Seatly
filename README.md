@@ -79,29 +79,36 @@ Queuely是一個提供活動宣傳和報到服務的整合平台。
 
 ![首頁](https://github.com/fanrir556/Seatly1/assets/158997558/f75d1c47-c542-4427-ba23-3c388dabfa21)
 
+
 ### 活動瀏覽
 1. 依活動類別瀏覽
+![分類 (1)](https://github.com/fanrir556/Seatly1/assets/158997558/6956be26-89c9-4e19-838e-c0d87f0cd2f8)
+
    
 ### 搜尋
 1. 依關鍵字搜尋篩選
+![關鍵字480](https://github.com/fanrir556/Seatly1/assets/158997558/da5079e6-8ff8-4d55-92cd-6ed63c40eb94)
+
 2. 依日期搜尋篩選
+![日期480](https://github.com/fanrir556/Seatly1/assets/158997558/8f193384-3816-4ac6-969e-0898054400e9)
 
    
 ### 會員系統
 1. 進行一般會員註冊
-
-![一般註冊 (1)](https://github.com/fanrir556/Seatly1/assets/158997558/bb3e7a04-5a0f-4a3c-ad23-9fe594b1b73c)
-
-2. 使用Google第三方進行一般會員註冊
    
- ![google註冊](https://github.com/fanrir556/Seatly1/assets/158997558/5c2f3748-6008-40dd-90c2-03e185b92a95)
+![一般註冊 (2)](https://github.com/fanrir556/Seatly1/assets/158997558/6a7e5f07-1828-42d5-bf1a-764f1d29315d)
 
-3. 收藏&分享活動功能
+3. 使用Google第三方進行一般會員註冊
    
-![收藏清單](https://github.com/fanrir556/Seatly1/assets/158997558/2953dffb-0cb9-44b7-b05d-fcc8971b30a5)
+![google註冊](https://github.com/fanrir556/Seatly1/assets/158997558/c02d78ce-9a59-42ed-a7b4-a22155cdb6b9)
 
-4. 會員中心
+4. 收藏&分享活動功能
+   
+![收藏清單480](https://github.com/fanrir556/Seatly1/assets/158997558/fd9c583f-6d99-432b-9def-80d9005ac846)
 
+5. 會員中心
+
+![會員中心](https://github.com/fanrir556/Seatly1/assets/158997558/49757ba1-a3d8-4b08-8932-8d0c75cc121b)
    
 
 ### 活動方系統
