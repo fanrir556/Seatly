@@ -15,11 +15,7 @@ $.ajax({
         console.log(organizerinfo);
         $('#account').val(organizerinfo.organizerAccount);
         $('#name').val(organizerinfo.organizerName);
-        $('#category').val(organizerinfo.organizerCategory);
-        $('#menu').val(organizerinfo.menu);
-        $('#address').val(organizerinfo.address);
         $('#URL').val(organizerinfo.reservationUrl);
-        $('#hashtag').val(organizerinfo.hashtag);
         $('#email').val(organizerinfo.email);
         $('#phone').val(organizerinfo.phone);
 
@@ -78,12 +74,8 @@ $('#modifyOrganizerForm').submit(function (event) {
 
     // 获取用户输入的注册表单信息
     let name = $('#name').val();
-    let category = $('#category').val();
     let photo;
-    let menu = $('#menu').val();
-    let address = $('#address').val();
     let url = $('#URL').val();
-    let hashtag = $('#hashtag').val();
     let email = $('#email').val();
     let phone = $('#phone').val();
     let password1 = $('#password1').val();
@@ -146,11 +138,7 @@ $('#modifyOrganizerForm').submit(function (event) {
                 data: JSON.stringify({
                     LoginPassword: password1,
                     OrganizerName: name,
-                    OrganizerCategory: category,
-                    Menu: menu,
-                    Address: address,
                     ReservationUrl: url,
-                    Hashtag: hashtag,
                     Email: email,
                     Phone: phone,
                 }),
