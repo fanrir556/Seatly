@@ -188,7 +188,6 @@ $('#modifyOrganizerForm').submit(function (event) {
                         data: JSON.stringify({
                             LoginPassword: password1,
                             OrganizerName: name,
-                            OrganizerCategory: category,
                             OrganizerPhoto: photo, // 使用新的文件名
                             Menu: menu,
                             Address: address,
