@@ -1216,13 +1216,13 @@
           //console.log(adding);
           //required.removeChild(adding);
           if (!lacked) {
+            saveLoading();
             isAdding.value = false;
             var pShop = results.shops.filter(p => p.edited == true && p.newImg !== undefined).map(p => ({
               ...p,
               productImage: p.newImg
             }));
             if (pShop.length > 0) {
-              saveLoading();
               await pShop.forEach(p => {
                 var formData = new FormData();
                 var file = p.file;
@@ -1475,7 +1475,7 @@
           var toastBody = document.querySelector("#liveToast>.toast-body");
           //console.log(deleteList.value);
           var ids = deleteList.value.sort((a, b) => a - b);
-          var fileNames = await results.shops.filter(p => ids.includes(p.productId)).map(p => (p.productImage.slice(p.productImage.lastIndexOf("/images/") + "/images/".length) != 'NoImage.jpg'));
+          var fileNames = await results.shops.filter(p => ids.includes(p.productId) && p.productImage.slice(p.productImage.lastIndexOf("/images/") + "/images/".length) != 'NoImage.jpg').map(p => p.productImage.slice(p.productImage.lastIndexOf("/images/") + "/images/".length));
           var strIds = ids.join(", ");
           if (deleteList.value.length > 0) {
             /*console.log(strIds);
