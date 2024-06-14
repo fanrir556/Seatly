@@ -20,8 +20,13 @@ services.AddAuthentication().AddGoogle(googleOptions =>
     //googleOptions.ClientSecret = "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";
 
     // Azure網域QueuelyWeb ! 
-    googleOptions.ClientId = "600911081668-micikktb27e2fleams2t528u7pe422gj.apps.googleusercontent.com";
-    googleOptions.ClientSecret = "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";
+    //googleOptions.ClientId = "600911081668-micikktb27e2fleams2t528u7pe422gj.apps.googleusercontent.com";
+    //googleOptions.ClientSecret = "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";
+
+    // Azure網域QueuelyWeb-Sanae ! 
+    googleOptions.ClientId = "480037630620-tq1hrlvb2mdmbqh6s9cot6li1194rvis.apps.googleusercontent.com";
+    googleOptions.ClientSecret = "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";
+
     //googleOptions.ClientId = Environment.GetEnvironmentVariable("Authentication:Google:ClientId");
     //googleOptions.ClientSecret = Environment.GetEnvironmentVariable("Authentication:Google:ClientSecret");
     googleOptions.CallbackPath = new PathString("/signin-google");  // 确保这与 Google Cloud Console 中的重定向 URI 匹配
