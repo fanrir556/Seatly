@@ -85,7 +85,7 @@ $('#modifyOrganizerForm').submit(function (event) {
     let file = fileInput.files[0];
 
     // 密碼與確認密碼欄位一致
-    if (password1 != password2) {
+    if ((password1 != password2) && (password1 || password2) != '') {
         $('#password1').removeClass("is-valid");
         $('#password1').addClass("is-invalid");
         $('#invalid_password1').text("密碼與確認密碼欄位不一致");
@@ -95,14 +95,14 @@ $('#modifyOrganizerForm').submit(function (event) {
     }
 
     // 電子郵件格式
-    else if ((/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(email) == false) {
+    else if ((/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(email) == false && (email != '')) {
         $('#email').removeClass("is-valid");
         $('#email').addClass("is-invalid");
         $('#invalid_email').text("email格式不正確");
     }
 
     // 網址格式
-    else if ((/^(http|https):\/\/[^\s$.?#].[^\s]*$/).test(url) == false) {
+    else if ((/^(http|https):\/\/[^\s$.?#].[^\s]*$/).test(url) == false && (url != '')) {
         $('#URL').removeClass("is-valid");
         $('#URL').addClass("is-invalid");
         $('#invalid_url').text("網址格式不正確");
@@ -115,7 +115,7 @@ $('#modifyOrganizerForm').submit(function (event) {
     至少包含一個特殊字符 (不包含底線、空白、冒號)
     長度在8到16個字符之間
     */
-    else if ((/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/).test(password1) == false) {
+    else if ((/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/).test(password1) == false && (password1 || password2) != '') {
         console.log("密碼至少包含一個數字、一個大寫字母、至少包含一個小寫字母、至少包含一個特殊字符(不包含底線、空白、冒號)、長度在8到16個字符之間");
         $('#password1').removeClass("is-valid");
         $('#password1').addClass("is-invalid");

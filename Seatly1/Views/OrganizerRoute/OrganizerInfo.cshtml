@@ -43,7 +43,7 @@
                                     <!-- input.form-control[type="text"] -->
                                     <input type="text" id="account" name="account" class="form-control" placeholder="請輸入活動方帳號"
                                            disabled readonly>
-                                    <div class="invalid-feedback">此為必填欄位</div>
+                                    <div class="invalid-feedback"></div>
                                 </div>
 
                                 <div class="col-12 col-md-3">
@@ -52,9 +52,8 @@
                                 <div class="col-12 col-md-9 mb-3">
                                     <!-- input.form-control[type="text"] -->
                                     <input type="text" id="name" name="name" class="form-control" placeholder="請輸入活動方名稱"
-                                           required>
+                                           @* required *@>
                                     <div class="invalid-feedback">
-                                        此為必填欄位
                                     </div>
                                 </div>
 
@@ -62,9 +61,8 @@
                                     <label for="final-enter" class="form-label">修改活動方網址</label>
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="URL" name="URL" class="form-control" placeholder="請輸入活動網址" required>
+                                    <input type="text" id="URL" name="URL" class="form-control" placeholder="請輸入活動網址" @* required *@>
                                     <div id="invalid_url" class="invalid-feedback">
-                                        此為必填欄位
                                     </div>
                                 </div>
 
@@ -72,9 +70,8 @@
                                     <label for="email" class="form-label">修改Email</label>
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="email" name="email" class="form-control" placeholder="name@example.com" required>
+                                    <input type="text" id="email" name="email" class="form-control" placeholder="name@example.com" @* required *@>
                                     <div id="invalid_email" class="invalid-feedback">
-                                        此為必填欄位
                                     </div>
                                 </div>
 
@@ -82,9 +79,8 @@
                                     <label for="phone" class="form-label">修改連絡電話</label>
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="phone" name="phone" class="form-control" placeholder="請輸入電話/手機號碼" required>
+                                    <input type="text" id="phone" name="phone" class="form-control" placeholder="請輸入電話/手機號碼" @* required *@>
                                     <div id="invalid_phone" class="invalid-feedback">
-                                        此為必填欄位
                                     </div>
                                 </div>
 
@@ -95,9 +91,8 @@
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
                                     <input type="password" id="password1" name="password1" class="form-control"
-                                           placeholder="請輸入密碼" required>
+                                           placeholder="請輸入密碼" @* required *@>
                                     <div id="invalid_password1" class="invalid-feedback">
-                                        此為必填欄位
                                     </div>
                                 </div>
 
@@ -106,9 +101,8 @@
                                 </div>
                                 <div class="col-12 col-md-9 mb-3">
                                     <input type="password" id="password2" name="password2" class="form-control"
-                                           placeholder="請再次輸入密碼" required>
+                                           placeholder="請再次輸入密碼" @* required *@>
                                     <div id="invalid_password2" class="invalid-feedback">
-                                        此為必填欄位
                                     </div>
                                 </div>
 

@@ -117,7 +117,7 @@ var vueApp = {
                 console.log(self.ActivityMethod);
 
                 if (self.ActivityMethod == '公告') {
-                    // 活動方法為公告時，FormData不讀取活動人數上限的資料
+                    // 活動方法為公告時，活動人數上限設置為0
                     formData.append('OrganizerId', organizeridInt);
                     formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
                     formData.append('StartTime', self.StartTime);

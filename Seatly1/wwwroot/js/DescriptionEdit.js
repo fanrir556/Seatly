@@ -119,7 +119,7 @@ function submitForm() {
 
         axios({
             method: 'patch',
-            url: `/api/OrganizersApi/activity/${activityId}`,
+            url: `/api/OrganizersApi/activity/descrption/${activityId}`,
             data: {
                 DescriptionN: editorData,
             }

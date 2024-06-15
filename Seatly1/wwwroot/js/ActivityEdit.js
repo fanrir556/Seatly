@@ -144,7 +144,8 @@ var vueApp = {
                     const formData = new FormData()
 
                     if (self.ActivityMethod == '公告') {
-                        // 活動方法為公告時，FormData不讀取活動人數上限的資料
+
+                        // 活動方法為公告時，活動人數上限設為0
                         formData.append('OrganizerId', organizeridInt);
                         formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
                         formData.append('StartTime', self.StartTime);
@@ -155,14 +156,26 @@ var vueApp = {
                         formData.append('isActivity', true); // 預設啟用活動
                         formData.append('Location', self.location);
                         formData.append('LocationDescription', self.LocationDescrption);
-                        formData.append('HashTag1', self.hashtag1);
-                        formData.append('HashTag2', self.hashtag2);
-                        formData.append('HashTag3', self.hashtag3);
-                        formData.append('HashTag4', self.hashtag4);
-                        formData.append('HashTag5', self.hashtag5);
+                        
+                        // 為防止Hashtag輸入null字串，檢查每個HashTag，如果值不為 null，則添加到 FormData
+                        if (self.hashtag1 !== null) {
+                            formData.append('HashTag1', self.hashtag1);
+                        }
+                        if (self.hashtag2 !== null) {
+                            formData.append('HashTag2', self.hashtag2);
+                        }
+                        if (self.hashtag3 !== null) {
+                            formData.append('HashTag3', self.hashtag3);
+                        }
+                        if (self.hashtag4 !== null) {
+                            formData.append('HashTag4', self.hashtag4);
+                        }
+                        if (self.hashtag5 !== null) {
+                            formData.append('HashTag5', self.hashtag5);
+                        }
 
-                        // 发送 put 请求
-                        axios.put(`/api/OrganizersApi/activity/${activityId}`, formData, {
+                        // 发送 patch 请求
+                        axios.patch(`/api/OrganizersApi/activity/${activityId}`, formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
                             }
@@ -179,7 +192,6 @@ var vueApp = {
                             });
                     }
                     else {
-                        // 活動方法為公告時，FormData不讀取活動名稱跟活動人數上限的資料
                         formData.append('OrganizerId', organizeridInt);
                         formData.append('ActivityPhoto', blob); // 添加被轉換成 Blob 的圖片
                         formData.append('StartTime', self.StartTime);
@@ -190,14 +202,26 @@ var vueApp = {
                         formData.append('isActivity', true); // 預設啟用活動
                         formData.append('Location', self.location);
                         formData.append('LocationDescription', self.LocationDescrption);
-                        formData.append('HashTag1', self.hashtag1);
-                        formData.append('HashTag2', self.hashtag2);
-                        formData.append('HashTag3', self.hashtag3);
-                        formData.append('HashTag4', self.hashtag4);
-                        formData.append('HashTag5', self.hashtag5);
 
-                        // 发送 put 请求
-                        axios.put(`/api/OrganizersApi/activity/${activityId}`, formData, {
+                        // 為防止Hashtag輸入null字串，檢查每個HashTag，如果值不為 null，則添加到 FormData
+                        if (self.hashtag1 !== null) {
+                            formData.append('HashTag1', self.hashtag1);
+                        }
+                        if (self.hashtag2 !== null) {
+                            formData.append('HashTag2', self.hashtag2);
+                        }
+                        if (self.hashtag3 !== null) {
+                            formData.append('HashTag3', self.hashtag3);
+                        }
+                        if (self.hashtag4 !== null) {
+                            formData.append('HashTag4', self.hashtag4);
+                        }
+                        if (self.hashtag5 !== null) {
+                            formData.append('HashTag5', self.hashtag5);
+                        }
+
+                        // 发送 patch 请求
+                        axios.patch(`/api/OrganizersApi/activity/${activityId}`, formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
                             }
@@ -225,7 +249,7 @@ var vueApp = {
                 const formData = new FormData()
 
                 if (self.ActivityMethod == '公告') {
-                    // 活動方法為公告時，FormData不讀取活動名稱跟活動人數上限的資料
+                    // 活動方法為公告時，活動人數上限設為0
                     formData.append('OrganizerId', organizeridInt);
                     formData.append('StartTime', self.StartTime);
                     formData.append('EndTime', self.EndTime);
@@ -235,14 +259,26 @@ var vueApp = {
                     formData.append('isActivity', true); // 預設啟用活動
                     formData.append('Location', self.location);
                     formData.append('LocationDescription', self.LocationDescrption);
-                    formData.append('HashTag1', self.hashtag1);
-                    formData.append('HashTag2', self.hashtag2);
-                    formData.append('HashTag3', self.hashtag3);
-                    formData.append('HashTag4', self.hashtag4);
-                    formData.append('HashTag5', self.hashtag5);
 
-                    // 发送 put 请求
-                    axios.put(`/api/OrganizersApi/activity/${activityId}`, formData, {
+                    // 為防止Hashtag輸入null字串，檢查每個HashTag，如果值不為 null，則添加到 FormData
+                    if (self.hashtag1 !== null) {
+                        formData.append('HashTag1', self.hashtag1);
+                    }
+                    if (self.hashtag2 !== null) {
+                        formData.append('HashTag2', self.hashtag2);
+                    }
+                    if (self.hashtag3 !== null) {
+                        formData.append('HashTag3', self.hashtag3);
+                    }
+                    if (self.hashtag4 !== null) {
+                        formData.append('HashTag4', self.hashtag4);
+                    }
+                    if (self.hashtag5 !== null) {
+                        formData.append('HashTag5', self.hashtag5);
+                    }
+
+                    // 发送 patch 请求
+                    axios.patch(`/api/OrganizersApi/activity/${activityId}`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
                         }
@@ -259,7 +295,6 @@ var vueApp = {
                         });
                 }
                 else {
-                    // 活動方法為公告時，FormData不讀取活動名稱跟活動人數上限的資料
                     formData.append('OrganizerId', organizeridInt);
                     formData.append('StartTime', self.StartTime);
                     formData.append('EndTime', self.EndTime);
@@ -269,14 +304,26 @@ var vueApp = {
                     formData.append('isActivity', true); // 預設啟用活動
                     formData.append('Location', self.location);
                     formData.append('LocationDescription', self.LocationDescrption);
-                    formData.append('HashTag1', self.hashtag1);
-                    formData.append('HashTag2', self.hashtag2);
-                    formData.append('HashTag3', self.hashtag3);
-                    formData.append('HashTag4', self.hashtag4);
-                    formData.append('HashTag5', self.hashtag5);
 
-                    // 发送 put 请求
-                    axios.put(`/api/OrganizersApi/activity/${activityId}`, formData, {
+                    // 為防止Hashtag輸入null字串，檢查每個HashTag，如果值不為 null，則添加到 FormData
+                    if (self.hashtag1 !== null) {
+                        formData.append('HashTag1', self.hashtag1);
+                    }
+                    if (self.hashtag2 !== null) {
+                        formData.append('HashTag2', self.hashtag2);
+                    }
+                    if (self.hashtag3 !== null) {
+                        formData.append('HashTag3', self.hashtag3);
+                    }
+                    if (self.hashtag4 !== null) {
+                        formData.append('HashTag4', self.hashtag4);
+                    }
+                    if (self.hashtag5 !== null) {
+                        formData.append('HashTag5', self.hashtag5);
+                    }
+
+                    // 发送 patch 请求
+                    axios.patch(`/api/OrganizersApi/activity/${activityId}`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data' // 设置请求头为 multipart/form-data
                         }

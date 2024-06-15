@@ -137,7 +137,7 @@ namespace Seatly1.Controllers
             return $"{act.ActivityId}";
         }
 
-        [HttpPut("activity/{id}")]
+        [HttpPatch("activity/{id}")]
         public async Task<string> PutActivitiesForOrganizer(int id, NotificationRecordDTO2 activity)
         {
             var existingActivity = await _context.NotificationRecords.FindAsync(id);
@@ -202,7 +202,7 @@ namespace Seatly1.Controllers
         }
 
         // 修改活動敘述
-        [HttpPatch("activity/{id}")]
+        [HttpPatch("activity/descrption/{id}")]
         public async Task<string> PatchActivityDescription(int id, ActivityDescriptionDTO activity)
         {
             var existingActivity = await _context.NotificationRecords.FindAsync(id);
