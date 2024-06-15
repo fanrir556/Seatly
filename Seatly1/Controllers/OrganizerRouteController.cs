@@ -19,7 +19,7 @@ namespace Seatly1.Controllers
         }
 
         // GET: 活動方忘記密碼頁面
-        public ActionResult OrganizerForgetPwd()
+        public IActionResult OrganizerForgetPwd()
         {
             return View();
         }

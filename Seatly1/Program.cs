@@ -163,7 +163,6 @@ app.MapControllerRoute(
     name: "ActivityEdit",
     pattern: "{controller=OrganizerRoute}/{action=ActivityEdit}/{id?}");
 
-
 app.MapRazorPages();
 
 app.Run();
