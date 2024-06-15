@@ -1,0 +1,74 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>忘記密碼</title>
+</head>
+
+<body>
+    <main class="main" id="top">
+        <!--登入頁開始-->
+        <section class="py-8 overflow-hidden">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-8 offset-md-2">
+                        <!-- 表單 start -->
+                        <form id="forgetPasswordForm" class="needs-validation" novalidate>
+                            <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
+                            <div class="row">
+                                <div class="col-12 col-md-3">
+                                    <label for="password1" class="form-label">新密碼</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="password" id="password1" class="form-control"
+                                           placeholder="請輸入密碼" required>
+                                    <div class="valid-feedback"></div>
+                                    <div class="invalid-feedback">
+                                        密碼不可為空。
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label for="password2" class="form-label">確認密碼</label>
+                                </div>
+                                <div class="col-12 col-md-9 mb-3">
+                                    <input type="password" id="password2" class="form-control"
+                                           placeholder="請輸入密碼" required>
+                                    <div class="valid-feedback"></div>
+                                    <div class="invalid-feedback">
+                                        密碼不可為空。
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-4 mb-3 d-flex flex-row-reverse bd-highlight">
+                                    <button type="submit" class="btn btn-primary margin-right mx-2" formnovalidate>送出</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <!-- 表單 end -->
+            </div>
+        </section>
+    </main>
+    @section Scripts {
+
+    <script src="https://unpkg.com/axios@1.6.8/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    }
+</body>
+
+</html>
