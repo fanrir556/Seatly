@@ -65,9 +65,9 @@ $('#previous').on('click', function () {
     }
 });
 
-function getActivity(organizerId, page) {
+async function getActivity(organizerId, page) {
     // 透過 axios 發送 GET 請求，傳遞給 API 的參數為活動方 ID 和頁碼，每頁顯示50筆資料
-    axios.get(`/api/OrganizersApi/activities/${organizerId}?page=${page}`)
+    await axios.get(`/api/OrganizersApi/activities/${organizerId}?page=${page}`)
         .then(response => {
             const activities = response.data;
             activities.forEach(activity => {
@@ -89,10 +89,10 @@ function convertToPM(dateTimeString) {
 }
 
 // Function to add a new row
-function read(activity) {
-    activity.startTime = convertToPM(activity.startTime);
-    activity.endTime = convertToPM(activity.endTime);
-    activityPhoto = binaryStringToBlob(activity.activityPhoto);
+async function read(activity) {
+    activity.startTime = await convertToPM(activity.startTime);
+    activity.endTime = await convertToPM(activity.endTime);
+    activityPhoto = await binaryStringToBlob(activity.activityPhoto);
 
     // blob 物件轉換成圖片
     const fileReader = new FileReader();
@@ -134,48 +134,48 @@ function read(activity) {
 //},
 
 // 二進位字串轉換成 blob 物件
-function binaryStringToBlob(binaryString, contentType) {
-    contentType = contentType || '';
-    const sliceSize = 512;
-    const byteCharacters = atob(binaryString);
-    const byteArrays = [];
+async function binaryStringToBlob(binaryString, contentType) {
+    contentType = await contentType || '';
+    const sliceSize = await 512;
+    const byteCharacters = await atob(binaryString);
+    const byteArrays = await [];
 
     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
+        const slice = await byteCharacters.slice(offset, offset + sliceSize);
 
-        const byteNumbers = new Array(slice.length);
+        const byteNumbers = await new Array(slice.length);
         for (let i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
+            byteNumbers[i] = await slice.charCodeAt(i);
         }
 
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
+        const byteArray = await new Uint8Array(byteNumbers);
+        await byteArrays.push(byteArray);
     }
 
-    const blob = new Blob(byteArrays, { type: contentType });
-    return blob;
+    const blob = await new Blob(byteArrays, { type: contentType });
+    return await blob;
 }
 
 // 進入活動資訊頁面
-function viewActivity( ) {
+async function viewActivity( ) {
 
     // alert("活動已觸發");
     // 從事件對象(event object)中取得觸發事件的按鈕元素
-    const btn = event.target;
+    const btn = await event.target;
     // 從按鈕元素中取得自定義屬性"btn-id"
-    const btnId = btn.getAttribute("btn-id");
+    const btnId = await btn.getAttribute("btn-id");
     //設置session
-    sessionStorage.setItem("ActID", btnId);
+    await sessionStorage.setItem("ActID", btnId);
 
-    window.location.href = `/NotificationRecord/OrganizersView`;
-}
+    window.location.href = await `/NotificationRecord/OrganizersView`;
+};
 
 // 新增活動
-function add() {
-    window.location.href = '/OrganizerRoute/ActivityCreate';
-}
+async function add() {
+    window.location.href = await '/OrganizerRoute/ActivityCreate';
+};
 
 // 修改活動
-function edit() {
-    window.location.href = '/OrganizerRoute/ActivityEdit';
+async function edit() {
+    window.location.href = await '/OrganizerRoute/ActivityEdit';
 }
