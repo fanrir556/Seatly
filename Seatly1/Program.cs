@@ -163,6 +163,10 @@ app.MapControllerRoute(
     name: "ActivityEdit",
     pattern: "{controller=OrganizerRoute}/{action=ActivityEdit}/{id?}");
 
+app.MapControllerRoute(
+    name: "OrganizerForgetPwdForm",
+    pattern: "{controller=OrganizerRoute}/{action=OrganizerForgetPwdForm}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();

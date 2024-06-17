@@ -14,7 +14,7 @@
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
-    <title>活動方資訊頁</title>
+    <title>活動方管理</title>
 </head>
 
 <body>
@@ -26,114 +26,181 @@
         <!--資訊頁開始-->
         <section class="py-8 overflow-hidden">
             <div id="app" class="container">
+                <div class="col-12">
+                    <h1 class="text-start text-md-center mb-3">活動方管理</h1>
+                </div>
                 <div class="row">
-                    <div class="col-12">
-                        <h1 class="text-start text-md-center mb-3">活動方資訊頁</h1>
-                    </div>
-                    <!-- col-8 start -->
-                    <div class="col-12 col-md-8 offset-md-2">
-                        <!-- 表單 start -->
-                        <form id="modifyOrganizerForm" class="needs-validation" novalidate>
-                            <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
-                            <div class="row">
-                                <div class="col-12 col-md-3">
-                                    <label for="account" class="form-label">活動方帳號</label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <!-- input.form-control[type="text"] -->
-                                    <input type="text" id="account" name="account" class="form-control" placeholder="請輸入活動方帳號"
-                                           disabled readonly>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                    <!--會員中心nav選單-->
+                    <div class="d-flex align-items-start">
+                        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">基本資料</button>
+                            <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">信箱</button>
+                            <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">密碼</button>
+                            <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">修改活動方照片</button>
+                        </div>
+                        <div class="col-12 col-md-8 offset-2">
+                            <div class="tab-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                    <!-- 表單 start -->
+                                    <form id="modifyOrganizerForm" v-on:submit.prevent="submitForm" class="needs-validation" novalidate>
+                                        <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h3 class="text-start text-md-start mb-3">基本資料</h3>
+                                            </div>
+                                            <div class="col-12 col-md-3">
+                                                <label for="account" class="form-label">活動方帳號</label>
+                                            </div>
+                                            <div class="col-12 col-md-9 mb-3">
+                                                <!-- input.form-control[type="text"] -->
+                                                <input type="text" id="account" v-model="account" class="form-control" placeholder="請輸入活動方帳號"
+                                                       disabled readonly>
+                                                <div class="invalid-feedback"></div>
+                                            </div>
 
-                                <div class="col-12 col-md-3">
-                                    <label for="name" class="form-label">修改活動方名稱</label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <!-- input.form-control[type="text"] -->
-                                    <input type="text" id="name" name="name" class="form-control" placeholder="請輸入活動方名稱"
-                                           @* required *@>
-                                    <div class="invalid-feedback">
-                                    </div>
-                                </div>
+                                            <div class="col-12 col-md-3">
+                                                <label for="name" class="form-label">活動方名稱</label>
+                                            </div>
+                                            <div class="col-12 col-md-9 mb-3">
+                                                <!-- input.form-control[type="text"] -->
+                                                <input type="text" id="name" v-model="name" class="form-control" placeholder="請輸入活動方名稱"
+                                                @* required *@>
+                                                <div class="invalid-feedback">
+                                                </div>
+                                            </div>
 
-                                <div class="col-12 col-md-3">
-                                    <label for="final-enter" class="form-label">修改活動方網址</label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="URL" name="URL" class="form-control" placeholder="請輸入活動網址" @* required *@>
-                                    <div id="invalid_url" class="invalid-feedback">
-                                    </div>
-                                </div>
+                                            <div class="col-12 col-md-3">
+                                                <label for="final-enter" class="form-label">活動方網址</label>
+                                            </div>
+                                            <div class="col-12 col-md-9 mb-3">
+                                                <input type="text" id="URL" v-model="URL" class="form-control" placeholder="請輸入活動網址" @* required *@>
+                                                <div id="invalid_url" class="invalid-feedback">
+                                                </div>
+                                            </div>
 
-                                <div class="col-12 col-md-3">
-                                    <label for="email" class="form-label">修改Email</label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="email" name="email" class="form-control" placeholder="name@example.com" @* required *@>
-                                    <div id="invalid_email" class="invalid-feedback">
-                                    </div>
-                                </div>
+                                            <div class="col-12 col-md-3">
+                                                <label for="phone" class="form-label">連絡電話</label>
+                                            </div>
+                                            <div class="col-12 col-md-9 mb-3">
+                                                <input type="text" id="phone" v-model="phone" class="form-control" placeholder="請輸入電話/手機號碼" @* required *@>
+                                                <div id="invalid_phone" class="invalid-feedback">
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                <div class="col-12 col-md-3">
-                                    <label for="phone" class="form-label">修改連絡電話</label>
+                                        <div class="d-flex flex-column flex-md-row bd-highlight mb-3 justify-content-md-start justify-content-sm-end">
+                                            <div class="p-2 bd-highlight sm-w-100 ml-auto">
+                                                <button type="submit" class="btn btn-primary" formnovalidate>儲存</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <input type="text" id="phone" name="phone" class="form-control" placeholder="請輸入電話/手機號碼" @* required *@>
-                                    <div id="invalid_phone" class="invalid-feedback">
-                                    </div>
+                                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                                    <form class="needs-validation" novalidate>
+                                        <div class="col-12">
+                                            <h3 class="text-start text-md-start mb-3">修改Email</h3>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <label for="email_old" class="form-label">舊Email</label>
+                                        </div>
+                                        <div class="col-12 col-md-9 mb-3">
+                                            <input type="text" id="email_old" v-model="email_old" class="form-control" placeholder="name@example.com" required>
+                                            <div id="invalid_email" class="invalid-feedback">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <label for="email" class="form-label">新Email</label>
+                                        </div>
+                                        <div class="col-12 col-md-9 mb-3">
+                                            <input type="text" id="email_new" v-model="email_new" class="form-control" placeholder="name@example.com" required>
+                                            <div id="invalid_email" class="invalid-feedback">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column flex-md-row bd-highlight mb-3 justify-content-md-start justify-content-sm-end">
+                                            <div class="p-2 bd-highlight sm-w-100 ml-auto">
+                                                <button type="submit" class="btn btn-primary" formnovalidate>送出變更</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
+                                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                                    <form class="needs-validation" novalidate>
+                                        <div class="col-12">
+                                            <h3 class="text-start text-md-start mb-3">修改密碼</h3>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <label for="password_old" class="form-label">
+                                                舊密碼
+                                            </label>
+                                        </div>
+                                        <div class="col-12 col-md-9 mb-3">
+                                            <input type="password" id="password_old" class="form-control"
+                                                   placeholder="請輸入舊密碼" required>
+                                            <div id="invalid_password_old" class="invalid-feedback">
+                                                這是必塡欄位
+                                            </div>
+                                        </div>
 
-                                <div class="col-12 col-md-3">
-                                    <label for="password1" class="form-label">
-                                        修改密碼
-                                    </label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <input type="password" id="password1" name="password1" class="form-control"
-                                           placeholder="請輸入密碼" @* required *@>
-                                    <div id="invalid_password1" class="invalid-feedback">
-                                    </div>
-                                </div>
+                                        <div class="col-12 col-md-3">
+                                            <label for="password_new" class="form-label">
+                                                新密碼
+                                            </label>
+                                        </div>
+                                        <div class="col-12 col-md-9 mb-3">
+                                            <input type="password" id="password_new" class="form-control"
+                                                   placeholder="請輸入新密碼" required>
+                                            <div id="invalid_password_new" class="invalid-feedback">
+                                                這是必塡欄位
+                                            </div>
+                                        </div>
 
-                                <div class="col-12 col-md-3">
-                                    <label for="password2" class="form-label">確認密碼</label>
+                                        <div class="col-12 col-md-3">
+                                            <label for="password_confirm" class="form-label">確認密碼</label>
+                                        </div>
+                                        <div class="col-12 col-md-9 mb-3">
+                                            <input type="password" id="password_confirm" name="password_confirm" class="form-control"
+                                                   placeholder="再次輸入新密碼" required>
+                                            <div id="invalid_password_confirm" class="invalid-feedback">
+                                                這是必塡欄位
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column flex-md-row bd-highlight mb-3 justify-content-md-start justify-content-sm-end">
+                                            <div class="p-2 bd-highlight sm-w-100 ml-auto">
+                                                <button type="submit" class="btn btn-primary" formnovalidate>送出變更</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    <input type="password" id="password2" name="password2" class="form-control"
-                                           placeholder="請再次輸入密碼" @* required *@>
-                                    <div id="invalid_password2" class="invalid-feedback">
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-md-3">
-                                    <label for="photo" class="form-label">修改活動方照片</label>
-                                </div>
-                                <div class="col-12 col-md-9 mb-3">
-                                    @* 顯示圖片預覽 *@
-                                    <img style="width:320px;height:240px" id="preview" src="~/images/NoImage.jpg" class="img-fluid mb-3">
-                                    <input type="file" id="imageInput" name="imageInput" class="form-control" aria-label="file example"
-                                           placeholder="請上傳活動方照片">
-                                    <div id="invalid_imageInput" class="invalid-feedback">
-                                        請選擇要上傳的圖片
-                                    </div>
-                                </div>
-                                <div id="status" class="valid-feedback">
+                                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                                    <form class="needs-validation" novalidate>
+                                        <div class="col-12 col-md-3">
+                                            <label for="photo" class="form-label">修改活動方照片</label>
+                                        </div>
+                                        <div class="col-12 col-md-9 mb-3">
+                                            @* 顯示圖片預覽 *@
+                                            <img style="width:320px;height:240px" id="preview" src="~/images/NoImage.jpg" class="img-fluid mb-3">
+                                            <input type="file" id="imageInput" name="imageInput" class="form-control" aria-label="file example"
+                                                   placeholder="請上傳活動方照片">
+                                            <div id="invalid_imageInput" class="invalid-feedback">
+                                                請選擇要上傳的圖片
+                                            </div>
+                                        </div>
+                                        <div id="status" class="valid-feedback">
+                                        </div>
+                                        <div class="d-flex flex-column flex-md-row bd-highlight mb-3 justify-content-md-start justify-content-sm-end">
+                                            <div class="p-2 bd-highlight sm-w-100 ml-auto">
+                                                <button type="submit" class="btn btn-primary" formnovalidate>送出變更</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-
-                            <div class="d-flex flex-column flex-md-row bd-highlight mb-3 justify-content-md-start justify-content-sm-end">
-                                <div class="p-2 bd-highlight sm-w-100 ml-auto">
-                                    <button id="submit" type="submit" class="btn btn-primary" formnovalidate>送出修改</button>
-                                </div>
-                            </div>
-                        </form>
-
+                        </div>
                     </div>
+                    
                 </div>
                 <!-- 表單 end -->
             </div>
-            <!-- col-8 end -->
         </section>
         <!--註冊頁結束-->
 
@@ -148,7 +215,7 @@
         <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
         <script src="https://unpkg.com/axios@1.6.8/dist/axios.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="~/js/OrganizerInfo.js"></script>
+        <script src="~/js/OrganizerInfo.js"></script>
     }
 </body>
 

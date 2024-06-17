@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-12 col-md-8 offset-md-2">
                         <!-- 表單 start -->
-                        <form id="forgetPasswordForm" class="needs-validation" novalidate>
+                        <form v-on:submit.prevent="submitForm" id="forgetPasswordForm" class="needs-validation" novalidate>
                             <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
                             <div class="row">
                                 <div class="col-12 col-md-3">
