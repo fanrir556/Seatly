@@ -211,7 +211,7 @@ var vueApp = {
         }
     },
     // 在應用程式創建時立即執行方法
-    created() {
+    mounted() {
         this.getOrganizerId();
         this.photopreview();
     },

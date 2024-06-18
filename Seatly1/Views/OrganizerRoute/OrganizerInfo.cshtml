@@ -36,7 +36,7 @@
                             <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">基本資料</button>
                             <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">信箱</button>
                             <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">密碼</button>
-                            <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">修改活動方照片</button>
+                            <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">活動方照片</button>
                         </div>
                         <div class="col-12 col-md-8 offset-2">
                             <div class="tab-content" id="v-pills-tabContent">
@@ -104,7 +104,7 @@
                                             <label for="email_old" class="form-label">舊Email</label>
                                         </div>
                                         <div class="col-12 col-md-9 mb-3">
-                                            <input type="text" id="email_old" v-model="email_old" class="form-control" placeholder="name@example.com" required>
+                                            <input type="text" id="email_old" v-model="email_old" class="form-control" placeholder="name@example.com" disabled>
                                             <div id="invalid_email" class="invalid-feedback">
                                             </div>
                                         </div>
@@ -114,6 +114,7 @@
                                         <div class="col-12 col-md-9 mb-3">
                                             <input type="text" id="email_new" v-model="email_new" class="form-control" placeholder="name@example.com" required>
                                             <div id="invalid_email" class="invalid-feedback">
+                                                
                                             </div>
                                         </div>
                                         <div class="d-flex flex-column flex-md-row bd-highlight mb-3 justify-content-md-start justify-content-sm-end">
@@ -134,7 +135,7 @@
                                             </label>
                                         </div>
                                         <div class="col-12 col-md-9 mb-3">
-                                            <input type="password" id="password_old" class="form-control"
+                                            <input type="password" id="password_old" v-model="password_old" class="form-control"
                                                    placeholder="請輸入舊密碼" required>
                                             <div id="invalid_password_old" class="invalid-feedback">
                                                 這是必塡欄位
@@ -147,7 +148,7 @@
                                             </label>
                                         </div>
                                         <div class="col-12 col-md-9 mb-3">
-                                            <input type="password" id="password_new" class="form-control"
+                                            <input type="password" id="password_new" v-model="password_new" class="form-control"
                                                    placeholder="請輸入新密碼" required>
                                             <div id="invalid_password_new" class="invalid-feedback">
                                                 這是必塡欄位
@@ -158,7 +159,7 @@
                                             <label for="password_confirm" class="form-label">確認密碼</label>
                                         </div>
                                         <div class="col-12 col-md-9 mb-3">
-                                            <input type="password" id="password_confirm" name="password_confirm" class="form-control"
+                                            <input type="password" id="password_confirm" name="password_confirm" v-model="password_confirm" class="form-control"
                                                    placeholder="再次輸入新密碼" required>
                                             <div id="invalid_password_confirm" class="invalid-feedback">
                                                 這是必塡欄位
@@ -183,7 +184,7 @@
                                             @* 顯示圖片預覽 *@
                                             <img style="width:320px;height:240px" id="preview" src="~/images/NoImage.jpg" class="img-fluid mb-3">
                                             <input type="file" id="imageInput" name="imageInput" class="form-control" aria-label="file example"
-                                                   placeholder="請上傳活動方照片">
+                                                   placeholder="請上傳活動方照片" required>
                                             <div id="invalid_imageInput" class="invalid-feedback">
                                                 請選擇要上傳的圖片
                                             </div>
@@ -215,10 +216,8 @@
     <!--    JavaScripts-->
     <!-- ===============================================-->
     @section Scripts{
-        <script src="https://unpkg.com/vue@3.4.26/dist/vue.global.js"></script>
         <script src="https://unpkg.com/axios@1.6.8/dist/axios.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="~/js/OrganizerInfo.js"></script>
+        <script setup src="~/js/OrganizerInfo.js"></script>
     }
 </body>
 

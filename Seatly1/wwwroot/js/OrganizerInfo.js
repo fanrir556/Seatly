@@ -1,25 +1,4 @@
-﻿import {ref,onMounted } from 'vue'
-
-// 透過Session取得活動方的id
-const organizerid = sessionStorage.getItem("OrganizerId");
-console.log(`OrganizerId：${organizerid}`);
-
-// 未登入時，跳到登入頁
-if (organizerid == null) {
-    window.location.href = '/OrganizerRoute/OrganizerLogin';
-}
-
-const account = ref('');
-const name = ref('');
-const URL = ref('');
-const phone = ref('');
-
-// 顯示活動方基本資料
-function showOrganizer() {
-
-};
-
-// 顯示活動方資訊
+﻿// 顯示活動方資訊
 //$.ajax({
 //    url: `/api/OrganizersApi/info/${organizerid}`, // 后端 API 的 URL
 //    type: 'GET',
@@ -59,26 +38,6 @@ function showOrganizer() {
 //        console.log(err.responseText)
 //    }
 //});
-
-/* 預覽上傳圖片 */
-
-// 引用自：https://codepen.io/tohousanae/pen/mdgzYxZ
-$(function () {
-    $('#imageInput').on('change', function (event) {
-        var files = event.target.files;
-        var image = files[0]
-        var reader = new FileReader();
-        reader.onload = function (file) {
-            var img = new Image();
-            console.log(file);
-            img.src = file.target.result;
-            $('#preview').attr('src', img.src);
-        }
-        reader.readAsDataURL(image);
-        console.log(files);
-    });
-});
-
 
 // 修改活動方資訊
 //$('#modifyOrganizerForm').submit(function (event) {
@@ -225,24 +184,96 @@ $(function () {
 //    }
 //});
 
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-// Wait for the DOM to be ready
-document.addEventListener("DOMContentLoaded", function () {
+// vue上傳圖片：https://hao1229.github.io/2019/08/05/EcommercePractice5/
 
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.querySelectorAll('.needs-validation');
+var vueApp = {
+    data() {
+        return {
+            account: '',
+            name: '',
+            URL: '',
+            phone: '',
+            email_old: '',
+            emal_new: '',
+            password_confirm: '',
+        };
+    },
+    watch: {
+        
+    },
+    methods: {
+        // 顯示活動方基本資料
+        showOrganizerInformation() {
+            // 依照活動id取得活動資訊
+            axios.get(`/api/OrganizersApi/info/${this.getOrganizerId()}`)
+                .then(response => {
+                    console.log(response.data);
+                    const info = response.data;
+                    this.account = info.organizerAccount;
+                    this.name = info.organizerName;
+                    this.URL = info.reservationUrl;
+                    this.phone = info.phone;
+                    this.email_old = info.email;
+                })
+                .catch(error => {
+                    console.error('取得活動方資訊時發生錯誤:', error);
+                });
+        },
+        getOrganizerId() {
+            // 透過Session取得活動方的id
+            let organizerid = sessionStorage.getItem("OrganizerId");
+            console.log(`OrganizerId：${organizerid}`);
 
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-
+            // 未登入時，跳到登入頁
+            if (organizerid == null) {
+                window.location.href = '/OrganizerRoute/OrganizerLogin';
+            }
+            return organizerid;
+        },
+        // 送出表單
+        submitForm() {
+            // 执行 Bootstrap 5 表单验证
+            let forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
                 form.classList.add('was-validated');
-            }, false);
-        });
-});
+            });
 
+            // 检查是否通过验证
+            if (document.querySelectorAll('.was-validated :invalid').length === 0) {
+                // 通过验证，调用 editActivity 方法
+                
+            }
+        },
+        // 修改資料的操作
+        editActivity() {
+            
+
+        },
+        photopreview() {
+            // 上傳圖片預覽
+            // 引用自：https://codepen.io/tohousanae/pen/mdgzYxZ
+            $(function () {
+                $('#imageInput').on('change', function (event) {
+                    var files = event.target.files;
+                    var image = files[0]
+                    var reader = new FileReader();
+                    reader.onload = function (file) {
+                        var img = new Image();
+                        console.log(file);
+                        img.src = file.target.result;
+                        $('#preview').attr('src', img.src);
+                    }
+                    reader.readAsDataURL(image);
+                    console.log(files);
+                });
+            });
+        }
+    },
+    // 在應用程式創建時立即執行方法
+    created() {
+        this.getOrganizerId(); 
+        this.photopreview();
+        this.showOrganizerInformation();
+    },
+};
+var app = Vue.createApp(vueApp).mount("#app");

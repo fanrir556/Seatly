@@ -2,23 +2,22 @@
 1. 忘記密碼：https://blog.hungwin.com.tw/aspnet-mvc-member-forget-reset-pwd/
 */
 
-/* 預覽上傳圖片 */
-
 // demo用一鍵輸入資料
-async function demo() {
+function demo() {
     // 获取用户输入的注册表单信息
-    await $('#account').val('TainanTraval');
-    await $('#name').val('台南旅遊網');
-    await $('#URL').val('https://www.twtainan.net/');
-    await $('#email').val('tainantraval@gmail.com');
-    await $('#phone').val('0966111555');
-    await $('#password1').val('Pass0rd-iii');
-    await $('#password2').val('Pass0rd-iii');
+    $('#account').val('TainanTraval');
+    $('#name').val('台南旅遊網');
+    $('#URL').val('https://www.twtainan.net/');
+    $('#email').val('tainantraval@gmail.com');
+    $('#phone').val('0966111555');
+    $('#password1').val('Pass0rd-iii');
+    $('#password2').val('Pass0rd-iii');
 }
 
+/* 預覽上傳圖片 */
 // 引用自：https://codepen.io/tohousanae/pen/mdgzYxZ
-$(async function () {
-    await $('#imageInput').on('change', function (event) {
+$(function () {
+    $('#imageInput').on('change', function (event) {
         var files = event.target.files;
         var image = files[0]
         var reader = new FileReader();
@@ -34,16 +33,16 @@ $(async function () {
 });
 
 // 關閉登入失敗Modal
-$('#closeErrorModalBtn').click(async function () {
-    await $('#loginErrorModal').modal('hide'); // 關閉Modal
+$('#closeErrorModalBtn').click(function () {
+    $('#loginErrorModal').modal('hide'); // 關閉Modal
 });
 
-$('#closeErrorModalBtn2').click(async function () {
-    await $('#loginErrorModal').modal('hide'); // 關閉Modal
+$('#closeErrorModalBtn2').click(function () {
+    $('#loginErrorModal').modal('hide'); // 關閉Modal
 });
 
 // 活動方登入程式
-$('#loginForm').submit(function (event) {
+$('#loginForm').submit(async function (event) {
     event.preventDefault(); // 阻止表单默认提交行為
 
     // 获取用户输入的账号和密码
