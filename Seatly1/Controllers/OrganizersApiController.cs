@@ -522,19 +522,7 @@ namespace Seatly1.Controllers
         [HttpPatch("put/{id}")]
         public async Task<ActionResult<Organizers>> PutOrganizerInfo(int id, OrganizerInfoDTO organizer)
         {
-            var existingActivity = await _context.NotificationRecords.FindAsync(id);
-            if (existingActivity == null)
-            {
-                return "活動不存在";
-            }
-
-            // 更新現有活動的屬性
-            existingActivity.DescriptionN = activity.DescriptionN;
-
-            // 儲存變更
-            await _context.SaveChangesAsync();
-
-            return "修改描述成功";
+            
         }
 
     }
