@@ -196,6 +196,7 @@ var vueApp = {
             email_old: '',
             emal_new: '',
             password_confirm: '',
+            photoName: '',
         };
     },
     watch: {
@@ -214,6 +215,7 @@ var vueApp = {
                     this.URL = info.reservationUrl;
                     this.phone = info.phone;
                     this.email_old = info.email;
+                    this.photoName = info.organizerPhoto;
                 })
                 .catch(error => {
                     console.error('取得活動方資訊時發生錯誤:', error);
@@ -230,8 +232,8 @@ var vueApp = {
             }
             return organizerid;
         },
-        // 送出表單
-        submitForm() {
+        // 送出修改基本資料表單
+        submitEditInfoForm() {
             // 执行 Bootstrap 5 表单验证
             let forms = document.querySelectorAll('.needs-validation');
             Array.prototype.slice.call(forms).forEach(function (form) {
@@ -241,12 +243,64 @@ var vueApp = {
             // 检查是否通过验证
             if (document.querySelectorAll('.was-validated :invalid').length === 0) {
                 // 通过验证，调用 editActivity 方法
-                
+                this.editInfo();
             }
         },
-        // 修改資料的操作
-        editActivity() {
+        // 送出修改Email表單
+        submitEditEmailForm() {
+            // 执行 Bootstrap 5 表单验证
+            let forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.classList.add('was-validated');
+            });
+
+            // 检查是否通过验证
+            if (document.querySelectorAll('.was-validated :invalid').length === 0) {
+                // 通过验证，调用 editActivity 方法
+                this.editEmail();
+            }
+        },
+        // 送出修改密碼表單
+        submitEditPasswordForm() {
+            // 执行 Bootstrap 5 表单验证
+            let forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.classList.add('was-validated');
+            });
+
+            // 检查是否通过验证
+            if (document.querySelectorAll('.was-validated :invalid').length === 0) {
+                // 通过验证，调用 editActivity 方法
+                this.editPassword();
+            }
+        },
+        // 送出修改活動方照片表單
+        submitEditPhotoForm() {
+            // 执行 Bootstrap 5 表单验证
+            let forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.classList.add('was-validated');
+            });
+
+            // 检查是否通过验证
+            if (document.querySelectorAll('.was-validated :invalid').length === 0) {
+                // 通过验证，调用 editActivity 方法
+                this.editPassword();
+            }
+        },
+        // 修改基本資料的操作
+        editInfo() {
             
+        },
+        // 修改Email的操作
+        editEmail() {
+
+        },
+        // 修改密碼的操作
+        editPassword() {
+
+        },
+        editPhoto() {
 
         },
         photopreview() {

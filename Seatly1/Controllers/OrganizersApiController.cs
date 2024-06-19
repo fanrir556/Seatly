@@ -267,12 +267,8 @@ namespace Seatly1.Controllers
             { 
                 OrganizerAccount = org.OrganizerAccount,
                 OrganizerName = org.OrganizerName,
-                OrganizerCategory = org.OrganizerCategory,
                 OrganizerPhoto = org.OrganizerPhoto,
-                Menu = org.Menu,
-                Address = org.Address,
                 ReservationUrl = org.ReservationUrl,
-                Hashtag = org.Hashtag,
                 Email = org.Email,
                 Phone = org.Phone,
             })
@@ -375,12 +371,8 @@ namespace Seatly1.Controllers
                     OrganizerAccount = organizer.OrganizerAccount,
                     LoginPassword = organizer.LoginPassword,
                     OrganizerName = organizer.OrganizerName,
-                    OrganizerCategory = organizer.OrganizerCategory,
                     OrganizerPhoto = organizer.OrganizerPhoto,
-                    Menu = organizer.Menu,
-                    Address = organizer.Address,
                     ReservationUrl = organizer.ReservationUrl,
-                    Hashtag = organizer.Hashtag,
                     Email = organizer.Email,
                     Phone = organizer.Phone,
                     Validation = organizer.Validation
@@ -526,67 +518,23 @@ namespace Seatly1.Controllers
             // 返回成功响应
         }
 
-        // 修改活動方資訊
-        [HttpPut("put/{id}")]
-        public async Task<ActionResult<Organizers>> PutOrganizer(int id, OrganizerDTO organizer)
+        // 修改活動方基本資料
+        [HttpPatch("put/{id}")]
+        public async Task<ActionResult<Organizers>> PutOrganizerInfo(int id, OrganizerInfoDTO organizer)
         {
-            var org = await _context.Organizers.FindAsync(id);
-            if (org == null)
+            var existingActivity = await _context.NotificationRecords.FindAsync(id);
+            if (existingActivity == null)
             {
-                return NotFound("活動方不存在");
+                return "活動不存在";
             }
-            else if (await _context.Organizers.AnyAsync(o => o.Email == organizer.Email && o.OrganizerId != id))
-            {
-                return BadRequest("信箱已被註冊");
-            }
-            else if (await _context.Organizers.AnyAsync(o => o.Phone == organizer.Phone && o.OrganizerId != id))
-            {
-                return BadRequest("電話已被註冊");
-            }
-            else
-            {
-                if (organizer.OrganizerPhoto == null)
-                {
-                    org.LoginPassword = organizer.LoginPassword;
-                    org.OrganizerName = organizer.OrganizerName;
-                    org.OrganizerCategory = organizer.OrganizerCategory;
-                    org.Menu = organizer.Menu;
-                    org.Address = organizer.Address;
-                    org.ReservationUrl = organizer.ReservationUrl;
-                    org.Hashtag = organizer.Hashtag;
-                    org.Email = organizer.Email;
-                    org.Phone = organizer.Phone;
-                    _context.Entry(org).State = EntityState.Modified;
-                    try { await _context.AddRangeAsync(); }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        throw;
-                    }
-                    await _context.SaveChangesAsync();
-                    return Ok("已送出修改");
-                }
-                else
-                {
-                    org.LoginPassword = organizer.LoginPassword;
-                    org.OrganizerName = organizer.OrganizerName;
-                    org.OrganizerCategory = organizer.OrganizerCategory;
-                    org.OrganizerPhoto = organizer.OrganizerPhoto;
-                    org.Menu = organizer.Menu;
-                    org.Address = organizer.Address;
-                    org.ReservationUrl = organizer.ReservationUrl;
-                    org.Hashtag = organizer.Hashtag;
-                    org.Email = organizer.Email;
-                    org.Phone = organizer.Phone;
-                    _context.Entry(org).State = EntityState.Modified;
-                    try { await _context.AddRangeAsync(); }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        throw;
-                    }
-                    await _context.SaveChangesAsync();
-                    return Ok("已送出修改");
-                }
-            }
+
+            // 更新現有活動的屬性
+            existingActivity.DescriptionN = activity.DescriptionN;
+
+            // 儲存變更
+            await _context.SaveChangesAsync();
+
+            return "修改描述成功";
         }
 
     }
