@@ -519,11 +519,22 @@ namespace Seatly1.Controllers
         }
 
         // 修改活動方基本資料
-        [HttpPatch("put/{id}")]
-        public async Task<ActionResult<Organizers>> PutOrganizerInfo(int id, OrganizerInfoDTO organizer)
+        [HttpPut("OrginizerInfo/put/{id}")]
+        public async Task<string> PutOrginizerInfo(int id, OrganizerInfoDTO orginizer)
         {
-            
-        }
+            var existingActivity = await _context.NotificationRecords.FindAsync(id);
+            if (existingActivity == null)
+            {
+                return "活動不存在";
+            }
 
+            // 更新現有活動的屬性
+            existingActivity.DescriptionN = orginizer.DescriptionN;
+
+            // 儲存變更
+            await _context.SaveChangesAsync();
+
+            return "修改描述成功";
+        }
     }
 }
