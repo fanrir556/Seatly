@@ -63,6 +63,20 @@ Queuely是一個提供活動宣傳和報到服務的整合平台。
    dotnet run
    ```
 
+### 資料庫
+
+1. 開啟SSMS
+
+2. 連線(localdb)\ProjectModels
+   
+   ```bash
+   (localdb)\ProjectModels
+   ```
+
+3. 從GitHub，Sql備份資料夾下載Seatly.bacpac
+
+4. 右鍵點擊資料庫，匯入資料層應用程式，匯入Seatly.bacpac
+
 ## 功能展示
 
 1. [首頁](#首頁)
@@ -115,7 +129,14 @@ Queuely是一個提供活動宣傳和報到服務的整合平台。
    
 
 ### 活動方系統
+1. 進行活動方註冊
+   
 
+
+3. 活動方登入
+4. 修改活動方資訊
+5. 活動管理
+   
 ### 點數專區
 
 #### 會員介面

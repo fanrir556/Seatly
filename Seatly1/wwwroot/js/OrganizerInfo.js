@@ -290,7 +290,11 @@ var vueApp = {
         },
         // 修改基本資料的操作
         editInfo() {
-            
+            let _this = this;
+            var request = {};
+            request.organizerName = _this.name;
+            request.reservationUrl = _this.URL;
+            request.phone = _this.phone;
         },
         // 修改Email的操作
         editEmail() {
