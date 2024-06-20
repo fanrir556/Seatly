@@ -194,7 +194,9 @@ var vueApp = {
             URL: '',
             phone: '',
             email_old: '',
-            emal_new: '',
+            email_new: '',
+            password_old: '',
+            password_new: '',
             password_confirm: '',
             photoName: '',
         };
@@ -204,9 +206,9 @@ var vueApp = {
     },
     methods: {
         // 顯示活動方基本資料
-        showOrganizerInformation() {
+        async showOrganizerInformation() {
             // 依照活動id取得活動資訊
-            axios.get(`/api/OrganizersApi/info/${this.getOrganizerId()}`)
+            await axios.get(`/api/OrganizersApi/info/${this.getOrganizerId()}`)
                 .then(response => {
                     console.log(response.data);
                     const info = response.data;
@@ -234,67 +236,38 @@ var vueApp = {
         },
         // 送出修改基本資料表單
         submitEditInfoForm() {
-            // 执行 Bootstrap 5 表单验证
-            let forms = document.querySelectorAll('.needs-validation');
-            Array.prototype.slice.call(forms).forEach(function (form) {
-                form.classList.add('was-validated');
-            });
-
-            // 检查是否通过验证
-            if (document.querySelectorAll('.was-validated :invalid').length === 0) {
-                // 通过验证，调用 editActivity 方法
-                this.editInfo();
-            }
+            this.editInfo();
         },
         // 送出修改Email表單
         submitEditEmailForm() {
-            // 执行 Bootstrap 5 表单验证
-            let forms = document.querySelectorAll('.needs-validation');
-            Array.prototype.slice.call(forms).forEach(function (form) {
-                form.classList.add('was-validated');
-            });
-
-            // 检查是否通过验证
-            if (document.querySelectorAll('.was-validated :invalid').length === 0) {
-                // 通过验证，调用 editActivity 方法
-                this.editEmail();
-            }
+            this.editEmail();
         },
         // 送出修改密碼表單
         submitEditPasswordForm() {
-            // 执行 Bootstrap 5 表单验证
-            let forms = document.querySelectorAll('.needs-validation');
-            Array.prototype.slice.call(forms).forEach(function (form) {
-                form.classList.add('was-validated');
-            });
-
-            // 检查是否通过验证
-            if (document.querySelectorAll('.was-validated :invalid').length === 0) {
-                // 通过验证，调用 editActivity 方法
-                this.editPassword();
-            }
+            this.editPassword();
         },
         // 送出修改活動方照片表單
         submitEditPhotoForm() {
-            // 执行 Bootstrap 5 表单验证
-            let forms = document.querySelectorAll('.needs-validation');
-            Array.prototype.slice.call(forms).forEach(function (form) {
-                form.classList.add('was-validated');
-            });
-
-            // 检查是否通过验证
-            if (document.querySelectorAll('.was-validated :invalid').length === 0) {
-                // 通过验证，调用 editActivity 方法
-                this.editPassword();
-            }
+            this.editPhoto();
         },
         // 修改基本資料的操作
         editInfo() {
             let _this = this;
-            var request = {};
-            request.organizerName = _this.name;
-            request.reservationUrl = _this.URL;
-            request.phone = _this.phone;
+            axios({
+                method: 'put',
+                url: `/api/OrganizersApi/OrginizerInfo/put/${this.getOrganizerId()}`,
+                data: {
+                    organizerName: `${_this.name}`,
+                    reservationUrl: `${_this.URL}`,
+                    phone: `${_this.phone}`,
+                }
+            }).then(response => {
+                alert("修改成功");
+                console.log(response.data);
+            })
+            .catch(error => {
+                    console.error('修改活動方資訊時發生錯誤:', error);
+            });;
         },
         // 修改Email的操作
         editEmail() {
