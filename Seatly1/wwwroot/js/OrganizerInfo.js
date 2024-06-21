@@ -293,11 +293,24 @@ var vueApp = {
             })
             .catch(error => {
                     console.error('修改活動方資訊時發生錯誤:', error);
-            });;
+            });
         },
         // 修改Email的操作
         async editEmail() {
-            alert("修改email");
+            let _this = this;
+            await axios({
+                method: 'put',
+                url: `/api/OrganizersApi/OrginizerEmail/put/${this.getOrganizerId()}`,
+                data: {
+                    organizerEmail: `${_this.email_new}`,
+                }
+            }).then(response => {
+                alert("修改成功");
+                console.log(response.data);
+            })
+                .catch(error => {
+                    console.error('修改Email發生錯誤:', error);
+                });
         },
         // 修改密碼的操作
         async editPassword() {

@@ -522,21 +522,56 @@ namespace Seatly1.Controllers
         [HttpPut("OrginizerInfo/put/{id}")]
         public async Task<string> PutOrginizerInfo(int id, OrganizerInfoDTO orginizer)
         {
-            var org = await _context.Organizers.FindAsync(id);
-            if (org == null)
+            // 检查电话号码是否已被注册
+            if (await _context.Organizers.AnyAsync(o => o.Phone == orginizer.Phone))
             {
-                return "活動方不存在";
+                return "電話已被註冊";
             }
+            else
+            {
+                var org = await _context.Organizers.FindAsync(id);
+                if (org == null)
+                {
+                    return "活動方不存在";
+                }
 
-            // 更新現有活動的屬性
-            org.OrganizerName = orginizer.OrganizerName;
-            org.ReservationUrl = orginizer.ReservationUrl;
-            org.Phone = orginizer.Phone;
+                // 更新現有活動的屬性
+                org.OrganizerName = orginizer.OrganizerName;
+                org.ReservationUrl = orginizer.ReservationUrl;
+                org.Phone = orginizer.Phone;
 
-            // 儲存變更
-            await _context.SaveChangesAsync();
+                // 儲存變更
+                await _context.SaveChangesAsync();
 
-            return "修改活動方基本資料成功";
+                return "修改活動方基本資料成功";
+            }
+        }
+
+        // 修改活動方Email
+        [HttpPut("OrginizerEmail/put/{id}")]
+        public async Task<string> PutOrginizerEmail(int id, OrganizerEmailDTO orginizer)
+        {
+            // 检查邮箱、电子邮件和电话号码是否已被注册
+            if (await _context.Organizers.AnyAsync(o => o.Email == orginizer.OrganizerEmail))
+            {
+                return "信箱已被註冊";
+            }
+            else
+            {
+                var org = await _context.Organizers.FindAsync(id);
+                if (org == null)
+                {
+                    return "活動方不存在";
+                }
+
+                // 更新現有活動的屬性
+                org.Email = orginizer.OrganizerEmail;
+
+                // 儲存變更
+                await _context.SaveChangesAsync();
+
+                return "修改Email成功";
+            }
         }
     }
 }
