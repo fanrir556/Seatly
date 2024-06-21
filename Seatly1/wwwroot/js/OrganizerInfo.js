@@ -325,7 +325,7 @@ var vueApp = {
                 $('#password_old').removeClass("is-valid");
                 $('#password_old').addClass("is-invalid");
                 $('#invalid_password_old').text("舊密碼不正確");
-                this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;
+                /*this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;*/
                 console.error(error);
             });
         },
