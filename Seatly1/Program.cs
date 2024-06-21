@@ -23,7 +23,7 @@ services.AddAuthentication().AddGoogle(googleOptions =>
     //googleOptions.ClientId = "600911081668-micikktb27e2fleams2t528u7pe422gj.apps.googleusercontent.com";
     //googleOptions.ClientSecret = "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";
 
-    // Azure網域QueuelyWeb-Sanae ! 
+    // Sanae的google第三方登入相關功能
     googleOptions.ClientId = "480037630620-tq1hrlvb2mdmbqh6s9cot6li1194rvis.apps.googleusercontent.com";
     googleOptions.ClientSecret = "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";
 

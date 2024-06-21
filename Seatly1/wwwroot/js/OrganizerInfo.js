@@ -199,6 +199,10 @@ var vueApp = {
             password_new: '',
             password_confirm: '',
             photoName: '',
+            // 前端驗證用正則表達式
+            regexEmail: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 
+            regexURL: /^(http|https):\/\/[^\s$.?#].[^\s]*$/, 
+            regexPasswordNew: /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/, 
         };
     },
     watch: {
@@ -236,24 +240,46 @@ var vueApp = {
         },
         // 送出修改基本資料表單
         submitEditInfoForm() {
-            this.editInfo();
+            _regexURL = this.regexURL;
+
+            if ((_regexURL).test(this.URL) == false && (this.URL != '')) {
+                $('#URL').removeClass("is-valid");
+                $('#URL').addClass("is-invalid");
+                $('#invalid_url').text("網址格式不正確");
+            }
+            else {
+                $('#URL').removeClass("is-invalid");
+                $('#URL').addClass("is-valid");
+                this.editInfo();
+            }
         },
         // 送出修改Email表單
         submitEditEmailForm() {
-            this.editEmail();
+            _regexEmail = this.regexEmail;
+
+            if ((_regexEmail).test(this.email_new) == false && (this.email_new != '')) {
+                $('#email_new').removeClass("is-valid");
+                $('#email_new').addClass("is-invalid");
+                $('#invalid_email_new').text("Email格式不正確");
+            }
+            else {
+                $('#email_new').removeClass("is-invalid");
+                $('#email_new').addClass("is-valid");
+                this.editEmail();
+            }
         },
         // 送出修改密碼表單
         submitEditPasswordForm() {
-            this.editPassword();
+            
         },
         // 送出修改活動方照片表單
         submitEditPhotoForm() {
-            this.editPhoto();
+            
         },
         // 修改基本資料的操作
-        editInfo() {
+        async editInfo() {
             let _this = this;
-            axios({
+            await axios({
                 method: 'put',
                 url: `/api/OrganizersApi/OrginizerInfo/put/${this.getOrganizerId()}`,
                 data: {
@@ -270,14 +296,14 @@ var vueApp = {
             });;
         },
         // 修改Email的操作
-        editEmail() {
-
+        async editEmail() {
+            alert("修改email");
         },
         // 修改密碼的操作
-        editPassword() {
+        async editPassword() {
 
         },
-        editPhoto() {
+        async editPhoto() {
 
         },
         photopreview() {

@@ -42,7 +42,7 @@
                             <div class="tab-content" id="v-pills-tabContent">
                                 <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
                                     <!-- 表單 start -->
-                                    <form id="modifyOrganizerForm" v-on:submit.prevent="submitEditInfoForm" v:on-submit="submitForm1" class="needs-validation" novalidate>
+                                    <form id="modifyOrganizerForm" v-on:submit.prevent="submitEditInfoForm" class="needs-validation" novalidate>
                                         <!-- .row>(.col-12.col-md-3 mb-3+.col-12.col-md-9 mb-3)*10 -->
                                         <div class="row">
                                             <div class="col-12">
@@ -105,7 +105,7 @@
                                         </div>
                                         <div class="col-12 col-md-9 mb-3">
                                             <input type="text" id="email_old" v-model="email_old" class="form-control" placeholder="name@example.com" disabled>
-                                            <div id="invalid_email" class="invalid-feedback">
+                                            <div id="invalid_email_old" class="invalid-feedback">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-3">
@@ -113,7 +113,7 @@
                                         </div>
                                         <div class="col-12 col-md-9 mb-3">
                                             <input type="text" id="email_new" v-model="email_new" class="form-control" placeholder="name@example.com" required>
-                                            <div id="invalid_email" class="invalid-feedback">
+                                            <div id="invalid_email_new" class="invalid-feedback">
                                                 這是必填欄位
                                             </div>
                                         </div>
