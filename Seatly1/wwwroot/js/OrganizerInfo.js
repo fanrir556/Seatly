@@ -199,10 +199,11 @@ var vueApp = {
             password_new: '',
             password_confirm: '',
             photoName: '',
+            alert: '',
             // 前端驗證用正則表達式
             regexEmail: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 
             regexURL: /^(http|https):\/\/[^\s$.?#].[^\s]*$/, 
-            regexPasswordNew: /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/, 
+            regexPassword: /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/, 
         };
     },
     watch: {
@@ -225,6 +226,7 @@ var vueApp = {
                 })
                 .catch(error => {
                     console.error('取得活動方資訊時發生錯誤:', error);
+                    this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;
                 });
         },
         getOrganizerId() {
@@ -262,6 +264,11 @@ var vueApp = {
                 $('#email_new').addClass("is-invalid");
                 $('#invalid_email_new').text("Email格式不正確");
             }
+            else if (this.email_new == '') {
+                $('#email_new').removeClass("is-valid");
+                $('#email_new').addClass("is-invalid");
+                $('#invalid_email_new').text("這是必填欄位");
+            }
             else {
                 $('#email_new').removeClass("is-invalid");
                 $('#email_new').addClass("is-valid");
@@ -270,7 +277,57 @@ var vueApp = {
         },
         // 送出修改密碼表單
         submitEditPasswordForm() {
-            
+            axios.post('/api/OrganizersApi/OrginizerPasswordConfirm', {
+                loginPassword: this.password_old,
+                organizerAccount: this.account
+            })
+            .then((response) => {
+                console.log(response.text);
+                // 密碼存在於資料庫
+                _regexPassword = this.regexPassword;
+
+                if ((_regexPassword).test(this.password_new) == false && (this.password_new != '')) {
+                    $('#password_new').removeClass("is-valid");
+                    $('#password_new').addClass("is-invalid");
+                    $('#invalid_password_new').text("密碼至少包含一個數字、一個大寫字母、至少包含一個小寫字母、至少包含一個特殊字符(不包含底線、空白、冒號)、長度在8到16個字符之間");
+                }
+                else if (this.password_new != this.password_confirm) {
+                    $('#password_new').removeClass("is-valid");
+                    $('#password_new').addClass("is-invalid");
+                    $('#password_confirm').removeClass("is-valid");
+                    $('#password_confirm').addClass("is-invalid");
+                    $('#invalid_password_new').text("密碼與確認密碼不一致");
+                    $('#invalid_password_confirm').text("密碼與確認密碼不一致");
+                }
+                else if (this.password_old == '' || this.password_new == '' || this.password_confirm == '') {
+                    $('#password_old').removeClass("is-valid");
+                    $('#password_old').addClass("is-invalid");
+                    $('#password_new').removeClass("is-valid");
+                    $('#password_new').addClass("is-invalid");
+                    $('#password_confirm').removeClass("is-valid");
+                    $('#password_confirm').addClass("is-invalid");
+                    $('#invalid_password_old').text("這是必填欄位");
+                    $('#invalid_password_new').text("這是必填欄位");
+                    $('#invalid_password_confirm').text("這是必填欄位");
+                }
+                else {
+                    $('#password_old').removeClass("is-invalid");
+                    $('#password_old').addClass("is-valid");
+                    $('#password_new').removeClass("is-invalid");
+                    $('#password_new').addClass("is-valid");
+                    $('#password_confirm').removeClass("is-invalid");
+                    $('#password_confirm').addClass("is-valid");
+                    this.editPassword();
+                }
+            })
+            .catch((error) => {
+                // 密碼不存在於資料庫
+                $('#password_old').removeClass("is-valid");
+                $('#password_old').addClass("is-invalid");
+                $('#invalid_password_old').text("舊密碼不正確");
+                this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;
+                console.error(error);
+            });
         },
         // 送出修改活動方照片表單
         submitEditPhotoForm() {
@@ -288,11 +345,12 @@ var vueApp = {
                     phone: `${_this.phone}`,
                 }
             }).then(response => {
-                alert("修改成功");
+                this.alert = `<div class="alert alert-success" role = "alert" >${response.data}</div>`;
                 console.log(response.data);
             })
             .catch(error => {
-                    console.error('修改活動方資訊時發生錯誤:', error);
+                this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;
+            console.error('修改活動方資訊時發生錯誤:', error);
             });
         },
         // 修改Email的操作
@@ -305,19 +363,34 @@ var vueApp = {
                     organizerEmail: `${_this.email_new}`,
                 }
             }).then(response => {
-                alert("修改成功");
+                this.alert = `<div class="alert alert-success" role = "alert" >${response.data}</div>`;
                 console.log(response.data);
             })
                 .catch(error => {
-                    console.error('修改Email發生錯誤:', error);
-                });
+                this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;
+                console.error('修改Email發生錯誤:', error);
+            });
         },
         // 修改密碼的操作
         async editPassword() {
-
+            let _this = this;
+            await axios({
+                method: 'put',
+                url: `/api/OrganizersApi/OrginizerPassword/put/${this.getOrganizerId()}`,
+                data: {
+                    loginPassword: `${_this.password_new}`,
+                }
+            }).then(response => {
+                this.alert = `<div class="alert alert-success" role = "alert" >${response.data}</div>`;
+                console.log(response.data);
+            })
+                .catch(error => {
+                    this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;
+                    console.error('修改密碼發生錯誤:', error);
+                });
         },
         async editPhoto() {
-
+            this.alert = '<div class="alert alert-success" role = "alert" >修改活動照片成功</div>';
         },
         photopreview() {
             // 上傳圖片預覽

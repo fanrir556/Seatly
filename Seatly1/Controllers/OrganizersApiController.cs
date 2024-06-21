@@ -522,19 +522,19 @@ namespace Seatly1.Controllers
         [HttpPut("OrginizerInfo/put/{id}")]
         public async Task<string> PutOrginizerInfo(int id, OrganizerInfoDTO orginizer)
         {
+            var org = await _context.Organizers.FindAsync(id);
+
+            if (org == null)
+            {
+                return "活動方不存在";
+            }
             // 检查电话号码是否已被注册
-            if (await _context.Organizers.AnyAsync(o => o.Phone == orginizer.Phone))
+            else if (org.Phone != orginizer.Phone && await _context.Organizers.AnyAsync(o => o.Phone == orginizer.Phone))
             {
                 return "電話已被註冊";
             }
             else
             {
-                var org = await _context.Organizers.FindAsync(id);
-                if (org == null)
-                {
-                    return "活動方不存在";
-                }
-
                 // 更新現有活動的屬性
                 org.OrganizerName = orginizer.OrganizerName;
                 org.ReservationUrl = orginizer.ReservationUrl;
@@ -551,19 +551,19 @@ namespace Seatly1.Controllers
         [HttpPut("OrginizerEmail/put/{id}")]
         public async Task<string> PutOrginizerEmail(int id, OrganizerEmailDTO orginizer)
         {
-            // 检查邮箱、电子邮件和电话号码是否已被注册
-            if (await _context.Organizers.AnyAsync(o => o.Email == orginizer.OrganizerEmail))
+            var org = await _context.Organizers.FindAsync(id);
+
+            if (org == null)
+            {
+                return "活動方不存在";
+            }
+            // 检查邮箱是否已被注册
+            if (org.Email != orginizer.OrganizerEmail && await _context.Organizers.AnyAsync(org => org.Email == orginizer.OrganizerEmail))
             {
                 return "信箱已被註冊";
             }
             else
             {
-                var org = await _context.Organizers.FindAsync(id);
-                if (org == null)
-                {
-                    return "活動方不存在";
-                }
-
                 // 更新現有活動的屬性
                 org.Email = orginizer.OrganizerEmail;
 
@@ -571,6 +571,41 @@ namespace Seatly1.Controllers
                 await _context.SaveChangesAsync();
 
                 return "修改Email成功";
+            }
+        }
+
+        // 修改活動方密碼
+        [HttpPut("OrginizerPassword/put/{id}")]
+        public async Task<string> PutOrginizerPassword(int id, OrganizerPasswordDTO orginizer)
+        {
+            var org = await _context.Organizers.FindAsync(id);
+            if (org == null)
+            {
+                return "活動方不存在";
+            }
+
+            // 更新現有活動的屬性
+            org.LoginPassword = orginizer.LoginPassword;
+
+            // 儲存變更
+            await _context.SaveChangesAsync();
+
+            return "修改密碼成功";
+        }
+
+        // 舊密碼驗證api，用帳號密碼登入機制來判斷舊密碼是否存在
+        [HttpPost("OrginizerPasswordConfirm")]
+        public async Task<string> OrginizerPasswordConfirm(OrganizerLoginDTO orglogindto)
+        {
+            var user = await _context.Organizers.FirstOrDefaultAsync(u => u.OrganizerAccount == orglogindto.OrganizerAccount && u.LoginPassword == orglogindto.LoginPassword);
+
+            if (user == null)
+            {
+                return "舊密碼不存在";
+            }
+            else
+            {
+                return "修改密碼成功";
             }
         }
     }
