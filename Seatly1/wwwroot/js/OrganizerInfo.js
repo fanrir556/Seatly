@@ -373,21 +373,21 @@ var vueApp = {
         },
         // 修改密碼的操作
         async editPassword() {
-            //let _this = this;
-            //await axios({
-            //    method: 'put',
-            //    url: `/api/OrganizersApi/OrginizerPassword/put/${this.getOrganizerId()}`,
-            //    data: {
-            //        loginPassword: `${_this.password_new}`,
-            //    }
-            //}).then(response => {
-            //    this.alert = `<div class="alert alert-success" role = "alert" >${response.data}</div>`;
-            //    console.log(response.data);
-            //})
-            //    .catch(error => {
-            //        this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;
-            //        console.error('修改密碼發生錯誤:', error);
-            //    });
+            let _this = this;
+            await axios({
+                method: 'put',
+                url: `/api/OrganizersApi/OrginizerPassword/put/${this.getOrganizerId()}`,
+                data: {
+                    loginPassword: `${_this.password_new}`,
+                }
+            }).then(response => {
+                this.alert = `<div class="alert alert-success" role = "alert" >${response.data}</div>`;
+                console.log(response.data);
+            })
+                .catch(error => {
+                    this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;
+                    console.error('修改密碼發生錯誤:', error);
+                });
         },
         async editPhoto() {
             this.alert = '<div class="alert alert-success" role = "alert" >修改活動照片成功</div>';
