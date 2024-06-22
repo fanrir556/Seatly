@@ -210,6 +210,9 @@ var vueApp = {
         
     },
     methods: {
+        async clearAlert() {
+            this.alert = await '';
+        },
         // 顯示活動方基本資料
         async showOrganizerInformation() {
             // 依照活動id取得活動資訊
