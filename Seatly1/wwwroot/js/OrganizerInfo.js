@@ -338,7 +338,15 @@ var vueApp = {
         },
         // 送出修改活動方照片表單
         submitEditPhotoForm() {
-            
+            //    let photo;
+            //    let url = $('#URL').val();
+            //    let email = $('#email').val();
+            //    let phone = $('#phone').val();
+            //    let password1 = $('#password1').val();
+            //    let password2 = $('#password2').val();
+            //    let formData = new FormData();
+            //    let fileInput = document.getElementById('imageInput');
+            //    let file = fileInput.files[0];
         },
         // 修改基本資料的操作
         async editInfo() {
