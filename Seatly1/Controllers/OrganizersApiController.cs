@@ -593,6 +593,26 @@ namespace Seatly1.Controllers
             return "修改密碼成功";
         }
 
+        // 修改活動方照片名稱
+        [HttpPut("OrginizerPhotoName/put/{id}")]
+        public async Task<string> PutOrginizerPhotoName(int id, OrganizerPhotoDTO orginizer)
+        {
+            var org = await _context.Organizers.FindAsync(id);
+
+            if (org == null)
+            {
+                return "活動方不存在";
+            }
+
+            // 更新現有活動的屬性
+            org.OrganizerPhoto = orginizer.OrganizerPhoto;
+
+            // 儲存變更
+            await _context.SaveChangesAsync();
+
+            return "修改圖片成功";
+        }
+
         // 舊密碼驗證api，用帳號密碼登入機制來判斷舊密碼是否存在
         [HttpPost("OrginizerPasswordConfirm")]
         public async Task<string> OrginizerPasswordConfirm(OrganizerLoginDTO orglogindto)

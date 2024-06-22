@@ -226,6 +226,31 @@ var vueApp = {
                     this.phone = info.phone;
                     this.email_old = info.email;
                     this.photoName = info.organizerPhoto;
+
+                    // 取得預覽圖片
+                    let _photoName = encodeURI(`FileName=${this.photoName}`);
+                    // 引用程式碼：https://www.dotblogs.com.tw/supershowwei/2022/06/20/download-binary-data-like-image-using-jquery-ajax
+                    axios({
+                        url: `/api/OrganizersApi/photo/${this.getOrganizerId()}?${_photoName}`, // 后端 API 的 URL
+                        method: 'GET',
+                        responseType: 'blob' // 回傳圖片為blob物件
+                    })
+                        .then(response => {
+                            console.log(`圖片轉換成功${response.data}`);
+
+                            // blob物件轉換成圖片
+                            const fileReader = new FileReader();
+
+                            fileReader.onload = e => {
+                                $('#preview').attr('src', e.target.result).show();
+                                $('#imageInput').attr('src', e.target.result);
+                            };
+                            fileReader.readAsDataURL(response.data);
+                        })
+                        .catch(error => {
+                            console.log(`圖片轉換失敗${error}`);
+                        });
+
                 })
                 .catch(error => {
                     console.error('取得活動方資訊時發生錯誤:', error);
@@ -337,16 +362,50 @@ var vueApp = {
             })  
         },
         // 送出修改活動方照片表單
-        submitEditPhotoForm() {
-            //    let photo;
-            //    let url = $('#URL').val();
-            //    let email = $('#email').val();
-            //    let phone = $('#phone').val();
-            //    let password1 = $('#password1').val();
-            //    let password2 = $('#password2').val();
-            //    let formData = new FormData();
-            //    let fileInput = document.getElementById('imageInput');
-            //    let file = fileInput.files[0];
+        async submitEditPhotoForm() {
+            let formData = new FormData();
+            let fileInput = document.getElementById('imageInput');
+            let file = fileInput.files[0];
+
+            // 重新命名圖片檔，除了副檔名以外都由現在日期與時間替換
+            let currentDate = new Date();
+            let dateString = currentDate.getFullYear() + ('0' + (currentDate.getMonth() + 1)).slice(-2) + ('0' + currentDate.getDate()).slice(-2);
+            let timeString = ('0' + currentDate.getHours()).slice(-2) + ('0' + currentDate.getMinutes()).slice(-2) + ('0' + currentDate.getSeconds()).slice(-2);
+            let fileExtension = file.name.split('.').pop(); // 获取文件的扩展名
+            let fileName = dateString + '_' + timeString + '.' + fileExtension; // 文件名只保留附檔名，其他部分用日期和时间替换
+
+            formData.append('image', file, fileName);
+
+            // 将文件名存储到photo变量中
+            this.photoName = fileName;
+
+            // 发送Axios请求到后端上传图片
+            axios.post('/api/OrganizersApi/uploads', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(response => {
+                console.log('Image uploaded successfully:', response);
+                $('#status').text('Image uploaded successfully.');
+
+                // 图片上传成功后，再发送PUT请求更新圖片名稱
+                axios.put(`/api/OrganizersApi/OrginizerPhotoName/put/${this.getOrganizerId()}`, {
+                    OrganizerPhoto: this.photoName, // 使用新的文件名
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    // 修改成功
+                    this.alert = `<div class="alert alert-success" role = "alert" >${response.data}</div>`;
+                }).catch(error => {
+                    this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;
+                });
+
+            }).catch(error => {
+                console.error('Error uploading image:', error);
+                $('#status').text('Error uploading image.');
+            });
         },
         // 修改基本資料的操作
         async editInfo() {
@@ -403,9 +462,6 @@ var vueApp = {
                     this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;
                     console.error('修改密碼發生錯誤:', error);
                 });
-        },
-        async editPhoto() {
-            this.alert = '<div class="alert alert-success" role = "alert" >修改活動照片成功</div>';
         },
         photopreview() {
             // 上傳圖片預覽
