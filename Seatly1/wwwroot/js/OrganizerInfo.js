@@ -362,7 +362,7 @@ var vueApp = {
             })  
         },
         // 送出修改活動方照片表單
-        async submitEditPhotoForm() {
+        submitEditPhotoForm() {
             let formData = new FormData();
             let fileInput = document.getElementById('imageInput');
             let file = fileInput.files[0];
