@@ -244,7 +244,7 @@ var vueApp = {
         submitEditInfoForm() {
             _regexURL = this.regexURL;
 
-            if ((_regexURL).test(this.URL) == false && (this.URL != '')) {
+            if ((_regexURL).test(this.URL) === false && (this.URL != '')) {
                 $('#URL').removeClass("is-valid");
                 $('#URL').addClass("is-invalid");
                 $('#invalid_url').text("網址格式不正確");
@@ -259,12 +259,12 @@ var vueApp = {
         submitEditEmailForm() {
             _regexEmail = this.regexEmail;
 
-            if ((_regexEmail).test(this.email_new) == false && (this.email_new != '')) {
+            if ((_regexEmail).test(this.email_new) === false && (this.email_new != '')) {
                 $('#email_new').removeClass("is-valid");
                 $('#email_new').addClass("is-invalid");
                 $('#invalid_email_new').text("Email格式不正確");
             }
-            else if (this.email_new == '') {
+            else if (this.email_new === '') {
                 $('#email_new').removeClass("is-valid");
                 $('#email_new').addClass("is-invalid");
                 $('#invalid_email_new').text("這是必填欄位");
@@ -276,58 +276,62 @@ var vueApp = {
             }
         },
         // 送出修改密碼表單
-        submitEditPasswordForm() {
-            axios.post('/api/OrganizersApi/OrginizerPasswordConfirm', {
+        async submitEditPasswordForm() {
+            await axios.post('/api/OrganizersApi/OrginizerPasswordConfirm', {
                 loginPassword: this.password_old,
                 organizerAccount: this.account
             })
             .then((response) => {
-                console.log(response.text);
-                // 密碼存在於資料庫
-                _regexPassword = this.regexPassword;
-
-                if ((_regexPassword).test(this.password_new) == false && (this.password_new != '')) {
-                    $('#password_new').removeClass("is-valid");
-                    $('#password_new').addClass("is-invalid");
-                    $('#invalid_password_new').text("密碼至少包含一個數字、一個大寫字母、至少包含一個小寫字母、至少包含一個特殊字符(不包含底線、空白、冒號)、長度在8到16個字符之間");
-                }
-                else if (this.password_new != this.password_confirm) {
-                    $('#password_new').removeClass("is-valid");
-                    $('#password_new').addClass("is-invalid");
-                    $('#password_confirm').removeClass("is-valid");
-                    $('#password_confirm').addClass("is-invalid");
-                    $('#invalid_password_new').text("密碼與確認密碼不一致");
-                    $('#invalid_password_confirm').text("密碼與確認密碼不一致");
-                }
-                else if (this.password_old == '' || this.password_new == '' || this.password_confirm == '') {
-                    $('#password_old').removeClass("is-valid");
-                    $('#password_old').addClass("is-invalid");
-                    $('#password_new').removeClass("is-valid");
-                    $('#password_new').addClass("is-invalid");
-                    $('#password_confirm').removeClass("is-valid");
-                    $('#password_confirm').addClass("is-invalid");
-                    $('#invalid_password_old').text("這是必填欄位");
-                    $('#invalid_password_new').text("這是必填欄位");
-                    $('#invalid_password_confirm').text("這是必填欄位");
-                }
-                else {
+                if (response.data === "舊密碼存在") {
                     $('#password_old').removeClass("is-invalid");
                     $('#password_old').addClass("is-valid");
-                    $('#password_new').removeClass("is-invalid");
-                    $('#password_new').addClass("is-valid");
-                    $('#password_confirm').removeClass("is-invalid");
-                    $('#password_confirm').addClass("is-valid");
-                    this.editPassword();
+
+                    console.log(response.text);
+                    // 密碼存在於資料庫
+                    _regexPassword = this.regexPassword;
+
+                    if ((_regexPassword).test(this.password_new) === false && (this.password_new != '')) {
+                        $('#password_new').removeClass("is-valid");
+                        $('#password_new').addClass("is-invalid");
+                        $('#invalid_password_new').text("密碼至少包含一個數字、一個大寫字母、至少包含一個小寫字母、至少包含一個特殊字符(不包含底線、空白、冒號)、長度在8到16個字符之間");
+                    }
+                    else if (this.password_new != this.password_confirm) {
+                        $('#password_new').removeClass("is-valid");
+                        $('#password_new').addClass("is-invalid");
+                        $('#password_confirm').removeClass("is-valid");
+                        $('#password_confirm').addClass("is-invalid");
+                        $('#invalid_password_new').text("密碼與確認密碼不一致");
+                        $('#invalid_password_confirm').text("密碼與確認密碼不一致");
+                    }
+                    else if (this.password_old === '' || this.password_new === '') {
+                        $('#password_old').removeClass("is-valid");
+                        $('#password_old').addClass("is-invalid");
+                        $('#password_new').removeClass("is-valid");
+                        $('#password_new').addClass("is-invalid");
+                        $('#invalid_password_old').text("這是必填欄位");
+                        $('#invalid_password_new').text("這是必填欄位");
+                    }
+                    else {
+                        $('#password_new').removeClass("is-invalid");
+                        $('#password_new').addClass("is-valid");
+                        $('#password_confirm').removeClass("is-invalid");
+                        $('#password_confirm').addClass("is-valid");
+                        this.editPassword();
+                    }
+
+                } else if (response.data === "舊密碼不存在") {
+                    // 密碼不存在於資料庫
+                    $('#password_old').removeClass("is-valid");
+                    $('#password_old').addClass("is-invalid");
+                    $('#invalid_password_old').text(`${response.data}`);
+                    /*this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;*/
+                    console.error(error);
                 }
             })
-            .catch((error) => {
-                // 密碼不存在於資料庫
-                $('#password_old').removeClass("is-valid");
-                $('#password_old').addClass("is-invalid");
-                $('#invalid_password_old').text("舊密碼不正確");
-                /*this.alert = `<div class="alert alert-danger" role = "alert" >${error}</div>`;*/
-                console.error(error);
-            });
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })  
         },
         // 送出修改活動方照片表單
         submitEditPhotoForm() {

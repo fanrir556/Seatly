@@ -595,17 +595,17 @@ namespace Seatly1.Controllers
 
         // 舊密碼驗證api，用帳號密碼登入機制來判斷舊密碼是否存在
         [HttpPost("OrginizerPasswordConfirm")]
-        public async Task<ActionResult<Organizers>> OrginizerPasswordConfirm(OrganizerLoginDTO orglogindto)
+        public async Task<string> OrginizerPasswordConfirm(OrganizerLoginDTO orglogindto)
         {
             var user = await _context.Organizers.FirstOrDefaultAsync(u => u.OrganizerAccount == orglogindto.OrganizerAccount && u.LoginPassword == orglogindto.LoginPassword);
 
             if (user == null)
             {
-                return Unauthorized("舊密碼不存在");
+                return "舊密碼不存在";
             }
             else
             {
-                return Ok("修改密碼成功");
+                return "舊密碼存在";
             }
         }
     }
