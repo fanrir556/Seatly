@@ -142,7 +142,7 @@ https://youtu.be/TOS0svRVZFg
 https://youtu.be/CXebKn59hG4
 
 #### 活動管理
-新增、編輯、刪除活動
+新增、編輯、刪除活動<br>
 https://youtu.be/BzYf17LpWLA
 
 ### 點數專區
