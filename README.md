@@ -129,21 +129,21 @@ Queuely是一個提供活動宣傳和報到服務的整合平台。
    
 
 ### 活動方系統
-#### 進行活動方註冊
+#### 活動方註冊
 
-
+https://youtu.be/LL8MdbY7PJc
 
 #### 活動方登入
 
-
+https://youtu.be/TOS0svRVZFg
 
 #### 修改活動方資訊
 
-
+https://youtu.be/CXebKn59hG4
 
 #### 活動管理
-新增、編輯、刪除活動
-![活動管理_ 使用 Clipchamp 製作](https://github.com/fanrir556/Seatly/assets/122202405/d085258f-b482-4371-b991-d103839bd18c)
+新增、編輯、刪除活動<br>
+https://youtu.be/BzYf17LpWLA
 
 ### 點數專區
 
