@@ -5,13 +5,15 @@ using Seatly1.Models;
 using Seatly1.Controllers;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Seatly1.Areas.Identity;
+using static Seatly1.Models.MailSetting;
+using MailKit;
+using Seatly1.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Google 第三方登入
 var services = builder.Services;
 var configuration = builder.Configuration;
-
 
 services.AddAuthentication().AddGoogle(googleOptions =>
 {
@@ -46,7 +48,6 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddControllersWithViews();
 
-
 // ���UDI�e��
 builder.Services.AddDbContext<SeatlyContext>(options =>
 {
@@ -55,8 +56,6 @@ builder.Services.AddDbContext<SeatlyContext>(options =>
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
-
-builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 //Session
 builder.Services.AddSession(option =>
@@ -84,6 +83,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
+
+// 活動方註冊、修改Email驗證信發送
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddTransient<Seatly1.Helper.IMailService, OMailService>();
 
 //CORS
 string PolicyName = "AllowAny";
